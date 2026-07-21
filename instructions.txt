@@ -1,0 +1,7 @@
+Updating the points:
+python data_pipeline/export_dashboard_data.py
+
+Run included server:
+python dashboard/server.py
+
+http://localhost:8050

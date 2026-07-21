@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LCS Fantasy Weekly Points Dashboard</title>
+  <meta name="description" content="Interactive weekly fantasy points leaderboard and performance analytics for LCS & LoL Esports.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-logo">⚡</div>
+        <div>
+          <h1>LCS Fantasy Analytics</h1>
+          <p>Weekly Player Scores & Heuristic Performance Dashboard</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button id="exportCsvBtn" class="btn-secondary">
+          <span>📥 Export CSV</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- KPI Summary Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Top Scoring Player</div>
+        <div class="kpi-value" id="topPlayerKpi">-</div>
+        <div class="kpi-subtext" id="topPlayerSub">-</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Active Players Tracked</div>
+        <div class="kpi-value" id="totalPlayersKpi">0</div>
+        <div class="kpi-subtext">Filtered Dataset</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Average Fantasy Pts / Game</div>
+        <div class="kpi-value" id="avgPtsKpi">0.00</div>
+        <div class="kpi-subtext">Across All Games</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Highest Single Week</div>
+        <div class="kpi-value" id="maxWeekKpi">0.0</div>
+        <div class="kpi-subtext" id="maxWeekSub">-</div>
+      </div>
+    </div>
+
+    <!-- Filters & Search Toolbar -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search player or team...">
+        
+        <select id="leagueSelect">
+          <option value="ALL">All Leagues</option>
+        </select>
+
+        <select id="yearSelect">
+          <option value="ALL">All Years</option>
+        </select>
+
+        <select id="splitSelect">
+          <option value="ALL">All Splits</option>
+          <option value="Spring">Spring</option>
+          <option value="Summer">Summer</option>
+          <option value="Split 1">Split 1</option>
+          <option value="Split 2">Split 2</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <div class="position-btns">
+          <button class="pos-btn active" data-pos="ALL">ALL</button>
+          <button class="pos-btn" data-pos="TOP">TOP</button>
+          <button class="pos-btn" data-pos="JGL">JGL</button>
+          <button class="pos-btn" data-pos="MID">MID</button>
+          <button class="pos-btn" data-pos="BOT">BOT</button>
+          <button class="pos-btn" data-pos="SUP">SUP</button>
+        </div>
+
+        <select id="pointsModeSelect">
+          <option value="raw">Calculated Fantasy Pts</option>
+          <option value="adjusted">Learning Adjusted Pts</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Main Grid (Table + Chart) -->
+    <div class="main-grid">
+      <!-- Player Trend Line Chart -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📈 Top Players Weekly Trend</h2>
+          <span style="font-size: 12px; color: var(--text-muted);">Points trajectory across weeks</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Weekly Matrix Table -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">🏆 Weekly Player Points Matrix</h2>
+          <span style="font-size: 12px; color: var(--text-muted);">Click any player row to view match details</span>
+        </div>
+        <div id="tableContainer">
+          <!-- Dynamically populated table -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Player Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <button class="modal-close" id="modalCloseBtn">&times;</button>
+      <div id="modalDetails">
+        <!-- Dynamically rendered details -->
+      </div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
