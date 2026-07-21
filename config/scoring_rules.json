@@ -1,0 +1,11 @@
+{
+  "kills": 3.0,
+  "deaths": -1.0,
+  "assists": 2.0,
+  "cs_multiplier": 0.02,
+  "triple_kill_bonus": 2.0,
+  "quadra_kill_bonus": 5.0,
+  "penta_kill_bonus": 10.0,
+  "ten_plus_k_or_a_bonus": 2.0,
+  "first_blood_bonus": 2.0
+}
