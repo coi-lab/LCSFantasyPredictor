@@ -94,6 +94,53 @@ class LCSDataIngestor:
             print(f"Loaded total raw rows (fallback mode): {len(records)}")
             return records
 
+    def attach_team_game_context(self, data: Union[Any, List[Dict[str, Any]]]) -> Union[Any, List[Dict[str, Any]]]:
+        """Copy team-row objectives and aggregates onto each player row."""
+        context_columns = [
+            "dragons", "barons", "firstdragon", "totalgold",
+            "damagetakenperminute",
+        ]
+
+        if HAS_PANDAS and isinstance(data, pd.DataFrame):
+            df = data.copy()
+            if not {"gameid", "side", "position"}.issubset(df.columns):
+                return df
+            team_rows = df[df["position"].astype(str).str.lower().eq("team")]
+            available = [col for col in context_columns if col in team_rows.columns]
+            if team_rows.empty or not available:
+                return df
+            context = team_rows[["gameid", "side", *available]].drop_duplicates(["gameid", "side"])
+            context = context.rename(columns={col: f"team_{col}" for col in available})
+            df = df.merge(context, on=["gameid", "side"], how="left")
+            opponent = context.copy()
+            opponent["side"] = opponent["side"].replace(
+                {"Blue": "Red", "Red": "Blue", "blue": "red", "red": "blue"}
+            )
+            opponent = opponent.rename(columns={
+                f"team_{col}": f"opponent_{col}" for col in available
+            })
+            return df.merge(opponent, on=["gameid", "side"], how="left")
+
+        team_context: Dict[tuple, Dict[str, Any]] = {}
+        for row in data:
+            if str(row.get("position", "")).lower().strip() == "team":
+                key = (row.get("gameid"), str(row.get("side", "")).lower())
+                team_context[key] = {col: row.get(col) for col in context_columns}
+
+        results = []
+        for row in data:
+            enriched = dict(row)
+            gameid = row.get("gameid")
+            side = str(row.get("side", "")).lower()
+            opponent_side = "red" if side == "blue" else "blue"
+            own = team_context.get((gameid, side), {})
+            opponent = team_context.get((gameid, opponent_side), {})
+            for col in context_columns:
+                enriched[f"team_{col}"] = own.get(col)
+                enriched[f"opponent_{col}"] = opponent.get(col)
+            results.append(enriched)
+        return results
+
     def filter_player_positions(self, data: Union[Any, List[Dict[str, Any]]]) -> Union[Any, List[Dict[str, Any]]]:
         """
         Filter rows to major tier-1 leagues (LCS, LEC, LCK, LPL) and player positions ('top', 'jgl', 'mid', 'bot', 'sup').
@@ -255,7 +302,9 @@ class LCSDataIngestor:
                 "triplekills", "quadrakills", "pentakills", "firstbloodkill", "teamkills",
                 "result", "gamelength", "damageshare", "golddiffat15", "golddiffat14",
                 "solokills", "dpm", "cspm", "vspm", "dragons", "barons", "firstdragon",
-                "csat15", "damagetakenperminute"
+                "csat15", "damagetakenperminute", "team_dragons", "team_barons",
+                "team_firstdragon", "team_totalgold", "opponent_totalgold",
+                "team_damagetakenperminute"
             ]
             for col in cols_to_numeric:
                 if col in df.columns:
@@ -290,11 +339,20 @@ class LCSDataIngestor:
             dmg30_mask = (df["damageshare"] >= 0.30).astype(float) * dmg_share30_bonus
             win_pts = (df["result"] == 1).astype(float) * victory_bonus
 
-            stomp_mask = ((df["result"] == 1) & ((df["gamelength"] < 1620) & (df["gamelength"] > 0))).astype(float) * stomp_bonus
+            team_gold_lead = df["team_totalgold"] - df["opponent_totalgold"]
+            stomp_mask = (
+                (df["result"] == 1) &
+                (
+                    ((df["gamelength"] < 1620) & (df["gamelength"] > 0)) |
+                    (team_gold_lead >= 10000)
+                )
+            ).astype(float) * stomp_bonus
             perfect_mask = ((df["deaths"] == 0) & ((df["kills"] + df["assists"]) >= 5)).astype(float) * perfect_bonus
 
             gold14_col = df["golddiffat14"] if df["golddiffat14"].sum() != 0 else df["golddiffat15"]
-            gold14_pts = (gold14_col.clip(lower=0) / 1000.0).apply(int) * gold14_bonus
+            # OE exposes @15 as the closest proxy when @14 is unavailable. The
+            # official UI awards fractional points rather than flooring each 1k.
+            gold14_pts = (gold14_col.clip(lower=0) / 1000.0) * gold14_bonus
 
             stolen_baron = pd.to_numeric(df["stolenbarons"], errors="coerce").fillna(0) if "stolenbarons" in df.columns else 0
             stolen_elder = pd.to_numeric(df["stolenelders"], errors="coerce").fillna(0) if "stolenelders" in df.columns else 0
@@ -315,9 +373,14 @@ class LCSDataIngestor:
             top_dmg25 = (pos_upper == "TOP") & (df["damageshare"] >= 0.25)
             top_dmg25_pts = top_dmg25.astype(float) * role_cfg.get("TOP", {}).get("damage_share_25", 2.0)
 
-            jgl_drag4 = (pos_upper == "JGL") & (df["dragons"] >= 4)
+            team_damage_taken_safe = df["team_damagetakenperminute"].replace(0, 1.0)
+            top_tank_share = df["damagetakenperminute"] / team_damage_taken_safe
+            top_tank = (pos_upper == "TOP") & (top_tank_share >= 0.25)
+            top_tank_pts = top_tank.astype(float) * role_cfg.get("TOP", {}).get("tank_bonus_25", 2.0)
+
+            jgl_drag4 = (pos_upper == "JGL") & (df["team_dragons"] >= 4)
             jgl_drag4_pts = jgl_drag4.astype(float) * role_cfg.get("JGL", {}).get("team_4plus_dragons", 1.5)
-            jgl_baron_pts = (pos_upper == "JGL").astype(float) * df["barons"] * role_cfg.get("JGL", {}).get("baron_secured_per_baron", 2.0)
+            jgl_baron_pts = (pos_upper == "JGL").astype(float) * df["team_barons"] * role_cfg.get("JGL", {}).get("baron_secured_per_baron", 2.0)
             jgl_kp75 = (pos_upper == "JGL") & (kp >= 0.75)
             jgl_kp75_pts = jgl_kp75.astype(float) * role_cfg.get("JGL", {}).get("kill_participation_75", 2.0)
 
@@ -336,12 +399,12 @@ class LCSDataIngestor:
             sup_ast10_pts = sup_ast10.astype(float) * role_cfg.get("SUP", {}).get("ten_plus_assists", 2.0)
             sup_kp75 = (pos_upper == "SUP") & (kp >= 0.75)
             sup_kp75_pts = sup_kp75.astype(float) * role_cfg.get("SUP", {}).get("kill_participation_75", 2.0)
-            sup_fdrag = (pos_upper == "SUP") & (df["firstdragon"] == 1)
+            sup_fdrag = (pos_upper == "SUP") & (df["team_firstdragon"] == 1)
             sup_fdrag_pts = sup_fdrag.astype(float) * role_cfg.get("SUP", {}).get("first_dragon", 1.5)
             sup_vspm_pts = (pos_upper == "SUP").astype(float) * df["vspm"] * role_cfg.get("SUP", {}).get("vision_score_pmn", 1.0)
 
             role_pts = (
-                top_solo_pts + top_dmg25_pts +
+                top_solo_pts + top_dmg25_pts + top_tank_pts +
                 jgl_drag4_pts + jgl_baron_pts + jgl_kp75_pts +
                 mid_dmg30_pts + mid_cspm10_pts +
                 bot_cspm10_pts + bot_dpm1000_pts +
@@ -385,11 +448,14 @@ class LCSDataIngestor:
                 win_score = victory_bonus if res == 1.0 else 0.0
 
                 gamelength = _safe_float(r.get("gamelength"))
-                stomp_score = stomp_bonus if (res == 1.0 and 0 < gamelength < 1620) else 0.0
+                team_gold_lead = _safe_float(r.get("team_totalgold")) - _safe_float(r.get("opponent_totalgold"))
+                stomp_score = stomp_bonus if (
+                    res == 1.0 and ((0 < gamelength < 1620) or team_gold_lead >= 10000)
+                ) else 0.0
                 perfect_score = perfect_bonus if (deaths == 0 and (kills + assists) >= 5) else 0.0
 
                 gold14 = _safe_float(r.get("golddiffat14", r.get("golddiffat15")))
-                gold14_pts = int(max(0, gold14) / 1000.0) * gold14_bonus
+                gold14_pts = (max(0, gold14) / 1000.0) * gold14_bonus
 
                 pos = str(r.get("position", "")).upper().strip()
                 role_score = 0.0
@@ -397,9 +463,12 @@ class LCSDataIngestor:
                 if pos == "TOP":
                     if _safe_float(r.get("solokills")) > 0: role_score += role_cfg.get("TOP", {}).get("solo_kill", 1.0)
                     if dmg_share >= 0.25: role_score += role_cfg.get("TOP", {}).get("damage_share_25", 2.0)
+                    team_damage_taken = _safe_float(r.get("team_damagetakenperminute"))
+                    if team_damage_taken > 0 and _safe_float(r.get("damagetakenperminute")) / team_damage_taken >= 0.25:
+                        role_score += role_cfg.get("TOP", {}).get("tank_bonus_25", 2.0)
                 elif pos == "JGL":
-                    if _safe_float(r.get("dragons")) >= 4: role_score += role_cfg.get("JGL", {}).get("team_4plus_dragons", 1.5)
-                    role_score += _safe_float(r.get("barons")) * role_cfg.get("JGL", {}).get("baron_secured_per_baron", 2.0)
+                    if _safe_float(r.get("team_dragons")) >= 4: role_score += role_cfg.get("JGL", {}).get("team_4plus_dragons", 1.5)
+                    role_score += _safe_float(r.get("team_barons")) * role_cfg.get("JGL", {}).get("baron_secured_per_baron", 2.0)
                     if kp >= 0.75: role_score += role_cfg.get("JGL", {}).get("kill_participation_75", 2.0)
                 elif pos == "MID":
                     if dmg_share >= 0.30: role_score += role_cfg.get("MID", {}).get("damage_share_30", 3.0)
@@ -412,7 +481,7 @@ class LCSDataIngestor:
                 elif pos == "SUP":
                     if assists >= 10: role_score += role_cfg.get("SUP", {}).get("ten_plus_assists", 2.0)
                     if kp >= 0.75: role_score += role_cfg.get("SUP", {}).get("kill_participation_75", 2.0)
-                    if _safe_float(r.get("firstdragon")) == 1.0: role_score += role_cfg.get("SUP", {}).get("first_dragon", 1.5)
+                    if _safe_float(r.get("team_firstdragon")) == 1.0: role_score += role_cfg.get("SUP", {}).get("first_dragon", 1.5)
                     role_score += _safe_float(r.get("vspm")) * role_cfg.get("SUP", {}).get("vision_score_pmn", 1.0)
 
                 total_pts = (
@@ -462,7 +531,8 @@ class LCSDataIngestor:
         """
         print("=== Starting LCS Fantasy Data Ingestion Pipeline ===")
         raw_data = self.load_raw_data()
-        player_data = self.filter_player_positions(raw_data)
+        contextual_data = self.attach_team_game_context(raw_data)
+        player_data = self.filter_player_positions(contextual_data)
         scored_data = self.calculate_fantasy_points(player_data)
         final_data = self.join_learnings(scored_data)
 

@@ -72,5 +72,14 @@
     "starting_gold": 100,
     "recalculation_frequency": "weekly",
     "budget_update_mechanism": "Direct Roster Asset Value Transfer: Your available budget for Week W+1 equals your Week W budget plus the exact net Gold price change of the players on your roster after weekend matches (Budget_Next = Budget_Current + sum(Player_Price_Next - Player_Price_Current)). If a chosen player plays exceptionally well and their price increases by +3.5 Gold, your team budget immediately increases by +3.5 Gold."
+  },
+  "estimated_market_model": {
+    "status": "experimental_screenshot_hypothesis",
+    "starting_price": 15.0,
+    "neutral_weekly_score": 13.0,
+    "adjustment_rate": 0.2,
+    "rounding_decimals": 1,
+    "evidence": "Castle: last score 7.05, displayed change -1.2, current price 10.4. round((7.05 - 13) * 0.20, 1) = -1.2.",
+    "warning": "The neutral score and rate fit one recovered price change. Starting prices and the complete official formula remain unknown. Official API snapshots always override this estimate."
   }
 }

@@ -14,6 +14,7 @@ if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
 from data_pipeline.ingest import LCSDataIngestor
+from data_pipeline.official_prices import add_missing_official_profiles, apply_official_prices
 
 try:
     import pandas as pd
@@ -34,6 +35,11 @@ def export_dashboard_json(output_path: str = None) -> str:
     print("=== Processing Weekly Fantasy Aggregation ===")
     ingestor = LCSDataIngestor()
     data = ingestor.run_pipeline(preview_rows=0)
+    market_model = ingestor.scoring_rules.get("estimated_market_model", {})
+    estimated_start_price = float(market_model.get("starting_price", 15.0))
+    estimated_neutral_score = float(market_model.get("neutral_weekly_score", 13.0))
+    estimated_adjustment_rate = float(market_model.get("adjustment_rate", 0.20))
+    estimated_rounding = int(market_model.get("rounding_decimals", 1))
 
     if HAS_PANDAS and isinstance(data, pd.DataFrame):
         df = data.copy()
@@ -159,16 +165,20 @@ def export_dashboard_json(output_path: str = None) -> str:
             p["is_swapped"] = len(p["teams"]) > 1
 
             # Compute market price history and price changes
-            base_price = 15.0
+            base_price = estimated_start_price
             curr_price = base_price
             price_history = []
             sorted_weeks = sorted(p["weekly_stats"].items(), key=lambda x: (x[1]["split"], x[1]["week_num"]))
 
             for w_key, w_val in sorted_weeks:
                 pts = w_val["fantasy_pts"]
-                # Baseline 15.0 pts; price delta = (pts - 15.0) * 0.20
-                change = round((pts - 15.0) * 0.20, 2)
-                curr_price = round(curr_price + change, 2)
+                # Screenshot-derived hypothesis: Castle's 7.05 score produced
+                # a -1.2 change, exactly matching a 13-point neutral baseline.
+                change = round(
+                    (pts - estimated_neutral_score) * estimated_adjustment_rate,
+                    estimated_rounding,
+                )
+                curr_price = round(curr_price + change, estimated_rounding)
                 price_history.append({
                     "week": w_key,
                     "split": w_val["split"],
@@ -324,15 +334,18 @@ def export_dashboard_json(output_path: str = None) -> str:
             p["is_swapped"] = len(p["teams"]) > 1
 
             # Compute market price history and price changes
-            base_price = 15.0
+            base_price = estimated_start_price
             curr_price = base_price
             price_history = []
             sorted_weeks = sorted(p["weekly_stats"].items(), key=lambda x: (x[1]["split"], x[1]["week_num"]))
 
             for w_key, w_val in sorted_weeks:
                 pts = w_val["fantasy_pts"]
-                change = round((pts - 15.0) * 0.20, 2)
-                curr_price = round(curr_price + change, 2)
+                change = round(
+                    (pts - estimated_neutral_score) * estimated_adjustment_rate,
+                    estimated_rounding,
+                )
+                curr_price = round(curr_price + change, estimated_rounding)
                 price_history.append({
                     "week": w_key,
                     "split": w_val["split"],
@@ -349,12 +362,20 @@ def export_dashboard_json(output_path: str = None) -> str:
             p["latest_weekly_change"] = price_history[-1]["change"] if price_history else 0.0
             p["price_history"] = price_history
 
+    market_only_count = add_missing_official_profiles(player_list)
+    official_price_count = apply_official_prices(player_list)
+    print(f"Added {market_only_count} official market profiles without match history.")
+    print(f"Applied official market prices to {official_price_count} player-season profiles.")
+
     # Save to JSON
     meta = {
         "total_players": len(player_list),
         "leagues": sorted(list(set(p["league"] for p in player_list))),
         "years": sorted(list(set(p["year"] for p in player_list))),
-        "positions": ["TOP", "JGL", "MID", "BOT", "SUP"],
+        "positions": ["TOP", "JGL", "MID", "BOT", "SUP", "COACH"],
+        "official_price_profiles": official_price_count,
+        "market_only_profiles": market_only_count,
+        "estimated_market_model": market_model,
         "players": player_list
     }
 

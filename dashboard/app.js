@@ -330,6 +330,9 @@ function renderTable() {
     const avgPts = (p._active_total || 0).toFixed(2);
     const activeGames = p._active_games || p.total_games;
     const swapBadge = p.is_swapped ? `<span class="roster-swap-badge" title="Roster swap: ${p.teams.join(' ➔ ')}">🔄 Swapped</span>` : '';
+    const priceSource = p.pricing_source === 'official_market_api'
+      ? '<div style="font-size: 10px; color: #00e676; margin-top: 2px;">OFFICIAL API</div>'
+      : '<div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">ESTIMATED</div>';
 
     html += `
       <tr onclick="openPlayerModal('${escapeHtml(p.playername)}', '${p.year}', '${p.league}')">
@@ -429,7 +432,7 @@ function renderPriceTable() {
         <td><span class="team-badge">${escapeHtml(p.teamname)}</span></td>
         <td><span class="pos-tag ${p.position}">${p.position}</span></td>
         <td style="color: var(--text-muted);">${basePrice}g</td>
-        <td style="font-weight: 800; color: var(--accent-cyan); font-size: 15px;">${currPrice} Gold</td>
+        <td style="font-weight: 800; color: var(--accent-cyan); font-size: 15px;">${currPrice} Gold${priceSource}</td>
         <td><span class="price-badge ${wBadgeClass}">${wPrefix}${weeklyChg.toFixed(2)}g</span></td>
         <td><span class="price-badge ${tBadgeClass}">${tPrefix}${totalChg.toFixed(2)}g</span></td>
       </tr>
@@ -473,16 +476,21 @@ function openPriceModal(pname, year, league) {
     const chgPrefix = h.change > 0 ? '+' : '';
     const tm = h.teamname || player.teamname;
     const weekLabel = selectedSplit !== 'ALL' ? h.week.replace(selectedSplit, '').trim() : h.week;
+    const pointsLabel = h.pts == null ? '—' : `${h.pts.toFixed(1)} Pts`;
     return `
       <tr>
         <td><strong>${weekLabel}</strong></td>
         <td><span class="team-badge">${escapeHtml(tm)}</span></td>
-        <td>${h.pts.toFixed(1)} Pts</td>
+        <td>${pointsLabel}</td>
         <td><span class="price-badge ${chgClass}">${chgPrefix}${h.change.toFixed(2)}g</span></td>
         <td style="font-weight: 800; color: var(--accent-cyan);">${h.price.toFixed(2)}g</td>
       </tr>
     `;
   }).join('');
+
+  const pricingNotice = player.pricing_source === 'official_market_api'
+    ? '<div style="color: #00e676; font-size: 12px; margin-top: 3px;">Official LCS Fantasy market API price</div>'
+    : '<div style="color: var(--text-muted); font-size: 12px; margin-top: 3px;">Experimental estimated price; no official snapshot captured</div>';
 
   detailsEl.innerHTML = `
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
@@ -492,6 +500,7 @@ function openPriceModal(pname, year, league) {
       </div>
       <div style="text-align: right;">
         <div style="font-size: 24px; font-weight: 900; color: var(--accent-cyan);">${player.current_price.toFixed(2)} Gold</div>
+        ${pricingNotice}
         <div style="font-size: 13px; font-weight: 800; color: ${isUp ? '#00e676' : '#ff1744'};">
           ${isUp ? '+' : ''}${totalChg.toFixed(2)}g (${((totalChg / player.start_price)*100).toFixed(1)}%)
         </div>

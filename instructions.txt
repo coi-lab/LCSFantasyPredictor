@@ -5,3 +5,8 @@ Run included server:
 python dashboard/server.py
 
 http://localhost:8050
+
+
+Every week we need to run this:
+python data_pipeline/snapshot_official_market.py
+python data_pipeline/export_dashboard_data.py
