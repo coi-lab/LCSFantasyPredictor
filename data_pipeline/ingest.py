@@ -96,59 +96,168 @@ class LCSDataIngestor:
 
     def filter_player_positions(self, data: Union[Any, List[Dict[str, Any]]]) -> Union[Any, List[Dict[str, Any]]]:
         """
-        Filter rows to individual player positions ('top', 'jgl', 'mid', 'bot', 'sup').
-        Normalizes 'jng' position to 'jgl' and excludes team-level rows.
+        Filter rows to major tier-1 leagues (LCS, LEC, LCK, LPL) and player positions ('top', 'jgl', 'mid', 'bot', 'sup').
+        Normalizes 2025 'LTA N' (LTA North) to 'LCS' and 'jng' to 'jgl'. Handles EWC as 'NA EWC Qualifiers'. Excludes CD and showmatches.
         """
-        target_positions = {"top", "jgl", "jng", "mid", "bot", "sup"}
+        lta_mapping = {"LTA N": "LCS"}
+
+        lcs_primary_2026 = {"Cloud9", "Team Liquid", "FlyQuest", "Sentinels", "LYON", "Disguised", "Dignitas", "Shopify Rebellion"}
+        lcs_primary_2025 = {"100 Thieves", "Cloud9", "Dignitas", "Disguised", "FlyQuest", "LYON", "Shopify Rebellion", "Team Liquid"}
+        lcs_primary_2024 = {"100 Thieves", "Cloud9", "Dignitas", "FlyQuest", "Immortals", "NRG", "Shopify Rebellion", "Team Liquid"}
+        lcs_primary_2023 = {"100 Thieves", "Cloud9", "Counter Logic Gaming", "Dignitas", "Evil Geniuses", "FlyQuest", "Golden Guardians", "Immortals", "NRG", "TSM", "Team Liquid"}
+
+        primary_teams_map = {
+            ("LCS", "2023"): lcs_primary_2023,
+            ("LCS", "2024"): lcs_primary_2024,
+            ("LCS", "2025"): lcs_primary_2025,
+            ("LCS", "2026"): lcs_primary_2026
+        }
 
         if HAS_PANDAS and isinstance(data, pd.DataFrame):
             df = data.copy()
-            if "position" not in df.columns:
-                raise KeyError("Column 'position' not found in dataset.")
+            if "position" not in df.columns or "league" not in df.columns:
+                raise KeyError("Columns 'position' or 'league' not found in dataset.")
+
+            # Filter out CD (Challengers Division) and showmatches
+            df = df[df["league"].astype(str).str.strip() != "CD"].copy()
+            if "split" in df.columns:
+                df = df[~df["split"].astype(str).str.lower().str.contains("showmatch")].copy()
+
             df["position_norm"] = df["position"].astype(str).str.lower().str.strip().replace({"jng": "jgl"})
-            filtered_df = df[df["position_norm"].isin(["top", "jgl", "mid", "bot", "sup"])].copy()
+            
+            # If league is EWC and team is NA LCS primary team, set league_norm='LCS' and split='NA EWC Qualifiers'
+            df["raw_league"] = df["league"].astype(str).str.strip()
+            df["year_norm"] = df["year"].astype(str).str.strip()
+            df["team_norm"] = df["teamname"].astype(str).str.strip()
+
+            def map_league_and_split(row):
+                raw_lg = row["raw_league"]
+                yr = row["year_norm"]
+                tm = row["team_norm"]
+                if raw_lg == "EWC" and (("LCS", yr) in primary_teams_map and tm in primary_teams_map[("LCS", yr)]):
+                    return "LCS", "NA EWC Qualifiers"
+                mapped_lg = lta_mapping.get(raw_lg, raw_lg)
+                return mapped_lg, row.get("split", "")
+
+            mapped_res = df.apply(map_league_and_split, axis=1)
+            df["league_norm"] = [m[0] for m in mapped_res]
+            df["split"] = [m[1] for m in mapped_res]
+
+            valid_rows = df[
+                df["position_norm"].isin(["top", "jgl", "mid", "bot", "sup"]) &
+                df["league_norm"].isin(["LCS", "LEC", "LCK", "LPL"])
+            ].copy()
+
+            team_counts = valid_rows.groupby(["league_norm", "year_norm", "team_norm"]).size()
+            dynamic_primary_teams = set(team_counts[team_counts >= 18].index)
+
+            def is_primary(row):
+                key = (row["league_norm"], row["year_norm"])
+                if key in primary_teams_map:
+                    return row["team_norm"] in primary_teams_map[key]
+                return (row["league_norm"], row["year_norm"], row["team_norm"]) in dynamic_primary_teams
+
+            filtered_df = valid_rows[valid_rows.apply(is_primary, axis=1)].copy()
             filtered_df["position"] = filtered_df["position_norm"]
-            filtered_df.drop(columns=["position_norm"], inplace=True)
-            print(f"Filtered player rows: {len(filtered_df)} (excluded team summary rows)")
+            filtered_df["league"] = filtered_df["league_norm"]
+            filtered_df.drop(columns=["position_norm", "league_norm", "raw_league", "year_norm", "team_norm"], inplace=True)
+            print(f"Filtered tier-1 primary league player rows (LCS, LEC, LCK, LPL): {len(filtered_df)}")
             return filtered_df
         else:
-            filtered = []
+            pre_filtered = []
+            team_counts = {}
             for row in data:
+                raw_lg = str(row.get("league", "")).strip()
+                sp_raw = str(row.get("split", "")).strip()
+                if raw_lg == "CD" or "showmatch" in sp_raw.lower() or "showmatch" in raw_lg.lower():
+                    continue
+
+                yr = str(row.get("year", "")).strip()
+                tm = str(row.get("teamname", "")).strip()
+
+                if raw_lg == "EWC" and (("LCS", yr) in primary_teams_map and tm in primary_teams_map[("LCS", yr)]):
+                    lg = "LCS"
+                    sp = "NA EWC Qualifiers"
+                else:
+                    lg = lta_mapping.get(raw_lg, raw_lg)
+                    sp = sp_raw
+
                 pos = str(row.get("position", "")).lower().strip()
                 if pos == "jng":
                     pos = "jgl"
-                if pos in {"top", "jgl", "mid", "bot", "sup"}:
+
+                if pos in {"top", "jgl", "mid", "bot", "sup"} and lg in {"LCS", "LEC", "LCK", "LPL"}:
+                    key = (lg, yr, tm)
+                    team_counts[key] = team_counts.get(key, 0) + 1
                     row_copy = dict(row)
                     row_copy["position"] = pos
-                    filtered.append(row_copy)
-            print(f"Filtered player rows (fallback mode): {len(filtered)}")
+                    row_copy["league"] = lg
+                    row_copy["split"] = sp
+                    pre_filtered.append(row_copy)
+
+            dynamic_primary_teams = {k for k, count in team_counts.items() if count >= 18}
+
+            def is_primary_dict(r):
+                lg = r["league"]
+                yr = str(r.get("year", "")).strip()
+                tm = str(r.get("teamname", "")).strip()
+                if (lg, yr) in primary_teams_map:
+                    return tm in primary_teams_map[(lg, yr)]
+                return (lg, yr, tm) in dynamic_primary_teams
+
+            filtered = [r for r in pre_filtered if is_primary_dict(r)]
+            print(f"Filtered tier-1 primary league player rows (fallback mode): {len(filtered)}")
             return filtered
 
     def calculate_fantasy_points(self, data: Union[Any, List[Dict[str, Any]]]) -> Union[Any, List[Dict[str, Any]]]:
         """
-        Calculate fantasy_pts per game based on scoring rules multipliers.
+        Calculate fantasy_pts per game based on official LCS Fantasy rules.
         """
-        kills_mult = self.scoring_rules.get("kills", 3.0)
-        deaths_mult = self.scoring_rules.get("deaths", -1.0)
-        assists_mult = self.scoring_rules.get("assists", 2.0)
-        cs_mult = self.scoring_rules.get("cs_multiplier", 0.02)
-        triple_bonus = self.scoring_rules.get("triple_kill_bonus", 2.0)
-        quadra_bonus = self.scoring_rules.get("quadra_kill_bonus", 5.0)
-        penta_bonus = self.scoring_rules.get("penta_kill_bonus", 10.0)
-        ten_plus_bonus = self.scoring_rules.get("ten_plus_k_or_a_bonus", 2.0)
-        fb_bonus = self.scoring_rules.get("first_blood_bonus", 2.0)
+        basic = self.scoring_rules.get("basic_points", {})
+        kills_mult = basic.get("kills", self.scoring_rules.get("kills", 1.5))
+        deaths_mult = basic.get("deaths", self.scoring_rules.get("deaths", -1.0))
+        assists_mult = basic.get("assists", self.scoring_rules.get("assists", 1.0))
+        cs_mult = basic.get("cs_multiplier", self.scoring_rules.get("cs_multiplier", 0.01))
+        fb_bonus = basic.get("first_blood", self.scoring_rules.get("first_blood_bonus", 1.0))
 
-        def _safe_float(val: Any) -> float:
+        perf = self.scoring_rules.get("performance_bonuses", {})
+        kp70_bonus = perf.get("kill_participation_70", 2.0)
+        triple_bonus = perf.get("triple_kill", self.scoring_rules.get("triple_kill_bonus", 2.0))
+        quadra_bonus = perf.get("quadra_kill", self.scoring_rules.get("quadra_kill_bonus", 3.0))
+        penta_bonus = perf.get("penta_kill", self.scoring_rules.get("penta_kill_bonus", 5.0))
+        ten_kills_bonus = perf.get("ten_plus_kills", 3.0)
+        dmg_share30_bonus = perf.get("damage_share_30", 3.0)
+        victory_bonus = perf.get("victory", 1.0)
+        stomp_bonus = perf.get("stomping_victory", 2.0)
+        perfect_bonus = perf.get("perfect_score", 3.0)
+        gold14_bonus = perf.get("gold_advantage_14_per_1000", 1.0)
+
+        stolen = self.scoring_rules.get("stolen_objectives", {})
+        stolen_baron_b = stolen.get("stolen_baron", 4.0)
+        stolen_elder_b = stolen.get("stolen_elder", 4.0)
+        stolen_dragon_b = stolen.get("stolen_dragon", 2.0)
+        stolen_herald_b = stolen.get("stolen_herald", 2.0)
+
+        role_cfg = self.scoring_rules.get("role_specific", {})
+
+        def _safe_float(val: Any, default: float = 0.0) -> float:
             try:
-                return float(val) if val not in ("", None) else 0.0
+                if val in ("", None, "None", "nan", "NaN"):
+                    return default
+                return float(val)
             except (ValueError, TypeError):
-                return 0.0
+                return default
 
         if HAS_PANDAS and isinstance(data, pd.DataFrame):
             df = data.copy()
-            num_cols = ["kills", "deaths", "assists", "total cs", "minionkills", "monsterkills",
-                        "triplekills", "quadrakills", "pentakills", "firstbloodkill"]
-            for col in num_cols:
+            cols_to_numeric = [
+                "kills", "deaths", "assists", "total cs", "minionkills", "monsterkills",
+                "triplekills", "quadrakills", "pentakills", "firstbloodkill", "teamkills",
+                "result", "gamelength", "damageshare", "golddiffat15", "golddiffat14",
+                "solokills", "dpm", "cspm", "vspm", "dragons", "barons", "firstdragon",
+                "csat15", "damagetakenperminute"
+            ]
+            for col in cols_to_numeric:
                 if col in df.columns:
                     df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0)
                 else:
@@ -159,19 +268,92 @@ class LCSDataIngestor:
             else:
                 cs = df["minionkills"] + df["monsterkills"]
 
-            ten_plus_mask = (df["kills"] >= 10) | (df["assists"] >= 10)
-
-            df["fantasy_pts"] = (
+            basic_pts = (
                 (df["kills"] * kills_mult)
                 + (df["deaths"] * deaths_mult)
                 + (df["assists"] * assists_mult)
                 + (cs * cs_mult)
-                + (df["triplekills"] * triple_bonus)
+                + (df["firstbloodkill"] * fb_bonus)
+            )
+
+            teamkills_safe = df["teamkills"].replace(0, 1.0)
+            kp = (df["kills"] + df["assists"]) / teamkills_safe
+            kp70_mask = (kp >= 0.70).astype(float) * kp70_bonus
+
+            multi_kill_pts = (
+                (df["triplekills"] * triple_bonus)
                 + (df["quadrakills"] * quadra_bonus)
                 + (df["pentakills"] * penta_bonus)
-                + (ten_plus_mask.astype(float) * ten_plus_bonus)
-                + (df["firstbloodkill"] * fb_bonus)
+            )
+
+            ten_kills_mask = (df["kills"] >= 10).astype(float) * ten_kills_bonus
+            dmg30_mask = (df["damageshare"] >= 0.30).astype(float) * dmg_share30_bonus
+            win_pts = (df["result"] == 1).astype(float) * victory_bonus
+
+            stomp_mask = ((df["result"] == 1) & ((df["gamelength"] < 1620) & (df["gamelength"] > 0))).astype(float) * stomp_bonus
+            perfect_mask = ((df["deaths"] == 0) & ((df["kills"] + df["assists"]) >= 5)).astype(float) * perfect_bonus
+
+            gold14_col = df["golddiffat14"] if df["golddiffat14"].sum() != 0 else df["golddiffat15"]
+            gold14_pts = (gold14_col.clip(lower=0) / 1000.0).apply(int) * gold14_bonus
+
+            stolen_baron = pd.to_numeric(df["stolenbarons"], errors="coerce").fillna(0) if "stolenbarons" in df.columns else 0
+            stolen_elder = pd.to_numeric(df["stolenelders"], errors="coerce").fillna(0) if "stolenelders" in df.columns else 0
+            stolen_dragon = pd.to_numeric(df["stolendragons"], errors="coerce").fillna(0) if "stolendragons" in df.columns else 0
+            stolen_herald = pd.to_numeric(df["stolenheralds"], errors="coerce").fillna(0) if "stolenheralds" in df.columns else 0
+
+            stolen_pts = (
+                (stolen_baron * stolen_baron_b)
+                + (stolen_elder * stolen_elder_b)
+                + (stolen_dragon * stolen_dragon_b)
+                + (stolen_herald * stolen_herald_b)
+            )
+
+            pos_upper = df["position"].astype(str).str.upper().str.strip()
+
+            top_solo = (pos_upper == "TOP") & (df["solokills"] > 0)
+            top_solo_pts = top_solo.astype(float) * role_cfg.get("TOP", {}).get("solo_kill", 1.0)
+            top_dmg25 = (pos_upper == "TOP") & (df["damageshare"] >= 0.25)
+            top_dmg25_pts = top_dmg25.astype(float) * role_cfg.get("TOP", {}).get("damage_share_25", 2.0)
+
+            jgl_drag4 = (pos_upper == "JGL") & (df["dragons"] >= 4)
+            jgl_drag4_pts = jgl_drag4.astype(float) * role_cfg.get("JGL", {}).get("team_4plus_dragons", 1.5)
+            jgl_baron_pts = (pos_upper == "JGL").astype(float) * df["barons"] * role_cfg.get("JGL", {}).get("baron_secured_per_baron", 2.0)
+            jgl_kp75 = (pos_upper == "JGL") & (kp >= 0.75)
+            jgl_kp75_pts = jgl_kp75.astype(float) * role_cfg.get("JGL", {}).get("kill_participation_75", 2.0)
+
+            mid_dmg30 = (pos_upper == "MID") & (df["damageshare"] >= 0.30)
+            mid_dmg30_pts = mid_dmg30.astype(float) * role_cfg.get("MID", {}).get("damage_share_30", 3.0)
+            cspm_15 = df["csat15"] / 15.0 if df["csat15"].sum() > 0 else df["cspm"]
+            mid_cspm10 = (pos_upper == "MID") & (cspm_15 >= 10.0)
+            mid_cspm10_pts = mid_cspm10.astype(float) * role_cfg.get("MID", {}).get("cspm_10_at_15", 1.5)
+
+            bot_cspm10 = (pos_upper == "BOT") & (cspm_15 >= 10.0)
+            bot_cspm10_pts = bot_cspm10.astype(float) * role_cfg.get("BOT", {}).get("cspm_10_at_15", 1.5)
+            bot_dpm1000 = (pos_upper == "BOT") & (df["dpm"] >= 1000.0)
+            bot_dpm1000_pts = bot_dpm1000.astype(float) * role_cfg.get("BOT", {}).get("dpm_1000", 1.0)
+
+            sup_ast10 = (pos_upper == "SUP") & (df["assists"] >= 10)
+            sup_ast10_pts = sup_ast10.astype(float) * role_cfg.get("SUP", {}).get("ten_plus_assists", 2.0)
+            sup_kp75 = (pos_upper == "SUP") & (kp >= 0.75)
+            sup_kp75_pts = sup_kp75.astype(float) * role_cfg.get("SUP", {}).get("kill_participation_75", 2.0)
+            sup_fdrag = (pos_upper == "SUP") & (df["firstdragon"] == 1)
+            sup_fdrag_pts = sup_fdrag.astype(float) * role_cfg.get("SUP", {}).get("first_dragon", 1.5)
+            sup_vspm_pts = (pos_upper == "SUP").astype(float) * df["vspm"] * role_cfg.get("SUP", {}).get("vision_score_pmn", 1.0)
+
+            role_pts = (
+                top_solo_pts + top_dmg25_pts +
+                jgl_drag4_pts + jgl_baron_pts + jgl_kp75_pts +
+                mid_dmg30_pts + mid_cspm10_pts +
+                bot_cspm10_pts + bot_dpm1000_pts +
+                sup_ast10_pts + sup_kp75_pts + sup_fdrag_pts + sup_vspm_pts
+            )
+
+            df["fantasy_pts"] = (
+                basic_pts + kp70_mask + multi_kill_pts + ten_kills_mask +
+                dmg30_mask + win_pts + stomp_mask + perfect_mask + gold14_pts +
+                stolen_pts + role_pts
             ).round(2)
+
             return df
         else:
             results = []
@@ -184,24 +366,61 @@ class LCSDataIngestor:
                 if total_cs == 0:
                     total_cs = _safe_float(r.get("minionkills")) + _safe_float(r.get("monsterkills"))
 
+                fb = _safe_float(r.get("firstbloodkill"))
+                basic_score = (kills * kills_mult) + (deaths * deaths_mult) + (assists * assists_mult) + (total_cs * cs_mult) + (fb * fb_bonus)
+
+                teamkills = _safe_float(r.get("teamkills"))
+                kp = (kills + assists) / teamkills if teamkills > 0 else 0.0
+                kp70_pts = kp70_bonus if kp >= 0.70 else 0.0
+
                 triple = _safe_float(r.get("triplekills"))
                 quadra = _safe_float(r.get("quadrakills"))
                 penta = _safe_float(r.get("pentakills"))
-                fb = _safe_float(r.get("firstbloodkill"))
-                ten_plus = 1.0 if (kills >= 10 or assists >= 10) else 0.0
+                multi_pts = (triple * triple_bonus) + (quadra * quadra_bonus) + (penta * penta_bonus)
 
-                pts = (
-                    (kills * kills_mult)
-                    + (deaths * deaths_mult)
-                    + (assists * assists_mult)
-                    + (total_cs * cs_mult)
-                    + (triple * triple_bonus)
-                    + (quadra * quadra_bonus)
-                    + (penta * penta_bonus)
-                    + (ten_plus * ten_plus_bonus)
-                    + (fb * fb_bonus)
+                ten_k_pts = ten_kills_bonus if kills >= 10 else 0.0
+                dmg_share = _safe_float(r.get("damageshare"))
+                dmg30_pts = dmg_share30_bonus if dmg_share >= 0.30 else 0.0
+                res = _safe_float(r.get("result"))
+                win_score = victory_bonus if res == 1.0 else 0.0
+
+                gamelength = _safe_float(r.get("gamelength"))
+                stomp_score = stomp_bonus if (res == 1.0 and 0 < gamelength < 1620) else 0.0
+                perfect_score = perfect_bonus if (deaths == 0 and (kills + assists) >= 5) else 0.0
+
+                gold14 = _safe_float(r.get("golddiffat14", r.get("golddiffat15")))
+                gold14_pts = int(max(0, gold14) / 1000.0) * gold14_bonus
+
+                pos = str(r.get("position", "")).upper().strip()
+                role_score = 0.0
+
+                if pos == "TOP":
+                    if _safe_float(r.get("solokills")) > 0: role_score += role_cfg.get("TOP", {}).get("solo_kill", 1.0)
+                    if dmg_share >= 0.25: role_score += role_cfg.get("TOP", {}).get("damage_share_25", 2.0)
+                elif pos == "JGL":
+                    if _safe_float(r.get("dragons")) >= 4: role_score += role_cfg.get("JGL", {}).get("team_4plus_dragons", 1.5)
+                    role_score += _safe_float(r.get("barons")) * role_cfg.get("JGL", {}).get("baron_secured_per_baron", 2.0)
+                    if kp >= 0.75: role_score += role_cfg.get("JGL", {}).get("kill_participation_75", 2.0)
+                elif pos == "MID":
+                    if dmg_share >= 0.30: role_score += role_cfg.get("MID", {}).get("damage_share_30", 3.0)
+                    cs15 = _safe_float(r.get("csat15")) / 15.0 if _safe_float(r.get("csat15")) > 0 else _safe_float(r.get("cspm"))
+                    if cs15 >= 10.0: role_score += role_cfg.get("MID", {}).get("cspm_10_at_15", 1.5)
+                elif pos == "BOT":
+                    cs15 = _safe_float(r.get("csat15")) / 15.0 if _safe_float(r.get("csat15")) > 0 else _safe_float(r.get("cspm"))
+                    if cs15 >= 10.0: role_score += role_cfg.get("BOT", {}).get("cspm_10_at_15", 1.5)
+                    if _safe_float(r.get("dpm")) >= 1000.0: role_score += role_cfg.get("BOT", {}).get("dpm_1000", 1.0)
+                elif pos == "SUP":
+                    if assists >= 10: role_score += role_cfg.get("SUP", {}).get("ten_plus_assists", 2.0)
+                    if kp >= 0.75: role_score += role_cfg.get("SUP", {}).get("kill_participation_75", 2.0)
+                    if _safe_float(r.get("firstdragon")) == 1.0: role_score += role_cfg.get("SUP", {}).get("first_dragon", 1.5)
+                    role_score += _safe_float(r.get("vspm")) * role_cfg.get("SUP", {}).get("vision_score_pmn", 1.0)
+
+                total_pts = (
+                    basic_score + kp70_pts + multi_pts + ten_k_pts +
+                    dmg30_pts + win_score + stomp_score + perfect_score + gold14_pts +
+                    role_score
                 )
-                r["fantasy_pts"] = round(pts, 2)
+                r["fantasy_pts"] = round(total_pts, 2)
                 results.append(r)
             return results
 

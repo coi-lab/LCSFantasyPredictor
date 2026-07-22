@@ -34,7 +34,6 @@ async function loadDashboardData() {
 function populateFilterDropdowns() {
   const leagueSelect = document.getElementById('leagueSelect');
   const yearSelect = document.getElementById('yearSelect');
-  const splitSelect = document.getElementById('splitSelect');
 
   // Populate Leagues
   const leagues = ['ALL', ...rawData.leagues];
@@ -48,12 +47,50 @@ function populateFilterDropdowns() {
   // Populate Years
   const years = ['ALL', ...rawData.years.sort().reverse()];
   yearSelect.innerHTML = years.map(y => `<option value="${y}">${y === 'ALL' ? 'All Years' : y}</option>`).join('');
+
+  updateSplitDropdown();
+}
+
+function updateSplitDropdown() {
+  const league = document.getElementById('leagueSelect').value;
+  const year = document.getElementById('yearSelect').value;
+  const splitSelect = document.getElementById('splitSelect');
+
+  const splitSet = new Set();
+  if (rawData && rawData.players) {
+    rawData.players.forEach(p => {
+      if ((league === 'ALL' || p.league === league) && (year === 'ALL' || p.year === year)) {
+        if (p.splits && Array.isArray(p.splits)) {
+          p.splits.forEach(s => splitSet.add(s));
+        } else if (p.split) {
+          p.split.split(', ').forEach(s => splitSet.add(s));
+        }
+      }
+    });
+  }
+
+  const sortedSplits = Array.from(splitSet).sort();
+  const currentVal = splitSelect.value;
+  splitSelect.innerHTML = `<option value="ALL">All Splits & Playoffs</option>` +
+    sortedSplits.map(s => `<option value="${s}">${s}</option>`).join('');
+
+  if (sortedSplits.includes(currentVal)) {
+    splitSelect.value = currentVal;
+  } else {
+    splitSelect.value = 'ALL';
+  }
 }
 
 function setupEventListeners() {
   document.getElementById('searchInput').addEventListener('input', applyFilters);
-  document.getElementById('leagueSelect').addEventListener('change', applyFilters);
-  document.getElementById('yearSelect').addEventListener('change', applyFilters);
+  document.getElementById('leagueSelect').addEventListener('change', () => {
+    updateSplitDropdown();
+    applyFilters();
+  });
+  document.getElementById('yearSelect').addEventListener('change', () => {
+    updateSplitDropdown();
+    applyFilters();
+  });
   document.getElementById('splitSelect').addEventListener('change', applyFilters);
   document.getElementById('pointsModeSelect').addEventListener('change', (e) => {
     pointsMode = e.target.value;
@@ -70,10 +107,61 @@ function setupEventListeners() {
     });
   });
 
+  // View Switcher Buttons
+  document.querySelectorAll('.view-tab-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.view-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+
+      const targetBtn = e.currentTarget;
+      const targetViewId = targetBtn.dataset.view;
+      targetBtn.classList.add('active');
+
+      const viewEl = document.getElementById(targetViewId);
+      if (viewEl) viewEl.classList.add('active');
+    });
+  });
+
+  // Price Modal close
+  const priceCloseBtn = document.getElementById('priceModalCloseBtn');
+  const priceModal = document.getElementById('priceModalOverlay');
+  if (priceCloseBtn && priceModal) {
+    priceCloseBtn.addEventListener('click', closePriceModal);
+    priceModal.addEventListener('click', (e) => {
+      if (e.target.id === 'priceModalOverlay') closePriceModal();
+    });
+  }
+
   // Export CSV
   document.getElementById('exportCsvBtn').addEventListener('click', exportToCSV);
 
-  // Modal close
+  // Rules Modal setup
+  const rulesBtn = document.getElementById('rulesBtn');
+  const rulesModal = document.getElementById('rulesModalOverlay');
+  const rulesCloseBtn = document.getElementById('rulesModalCloseBtn');
+
+  if (rulesBtn && rulesModal) {
+    rulesBtn.addEventListener('click', () => rulesModal.classList.add('active'));
+    rulesCloseBtn.addEventListener('click', () => rulesModal.classList.remove('active'));
+    rulesModal.addEventListener('click', (e) => {
+      if (e.target.id === 'rulesModalOverlay') rulesModal.classList.remove('active');
+    });
+
+    // Rules Tabs Switching
+    document.querySelectorAll('.rules-tab-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.rules-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.rules-tab-content').forEach(c => c.classList.remove('active'));
+        
+        const targetTab = e.target.dataset.tab;
+        e.target.classList.add('active');
+        const contentEl = document.getElementById(targetTab);
+        if (contentEl) contentEl.classList.add('active');
+      });
+    });
+  }
+
+  // Player detail modal close
   document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
   document.getElementById('modalOverlay').addEventListener('click', (e) => {
     if (e.target.id === 'modalOverlay') closeModal();
@@ -92,15 +180,29 @@ function applyFilters() {
     if (search && !p.playername.toLowerCase().includes(search) && !p.teamname.toLowerCase().includes(search)) return false;
     if (league !== 'ALL' && p.league !== league) return false;
     if (year !== 'ALL' && p.year !== year) return false;
-    if (split !== 'ALL' && p.split !== split) return false;
+    if (split !== 'ALL') {
+      if (p.splits && !p.splits.includes(split)) return false;
+      if (!p.splits && !p.split.includes(split)) return false;
+    }
     if (currentPositionFilter !== 'ALL' && p.position !== currentPositionFilter) return false;
     return true;
   });
 
-  // Calculate dynamic sort values
+  // Calculate dynamic sort values (split-aware)
   filteredPlayers.forEach(p => {
-    p._active_total = pointsMode === 'adjusted' ? p.total_adjusted_pts : p.total_fantasy_pts;
-    p._active_avg = p.total_games > 0 ? (p._active_total / p.total_games) : 0;
+    let totalPts = 0;
+    let totalGames = 0;
+
+    Object.entries(p.weekly_stats).forEach(([wKey, wVal]) => {
+      if (split === 'ALL' || wKey.startsWith(split) || (wVal.split && wVal.split === split)) {
+        totalPts += (pointsMode === 'adjusted' ? wVal.adjusted_pts : wVal.fantasy_pts) * wVal.games;
+        totalGames += wVal.games;
+      }
+    });
+
+    p._active_total = totalGames > 0 ? (totalPts / totalGames) : 0; // Average per game for fantasy ranking
+    p._active_sum = totalPts;
+    p._active_games = totalGames;
   });
 
   // Sort
@@ -116,10 +218,16 @@ function applyFilters() {
       valA = a.teamname;
       valB = b.teamname;
       return currentSortDir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-    } else if (currentSortCol === 'avg_pts') {
-      valA = a._active_avg;
-      valB = b._active_avg;
-    } else if (currentSortCol.startsWith('W')) {
+    } else if (currentSortCol === 'current_price') {
+      valA = a.current_price || 15.0;
+      valB = b.current_price || 15.0;
+    } else if (currentSortCol === 'total_price_change') {
+      valA = a.total_price_change || 0;
+      valB = b.total_price_change || 0;
+    } else if (currentSortCol === 'avg_pts' || currentSortCol === 'total_pts') {
+      valA = a._active_total;
+      valB = b._active_total;
+    } else if (currentSortCol.length > 0) {
       const weekKey = currentSortCol;
       valA = a.weekly_stats[weekKey] ? (pointsMode === 'adjusted' ? a.weekly_stats[weekKey].adjusted_pts : a.weekly_stats[weekKey].fantasy_pts) : 0;
       valB = b.weekly_stats[weekKey] ? (pointsMode === 'adjusted' ? b.weekly_stats[weekKey].adjusted_pts : b.weekly_stats[weekKey].fantasy_pts) : 0;
@@ -130,6 +238,7 @@ function applyFilters() {
 
   updateKPICards();
   renderTable();
+  renderPriceTable();
   renderTrendChart();
 }
 
@@ -139,22 +248,21 @@ function updateKPICards() {
   if (filteredPlayers.length > 0) {
     const topPlayer = filteredPlayers[0];
     document.getElementById('topPlayerKpi').innerText = topPlayer.playername;
-    document.getElementById('topPlayerSub').innerText = `${topPlayer.teamname} • ${topPlayer._active_total.toFixed(1)} Pts`;
+    document.getElementById('topPlayerSub').innerText = `${topPlayer.teamname} • ${topPlayer._active_total.toFixed(2)} Avg Pts`;
 
-    const totalGames = filteredPlayers.reduce((acc, p) => acc + p.total_games, 0);
-    const totalPts = filteredPlayers.reduce((acc, p) => acc + p._active_total, 0);
-    const avgPts = totalGames > 0 ? (totalPts / totalGames).toFixed(2) : '0.00';
+    const totalGames = filteredPlayers.reduce((acc, p) => acc + p._active_games, 0);
+    const avgPts = filteredPlayers.length > 0 ? (filteredPlayers.reduce((acc, p) => acc + p._active_total, 0) / filteredPlayers.length).toFixed(2) : '0.00';
     document.getElementById('avgPtsKpi').innerText = avgPts;
 
     // Highest single week score
     let maxWeekScore = 0;
     let maxWeekPlayer = '-';
     filteredPlayers.forEach(p => {
-      Object.values(p.weekly_stats).forEach(w => {
-        const pts = pointsMode === 'adjusted' ? w.adjusted_pts : w.fantasy_pts;
+      Object.entries(p.weekly_stats).forEach(([wKey, wVal]) => {
+        const pts = pointsMode === 'adjusted' ? wVal.adjusted_pts : wVal.fantasy_pts;
         if (pts > maxWeekScore) {
           maxWeekScore = pts;
-          maxWeekPlayer = `${p.playername} (W${w.week_num})`;
+          maxWeekPlayer = `${p.playername} (${wKey})`;
         }
       });
     });
@@ -173,17 +281,20 @@ function updateKPICards() {
 
 function renderTable() {
   const container = document.getElementById('tableContainer');
+  const selectedSplit = document.getElementById('splitSelect').value;
 
   // Discover all distinct weeks in filtered dataset
   const weekSet = new Set();
   filteredPlayers.forEach(p => {
-    Object.keys(p.weekly_stats).forEach(w => weekSet.add(w));
+    Object.keys(p.weekly_stats).forEach(wKey => {
+      if (selectedSplit === 'ALL' || wKey.startsWith(selectedSplit)) {
+        weekSet.add(wKey);
+      }
+    });
   });
 
   const sortedWeeks = Array.from(weekSet).sort((a, b) => {
-    const numA = parseInt(a.replace('W', '')) || 0;
-    const numB = parseInt(b.replace('W', '')) || 0;
-    return numA - numB;
+    return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
   });
 
   if (filteredPlayers.length === 0) {
@@ -201,12 +312,12 @@ function renderTable() {
             <th onclick="sortTable('teamname')">Team</th>
             <th>Pos</th>
             <th>Games</th>
-            <th onclick="sortTable('total_pts')">Total Pts ⇳</th>
-            <th onclick="sortTable('avg_pts')">Avg Pts ⇳</th>
+            <th onclick="sortTable('avg_pts')">Avg Pts / Game ⇳</th>
   `;
 
   sortedWeeks.forEach(w => {
-    html += `<th onclick="sortTable('${w}')">${w} ⇳</th>`;
+    const displayLabel = selectedSplit !== 'ALL' ? w.replace(selectedSplit, '').trim() : w;
+    html += `<th onclick="sortTable('${w}')">${displayLabel} ⇳</th>`;
   });
 
   html += `
@@ -216,21 +327,23 @@ function renderTable() {
   `;
 
   filteredPlayers.forEach((p, idx) => {
-    const avgPts = p.total_games > 0 ? (p._active_total / p.total_games).toFixed(2) : '0.00';
+    const avgPts = (p._active_total || 0).toFixed(2);
+    const activeGames = p._active_games || p.total_games;
+    const swapBadge = p.is_swapped ? `<span class="roster-swap-badge" title="Roster swap: ${p.teams.join(' ➔ ')}">🔄 Swapped</span>` : '';
 
     html += `
-      <tr onclick="openPlayerModal('${p.playername}', '${p.year}', '${p.league}', '${p.split}')">
+      <tr onclick="openPlayerModal('${escapeHtml(p.playername)}', '${p.year}', '${p.league}')">
         <td class="rank-cell">${idx + 1}</td>
         <td>
           <div class="player-name-cell">
             <span>${escapeHtml(p.playername)}</span>
+            ${swapBadge}
           </div>
         </td>
         <td><span class="team-badge">${escapeHtml(p.teamname)}</span></td>
         <td><span class="pos-tag ${p.position}">${p.position}</span></td>
-        <td style="color: var(--text-muted);">${p.total_games}</td>
-        <td style="font-weight: 800; color: var(--accent-cyan);">${p._active_total.toFixed(2)}</td>
-        <td style="font-weight: 700;">${avgPts}</td>
+        <td style="color: var(--text-muted);">${activeGames}</td>
+        <td style="font-weight: 800; color: var(--accent-cyan);">${avgPts}</td>
     `;
 
     sortedWeeks.forEach(w => {
@@ -259,6 +372,206 @@ function renderTable() {
   container.innerHTML = html;
 }
 
+function renderPriceTable() {
+  const container = document.getElementById('priceTableContainer');
+  if (!container) return;
+
+  if (filteredPlayers.length === 0) {
+    container.innerHTML = `<div style="padding: 40px; text-align: center; color: var(--text-muted);">No players found matching your criteria.</div>`;
+    return;
+  }
+
+  let html = `
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th class="rank-cell">#</th>
+            <th onclick="sortTable('playername')">Player</th>
+            <th onclick="sortTable('teamname')">Team</th>
+            <th>Pos</th>
+            <th>Base Price</th>
+            <th onclick="sortTable('current_price')">Current Market Price ⇳</th>
+            <th>Latest Week Change</th>
+            <th onclick="sortTable('total_price_change')">Total Season Change ⇳</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  filteredPlayers.forEach((p, idx) => {
+    const basePrice = (p.start_price || 15.0).toFixed(2);
+    const currPrice = (p.current_price || 15.0).toFixed(2);
+    const weeklyChg = p.latest_weekly_change || 0.0;
+    const totalChg = p.total_price_change || 0.0;
+
+    let wBadgeClass = 'neutral';
+    let wPrefix = '';
+    if (weeklyChg > 0) { wBadgeClass = 'up'; wPrefix = '+'; }
+    else if (weeklyChg < 0) { wBadgeClass = 'down'; }
+
+    let tBadgeClass = 'neutral';
+    let tPrefix = '';
+    if (totalChg > 0) { tBadgeClass = 'up'; tPrefix = '+'; }
+    else if (totalChg < 0) { tBadgeClass = 'down'; }
+
+    const swapBadge = p.is_swapped ? `<span class="roster-swap-badge" title="Roster swap: ${p.teams.join(' ➔ ')}">🔄 Swapped</span>` : '';
+
+    html += `
+      <tr onclick="openPriceModal('${escapeHtml(p.playername)}', '${p.year}', '${p.league}')">
+        <td class="rank-cell">${idx + 1}</td>
+        <td>
+          <div class="player-name-cell">
+            <span>${escapeHtml(p.playername)}</span>
+            ${swapBadge}
+          </div>
+        </td>
+        <td><span class="team-badge">${escapeHtml(p.teamname)}</span></td>
+        <td><span class="pos-tag ${p.position}">${p.position}</span></td>
+        <td style="color: var(--text-muted);">${basePrice}g</td>
+        <td style="font-weight: 800; color: var(--accent-cyan); font-size: 15px;">${currPrice} Gold</td>
+        <td><span class="price-badge ${wBadgeClass}">${wPrefix}${weeklyChg.toFixed(2)}g</span></td>
+        <td><span class="price-badge ${tBadgeClass}">${tPrefix}${totalChg.toFixed(2)}g</span></td>
+      </tr>
+    `;
+  });
+
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  container.innerHTML = html;
+}
+
+function openPriceModal(pname, year, league) {
+  const player = rawData.players.find(p => p.playername === pname && p.year === year && p.league === league);
+  if (!player || !player.price_history) return;
+
+  const selectedSplit = document.getElementById('splitSelect').value;
+  const filteredHist = (player.price_history || []).filter(h => {
+    return selectedSplit === 'ALL' || h.week.startsWith(selectedSplit) || h.split === selectedSplit;
+  });
+  const historyToUse = filteredHist.length > 0 ? filteredHist : player.price_history;
+
+  const detailsEl = document.getElementById('priceModalDetails');
+  const totalChg = player.total_price_change || 0;
+  const isUp = totalChg >= 0;
+
+  let swapNotice = '';
+  if (player.is_swapped) {
+    swapNotice = `
+      <div style="background: rgba(255, 171, 0, 0.1); border: 1px solid rgba(255, 171, 0, 0.3); padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; color: #ffab00;">
+        🔄 <strong>Roster Swap History:</strong> This player moved between teams during the season: <strong>${player.teams.join(' ➔ ')}</strong>.
+      </div>
+    `;
+  }
+
+  let tableRows = historyToUse.map(h => {
+    const chgClass = h.change > 0 ? 'up' : (h.change < 0 ? 'down' : 'neutral');
+    const chgPrefix = h.change > 0 ? '+' : '';
+    const tm = h.teamname || player.teamname;
+    const weekLabel = selectedSplit !== 'ALL' ? h.week.replace(selectedSplit, '').trim() : h.week;
+    return `
+      <tr>
+        <td><strong>${weekLabel}</strong></td>
+        <td><span class="team-badge">${escapeHtml(tm)}</span></td>
+        <td>${h.pts.toFixed(1)} Pts</td>
+        <td><span class="price-badge ${chgClass}">${chgPrefix}${h.change.toFixed(2)}g</span></td>
+        <td style="font-weight: 800; color: var(--accent-cyan);">${h.price.toFixed(2)}g</td>
+      </tr>
+    `;
+  }).join('');
+
+  detailsEl.innerHTML = `
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+      <div>
+        <h2 style="font-size: 22px; font-weight: 800;">💰 ${escapeHtml(player.playername)} Market Trajectory</h2>
+        <div style="color: var(--text-muted); font-size: 13px;">${escapeHtml(player.teamname)} • ${player.position} • ${player.league} ${player.year} ${selectedSplit !== 'ALL' ? `(${selectedSplit})` : ''}</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 24px; font-weight: 900; color: var(--accent-cyan);">${player.current_price.toFixed(2)} Gold</div>
+        <div style="font-size: 13px; font-weight: 800; color: ${isUp ? '#00e676' : '#ff1744'};">
+          ${isUp ? '+' : ''}${totalChg.toFixed(2)}g (${((totalChg / player.start_price)*100).toFixed(1)}%)
+        </div>
+      </div>
+    </div>
+
+    ${swapNotice}
+
+    <div style="background: rgba(10, 14, 23, 0.6); padding: 16px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 20px; height: 260px;">
+      <canvas id="priceTrajectoryChart"></canvas>
+    </div>
+
+    <h4 style="margin-bottom: 10px; color: var(--text-muted); font-size: 12px; text-transform: uppercase;">Week-by-Week Price Adjustment History</h4>
+    <div class="table-wrapper" style="max-height: 200px; overflow-y: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Team</th>
+            <th>Fantasy Pts</th>
+            <th>Price Change</th>
+            <th>Ending Market Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  document.getElementById('priceModalOverlay').classList.add('active');
+
+  // Render Chart.js line graph for filtered history
+  setTimeout(() => {
+    const canvas = document.getElementById('priceTrajectoryChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const labels = historyToUse.map(h => selectedSplit !== 'ALL' ? h.week.replace(selectedSplit, '').trim() : h.week);
+    const prices = historyToUse.map(h => h.price);
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Market Price (Gold)',
+          data: prices,
+          borderColor: isUp ? '#00e676' : '#ff1744',
+          backgroundColor: isUp ? 'rgba(0, 230, 118, 0.15)' : 'rgba(255, 23, 68, 0.15)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 5,
+          pointHoverRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `Price: ${ctx.raw.toFixed(2)} Gold`
+            }
+          }
+        },
+        scales: {
+          x: { ticks: { color: '#8a99ad' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { ticks: { color: '#8a99ad' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        }
+      }
+    });
+  }, 50);
+}
+
+function closePriceModal() {
+  document.getElementById('priceModalOverlay').classList.remove('active');
+}
+
 function sortTable(column) {
   if (currentSortCol === column) {
     currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
@@ -271,6 +584,7 @@ function sortTable(column) {
 
 function renderTrendChart() {
   const ctx = document.getElementById('trendChart').getContext('2d');
+  const selectedSplit = document.getElementById('splitSelect').value;
   
   if (trendChart) {
     trendChart.destroy();
@@ -279,10 +593,19 @@ function renderTrendChart() {
   const top5 = filteredPlayers.slice(0, 5);
   if (top5.length === 0) return;
 
-  // Discover weeks
+  // Discover weeks filtered by selectedSplit
   const weekSet = new Set();
-  top5.forEach(p => Object.keys(p.weekly_stats).forEach(w => weekSet.add(w)));
-  const weeks = Array.from(weekSet).sort((a, b) => (parseInt(a.replace('W', '')) || 0) - (parseInt(b.replace('W', '')) || 0));
+  top5.forEach(p => {
+    Object.keys(p.weekly_stats).forEach(wKey => {
+      if (selectedSplit === 'ALL' || wKey.startsWith(selectedSplit) || (p.weekly_stats[wKey].split && p.weekly_stats[wKey].split === selectedSplit)) {
+        weekSet.add(wKey);
+      }
+    });
+  });
+
+  const weeks = Array.from(weekSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+
+  if (weeks.length === 0) return;
 
   const colors = ['#00f2fe', '#ff4d6d', '#7209b7', '#ffb703', '#00e676'];
 
@@ -304,10 +627,12 @@ function renderTrendChart() {
     };
   });
 
+  const displayLabels = weeks.map(w => selectedSplit !== 'ALL' ? w.replace(selectedSplit, '').trim() : w);
+
   trendChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: weeks,
+      labels: displayLabels,
       datasets: datasets
     },
     options: {
@@ -337,17 +662,33 @@ function renderTrendChart() {
   });
 }
 
-function openPlayerModal(pname, year, league, split) {
-  const player = rawData.players.find(p => p.playername === pname && p.year === year && p.league === league && p.split === split);
+function openPlayerModal(pname, year, league) {
+  const player = rawData.players.find(p => p.playername === pname && p.year === year && p.league === league);
   if (!player) return;
 
+  const selectedSplit = document.getElementById('splitSelect').value;
   const content = document.getElementById('modalDetails');
   
-  let weeksHtml = Object.entries(player.weekly_stats).map(([wKey, w]) => {
+  let swapNotice = '';
+  if (player.is_swapped) {
+    swapNotice = `
+      <div style="background: rgba(255, 171, 0, 0.1); border: 1px solid rgba(255, 171, 0, 0.3); padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; color: #ffab00;">
+        🔄 <strong>Roster Swap History:</strong> Swapped between <strong>${player.teams.join(' ➔ ')}</strong>.
+      </div>
+    `;
+  }
+
+  const filteredEntries = Object.entries(player.weekly_stats).filter(([wKey, w]) => {
+    return selectedSplit === 'ALL' || wKey.startsWith(selectedSplit) || w.split === selectedSplit;
+  });
+  const entriesToDisplay = filteredEntries.length > 0 ? filteredEntries : Object.entries(player.weekly_stats);
+
+  let weeksHtml = entriesToDisplay.map(([wKey, w]) => {
+    const displayLabel = selectedSplit !== 'ALL' ? wKey.replace(selectedSplit, '').trim() : wKey;
     return `
       <div style="background: rgba(255,255,255,0.04); padding: 12px 16px; border-radius: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <strong style="color: var(--accent-cyan);">${wKey}</strong> • ${w.games} Game(s)
+          <strong style="color: var(--accent-cyan);">${displayLabel}</strong> • <span class="team-badge">${escapeHtml(w.teamname || player.teamname)}</span> • ${w.games} Game(s)
           <div style="font-size: 12px; color: var(--text-muted);">KDA: ${w.kills} / ${w.deaths} / ${w.assists}</div>
         </div>
         <div style="text-align: right;">
@@ -369,10 +710,12 @@ function openPlayerModal(pname, year, league, split) {
       </div>
     </div>
 
+    ${swapNotice}
+
     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px;">
       <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 12px; text-align: center;">
-        <div style="font-size: 11px; color: var(--text-muted);">TOTAL POINTS</div>
-        <div style="font-size: 20px; font-weight: 800; color: var(--accent-cyan);">${player.total_fantasy_pts}</div>
+        <div style="font-size: 11px; color: var(--text-muted);">CURRENT MARKET PRICE</div>
+        <div style="font-size: 20px; font-weight: 800; color: var(--accent-cyan);">${(player.current_price || 15.0).toFixed(2)}g</div>
       </div>
       <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 12px; text-align: center;">
         <div style="font-size: 11px; color: var(--text-muted);">AVG PTS / GAME</div>
@@ -398,7 +741,7 @@ function closeModal() {
 function exportToCSV() {
   if (filteredPlayers.length === 0) return;
 
-  const headers = ['Player', 'Team', 'Position', 'League', 'Year', 'Split', 'Games', 'Total Fantasy Pts', 'Avg Pts Per Game'];
+  const headers = ['Player', 'Team', 'Position', 'League', 'Year', 'Split', 'Current Price (Gold)', 'Total Price Change', 'Games', 'Total Fantasy Pts', 'Avg Pts Per Game'];
   const rows = filteredPlayers.map(p => [
     `"${p.playername}"`,
     `"${p.teamname}"`,
@@ -406,6 +749,8 @@ function exportToCSV() {
     p.league,
     p.year,
     `"${p.split}"`,
+    (p.current_price || 15.0).toFixed(2),
+    (p.total_price_change || 0).toFixed(2),
     p.total_games,
     p._active_total.toFixed(2),
     p._active_avg.toFixed(2)

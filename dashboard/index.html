@@ -24,6 +24,9 @@
         </div>
       </div>
       <div class="header-controls">
+        <button id="rulesBtn" class="btn-primary">
+          <span>📜 Official Rules & Budget Guide</span>
+        </button>
         <button id="exportCsvBtn" class="btn-secondary">
           <span>📥 Export CSV</span>
         </button>
@@ -68,11 +71,7 @@
         </select>
 
         <select id="splitSelect">
-          <option value="ALL">All Splits</option>
-          <option value="Spring">Spring</option>
-          <option value="Summer">Summer</option>
-          <option value="Split 1">Split 1</option>
-          <option value="Split 2">Split 2</option>
+          <option value="ALL">All Splits & Playoffs</option>
         </select>
       </div>
 
@@ -93,27 +92,52 @@
       </div>
     </div>
 
-    <!-- Main Grid (Table + Chart) -->
-    <div class="main-grid">
-      <!-- Player Trend Line Chart -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">📈 Top Players Weekly Trend</h2>
-          <span style="font-size: 12px; color: var(--text-muted);">Points trajectory across weeks</span>
+    <!-- View Mode Tabs -->
+    <div class="view-tabs">
+      <button class="view-tab-btn active" data-view="view-leaderboard">
+        <span>📊 Weekly Performance Leaderboard</span>
+      </button>
+      <button class="view-tab-btn" data-view="view-prices">
+        <span>💰 Player Market Prices & Trends</span>
+      </button>
+    </div>
+
+    <!-- View 1: Leaderboard Grid (Table + Chart) -->
+    <div class="view-section active" id="view-leaderboard">
+      <div class="main-grid">
+        <!-- Player Trend Line Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📈 Top Players Weekly Trend</h2>
+            <span style="font-size: 12px; color: var(--text-muted);">Points trajectory across weeks</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="trendChart"></canvas>
+          </div>
         </div>
-        <div class="chart-container">
-          <canvas id="trendChart"></canvas>
+
+        <!-- Weekly Matrix Table -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🏆 Weekly Player Points Matrix</h2>
+            <span style="font-size: 12px; color: var(--text-muted);">Click any player row to view match details</span>
+          </div>
+          <div id="tableContainer">
+            <!-- Dynamically populated table -->
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Weekly Matrix Table -->
+    <!-- View 2: Player Market Prices Table -->
+    <div class="view-section" id="view-prices">
       <div class="card">
         <div class="card-header">
-          <h2 class="card-title">🏆 Weekly Player Points Matrix</h2>
-          <span style="font-size: 12px; color: var(--text-muted);">Click any player row to view match details</span>
+          <h2 class="card-title">💰 Player Market Values & Price Trajectory</h2>
+          <span style="font-size: 12px; color: var(--text-muted);">Track player value appreciation, weekly gains/losses, and roster swap histories. Click any row for price graph.</span>
         </div>
-        <div id="tableContainer">
-          <!-- Dynamically populated table -->
+        <div id="priceTableContainer">
+          <!-- Dynamically populated price table -->
         </div>
       </div>
     </div>
@@ -125,6 +149,223 @@
       <button class="modal-close" id="modalCloseBtn">&times;</button>
       <div id="modalDetails">
         <!-- Dynamically rendered details -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Player Price History Chart Modal -->
+  <div class="modal-overlay" id="priceModalOverlay">
+    <div class="modal-content price-modal-content">
+      <button class="modal-close" id="priceModalCloseBtn">&times;</button>
+      <div id="priceModalDetails">
+        <!-- Dynamically rendered price graph & breakdown -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Official LCS Fantasy Rules & Budget Guide Modal -->
+  <div class="modal-overlay" id="rulesModalOverlay">
+    <div class="modal-content rules-modal-content">
+      <button class="modal-close" id="rulesModalCloseBtn">&times;</button>
+      
+      <div class="rules-header">
+        <div class="rules-badge">SPLIT 3 OFFICIAL</div>
+        <h2>🏆 LCS Fantasy Official Rules & System Guide</h2>
+        <p>Everything you need to know about building rosters, scoring points, and week-to-week budget dynamics.</p>
+      </div>
+
+      <!-- Modal Tabs -->
+      <div class="rules-tabs">
+        <button class="rules-tab-btn active" data-tab="tab-overview">Overview & Play</button>
+        <button class="rules-tab-btn" data-tab="tab-budget">💰 Budget System</button>
+        <button class="rules-tab-btn" data-tab="tab-scoring">⚡ Scoring & Objectives</button>
+        <button class="rules-tab-btn" data-tab="tab-roles">🛡️ Roles & Buffs</button>
+        <button class="rules-tab-btn" data-tab="tab-rewards">🎁 Rewards & Leagues</button>
+      </div>
+
+      <!-- Tab Content 1: Overview & How to Play -->
+      <div class="rules-tab-content active" id="tab-overview">
+        <h3>Creating Your Team</h3>
+        <p>Sign up using your <strong>Riot ID</strong>, then name your team, pick a logo, and select a tricode. Each manager starts with a budget of <strong>100 Gold</strong>.</p>
+        <div class="info-callout">
+          🗓️ <strong>Roster Locks:</strong> Starting January 13th, 3PM PT, use your budget to build your roster. Rosters lock strictly before the start of the first game of each week.
+        </div>
+        <p style="margin-top: 14px;">Points are earned from your players' real-world performance in official LCS matches over the weekend. Results are calculated the day after the last weekend game.</p>
+        
+        <h4 style="margin-top: 20px;">Eligibility & Regions</h4>
+        <p style="font-size: 13px; color: var(--text-muted);">Available in all regions except Cuba, Iran, North Korea, Crimea, Sudan, Venezuela, Syria, Greece, Italy, China, Quebec, Taiwan, Philippines, Hong Kong, Macau, Vietnam, Singapore, Thailand, Malaysia, Indonesia, Myanmar, or where prohibited by law. Requires valid Riot Account and Summoner Name for rewards.</p>
+      </div>
+
+      <!-- Tab Content 2: Week-to-Week Budget Dynamics -->
+      <div class="rules-tab-content" id="tab-budget">
+        <div class="budget-spotlight-card">
+          <div class="budget-icon">💰</div>
+          <div>
+            <h3>How Budget Updates From Week to Week</h3>
+            <p>Your team budget directly expands or contracts based on the performance and market price changes of the players you selected!</p>
+          </div>
+        </div>
+
+        <div class="info-callout gold-callout" style="margin-bottom: 20px;">
+          ⚡ <strong>Key Rule Mechanism: Direct Capital Appreciation Transfer</strong><br>
+          When a player on your roster plays exceptionally well over the weekend, their market cost increases. <strong>Your team budget for the following week increases by the exact amount that player's price went up!</strong>
+        </div>
+
+        <div class="budget-steps-grid">
+          <div class="budget-step">
+            <div class="step-num">1</div>
+            <h4>Starting 100 Gold Budget</h4>
+            <p>Every manager starts Week 1 with 100 Gold to assign players to their 5 player positions + 1 coach slot.</p>
+          </div>
+          <div class="budget-step">
+            <div class="step-num">2</div>
+            <h4>Player Price Recalculation</h4>
+            <p>Each week, player market values adjust up or down based on their actual weekend fantasy performance vs. price benchmarks.</p>
+          </div>
+          <div class="budget-step">
+            <div class="step-num">3</div>
+            <h4>Direct Budget Growth</h4>
+            <p>If Player A's price rises by <strong>+3.5 Gold</strong>, your total team budget for next week increases by <strong>+3.5 Gold</strong> (e.g. 100g &rarr; 103.5g)!</p>
+          </div>
+          <div class="budget-step">
+            <div class="step-num">4</div>
+            <h4>Roster Unlock & Upgrades</h4>
+            <p>When rosters unlock at the start of the week, spend your newly expanded budget to purchase higher-tier superstars!</p>
+          </div>
+        </div>
+
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-top: 18px;">
+          <h4 style="color: var(--accent-gold); font-size: 14px; font-weight: 800; margin-bottom: 8px;">📊 Concrete Budget Growth Example</h4>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+            In Week 1, you draft a sleeper Mid laner for <strong>14.0 Gold</strong>. Over the weekend, they pop off with a Penta Kill and 2 Wins. Their market price jumps from 14.0 Gold to <strong>17.5 Gold (+3.5 Gold Gain)</strong>.<br>
+            For Week 2, your overall team purchasing budget automatically increases from <strong>100.0 Gold to 103.5 Gold</strong>! Picking breakout players early rewards you with a larger budget to build super-teams in later weeks.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tab Content 3: Scoring Rules -->
+      <div class="rules-tab-content" id="tab-scoring">
+        <h3>Scoring Mechanics</h3>
+        <p>Each player's points are averaged across their games played on a weekend to account for variable series lengths (Bo1, Bo3, Bo5). Your final weekly score is the aggregate of your players' weekly averages.</p>
+
+        <div class="rules-tables-grid">
+          <div>
+            <h4>Basic Events</h4>
+            <ul class="rules-list">
+              <li><span>Kills</span><strong>+1.5 pts</strong></li>
+              <li><span>Assists</span><strong>+1.0 pt</strong></li>
+              <li><span>Deaths</span><strong>-1.0 pt</strong></li>
+              <li><span>Creep Score (CS)</span><strong>+0.01 / CS</strong></li>
+              <li><span>First Blood</span><strong>+1.0 pt</strong></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Performance Bonuses</h4>
+            <ul class="rules-list">
+              <li><span>Kill Participation ≥ 70%</span><strong>+2.0 pts</strong></li>
+              <li><span>Triple Kill</span><strong>+2.0 pts</strong></li>
+              <li><span>Quadra Kill</span><strong>+3.0 pts</strong></li>
+              <li><span>Penta Kill</span><strong>+5.0 pts</strong></li>
+              <li><span>10+ Kills</span><strong>+3.0 pts</strong></li>
+              <li><span>Damage Share ≥ 30%</span><strong>+3.0 pts</strong></li>
+              <li><span>Victory</span><strong>+1.0 pt</strong></li>
+              <li><span>Stomping Victory (10k+ gold or &lt;27m)</span><strong>+2.0 pts</strong></li>
+              <li><span>Perfect Score (0 deaths & KDA ≥5)</span><strong>+3.0 pts</strong></li>
+              <li><span>Gold Advantage @ 14:00</span><strong>+1 pt / 1000g</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <h4 style="margin-top: 20px;">Stolen Objective Bonuses <span class="new-tag">NEW IN SPLIT 3</span></h4>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">Applied to the pro player who steals the objective:</p>
+        <div class="stolen-grid">
+          <div class="stolen-card"><span>🐉 Stolen Dragon</span><strong>+2 pts</strong></div>
+          <div class="stolen-card"><span>👾 Stolen Rift Herald</span><strong>+2 pts</strong></div>
+          <div class="stolen-card"><span>👑 Stolen Baron</span><strong>+4 pts</strong></div>
+          <div class="stolen-card"><span>🔥 Stolen Elder Dragon</span><strong>+4 pts</strong></div>
+        </div>
+      </div>
+
+      <!-- Tab Content 4: Roles, Champions, Variety Buff & Coaches -->
+      <div class="rules-tab-content" id="tab-roles">
+        <h3>Role-Specific Scoring</h3>
+        <div class="role-cards-grid">
+          <div class="role-card TOP">
+            <h4>TOP LANE</h4>
+            <ul>
+              <li>Solo Kill: +1.0 pt</li>
+              <li>Damage Share ≥ 25%: +2.0 pts</li>
+              <li>Tank Bonus (≥25% team damage taken): +2.0 pts</li>
+            </ul>
+          </div>
+          <div class="role-card JGL">
+            <h4>JUNGLE</h4>
+            <ul>
+              <li>Team Gets 4+ Dragons: +1.5 pts</li>
+              <li>Baron Secured: +2.0 pts / Baron</li>
+              <li>Kill Participation ≥ 75%: +2.0 pts</li>
+            </ul>
+          </div>
+          <div class="role-card MID">
+            <h4>MID LANE</h4>
+            <ul>
+              <li>Damage Share ≥ 30%: +3.0 pts</li>
+              <li>CS/Min ≥ 10 @ 15 min: +1.5 pts</li>
+            </ul>
+          </div>
+          <div class="role-card BOT">
+            <h4>BOT LANE (ADC)</h4>
+            <ul>
+              <li>CS/Min ≥ 10 @ 15 min: +1.5 pts</li>
+              <li>Damage/Min ≥ 1000: +1.0 pt</li>
+            </ul>
+          </div>
+          <div class="role-card SUP">
+            <h4>SUPPORT</h4>
+            <ul>
+              <li>10+ Assists: +2.0 pts</li>
+              <li>Kill Participation ≥ 75%: +2.0 pts</li>
+              <li>First Dragon: +1.5 pts</li>
+              <li>Vision Score: Points equal to VSPM</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="margin-top: 24px;">Champion Prediction Multiplier</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Correctly predicting a champion a player uses applies a multiplier for that game (highest non-cumulative multiplier applies based on prior split rounds):</p>
+        <ul class="rules-list champion-list">
+          <li><span>Predicting champion not played in player's role:</span><strong>x1.7 Multiplier</strong></li>
+          <li><span>Predicting champion not played before by that player:</span><strong>x1.5 Multiplier</strong></li>
+          <li><span>Predicting champion already played by that player:</span><strong>x1.3 Multiplier</strong></li>
+        </ul>
+
+        <h3 style="margin-top: 24px;">Variety Buff <span class="new-tag">NEW IN SPLIT 3</span></h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Rosters with players from more teams earn a global percentage point bonus:</p>
+        <div class="variety-flex">
+          <div class="variety-badge">6 Teams: <strong>+25%</strong></div>
+          <div class="variety-badge">5 Teams: <strong>+20%</strong></div>
+          <div class="variety-badge">4 Teams: <strong>+15%</strong></div>
+          <div class="variety-badge">3 Teams: <strong>+10%</strong></div>
+          <div class="variety-badge">2 Teams: <strong>+5%</strong></div>
+          <div class="variety-badge muted">1 Team: <strong>No bonus</strong></div>
+        </div>
+
+        <h3 style="margin-top: 24px;">Coaches <span class="new-tag">NEW IN SPLIT 3</span></h3>
+        <p>In 2026, assign a Head Coach to your roster! The coach's score is calculated as the average fantasy score of that coach's LCS team roster.</p>
+      </div>
+
+      <!-- Tab Content 5: Rewards & Leaderboards -->
+      <div class="rules-tab-content" id="tab-rewards">
+        <h3>Leaderboards & Competition</h3>
+        <p>Your team automatically competes in the official LCS League and your chosen Favorite Team League upon registration. You can also join or create unlimited custom private leagues for friends and streamers using a single shared weekly roster.</p>
+
+        <div class="rewards-banner">
+          <div class="rewards-icon">🎁</div>
+          <div>
+            <h3>LCS Fantasy Kickoff Rewards</h3>
+            <p>The top <strong>100 players</strong> with the highest total points at the end of LCS Kickoff will earn an exclusive League of Legends skin reward delivered within 30 days of Kickoff completion!</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
