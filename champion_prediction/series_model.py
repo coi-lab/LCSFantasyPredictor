@@ -33,6 +33,7 @@ def build_player_series(rows: pd.DataFrame) -> pd.DataFrame:
         series_start=("as_of_timestamp", "min"),
         last_game=("as_of_timestamp", "max"),
         games_played=("gameid", "nunique"),
+        gameids=("gameid", lambda values: sorted(set(map(str, values)))),
         patch=("patch", "last"),
         actual_champions=("champion", lambda values: sorted(set(values))),
     ).reset_index()
@@ -94,6 +95,7 @@ def rolling_rankings(
     expanded = expand_training_champions(all_series)
     hit_1 = 0
     hit_3 = 0
+    evaluated = 0
     examples: list[dict[str, Any]] = []
     for target in targets.to_dict("records"):
         cutoff = target["series_start"]
@@ -104,6 +106,7 @@ def rolling_rankings(
         ].copy()
         if prior.empty:
             continue
+        evaluated += 1
         ages = (cutoff - prior["series_start"]).dt.total_seconds() / 86400.0
         prior["_recency"] = 0.5 ** (ages / 90.0)
         prior["_patch_weight"] = prior["patch"].astype(str).eq(str(target["patch"])).map(
@@ -141,7 +144,7 @@ def rolling_rankings(
                 "opponent": target["opponent_team"], "patch": str(target["patch"]),
                 "actual": sorted(actual), "predicted_top_3": ranked[:3],
             })
-    count = len(targets)
+    count = evaluated
     return (
         hit_1 / count if count else 0.0,
         hit_3 / count if count else 0.0,

@@ -37,6 +37,13 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 ## Modeling conventions
 
 - Use point-in-time feature construction and chronological evaluation.
+- Preserve patch identifiers as strings at CSV ingestion; parsing patches as
+  decimal numbers collapses distinct versions such as `15.1` and `15.10`.
+- Public opponent bans always reduce champion availability. Any unusual ban
+  attention must be stored as a separate observed signal and must not be
+  described as proof of private scrim activity.
+- Production prepared history uses `role`; reusable feature builders should
+  accept that schema rather than silently requiring raw `position`.
 - Champion-model training, tuning, examples, and audits use LCS 2023-2025 only. The protected 2026 Lock-In and Spring holdout must not be inspected or surfaced.
 - Predict each known weekly matchup and series independently; Fearless state resets between series.
 - Picks and bans are separate actions in one sequential two-team draft system.

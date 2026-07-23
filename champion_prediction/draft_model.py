@@ -20,8 +20,13 @@ from fantasy_prediction.player_baseline import canonical_team, prepare_history
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REPORT = PROJECT_ROOT / "data" / "predictions" / "draft_model_backtest.json"
-BASE_FEATURES = ("league", "patch", "acting_team", "opponent_team", "slot", "game_number", "draft_position")
-PICK_FEATURES = (*BASE_FEATURES, "assigned_role", "assigned_player")
+BASE_FEATURES = (
+    "league", "patch", "acting_team", "opponent_team", "slot", "action_phase",
+    "action_number", "game_number", "draft_position", "map_side", "is_fearless",
+)
+# Final player/role assignment is deliberately excluded. For a flex pick, that
+# assignment is not known at the moment the sequential action is predicted.
+PICK_FEATURES = BASE_FEATURES
 
 
 class CategoricalNaiveBayesRanker:
@@ -138,14 +143,18 @@ def evaluate(
         rank = ordered.index(actual) + 1
         ranks.append(rank)
         log_losses.append(-math.log(max(probabilities[actual], 1e-15)))
-    if not ranks:
-        return {"observations": 0, "unseen_champion_actions": unseen}
+    all_observations = len(ranks) + unseen
+    if not all_observations:
+        return {"observations": 0, "scored_observations": 0, "unseen_champion_actions": unseen}
     return {
-        "observations": len(ranks),
+        "observations": all_observations,
+        "scored_observations": len(ranks),
         "unseen_champion_actions": unseen,
-        "top_1_accuracy": round(sum(rank == 1 for rank in ranks) / len(ranks), 4),
-        "top_5_accuracy": round(sum(rank <= 5 for rank in ranks) / len(ranks), 4),
-        "mean_reciprocal_rank": round(float(np.mean([1.0 / rank for rank in ranks])), 4),
+        "top_1_accuracy": round(sum(rank == 1 for rank in ranks) / all_observations, 4),
+        "top_5_accuracy": round(sum(rank <= 5 for rank in ranks) / all_observations, 4),
+        "mean_reciprocal_rank": round(
+            float(sum(1.0 / rank for rank in ranks) / all_observations), 4
+        ),
         "log_loss": round(float(np.mean(log_losses)), 4),
     }
 
@@ -170,9 +179,6 @@ def train_and_backtest(rows: pd.DataFrame) -> tuple[dict[str, Any], dict[str, Ca
     for action_type, features in (("pick", PICK_FEATURES), ("ban", BASE_FEATURES)):
         training_rows = train.loc[train["action_type"].eq(action_type)].copy()
         testing_rows = test.loc[test["action_type"].eq(action_type)].copy()
-        if action_type == "pick":
-            training_rows = training_rows.loc[training_rows["assigned_role"].notna()]
-            testing_rows = testing_rows.loc[testing_rows["assigned_role"].notna()]
         model = CategoricalNaiveBayesRanker(features).fit(training_rows)
         models[action_type] = model
         report[action_type] = {

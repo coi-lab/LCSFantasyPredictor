@@ -11,3 +11,8 @@ data/predictions/*.json
 # Local browser diagnostic artifacts.
 .edge-*/
 *.png
+
+# Secrets and local environment files
+.env
+.env.*
+*.env

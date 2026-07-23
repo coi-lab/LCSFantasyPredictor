@@ -145,6 +145,29 @@ def project_one(
     }
 
 
+def project_weekly_opponents(
+    history: pd.DataFrame,
+    player: str,
+    role: str,
+    opponents: list[str],
+    cutoff: pd.Timestamp,
+) -> dict[str, float | int | str | None]:
+    """Average per-game projections across every scheduled weekly opponent."""
+    projections = [
+        project_one(history, player, role, opponent, cutoff)
+        for opponent in (opponents or [""])
+    ]
+    result = dict(projections[0])
+    for field in (
+        "projected_fantasy_pts", "player_recent_mean", "role_baseline",
+        "opponent_adjustment", "effective_recent_games",
+    ):
+        values = [float(item[field]) for item in projections if item[field] is not None]
+        result[field] = round(float(np.mean(values)), 2) if values else None
+    result["scheduled_matchups"] = len(opponents)
+    return result
+
+
 def latest_market_snapshot(market_dir: Path = DEFAULT_MARKET_DIR) -> Path:
     """Return the most recently captured official market CSV."""
     paths = sorted(glob.glob(str(market_dir / "*.csv")))
@@ -168,16 +191,20 @@ def project_market(
     records: list[dict[str, Any]] = []
     for row in player_rows.itertuples():
         role = ROLE_MAP.get(str(row.role).casefold(), str(row.role).casefold())
-        opponent_code = str(row.opponent_codes).split("|")[0]
-        opponent = code_to_team.get(opponent_code, opponent_code)
-        projection = project_one(history, str(row.summoner_name), role, opponent, cutoff)
+        opponent_codes = [
+            code.strip() for code in str(row.opponent_codes).split("|") if code.strip()
+        ]
+        opponents = [code_to_team.get(code, code) for code in opponent_codes]
+        projection = project_weekly_opponents(
+            history, str(row.summoner_name), role, opponents, cutoff
+        )
         records.append({
             "round_name": row.round_name,
             "roster_lock": cutoff.isoformat(),
             "player": row.summoner_name,
             "role": role,
             "team": canonical_team(row.team_name),
-            "opponent": opponent,
+            "opponent": "|".join(opponents),
             "price": float(row.price),
             **projection,
         })
@@ -197,12 +224,16 @@ def project_market(
     coach_records: list[dict[str, Any]] = []
     for row in rows.loc[rows["role"].astype(str).str.casefold().eq("coach")].itertuples():
         team = canonical_team(row.team_name)
+        opponent_codes = [
+            code.strip() for code in str(row.opponent_codes).split("|") if code.strip()
+        ]
+        opponents = [code_to_team.get(code, code) for code in opponent_codes]
         starters = players.loc[players["team"].eq(team) & players["projected_starter"]]
         coach_records.append({
             "round_name": row.round_name,
             "coach": row.summoner_name,
             "team": team,
-            "opponent": code_to_team.get(str(row.opponent_codes).split("|")[0], str(row.opponent_codes)),
+            "opponent": "|".join(opponents),
             "price": float(row.price),
             "projected_fantasy_pts": round(float(starters["projected_fantasy_pts"].mean()), 2),
             "projected_player_count": int(len(starters)),
@@ -212,7 +243,7 @@ def project_market(
 
 
 def backtest_late_2025(history: pd.DataFrame) -> dict[str, float | int | str]:
-    """Evaluate a chronological baseline on late-2025 LCS games."""
+    """Evaluate a rolling chronological baseline on late-2025 LCS games."""
     training_cutoff = pd.Timestamp("2025-07-01", tz="UTC")
     validation_end = pd.Timestamp("2026-01-01", tz="UTC")
     targets = history.loc[
@@ -220,16 +251,16 @@ def backtest_late_2025(history: pd.DataFrame) -> dict[str, float | int | str]:
         & history["date"].ge(training_cutoff)
         & history["date"].lt(validation_end)
     ].copy()
-    frozen_history = history.loc[history["date"].lt(training_cutoff)]
     predicted: list[float] = []
     role_baselines: list[float] = []
     for row in targets.itertuples():
+        target_cutoff = pd.Timestamp(row.date)
         result = project_one(
-            frozen_history,
+            history,
             str(row.player),
             str(row.role),
             str(row.opponent),
-            training_cutoff,
+            target_cutoff,
         )
         predicted.append(float(result["projected_fantasy_pts"]))
         role_baselines.append(float(result["role_baseline"]))
@@ -240,6 +271,7 @@ def backtest_late_2025(history: pd.DataFrame) -> dict[str, float | int | str]:
         "training_cutoff": training_cutoff.isoformat(),
         "validation_end": validation_end.isoformat(),
         "target": "LCS late-2025 player-games",
+        "evaluation_mode": "rolling_point_in_time",
         "observations": int(len(actual)),
         "mae": round(float(np.mean(np.abs(actual - prediction_array))), 3),
         "rmse": round(float(np.sqrt(np.mean(np.square(actual - prediction_array)))), 3),

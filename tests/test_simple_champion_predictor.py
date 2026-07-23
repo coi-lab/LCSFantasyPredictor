@@ -83,11 +83,13 @@ class SimpleChampionPredictorTests(unittest.TestCase):
         # Mature patch should favor player history
         self.assertEqual(w_p2, 0.55)
 
-    def test_scrim_leak_boosts_unplayed_champion(self) -> None:
-        # Azir is unplayed by player One in LCS, but opponent B bans Azir
+    def test_unusual_ban_interest_does_not_increase_availability(self) -> None:
+        # The opponent's public ban is attention evidence, not private scrim evidence.
         actions = pd.DataFrame([
             {"as_of_timestamp": "2025-12-15", "acting_team": "B", "patch": "25.24",
              "gameid": "g1", "action_type": "ban", "champion": "Azir"},
+            {"as_of_timestamp": "2025-12-15", "acting_team": "C", "patch": "25.24",
+             "gameid": "g2", "action_type": "ban", "champion": "Orianna"},
         ])
         split_history = pd.DataFrame([
             {"role": "mid", "player": "Other", "champion": "Syndra"},
@@ -101,8 +103,9 @@ class SimpleChampionPredictorTests(unittest.TestCase):
         )
         azir = result.loc[result["champion"].eq("Azir")].iloc[0]
 
-        self.assertTrue(azir["scrim_leak_signal"])
-        self.assertGreater(azir["availability_factor"], 1.0)
+        self.assertGreater(azir["unusual_opponent_ban_interest"], 0.0)
+        self.assertGreaterEqual(azir["availability_factor"], 0.0)
+        self.assertLessEqual(azir["availability_factor"], 1.0)
 
     def test_select_tiered_portfolio(self) -> None:
         from champion_prediction.simple_predictor import select_tiered_portfolio

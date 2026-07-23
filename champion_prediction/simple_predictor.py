@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 
 from champion_prediction.draft_actions import DEFAULT_OUTPUT_PATH as DEFAULT_DRAFT_DATABASE
+from champion_prediction.features import LanePriorityMatrix, PatchTierMatrix
 from data_pipeline.ingest import LCSDataIngestor
 from fantasy_prediction.player_baseline import (
     DEFAULT_MARKET_DIR,
@@ -105,26 +106,37 @@ def opponent_draft_rates(
     opponent: str,
     cutoff: pd.Timestamp,
     target_patch: str,
-) -> tuple[dict[str, float], dict[str, float], int]:
-    """Calculate opponent ban and pick rates from earlier professional drafts."""
+) -> tuple[dict[str, float], dict[str, float], dict[str, float], int]:
+    """Calculate opponent rates and a same-patch public-meta ban baseline."""
     rows = actions.copy()
     rows["date"] = pd.to_datetime(rows["as_of_timestamp"], errors="coerce", utc=True)
     rows["acting_team_norm"] = rows["acting_team"].map(canonical_team)
     rows["patch_text"] = rows["patch"].astype(str).str.strip()
-    rows = rows.loc[
+    public_prior = rows.loc[
         rows["date"].lt(cutoff)
-        & rows["acting_team_norm"].eq(canonical_team(opponent))
         & rows["date"].ge(cutoff - pd.Timedelta(days=365))
     ]
-    same_patch = rows.loc[rows["patch_text"].eq(str(target_patch))]
-    if not same_patch.empty:
-        rows = same_patch
+    same_patch_public = public_prior.loc[
+        public_prior["patch_text"].eq(str(target_patch))
+    ]
+    if not same_patch_public.empty:
+        public_prior = same_patch_public
+    rows = public_prior.loc[
+        public_prior["acting_team_norm"].eq(canonical_team(opponent))
+    ]
     games = int(rows["gameid"].nunique())
     if games == 0:
-        return {}, {}, 0
+        return {}, {}, {}, 0
     bans = rows.loc[rows["action_type"].eq("ban"), "champion"].value_counts() / games
     picks = rows.loc[rows["action_type"].eq("pick"), "champion"].value_counts() / games
-    return bans.to_dict(), picks.to_dict(), games
+    public_games = int(public_prior["gameid"].nunique())
+    public_bans = (
+        public_prior.loc[public_prior["action_type"].eq("ban"), "champion"].value_counts()
+        / public_games
+        if public_games
+        else pd.Series(dtype=float)
+    )
+    return bans.to_dict(), picks.to_dict(), public_bans.to_dict(), games
 
 
 def dynamic_feature_weights(lcs_patch_games: int) -> tuple[float, float, float]:
@@ -190,6 +202,8 @@ def rank_champions(
     top_n: int = 5,
     split_history: pd.DataFrame | None = None,
     champion_bonus_rules: dict[str, float] | None = None,
+    tier_matrix: PatchTierMatrix | None = None,
+    prio_matrix: LanePriorityMatrix | None = None,
 ) -> pd.DataFrame:
     """Rank champion candidates using dynamic cross-region weights and scrim-leak signals."""
     prior = history.loc[
@@ -218,7 +232,7 @@ def rank_champions(
             & prior["date"].ge(cutoff - pd.Timedelta(days=180))
         ]
     leading_shares = weighted_champion_shares(leading_rows, cutoff)
-    ban_rates, denial_rates, opponent_games = opponent_draft_rates(
+    ban_rates, denial_rates, public_ban_rates, opponent_games = opponent_draft_rates(
         actions, opponent, cutoff, target_patch
     )
 
@@ -232,6 +246,13 @@ def rank_champions(
     lcs_patch_games = int(lcs_rows["gameid"].nunique()) if "gameid" in lcs_rows.columns else len(lcs_rows)
     w_player, w_lcs, w_leading = dynamic_feature_weights(lcs_patch_games)
 
+    if tier_matrix is None:
+        tier_matrix = PatchTierMatrix()
+        tier_matrix.fit(prior)
+
+    if prio_matrix is None:
+        prio_matrix = LanePriorityMatrix()
+
     records: list[dict[str, Any]] = []
     for champion in candidates:
         if split_history is not None and champion_bonus_rules is not None:
@@ -244,26 +265,26 @@ def rank_champions(
         player_share = float(player_shares.get(champion, 0.0))
         lcs_share = float(lcs_shares.get(champion, 0.0))
         leading_share = float(leading_shares.get(champion, 0.0))
-        base_priority = w_player * player_share + w_lcs * lcs_share + w_leading * leading_share
+
+        tier_mult = tier_matrix.get_multiplier(target_patch, role, champion)
+        prio_stats = prio_matrix.calculate_lane_prio(prior, champion, role)
+        prio_mult = float(prio_stats.get("prio_index", 1.0))
+
+        base_priority = (
+            (w_player * player_share + w_lcs * lcs_share + w_leading * leading_share)
+            * tier_mult
+            * (0.85 + 0.15 * prio_mult)
+        )
         ban_rate = min(1.0, float(ban_rates.get(champion, 0.0)))
         denial_rate = min(1.0, float(denial_rates.get(champion, 0.0)))
 
-        # Scrim-leak target-ban detection: opponent bans on unplayed (1.7x / 1.5x) champions indicate scrim practice
-        is_already_played = (
-            novelty_category == "already_played_by_player"
-            or (novelty_category == "legacy_round_default" and player_share > 0)
+        public_ban_rate = min(1.0, float(public_ban_rates.get(champion, 0.0)))
+        unusual_ban_interest = max(0.0, ban_rate - public_ban_rate)
+        # A public ban is evidence of attention, but it always reduces actual
+        # availability. It is not evidence of private scrim preparation.
+        availability_factor = max(
+            0.05, min(1.0, 1.0 - (0.70 * ban_rate + 0.30 * denial_rate))
         )
-        if is_already_played:
-            scrim_leak_signal = False
-            availability_factor = max(0.10, 1.0 - (0.70 * ban_rate + 0.30 * denial_rate))
-        else:
-            if ban_rate > 0:
-                scrim_leak_signal = True
-                scrim_leak_boost = 1.0 + (1.5 * ban_rate)
-                availability_factor = max(0.50, scrim_leak_boost - 0.20 * denial_rate)
-            else:
-                scrim_leak_signal = False
-                availability_factor = max(0.10, 1.0 - 0.30 * denial_rate)
 
         champion_rows = player_rows.loc[player_rows["champion"].eq(champion)]
         champion_mean, champion_weight, _ = recency_mean(champion_rows, cutoff)
@@ -284,7 +305,8 @@ def rank_champions(
             "opponent_ban_rate": ban_rate,
             "opponent_pick_denial_rate": denial_rate,
             "opponent_draft_games": opponent_games,
-            "scrim_leak_signal": scrim_leak_signal,
+            "public_meta_ban_rate": public_ban_rate,
+            "unusual_opponent_ban_interest": unusual_ban_interest,
             "availability_factor": availability_factor,
             "expected_points_if_picked": expected_points,
             "novelty_category": novelty_category,
@@ -294,11 +316,14 @@ def rank_champions(
 
     ranking = pd.DataFrame.from_records(records)
     priority_total = float(ranking["unnormalized_pick_priority"].sum())
-    ranking["estimated_pick_probability"] = (
+    ranking["ranking_share"] = (
         ranking["unnormalized_pick_priority"] / priority_total
         if priority_total > 0
         else 1.0 / len(ranking)
     )
+    # Backward-compatible alias. This is a normalized heuristic share, not a
+    # calibrated forecast; new consumers should use ``ranking_share``.
+    ranking["estimated_pick_probability"] = ranking["ranking_share"]
     ranking["expected_multiplier_bonus"] = (
         ranking["estimated_pick_probability"]
         * ranking["expected_points_if_picked"]
@@ -306,13 +331,74 @@ def rank_champions(
     )
     numeric_columns = [
         "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
-        "opponent_ban_rate", "opponent_pick_denial_rate", "availability_factor",
+        "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
+        "unusual_opponent_ban_interest", "availability_factor", "ranking_share",
         "expected_points_if_picked", "novelty_multiplier",
         "estimated_pick_probability", "expected_multiplier_bonus",
     ]
     ranking[numeric_columns] = ranking[numeric_columns].round(4)
     return ranking.sort_values(
         ["expected_multiplier_bonus", "estimated_pick_probability"],
+        ascending=False,
+        kind="stable",
+    ).head(top_n).reset_index(drop=True)
+
+
+def rank_weekly_opponents(
+    history: pd.DataFrame,
+    actions: pd.DataFrame,
+    player: str,
+    role: str,
+    team: str,
+    opponents: list[str],
+    cutoff: pd.Timestamp,
+    target_patch: str,
+    split_history: pd.DataFrame,
+    champion_bonus_rules: dict[str, float],
+    top_n: int = 5,
+) -> pd.DataFrame:
+    """Combine independently ranked scheduled matchups into one weekly choice."""
+    matchup_rankings: list[pd.DataFrame] = []
+    for opponent in opponents or [""]:
+        ranked = rank_champions(
+            history,
+            actions,
+            player,
+            role,
+            team,
+            opponent,
+            cutoff,
+            target_patch,
+            None,
+            top_n=250,
+            split_history=split_history,
+            champion_bonus_rules=champion_bonus_rules,
+        )
+        if not ranked.empty:
+            matchup_rankings.append(ranked)
+    if not matchup_rankings:
+        return pd.DataFrame()
+
+    combined = pd.concat(matchup_rankings, ignore_index=True)
+    identity_columns = [
+        "player", "team", "role", "target_patch", "champion",
+        "novelty_category", "novelty_multiplier",
+    ]
+    mean_columns = [
+        "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
+        "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
+        "unusual_opponent_ban_interest", "availability_factor",
+        "expected_points_if_picked", "ranking_share", "estimated_pick_probability",
+    ]
+    weekly = combined.groupby(identity_columns, as_index=False, dropna=False).agg(
+        **{column: (column, "mean") for column in mean_columns},
+        expected_multiplier_bonus=("expected_multiplier_bonus", "sum"),
+        opponent_draft_games=("opponent_draft_games", "sum"),
+        matchup_count=("opponent", "nunique"),
+    )
+    weekly["opponent"] = "|".join(opponents)
+    return weekly.sort_values(
+        ["expected_multiplier_bonus", "ranking_share"],
         ascending=False,
         kind="stable",
     ).head(top_n).reset_index(drop=True)
@@ -356,13 +442,14 @@ def build_current_rankings(
     bonus_rules = load_champion_bonus_rules()
     outputs: list[pd.DataFrame] = []
     for row in market.loc[~market["role"].astype(str).str.casefold().eq("coach")].itertuples():
-        opponent_code = str(row.opponent_codes).split("|")[0]
-        opponent = code_to_team.get(opponent_code, opponent_code)
+        opponent_codes = [
+            code.strip() for code in str(row.opponent_codes).split("|") if code.strip()
+        ]
+        opponents = [code_to_team.get(code, code) for code in opponent_codes]
         role = ROLE_MAP.get(str(row.role).casefold(), str(row.role).casefold())
-        ranked = rank_champions(
-            history, actions, str(row.summoner_name), role, str(row.team_name), opponent,
-            cutoff, patch, None, split_history=split_history,
-            champion_bonus_rules=bonus_rules,
+        ranked = rank_weekly_opponents(
+            history, actions, str(row.summoner_name), role, str(row.team_name),
+            opponents, cutoff, patch, split_history, bonus_rules,
         )
         if not ranked.empty:
             ranked.insert(0, "round_name", row.round_name)

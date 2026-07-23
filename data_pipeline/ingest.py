@@ -71,7 +71,10 @@ class LCSDataIngestor:
             dfs = []
             for file_path in csv_files:
                 try:
-                    df = pd.read_csv(file_path, low_memory=False)
+                    # Patch identifiers are categorical labels, not decimal
+                    # numbers. Reading 15.10 as a float would collapse it to
+                    # 15.1 and merge two distinct game versions.
+                    df = pd.read_csv(file_path, low_memory=False, dtype={"patch": "string"})
                     dfs.append(df)
                 except Exception as e:
                     print(f"Warning: Could not read {file_path}: {e}")

@@ -109,6 +109,7 @@ def load_team_drafts(
         frame = pd.read_csv(
             path,
             usecols=lambda column: column in SOURCE_COLUMNS,
+            dtype={"patch": "string"},
             low_memory=False,
         )
         required = {"gameid", "position", "league", "side", "teamname", *DRAFT_COLUMNS}

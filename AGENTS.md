@@ -54,8 +54,7 @@ Read `README.md` for current usage, `IDEAS.md` for the modeling roadmap, `analys
   examples from those splits to choose weights, features, archetypes, or model
   structure. Champion-model development and Champion Lab must use LCS
   2023–2025 only unless the user explicitly replaces this rule in writing.
-  Operational fantasy pages may display current results, but they must not feed
-  champion-model research or tuning.
+- **Riot API Rate Limits (Strictly Enforce)**: All scripts querying the Riot Games API must enforce rate limits: maximum **20 requests per 1 second** and **100 requests per 2 minutes (120 seconds)**. Handle API key expiration gracefully by loading `RIOT_API_KEY` from `.env`.
 - Every historical feature must have an `as_of` time or an equivalent enforceable cutoff.
 - Never use games, drafts, market prices, novelty state, or outcomes that occurred after the prediction lock.
 - Use chronological validation rather than random train/test splits for future-week prediction.

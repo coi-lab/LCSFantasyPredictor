@@ -7,7 +7,37 @@ predictions.
 See [IDEAS.md](IDEAS.md) for the modeling backlog, including cross-region meta
 adoption scores for teams and coaches.
 
-## Data notes
+## Weekly Operating Guide (Step-by-Step)
+
+Follow these simple steps every week before fantasy roster lock:
+
+### Step 1: Update Current Match Data
+Re-download the current year's Oracle's Elixir match file `2026_LoL_esports_match_data_from_OraclesElixir.csv` into `LCS_stats/`.
+* **Important**: Do **NOT** delete historical files (`2023`, `2024`, `2025`). The system auto-detects and loads all years together.
+
+### Step 2: Refresh Your 24-Hour Riot API Key
+1. Go to [https://developer.riotgames.com/](https://developer.riotgames.com/) and log in with your Riot account.
+2. Click **"Generate Personal API Key"** and copy the `RGAPI-xxxx-xxxx...` string.
+3. Create or open `.env` in the project root and add your key:
+   ```env
+   RIOT_API_KEY=RGAPI-your-key-here
+   ```
+* **Security Note**: `.env` is listed in `.gitignore` and is **never** committed to Git. Keeps your API key safe in public repos.
+
+### Step 3: Strict Riot API Rate Limits
+Riot Games enforces strict API rate limits that our data scripts automatically obey:
+* **20 requests per 1 second**
+* **100 requests per 2 minutes (120 seconds)**
+
+### Step 4: Run Champion Predictor & Generate Portfolio
+```bash
+python -m champion_prediction.simple_predictor
+```
+Generates two files under `data/predictions/`:
+* `current_champion_rankings.csv` (All ranked candidates)
+* `current_champion_portfolio.csv` (Top 1.3x Comfort Floor, 1.5x League Adoption, and 1.7x Novelty Wildcard picks)
+
+---
 
 Oracle's Elixir already supplies the core draft fields used by this project:
 player-game rows contain the champion played, and team-game rows contain ordered

@@ -8,8 +8,23 @@ http://localhost:8050
 
 
 Every week we need to run this:
-python data_pipeline/snapshot_official_market.py
-python data_pipeline/export_dashboard_data.py
+1. Re-download current year's Oracle's Elixir match file into LCS_stats/:
+   2026_LoL_esports_match_data_from_OraclesElixir.csv
+   (Do NOT delete historical 2023-2025 files!)
 
-ok so before moving on I looked at the player pricing in gold and it seems to go up a lot more than how lcs fantay does it as it really hard for even a player to reach above 30 which berserker did in the latest season so something is wrong with how we calculate it.
-Another thing to optimize is predicting the champ in the gamre that it will earn the most bonus in 
+2. Refresh 24-Hour Riot API Key in '.env':
+   - Copy key from https://developer.riotgames.com/
+   - Set RIOT_API_KEY=RGAPI-... in .env (kept secure & git-ignored)
+
+3. Run market snapshot & champion predictor:
+   python data_pipeline/snapshot_official_market.py
+   python -m champion_prediction.simple_predictor
+   python data_pipeline/export_dashboard_data.py
+
+4. Run included server:
+   python dashboard/server.py
+   (http://localhost:8050)
+
+Notes:
+- Player pricing in gold: verify formula for high values (hard to reach above 30).
+- Champion predictor outputs current_champion_rankings.csv and current_champion_portfolio.csv (1.3x floor, 1.5x adoption, 1.7x wildcard picks). 

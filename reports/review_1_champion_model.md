@@ -2,6 +2,11 @@
 
 **Date:** 2026-07-23
 
+> **Quarantined holdout artifact:** This report contains results from the
+> protected evaluation period. Do not use its metrics, examples, or conclusions
+> to select features, weights, archetypes, or model structure. Champion-model
+> development must use chronological 2023-2025 folds.
+
 ## Executive Overview & System Architecture
 
 The champion prediction subsystem consists of three complementary components designed to handle point-in-time fantasy scoring, sequential draft action probabilities, and multi-game series tendencies:
