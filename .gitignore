@@ -4,6 +4,9 @@ __pycache__/
 # Reproducible generated champion-prediction databases.
 data/champion_prediction/*.sqlite
 data/champion_prediction/*.sqlite-*
+data/champion_prediction/audit/*.csv
+data/predictions/*.csv
+data/predictions/*.json
 
 # Local browser diagnostic artifacts.
 .edge-*/

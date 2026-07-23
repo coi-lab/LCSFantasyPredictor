@@ -121,6 +121,49 @@ Possible outputs:
 - Backtest chronologically. Never calculate adoption features using future drafts.
 - Compare the model against simple baselines: global pick rate, LCS-only pick rate, and player comfort picks.
 
+### Season resets, within-split learning, and international events
+
+Measure prediction accuracy with a weekly walk-forward backtest. A walk-forward
+backtest predicts Week 1 using only earlier games, then predicts Week 2 after
+adding Week 1, and continues through the split. Pick and ban probability should
+usually become better calibrated as same-patch, same-season evidence grows, but
+this improvement is a hypothesis to measure rather than assume.
+
+Use a dynamic evidence mixture:
+
+- Early in a season, rely more on current-patch LCK/LPL/LEC evidence, player
+  comfort, coach history, and broad regional priors.
+- Increase the weight of same-season LCS picks and bans as each completed LCS
+  week becomes available.
+- Learn the rate of this handoff from historical seasons instead of choosing a
+  fixed week manually.
+- Track pick accuracy, ban accuracy, Top-K coverage, and probability calibration
+  separately by week and by action type.
+
+Treat a new League of Legends season as a partial meta reset. Major item,
+objective, map, system, champion, and rules changes can make the final meta from
+the previous season much less relevant. Retain slower-changing player comfort
+and coach/adoption tendencies, but sharply decay champion-priority and
+composition-meta evidence across the season boundary. Estimate the size of that
+reset from prior season transitions.
+
+Keep international tournaments as their own event context:
+
+- First Stand is an early-season cross-region meta alignment signal.
+- MSI is a strong mid-season signal because major regions directly test their
+  drafts against one another.
+- EWC is another cross-region signal, but its invited field, short schedule, and
+  patch timing require a separate learned weight.
+- Worlds is useful for studying the completed season and long-term player or
+  coach tendencies, but it provides little same-season forward value for LCS
+  because the domestic season is over. Its champion meta should also decay
+  heavily across the following preseason reset.
+
+Oracle's Elixir uses event codes including `FST`, `MSI`, `EWC`, and `WLDs`.
+Preserve these labels instead of reclassifying an international game as an
+ordinary domestic-region game merely because an LCS, LCK, LPL, or LEC team
+participated.
+
 ## Patch-sensitive player and champion-archetype fit
 
 Test whether balance changes create predictable advantages for players whose strongest champion archetypes are helped by the current patch. The useful signal is not simply "player win rate on patch X"; it is the interaction between what changed, which champions and playstyles became stronger or weaker, and a player's demonstrated proficiency on those styles.
@@ -289,23 +332,39 @@ Implement the first champion-ranking model with:
 8. Novelty multiplier frozen at roster lock
 9. Expected series length and game-specific fearless availability
 10. Cross-region adoption likelihood and team-specific adoption speed
+11. Player comfort/style interaction with the team's recent willingness to enable it
+
+Do not treat a player's career champion identity as permanently active. Add a time-varying
+`team enablement` feature: compare recent team drafts with the player's established comfort
+pool and archetypes, including early-versus-late split usage. For example, an aggressive
+mid laner's historical success on melee carries should raise Yone or Akali only when the
+current patch makes them plausible and the current team/coach has recently shown a willingness
+to draft that style. Test short windows and change-point features against a static player-history
+baseline. A change point is an estimated moment when a behavior shifts, such as a team beginning
+to prioritize a player's comfort pool halfway through a split.
 
 For player `p`, champion `c`, opponent `o`, and possible series game `g`, rank candidates using an expected bonus objective:
 
 `sum_g(P(series reaches g) * P(c is fearless-legal) * P(c is not banned or denied) * P(team assigns c to p | available) * expected_fantasy_points(p, c, o, patch) * (novelty_multiplier - 1))`
 
-### Initial historical holdout experiment
+### Protected 2026 LCS holdout
 
-Use only 2025 and earlier information to generate predictions for 2026 Spring. Treat 2026 Spring as a locked out-of-time evaluation set:
+Champion-model research, feature design, manual audits, and tuning use LCS
+2023–2025 only. LCS 2026 Lock-In and Spring—including regular season and
+playoffs—are protected data and must not be inspected, queried, summarized, or
+visualized during development. Their presence in local source files does not
+authorize their use.
 
 - Fit champion, player, team, opponent, synergy, regional, and adoption features using data no later than December 31, 2025.
-- Do not use 2026 Lock-In, Spring, or later results when constructing the initial prediction features, even if those files are already present locally.
+- Tune and compare models with chronological validation windows entirely inside 2023–2025.
 - Freeze every feature at the historical roster-lock timestamp, including champion novelty and tier/adoption signals.
-- Predict champion assignment probability, pick/ban availability, expected fantasy points when picked, and expected multiplier bonus.
-- Evaluate top-1 champion accuracy, probability calibration, expected-versus-realized bonus points, and regret versus the best legal hindsight choice.
-- Compare against simple baselines: player's most-played champion, current-region presence, global presence, and a model without team style or synergy.
+- Compare top-1 and top-3 accuracy, probability calibration, expected fantasy bonus, and simple baselines on those pre-2026 validation windows.
+- Do not use any observation from protected 2026 splits to select weights, features, player archetypes, or model structure.
+- Do not expose protected profiles in Champion Lab or other champion-model audit artifacts.
 
-After preserving this untouched benchmark, later experiments can allow information from 2026 Lock-In or earlier 2026 rounds to test how quickly the model adapts within a season.
+Evaluation on protected data remains deferred unless the user explicitly
+replaces this iron rule in writing and establishes a controlled evaluation
+procedure.
 
 ## Player condition, form, and availability
 

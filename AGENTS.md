@@ -48,6 +48,14 @@ Read `README.md` for current usage, `IDEAS.md` for the modeling roadmap, `analys
 
 ## Modeling and data requirements
 
+- **Iron rule — protected 2026 LCS holdout:** Never inspect, query, summarize,
+  visualize, tune on, or derive champion-model features from LCS 2026 Lock-In
+  or Spring data, including regular-season and playoff games. Do not use
+  examples from those splits to choose weights, features, archetypes, or model
+  structure. Champion-model development and Champion Lab must use LCS
+  2023–2025 only unless the user explicitly replaces this rule in writing.
+  Operational fantasy pages may display current results, but they must not feed
+  champion-model research or tuning.
 - Every historical feature must have an `as_of` time or an equivalent enforceable cutoff.
 - Never use games, drafts, market prices, novelty state, or outcomes that occurred after the prediction lock.
 - Use chronological validation rather than random train/test splits for future-week prediction.

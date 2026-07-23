@@ -14,6 +14,7 @@ if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
 from data_pipeline.ingest import LCSDataIngestor
+from data_pipeline.export_champion_lab_data import export_champion_lab_json
 from data_pipeline.official_prices import add_missing_official_profiles, apply_official_prices
 
 try:
@@ -399,6 +400,9 @@ def export_dashboard_json(output_path: str = None) -> str:
 
     print(f"Dashboard data successfully exported to: {output_path}")
     print(f"   Processed {len(player_list)} unique player-season profiles.")
+    if HAS_PANDAS and isinstance(data, pd.DataFrame):
+        # Champion Lab enforces its protected LCS 2023-2025 scope internally.
+        export_champion_lab_json(data)
     return output_path
 
 

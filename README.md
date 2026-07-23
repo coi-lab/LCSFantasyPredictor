@@ -72,6 +72,19 @@ teams. Riot's [2025 season overview](https://lolesports.com/en-GB/news/lol-espor
 and [Fearless Draft update](https://www.leagueoflegends.com/en-us/news/esports/fearless-draft-takes-over-2025/)
 are the rule references.
 
+Build the first human-auditable professional champion summaries after building
+the draft database:
+
+```bash
+python -m champion_prediction.pro_profiles
+```
+
+This writes `champion_role_pro_profiles.csv` and
+`champion_pro_presence.csv` under `data/champion_prediction/audit/`. These are
+generated review files rather than model inputs. See
+[`analysis/champion-data-audit.md`](analysis/champion-data-audit.md) for the
+field definitions, limitations, and suggested audit order.
+
 ## Official market-price snapshots
 
 The LCS Fantasy web application loads the current market from the public

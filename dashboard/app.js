@@ -1,12 +1,15 @@
 // LCS Fantasy Interactive Weekly Dashboard Logic
 
 let rawData = null;
+let championLabData = null;
 let filteredPlayers = [];
 let currentPositionFilter = 'ALL';
 let currentSortCol = 'total_pts';
 let currentSortDir = 'desc';
 let pointsMode = 'raw'; // 'raw' or 'adjusted'
 let trendChart = null;
+let championPoolChart = null;
+let championSplitChart = null;
 
 const TEAM_COLORS = {
   '100 Thieves': '#e31b23',
@@ -114,15 +117,32 @@ function buildPatchMarkers(entries) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  addChampionLabTab();
   await loadDashboardData();
   setupEventListeners();
 });
 
+function addChampionLabTab() {
+  const tabRow = document.querySelector('.view-tabs');
+  if (!tabRow || tabRow.querySelector('[data-view="view-champion-lab"]')) return;
+  const button = document.createElement('button');
+  button.className = 'view-tab-btn';
+  button.dataset.view = 'view-champion-lab';
+  button.innerHTML = '<span>Champion Lab</span>';
+  tabRow.appendChild(button);
+}
+
 async function loadDashboardData() {
   try {
-    const resp = await fetch('./dashboard_data.json');
+    const [resp, championResp] = await Promise.all([
+      fetch('./dashboard_data.json'),
+      fetch('./champion_lab_data.json')
+    ]);
     if (!resp.ok) throw new Error('Could not load dashboard_data.json');
     rawData = await resp.json();
+    championLabData = championResp.ok
+      ? await championResp.json()
+      : { profiles: [], players: [] };
 
     populateFilterDropdowns();
     applyFilters();
@@ -228,6 +248,16 @@ function setupEventListeners() {
 
       const viewEl = document.getElementById(targetViewId);
       if (viewEl) viewEl.classList.add('active');
+      if (targetViewId === 'view-champion-lab') {
+        const yearSelect = document.getElementById('yearSelect');
+        if (Number(yearSelect.value) > 2025 || yearSelect.value === 'ALL') {
+          yearSelect.value = '2025';
+          updateSplitDropdown();
+          applyFilters();
+        } else {
+          renderChampionLab();
+        }
+      }
     });
   });
 
@@ -275,6 +305,7 @@ function setupEventListeners() {
   document.getElementById('modalOverlay').addEventListener('click', (e) => {
     if (e.target.id === 'modalOverlay') closeModal();
   });
+  document.getElementById('championPlayerSelect').addEventListener('change', renderChampionLab);
 }
 
 function getActivePriceHistory(player, selectedSplit) {
@@ -394,6 +425,7 @@ function applyFilters() {
   renderTable();
   renderPriceTable();
   renderTrendChart();
+  renderChampionLab();
 }
 
 function updateKPICards() {
@@ -951,6 +983,272 @@ function openPlayerModal(pname, year, league) {
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function formatLabNumber(value, digits = 1) {
+  return value === null || value === undefined || Number.isNaN(Number(value))
+    ? '-'
+    : Number(value).toFixed(digits);
+}
+
+function formatLabPercent(value, digits = 1) {
+  return value === null || value === undefined || Number.isNaN(Number(value))
+    ? '-'
+    : `${(Number(value) * 100).toFixed(digits)}%`;
+}
+
+function renderChampionLab() {
+  const selector = document.getElementById('championPlayerSelect');
+  const empty = document.getElementById('championLabEmpty');
+  const content = document.getElementById('championLabContent');
+  if (!selector || !empty || !content) return;
+
+  const profiles = championLabData && Array.isArray(championLabData.profiles)
+    ? championLabData.profiles
+    : [];
+  const search = document.getElementById('searchInput').value.toLowerCase().trim();
+  const league = document.getElementById('leagueSelect').value;
+  const year = document.getElementById('yearSelect').value;
+  const split = document.getElementById('splitSelect').value;
+
+  const matchingProfiles = profiles.filter(profile => {
+    const playerMatches = String(profile.player || '').toLowerCase().includes(search);
+    const teamMatches = (profile.teams || []).some(team => String(team).toLowerCase().includes(search));
+    if (search && !playerMatches && !teamMatches) return false;
+    if (league !== 'ALL' && profile.league !== league) return false;
+    if (year !== 'ALL' && profile.year !== year) return false;
+    if (split !== 'ALL' && profile.split !== split) return false;
+    if (currentPositionFilter !== 'ALL' && profile.position !== currentPositionFilter) return false;
+    return true;
+  });
+
+  const players = Array.from(new Set(matchingProfiles.map(profile => profile.player)))
+    .sort((a, b) => a.localeCompare(b));
+  const priorSelection = selector.value;
+  selector.innerHTML = players.map(player =>
+    `<option value="${escapeHtml(player)}">${escapeHtml(player)}</option>`
+  ).join('');
+  selector.value = players.includes(priorSelection) ? priorSelection : (players[0] || '');
+
+  if (!selector.value) {
+    empty.hidden = false;
+    content.hidden = true;
+    if (championPoolChart) championPoolChart.destroy();
+    if (championSplitChart) championSplitChart.destroy();
+    championPoolChart = null;
+    championSplitChart = null;
+    return;
+  }
+
+  empty.hidden = true;
+  content.hidden = false;
+  const selectedProfiles = matchingProfiles
+    .filter(profile => profile.player === selector.value)
+    .sort((a, b) => String(b.end_date || '').localeCompare(String(a.end_date || '')));
+  const profile = selectedProfiles[0];
+  const history = profiles
+    .filter(item =>
+      item.player === selector.value &&
+      (league === 'ALL' || item.league === league)
+    )
+    .sort((a, b) => String(a.start_date || '').localeCompare(String(b.start_date || '')));
+
+  renderChampionSummary(profile);
+  renderChampionPoolChart(profile);
+  renderChampionSplitChart(history);
+  renderChampionSegmentTable(profile);
+  renderChampionPickTable(profile);
+  renderChampionBanTable(profile);
+}
+
+function renderChampionSummary(profile) {
+  const summary = profile.summary;
+  const teamText = (profile.teams || []).join(', ') || 'Unknown team';
+  document.getElementById('championProfileLabel').textContent =
+    `${profile.player} | ${teamText} | ${profile.league} ${profile.year} ${profile.split} | ${summary.games} games`;
+
+  const cards = [
+    ['Pool shape', summary.pool_shape, `${summary.unique_champions} unique champions`],
+    ['Top-3 concentration', formatLabPercent(summary.top_three_concentration), 'Share of games on three most-picked champions'],
+    ['Win rate', formatLabPercent(summary.win_rate), `${summary.wins} wins in ${summary.games} games`],
+    ['Fantasy points', formatLabNumber(summary.avg_fantasy_points, 2), 'Average per game'],
+    ['Damage / minute', formatLabNumber(summary.avg_dpm, 0), 'Observed average'],
+    ['Gold diff @15', formatLabNumber(summary.avg_gold_diff_15, 0), 'Observed lane-state average']
+  ];
+  document.getElementById('championSummaryGrid').innerHTML = cards.map(([label, value, note]) => `
+    <div class="champion-summary-card">
+      <span>${escapeHtml(label)}</span>
+      <strong>${escapeHtml(value)}</strong>
+      <small>${escapeHtml(note)}</small>
+    </div>
+  `).join('');
+}
+
+function renderChampionPoolChart(profile) {
+  const canvas = document.getElementById('championPoolChart');
+  if (championPoolChart) championPoolChart.destroy();
+  const picks = (profile.champion_picks || []).slice(0, 10);
+  const teamColor = getTeamColor((profile.teams || [])[0]);
+  championPoolChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: picks.map(item => item.champion),
+      datasets: [{
+        label: 'Pick share',
+        data: picks.map(item => item.pick_share * 100),
+        backgroundColor: colorWithAlpha(teamColor, '99'),
+        borderColor: teamColor,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#a8b2c7' }, grid: { display: false } },
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#a8b2c7', callback: value => `${value}%` },
+          grid: { color: 'rgba(255,255,255,0.06)' }
+        }
+      }
+    }
+  });
+}
+
+function renderChampionSplitChart(history) {
+  const canvas = document.getElementById('championSplitChart');
+  if (championSplitChart) championSplitChart.destroy();
+  const labels = history.map(profile => `${profile.year} ${profile.split}`);
+  championSplitChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Unique champions',
+          data: history.map(profile => profile.summary.unique_champions),
+          borderColor: '#00f2fe',
+          backgroundColor: 'rgba(0,242,254,0.15)',
+          yAxisID: 'y',
+          tension: 0.25
+        },
+        {
+          label: 'Top-3 concentration',
+          data: history.map(profile => profile.summary.top_three_concentration * 100),
+          borderColor: '#ffb703',
+          backgroundColor: 'rgba(255,183,3,0.12)',
+          yAxisID: 'y1',
+          tension: 0.25
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#dce3f1' } } },
+      scales: {
+        x: { ticks: { color: '#a8b2c7' }, grid: { display: false } },
+        y: {
+          beginAtZero: true,
+          position: 'left',
+          ticks: { color: '#00f2fe', precision: 0 },
+          grid: { color: 'rgba(255,255,255,0.06)' }
+        },
+        y1: {
+          beginAtZero: true,
+          max: 100,
+          position: 'right',
+          ticks: { color: '#ffb703', callback: value => `${value}%` },
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
+}
+
+function renderChampionPickTable(profile) {
+  const rows = (profile.champion_picks || []).map(item => `
+    <tr>
+      <td><strong>${escapeHtml(item.champion)}</strong></td>
+      <td>${item.games}</td>
+      <td>${formatLabPercent(item.pick_share)}</td>
+      <td>${formatLabPercent(item.win_rate)}</td>
+      <td>${formatLabNumber(item.avg_fantasy_points, 2)}</td>
+      <td>${formatLabNumber(item.avg_kills)} / ${formatLabNumber(item.avg_deaths)} / ${formatLabNumber(item.avg_assists)}</td>
+      <td>${formatLabNumber(item.avg_dpm, 0)}</td>
+      <td>${formatLabPercent(item.avg_damage_share)}</td>
+      <td>${formatLabNumber(item.avg_gold_diff_15, 0)}</td>
+      <td>${escapeHtml((item.patches || []).join(', '))}</td>
+    </tr>
+  `).join('');
+  document.getElementById('championPickTableContainer').innerHTML = `
+    <div class="table-wrapper">
+      <table>
+        <thead><tr>
+          <th>Champion</th><th>Games</th><th>Pick share</th><th>Win rate</th>
+          <th>Fantasy pts</th><th>K / D / A</th><th>DPM</th><th>Damage share</th>
+          <th>GD @15</th><th>Patches</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderChampionSegmentTable(profile) {
+  const segments = profile.split_segments || [];
+  const rows = segments.map(segment => `
+    <tr>
+      <td><strong>${escapeHtml(segment.label)}</strong></td>
+      <td>${segment.games}</td>
+      <td>${segment.unique_champions}</td>
+      <td>${formatLabPercent(segment.top_three_concentration)}</td>
+      <td>${segment.top_picks.map(pick =>
+        `${escapeHtml(pick.champion)} (${pick.games}, ${formatLabPercent(pick.pick_share)})`
+      ).join(', ')}</td>
+    </tr>
+  `).join('');
+  document.getElementById('championSegmentTableContainer').innerHTML = `
+    <div class="table-wrapper">
+      <table>
+        <thead><tr>
+          <th>Period</th><th>Games</th><th>Unique champions</th>
+          <th>Top-3 concentration</th><th>Most-picked champions</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderChampionBanTable(profile) {
+  const bans = (profile.opponent_bans || []).slice(0, 25);
+  const rows = bans.map(item => {
+    const liftClass = item.targeted_ban_lift > 0 ? 'positive-lift' : 'negative-lift';
+    const prefix = item.targeted_ban_lift > 0 ? '+' : '';
+    return `
+      <tr>
+        <td><strong>${escapeHtml(item.champion)}</strong></td>
+        <td>${item.ban_games}</td>
+        <td>${formatLabPercent(item.faced_ban_rate)}</td>
+        <td>${formatLabPercent(item.global_side_ban_rate)}</td>
+        <td class="${liftClass}">${prefix}${formatLabPercent(item.targeted_ban_lift)}</td>
+      </tr>
+    `;
+  }).join('');
+  document.getElementById('championBanTableContainer').innerHTML = `
+    <div class="table-wrapper">
+      <table>
+        <thead><tr>
+          <th>Champion</th><th>Games banned</th><th>Faced-ban rate</th>
+          <th>Normal split rate</th><th>Ban lift</th>
+        </tr></thead>
+        <tbody>${rows || '<tr><td colspan="5">No recorded opponent bans.</td></tr>'}</tbody>
+      </table>
+    </div>
+  `;
 }
 
 function exportToCSV() {

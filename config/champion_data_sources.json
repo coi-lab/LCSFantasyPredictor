@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source_id": "oracles_elixir",
+      "name": "Oracle's Elixir professional match data",
+      "status": "active_local",
+      "approval_required_before_download": false,
+      "url": "https://lol.timsevenhuysen.com/matchdata/",
+      "provides": [
+        "professional champion picks and role assignments",
+        "ordered team picks and bans",
+        "game results and player performance",
+        "patch, league, team, player, and date context"
+      ],
+      "limitations": [
+        "no explicit series identifier",
+        "many historical player rows have partial performance statistics",
+        "does not define subjective champion playstyle labels",
+        "recorded game time is not the fantasy roster-lock time"
+      ]
+    },
+    {
+      "source_id": "riot_data_dragon",
+      "name": "Riot Data Dragon",
+      "status": "proposed_for_audit",
+      "approval_required_before_download": true,
+      "url": "https://developer.riotgames.com/docs/lol#data-dragon",
+      "provides": [
+        "official champion identifiers and names",
+        "official static tags, spell text, and base statistics",
+        "versioned champion and item assets"
+      ],
+      "limitations": [
+        "static tags are not professional role assignments",
+        "spell text does not directly establish a pro-play archetype",
+        "versions must be mapped carefully to tournament patches"
+      ]
+    },
+    {
+      "source_id": "riot_patch_notes",
+      "name": "Official Riot patch notes",
+      "status": "proposed_for_audit",
+      "approval_required_before_download": true,
+      "url": "https://www.leagueoflegends.com/en-us/news/tags/patch-notes/",
+      "provides": [
+        "champion buffs and nerfs",
+        "item, rune, system, and objective changes",
+        "published patch context"
+      ],
+      "limitations": [
+        "changes require structured interpretation",
+        "publication date is not necessarily the date a pro league adopts the patch",
+        "hotfixes and tournament-specific exceptions need separate handling"
+      ]
+    },
+    {
+      "source_id": "curated_champion_taxonomy",
+      "name": "Project champion-role taxonomy",
+      "status": "design_pending_user_audit",
+      "approval_required_before_download": false,
+      "url": null,
+      "provides": [
+        "multi-label playstyles such as engage, poke, dive, peel, and scaling",
+        "role-specific blind-pick, counter-pick, flex, and execution labels",
+        "human-reviewed explanations and confidence"
+      ],
+      "limitations": [
+        "contains judgment rather than purely observed facts",
+        "must be versioned by role and patch",
+        "every label needs provenance, confidence, and review status"
+      ]
+    },
+    {
+      "source_id": "riot_match_v5_high_elo",
+      "name": "Riot Match-V5 KR and EUW high-elo matches",
+      "status": "deferred_until_pro_baseline_is_validated",
+      "approval_required_before_download": true,
+      "url": "https://developer.riotgames.com/apis#match-v5",
+      "provides": [
+        "high-ranked solo-queue champion usage and outcomes",
+        "possible early signals before professional adoption"
+      ],
+      "limitations": [
+        "requires an API key and rate-limit-aware collection",
+        "ranked matches do not reproduce coordinated professional drafts",
+        "ban data and inferred roles require validation"
+      ]
+    }
+  ]
+}

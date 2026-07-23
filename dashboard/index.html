@@ -141,6 +141,90 @@
         </div>
       </div>
     </div>
+
+    <!-- View 3: Player champion tendencies and opponent ban context -->
+    <div class="view-section" id="view-champion-lab">
+      <div class="champion-lab-toolbar card">
+        <div>
+          <label for="championPlayerSelect">Player to audit</label>
+          <select id="championPlayerSelect"></select>
+        </div>
+        <p>
+          The main league, year, split, role, and search filters select the current profile.
+          Champion Lab is intentionally limited to LCS 2023-2025. The protected
+          2026 Lock-In and Spring holdout data is not exported to this page.
+        </p>
+      </div>
+
+      <div id="championLabEmpty" class="card champion-lab-empty" hidden>
+        No Champion Lab profile matches the current filters.
+      </div>
+
+      <div id="championLabContent">
+        <div class="champion-summary-grid" id="championSummaryGrid"></div>
+
+        <div class="champion-lab-grid">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Current champion pool</h2>
+                <span id="championProfileLabel" class="champion-lab-note"></span>
+              </div>
+            </div>
+            <div class="chart-container champion-chart-container">
+              <canvas id="championPoolChart"></canvas>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">Pool across splits</h2>
+                <span class="champion-lab-note">Unique picks and top-three concentration over time</span>
+              </div>
+            </div>
+            <div class="chart-container champion-chart-container">
+              <canvas id="championSplitChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card champion-lab-table-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Early versus late split usage</h2>
+              <span class="champion-lab-note">
+                A chronological split-half comparison helps reveal whether the team began enabling a player's comfort picks later.
+              </span>
+            </div>
+          </div>
+          <div id="championSegmentTableContainer"></div>
+        </div>
+
+        <div class="card champion-lab-table-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Champion picks and performance</h2>
+              <span class="champion-lab-note">Pick rate describes preference; fantasy results describe the observed payoff.</span>
+            </div>
+          </div>
+          <div id="championPickTableContainer"></div>
+        </div>
+
+        <div class="card champion-lab-table-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Opponent bans while player was present</h2>
+              <span class="champion-lab-note">
+                Ban lift compares this player's faced-ban rate with the normal team-side ban rate in the same league and split.
+                It is evidence of unusual attention, not proof the ban targeted this player.
+              </span>
+            </div>
+          </div>
+          <div id="championBanTableContainer"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Player Detail Modal -->
@@ -370,6 +454,6 @@
     </div>
   </div>
 
-  <script src="./app.js?v=20260722-5"></script>
+  <script src="./app.js?v=20260723-7"></script>
 </body>
 </html>

@@ -768,6 +768,118 @@ tr:hover {
   display: block;
 }
 
+/* Champion Lab */
+.champion-lab-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.champion-lab-toolbar > div {
+  min-width: 240px;
+}
+
+.champion-lab-toolbar label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.champion-lab-toolbar select {
+  width: 100%;
+}
+
+.champion-lab-toolbar p,
+.champion-lab-note {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.champion-lab-empty {
+  padding: 42px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.champion-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.champion-summary-card {
+  min-height: 112px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+}
+
+.champion-summary-card span,
+.champion-summary-card small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.champion-summary-card strong {
+  display: block;
+  margin: 8px 0 5px;
+  color: var(--accent-cyan);
+  font-size: 21px;
+}
+
+.champion-lab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.champion-chart-container {
+  height: 330px;
+}
+
+.champion-lab-table-card {
+  margin-bottom: 18px;
+}
+
+.positive-lift {
+  color: var(--accent-gold);
+  font-weight: 800;
+}
+
+.negative-lift {
+  color: var(--text-muted);
+}
+
+@media (max-width: 1100px) {
+  .champion-summary-grid {
+    grid-template-columns: repeat(3, minmax(130px, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .view-tabs,
+  .champion-lab-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .champion-summary-grid,
+  .champion-lab-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Price Delta Badges */
 .price-badge {
   display: inline-flex;

@@ -30,11 +30,13 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 - Official API prices apply only to their mapped league/year/split; they must be merged into modeled history rather than replacing unrelated splits.
 - Current LCS team graph colors are centralized in `dashboard/app.js`. Historical aliases such as Cloud9 Kia and Team Liquid Alienware normalize to their base team identities.
 - Gold chart separators indicate a recorded patch change. Cross-year views suppress patch boundaries because unrelated patch timelines would be misleading.
+- Champion Lab is a protected LCS 2023-2025 audit surface generated with the normal dashboard export. Its exporter hard-excludes every 2026 profile so Lock-In and Spring cannot leak into player-style analysis.
+- Champion Lab's `ban lift` is the player-facing ban rate minus the same league/year/split team-side ban rate. Treat it as unusual opponent attention, not proof that a ban targeted the player.
 
 ## Modeling conventions
 
 - Use point-in-time feature construction and chronological evaluation.
-- The initial untouched benchmark uses 2025 and earlier match information to predict 2026 Spring.
+- Champion-model training, tuning, examples, and audits use LCS 2023-2025 only. The protected 2026 Lock-In and Spring holdout must not be inspected or surfaced.
 - Predict each known weekly matchup and series independently; Fearless state resets between series.
 - Picks and bans are separate actions in one sequential two-team draft system.
 - Coach, roster, player, and team-era effects should be modeled hierarchically rather than permanently attributed to an organization name.
@@ -54,5 +56,10 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 - Oracle's Elixir has two team rows per game but no explicit series ID. The champion draft builder pairs Blue/Red rows and infers conservative series boundaries from matchup, consecutive game numbers, timestamps, league, year, and split.
 - Draft order must be mirrored from the recorded `firstPick` side; Blue does not always have first pick in the source data.
 - Keep map side (`Blue`/`Red`) separate from draft position (`first`/`second`). In the local data, all selected 2025 games remain Blue-first, while 801 of 1,230 selected 2026 games are Red-first under the newer First Selection system.
+- Oracle's Elixir player coverage for the five selected leagues contains 65,650 champion appearances: 38,350 complete-stat rows and 27,300 partial rows. Count partial rows for observed picks but exclude them from detailed performance averages.
+- Full-patch champion audit summaries are descriptive only. Recompute rates at each historical cutoff before using them as model features.
+- Champion prediction is evaluated primarily at the player-series level: Top-1 is the actual fantasy choice, while Top-3 is an explanation/coverage list. A hit occurs when the player uses the champion in any game of the series.
+- Preserve the recency/patch-weighted Naive Bayes model as a negative baseline and require candidate-level models to beat role popularity on chronological pre-2026 validation before integration.
+- Rolling point-in-time evaluation must tune on an earlier 2023-2025 window and score a later 2023-2025 window, using only matches before each target series.
 - Built the first point-in-time champion dataset with 6,565 canonical games and 130,600 sequential pick/ban actions across LCS/LTA N, LEC, LCK, and LPL.
 - The reconstructed data retains two known legality conflicts among 130,600 actions: one same-draft duplicate ban and one LPL 2025 prior-Fearless-pick ban. Conflict types are stored explicitly for later source auditing rather than silently rewritten.
