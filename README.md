@@ -26,6 +26,52 @@ Champion novelty must be computed using only rounds before the prediction
 round, within the same split and across all LCS teams. Do not update novelty
 categories with games played earlier in the same fantasy weekend.
 
+## Champion draft database
+
+Build the first champion-prediction dataset with:
+
+```bash
+python -m champion_prediction.draft_actions
+```
+
+This creates the reproducible SQLite database
+`data/champion_prediction/champion_drafts.sqlite`. SQLite is a small database
+stored in one local file; Python supports it without another database server.
+The generated file is intentionally ignored by Git because it can be rebuilt
+from the Oracle's Elixir CSVs and `config/draft_rules.json`.
+
+The database contains two tables:
+
+- `games` is the **canonical game table**: one row represents one game, with
+  both teams' draft fields brought together. “Canonical” means this is the
+  project's single standard representation of a game.
+- `draft_actions` is the **action-level table**: one row represents one pick or
+  ban in its actual sequence. Each row includes only draft information known
+  before that action, including earlier actions and the prior-game Fearless
+  pool. This is the point-in-time state a prediction model is allowed to see.
+
+Map side and draft order are deliberately separate. `map_side` records where a
+team plays on Summoner's Rift (`Blue` or `Red`), while `draft_position` records
+whether it drafts `first` or `second`. The builder reads the per-game
+`firstPick` source flag and does not assume Blue always drafts first. For
+example, a 2026 Red-side team can have `draft_position = first`; its first ban
+and pick are correctly emitted before Blue's.
+
+Oracle's Elixir does not include a series identifier in these files, so the
+builder conservatively reconstructs one from league, split, matchup, game
+number, and time gap. Complete drafts produce 20 actions; partial drafts remain
+in `games` but are excluded from `draft_actions` unless `--include-partial` is
+passed. The recorded game time is an observation timestamp, not proof of the
+earlier roster-lock or draft-start time.
+
+`chosen_was_legal` and `legality_conflict_type` make source anomalies visible
+instead of deleting them. These fields are quality checks, not replacement
+labels for what actually happened. The configured 2025+ Tier-1 rule uses Full
+(Hard) Fearless: a champion picked earlier in a series is unavailable to both
+teams. Riot's [2025 season overview](https://lolesports.com/en-GB/news/lol-esports-in-2025)
+and [Fearless Draft update](https://www.leagueoflegends.com/en-us/news/esports/fearless-draft-takes-over-2025/)
+are the rule references.
+
 ## Official market-price snapshots
 
 The LCS Fantasy web application loads the current market from the public

@@ -68,23 +68,23 @@ def export_dashboard_json(output_path: str = None) -> str:
 
         df["phase"] = df.apply(build_phase, axis=1)
 
-        # Group by league, year, phase to compute split-relative week
-        def compute_week(group):
-            min_date = group["date_dt"].min()
-            if pd.isna(min_date):
-                group["week_num"] = 1
-            else:
-                days = (group["date_dt"] - min_date).dt.days
-                group["week_num"] = (days // 7) + 1
-            return group
-
-        df = df.groupby(["league_str", "year_str", "phase"], group_keys=False).apply(compute_week)
+        # Compute each row's split-relative week without DataFrameGroupBy.apply.
+        # pandas 3 excludes grouping columns from apply results, which caused
+        # league_str/year_str/phase to disappear before weekly aggregation.
+        group_columns = ["league_str", "year_str", "phase"]
+        split_start = df.groupby(group_columns)["date_dt"].transform("min")
+        days_from_split_start = (df["date_dt"] - split_start).dt.days
+        df["week_num"] = ((days_from_split_start // 7) + 1).fillna(1).astype(int)
         df["week_name"] = "W" + df["week_num"].astype(str)
 
         # Aggregate game rows into weekly player summaries
         weekly_agg = df.groupby(
             ["playername", "teamname", "position", "league_str", "year_str", "phase", "week_num"]
         ).agg(
+            week_start=("date_dt", "min"),
+            patch=("patch", lambda values: ", ".join(sorted({
+                str(value).strip() for value in values if pd.notna(value) and str(value).strip()
+            }))),
             games=("gameid", "count"),
             kills=("kills", "sum"),
             deaths=("deaths", "sum"),
@@ -145,6 +145,8 @@ def export_dashboard_json(output_path: str = None) -> str:
             p["weekly_stats"][week_key] = {
                 "week_num": int(row["week_num"]),
                 "split": phase,
+                "week_start": row["week_start"].isoformat() if pd.notna(row["week_start"]) else None,
+                "patch": str(row["patch"]).strip(),
                 "teamname": team,
                 "games": int(row["games"]),
                 "kills": int(row["kills"]),
@@ -168,7 +170,10 @@ def export_dashboard_json(output_path: str = None) -> str:
             base_price = estimated_start_price
             curr_price = base_price
             price_history = []
-            sorted_weeks = sorted(p["weekly_stats"].items(), key=lambda x: (x[1]["split"], x[1]["week_num"]))
+            sorted_weeks = sorted(
+                p["weekly_stats"].items(),
+                key=lambda x: (x[1].get("week_start") or "", x[1]["week_num"]),
+            )
 
             for w_key, w_val in sorted_weeks:
                 pts = w_val["fantasy_pts"]
@@ -183,9 +188,12 @@ def export_dashboard_json(output_path: str = None) -> str:
                     "week": w_key,
                     "split": w_val["split"],
                     "week_num": w_val["week_num"],
+                    "week_start": w_val.get("week_start"),
+                    "patch": w_val.get("patch"),
                     "pts": pts,
                     "change": change,
-                    "price": curr_price
+                    "price": curr_price,
+                    "source": "estimated_baseline_13",
                 })
 
             p["start_price"] = base_price
@@ -304,6 +312,7 @@ def export_dashboard_json(output_path: str = None) -> str:
                     "week_num": week_num,
                     "split": phase,
                     "teamname": team,
+                    "patch": str(row.get("patch", "")).strip(),
                     "games": 0,
                     "kills": 0,
                     "deaths": 0,
@@ -324,6 +333,11 @@ def export_dashboard_json(output_path: str = None) -> str:
             ws["adjusted_pts"] = ws["fantasy_pts"]
             ws["avg_pts"] = ws["fantasy_pts"]
             ws["teamname"] = team
+            row_patch = str(row.get("patch", "")).strip()
+            known_patches = {part.strip() for part in str(ws.get("patch", "")).split(",") if part.strip()}
+            if row_patch:
+                known_patches.add(row_patch)
+            ws["patch"] = ", ".join(sorted(known_patches))
 
         player_list = list(player_dict.values())
         for p in player_list:
@@ -351,6 +365,7 @@ def export_dashboard_json(output_path: str = None) -> str:
                     "split": w_val["split"],
                     "week_num": w_val["week_num"],
                     "teamname": w_val["teamname"],
+                    "patch": w_val.get("patch"),
                     "pts": pts,
                     "change": change,
                     "price": curr_price
@@ -382,7 +397,7 @@ def export_dashboard_json(output_path: str = None) -> str:
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(meta, f, indent=2)
 
-    print(f"✅ Dashboard data successfully exported to: {output_path}")
+    print(f"Dashboard data successfully exported to: {output_path}")
     print(f"   Processed {len(player_list)} unique player-season profiles.")
     return output_path
 

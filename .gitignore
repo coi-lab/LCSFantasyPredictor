@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+
+# Reproducible generated champion-prediction databases.
+data/champion_prediction/*.sqlite
+data/champion_prediction/*.sqlite-*
+
+# Local browser diagnostic artifacts.
+.edge-*/
+*.png

@@ -121,6 +121,238 @@ Possible outputs:
 - Backtest chronologically. Never calculate adoption features using future drafts.
 - Compare the model against simple baselines: global pick rate, LCS-only pick rate, and player comfort picks.
 
+## Patch-sensitive player and champion-archetype fit
+
+Test whether balance changes create predictable advantages for players whose strongest champion archetypes are helped by the current patch. The useful signal is not simply "player win rate on patch X"; it is the interaction between what changed, which champions and playstyles became stronger or weaker, and a player's demonstrated proficiency on those styles.
+
+Build a multi-label champion taxonomy for every role. A champion may belong to more than one pool, and the labels should describe how the champion is used rather than force every champion into one exclusive class. Candidate pools include:
+
+- Top: tanks, weak-side/frontline, duelists, split-pushers, ranged carries, and AP threats
+- Jungle: farming carries, early gankers, engage tanks, facilitators, and AP junglers
+- Mid: control mages, assassins, roaming/playmaking mids, scaling carries, and supportive mids
+- Bot: hypercarries, lane bullies, utility carries, poke, and mage/AP bot picks
+- Support: engage, enchanter, disengage, roaming/playmaking, poke, and tank/warden
+
+Represent each patch as structured changes rather than only a patch number:
+
+- Direct champion buffs and nerfs, separated by affected role when appropriate
+- Item, rune, system, and objective changes that affect an entire archetype
+- Magnitude and type of change: damage, durability, mobility, economy, cooldown, lane strength, or scaling
+- Resulting changes in pick rate, ban rate, win rate, and fantasy-point production by role and region
+
+Estimate a player-archetype proficiency profile using only games available before roster lock. Consider games played, win rate, fantasy points, lane metrics, damage share, gold efficiency, champion diversity, and performance relative to team/opponent strength. Use recency weighting and partial pooling so a five-game specialist sample is not treated as more reliable than a large career history.
+
+A possible feature is:
+
+`patch_fit(player) = sum(archetype_proficiency(player, role, archetype) * patch_archetype_strength(archetype))`
+
+Use the result to adjust a player's expected score and champion-pick distribution, with an uncertainty penalty when the player has little evidence on the newly favored pool. A positive patch fit could raise a player's projection when their comfort styles are buffed; a negative fit could lower it when their best champions, core items, or preferred play pattern are nerfed.
+
+### Validation and correlation risks
+
+- Predict fantasy points and champion selection as well as match win rate; winning and fantasy scoring are related but not interchangeable.
+- Control for team strength, opponent strength, side, role, series format, roster changes, and champion draft priority.
+- Account for selection bias: a player appearing on a champion after a buff does not prove the buff caused better performance.
+- Separate direct champion effects from broader item, rune, objective, and meta changes.
+- Backtest chronologically and freeze patch-note features before each roster lock.
+- Compare against player-only, champion-only, patch-only, and recent-form baselines to prove the interaction adds value.
+- Report sample size and uncertainty, especially immediately after a patch or for rarely played archetypes.
+- Revisit the champion-pool taxonomy as the meta changes; flexible multi-label pools are preferable to permanent hard-coded categories.
+
+## Champion knowledge database and modeling roadmap
+
+Build a versioned champion knowledge layer before making champion-pool fit a major prediction input. Its purpose is not to reproduce a complete game wiki; it should contain the characteristics and historical evidence needed to estimate which champion gives a particular player the highest expected fantasy bonus against a specific opponent and draft environment.
+
+The primary grain should be `champion + role + patch + region + time window`. Keep curated champion identity separate from observed performance so the model can distinguish what a champion is designed to do from how professional teams are currently using it.
+
+### Champion-role characteristics
+
+Store multi-label or continuous characteristics rather than assigning every champion to one exclusive class:
+
+- Early strength, scaling, lane priority, wave clear, and side-lane pressure
+- Engage, disengage, pick/catch, poke, burst, sustained damage, and frontline value
+- Blind-pick safety, counter-pick dependence, flex potential, and execution difficulty
+- Mobility, global-map influence, objective control, resource demand, and damage profile
+- Pro-play roles such as weak-side tank, farming carry, facilitator, roaming playmaker, hypercarry, enchanter, or protect-the-carry piece
+
+Version characteristics by role and patch when balance or system changes materially alter how the champion functions. Preserve confidence and provenance for every curated label.
+
+### Champion synergy and composition patterns
+
+Champion fit must include interactions rather than evaluating each pick independently. Store pair and later composition-level features such as:
+
+- Known functional combinations, for example Orianna plus Nocturne for reliable ball delivery and dive initiation
+- Other role-dependent combinations such as Orianna plus Naafiri when their assigned roles and current-patch usage make the pairing legal and strategically meaningful
+- Engage delivery, wombo combo, pick chains, protect-the-carry, front-to-back, poke/siege, dive, split-push, and early-snowball structures
+- Observed games, pick order, win rate, fantasy output, and expected-versus-actual performance for each pairing
+- Whether the pair is commonly drafted together, merely theoretically compatible, or dependent on side, matchup, patch, or a specific team
+- Opponent denial risk and the probability both pieces remain available through the draft
+
+Use shrinkage and minimum-sample labels. A 3-0 pairing should not automatically outrank a well-supported combination played dozens of times. Extend from champion pairs to trios or learned composition embeddings only after pair features prove useful out of sample.
+
+### Team playstyle and adoption profiles
+
+Learn a versioned team-style profile from drafts and game outcomes. Candidate dimensions include engage/dive, front-to-back teamfighting, poke, pick, split-push, early aggression, scaling, protect-the-carry, willingness to flex, and willingness to play difficult or novel compositions.
+
+Connect team style to champion recommendations:
+
+- How well a champion or combination matches the team's demonstrated style
+- Whether the roster has players capable of filling every required role
+- Whether the coach/team historically changes style after roster or patch changes
+- Which strategies the opponent is vulnerable to or likely to ban
+- Whether a team successfully executes an archetype, not merely whether it drafts it
+
+Retain separate team-era, coach-era, and roster-era profiles so historical behavior is not blindly assigned to a new lineup.
+
+### Draft decision ownership: coaches, players, and team eras
+
+Do not attach draft behavior permanently to an organization name. Picks and bans are produced jointly by the coaching staff, active roster, influential players, opponent, patch, side, series state, and current tournament rules. A team name is still useful as context, but it is a poor long-term owner of the behavior when coaches and players move.
+
+Model draft tendencies hierarchically:
+
+`draft tendency = global meta + region + coach/staff era + roster era + player comfort/influence + opponent + patch + side/slot + series state`
+
+Maintain effective-dated identities for:
+
+- Head coach, strategic coach, positional coaches, analysts, and other known draft staff
+- Active roster and substitutes
+- Coach-player overlap periods
+- Team/organization era
+- Tournament stage and applicable draft rules
+
+Estimate coach and coaching-staff tendencies such as champion priority, ban philosophy, willingness to flex, preference for comfort versus meta, composition archetypes, cross-region adoption speed, and adaptation between games. Preserve coach-career features across team changes, but shrink them toward the current team/roster evidence because public data does not reveal who made each individual draft decision.
+
+Coach-player interaction features may capture combinations that repeatedly produce distinctive drafts or unusually successful champion usage. Examples include a coach enabling a player's specialist pool, a player adapting quickly to the coach's preferred meta, or a staff repeatedly building compositions around one player's strengths. Require repeated shared history and compare against each coach's and player's separate baselines before attributing a synergy effect.
+
+### Player draft influence
+
+Explore a probabilistic player-influence score rather than assuming every player has equal input or declaring that a particular player controls the draft. Possible observable signals include:
+
+- Share of team bans directed at the player's lane or known champion pool
+- Frequency the team spends early picks, counter-pick position, or flex options on that player
+- How strongly team champion priorities change when the player joins, leaves, or is substituted
+- Whether compositions repeatedly center on the player's comfort archetypes
+- Champion-pool centrality: how many team compositions depend on the player's picks or flex threats
+- Persistence of the same draft tendencies across different coaches or teams
+
+Player influence is latent and heavily confounded by skill, role, champion pool, patch, opponent targeting, and team strength. Use roster/coach changes as quasi-experiments where possible, apply strong sample-size shrinkage, and report uncertainty. Treat the resulting feature as evidence that drafts are organized around a player, not proof of private shot-calling authority.
+
+Coach attribution should be tested against simpler alternatives. Compare out-of-time prediction accuracy for team-era only, coach-era only, roster only, and combined hierarchical models. Keep the additional depth only if coach or coach-player features improve pick/ban probability and expected fantasy bonus on unseen matches.
+
+### Picks, bans, denial, and inter-game strategy
+
+Treat picks and bans as equally important observations within one sequential draft model, while recognizing that they are different actions. A pick reveals immediate composition value and player assignment; a ban reveals opponent respect, matchup danger, strategy protection, or the opportunity cost a team is willing to accept.
+
+- A team may ban a champion it also plays well when the opponent's expected value on it is even higher.
+- A team cannot ban a champion to preserve that same champion for its own later pick; banning removes it for both teams. It can instead ban counters or other opponent priorities to protect a planned later pick.
+- A team may select a champion it plays only adequately to deny an opponent who is substantially stronger on it.
+- Flex picks can preserve role ambiguity and delay revealing the intended composition.
+- Under Fearless, selecting a champion also denies it to both teams in later games, so a current-game pick may carry future-series denial value.
+- Weight future denial by the probability the series reaches each later game and by the opponent's value on the champion in the resulting reduced pool.
+
+The data observes actions but not private motives. Create probabilistic denial, protection, comfort, flex, and future-series-value features rather than labeling any single action's intent as fact.
+
+Version Fearless rules by league, split, stage, series format, and effective date rather than using a blanket year cutoff. Pre-Fearless games remain valid for learning comfort, counters, team preferences, and ordinary pick/ban strategy; their series-level unavailable set is simply empty. Fearless state resets between separate scheduled series, so predict every known weekly matchup independently before combining its expected fantasy value.
+
+### Cross-region meta and adoption speed
+
+LCK and LPL picks, bans, role assignments, and successful compositions should be important leading indicators for LCS. LEC can be included as another source with its own learned weight. For every LCS team and coach, estimate whether they are a fast, average, selective, or slow adopter of signals from each source region.
+
+Track:
+
+- First source-region appearance and first meaningful rise in presence by champion-role-patch
+- Time until an LCS team first bans, picks, and repeatedly uses the signal
+- Separate adoption lags for individual champions, flex roles, pair synergies, and broader composition styles
+- Source-region affinity, because a team may follow LCK more closely than LPL or vice versa
+- Successful adoption versus imitation without good results
+- Patch alignment and information availability before the target roster lock
+
+This should extend the cross-region meta-adoption model above rather than create an unrelated duplicate feature.
+
+### Deferred high-elo solo-queue signal
+
+For a later split, use Riot Match-V5 data to calculate role-specific pick rate, ban rate, win rate, and emerging champion-pair signals from Challenger and Grandmaster games in KR and EUW. Store the underlying patch, region, tier, role, sample size, collection time, and queue rather than importing consumer `S/A/B` tier labels.
+
+Treat this as an early-warning prior, not direct evidence of professional strength. High-elo solo queue may reveal experiments before professional matches provide enough samples, but coordinated professional drafts, lane assignments, bans, and composition execution are materially different. Compare whether KR or EUW signals actually lead LCK/LPL adoption and then whether those professional regions lead LCS adoption. Hold this ingestion work until the first professional-data version is validated.
+
+### First-version feature set
+
+Implement the first champion-ranking model with:
+
+1. Champion-role characteristics
+2. Pro pick, ban, presence, and role rates by patch and region
+3. Player history, recency, and fantasy production on the champion and its archetypes
+4. Team pick/ban tendencies and team-style compatibility
+5. Opponent bans, denial picks, counters, and vulnerabilities
+6. Patch buffs, nerfs, and relevant item/rune/system changes
+7. Pair-synergy features with sample-size shrinkage
+8. Novelty multiplier frozen at roster lock
+9. Expected series length and game-specific fearless availability
+10. Cross-region adoption likelihood and team-specific adoption speed
+
+For player `p`, champion `c`, opponent `o`, and possible series game `g`, rank candidates using an expected bonus objective:
+
+`sum_g(P(series reaches g) * P(c is fearless-legal) * P(c is not banned or denied) * P(team assigns c to p | available) * expected_fantasy_points(p, c, o, patch) * (novelty_multiplier - 1))`
+
+### Initial historical holdout experiment
+
+Use only 2025 and earlier information to generate predictions for 2026 Spring. Treat 2026 Spring as a locked out-of-time evaluation set:
+
+- Fit champion, player, team, opponent, synergy, regional, and adoption features using data no later than December 31, 2025.
+- Do not use 2026 Lock-In, Spring, or later results when constructing the initial prediction features, even if those files are already present locally.
+- Freeze every feature at the historical roster-lock timestamp, including champion novelty and tier/adoption signals.
+- Predict champion assignment probability, pick/ban availability, expected fantasy points when picked, and expected multiplier bonus.
+- Evaluate top-1 champion accuracy, probability calibration, expected-versus-realized bonus points, and regret versus the best legal hindsight choice.
+- Compare against simple baselines: player's most-played champion, current-region presence, global presence, and a model without team style or synergy.
+
+After preserving this untouched benchmark, later experiments can allow information from 2026 Lock-In or earlier 2026 rounds to test how quickly the model adapts within a season.
+
+## Player condition, form, and availability
+
+Treat player condition as an uncertain, time-varying state supported by observable evidence. Do not infer private health, motivation, confidence, or morale from rumors or poor results. Separate three questions:
+
+1. **Availability:** What is the probability the player starts and completes the expected games?
+2. **Recent form:** Is the player currently performing above or below their normal expectation after accounting for context?
+3. **Adaptation state:** Is the player adjusting to a new patch, role, roster, team, coach, or champion pool?
+
+A useful first form signal is a recency-weighted performance residual:
+
+`condition_score = weighted_average(actual_fantasy_points - expected_fantasy_points)`
+
+A **residual** is the difference between what happened and what the model expected after considering champion, opponent, side, team strength, role, and patch. Using residuals is safer than using raw recent points: scoring 15 against a very strong opponent on a low-scoring weak-side champion may be better evidence than scoring 20 in an easy, high-kill matchup.
+
+Use an **exponentially weighted moving average (EWMA)** for the first implementation. An EWMA is an average that gives the newest games the most weight and gradually reduces the influence of older games. Test several decay speeds rather than assuming a single definition of "recent."
+
+Possible observable features:
+
+- Residual performance over the last 3, 5, and 10 games
+- Variability and consistency of recent performance
+- Days since the player's last professional game
+- Expected games, recent substitutions, and confirmed starter announcements
+- Publicly confirmed illness, injury, visa, or availability information with source and timestamp
+- Recent role, roster, team, or coach changes
+- Performance immediately after major patches or on newly required champion archetypes
+- Travel and schedule density when reliable public information is available
+- High-elo solo-queue activity or experimentation later, only with reliable player-account identity matching
+
+Apply **shrinkage**, meaning pull an uncertain estimate back toward the player's longer-term baseline when the recent sample is small. One unusually good game should not create a large condition boost. Attach a confidence score and cap the initial condition adjustment to a modest range until chronological backtests demonstrate a larger reliable effect.
+
+Player condition should modify both expected fantasy points and start probability, but should not directly invent champion preferences. Any effect on champion prediction should pass through observable evidence such as recent champion practice, role adaptation, or a substitution that changes the available pool.
+
+Validate the feature by comparing a model without condition, a raw-recent-form model, and the context-adjusted residual model. Keep the added complexity only if it improves future-week predictions rather than merely explaining games after they happened.
+
+## Learning and explanation standard
+
+Treat development as a learning process as well as a prediction project. When documentation, reports, or model outputs introduce a new statistical or machine-learning term:
+
+- Define it in plain language on first use.
+- Explain why it is appropriate for this problem.
+- Give a concrete League or fantasy example.
+- State its assumptions and common failure modes.
+- Distinguish fixed heuristics from values learned from data.
+- Prefer interpretable baselines before introducing more complex algorithms.
+- Expose component probabilities and feature contributions rather than returning only a final recommendation.
+
 ## Draft optimizer ideas
 
 - Optimize expected score and expected roster value growth under the 100-gold budget.

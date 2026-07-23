@@ -1,0 +1,18 @@
+{
+  "default_rule": {
+    "rule_id": "standard_draft",
+    "fearless_enabled": false,
+    "fearless_variant": "none"
+  },
+  "rules": [
+    {
+      "rule_id": "tier1_fearless_2025_plus",
+      "leagues": ["LCS", "LTA N", "LEC", "LCK", "LPL"],
+      "start_date": "2025-01-01",
+      "end_date": null,
+      "fearless_enabled": true,
+      "fearless_variant": "hard",
+      "notes": "Default Tier-1 rule. Add a more specific stage override when a competition used a different format."
+    }
+  ]
+}

@@ -17,6 +17,14 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DASHBOARD_DIR, **kwargs)
 
+    def end_headers(self):
+        # This is a local development dashboard. Always serve current files so
+        # browser caches cannot retain an older app.js after code changes.
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
+
 
 def run_server():
     print(f"🚀 Starting LCS Fantasy Weekly Dashboard at http://localhost:{PORT}")

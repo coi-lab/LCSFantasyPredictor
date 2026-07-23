@@ -8,6 +8,111 @@ let currentSortDir = 'desc';
 let pointsMode = 'raw'; // 'raw' or 'adjusted'
 let trendChart = null;
 
+const TEAM_COLORS = {
+  '100 Thieves': '#e31b23',
+  'Cloud9': '#00aeef',
+  'Dignitas': '#ffe600',
+  'Disguised': '#a66a3f',
+  'FlyQuest': '#2ecc71',
+  'Immortals': '#00e5ff',
+  'LYON': '#d4af37',
+  'Sentinels': '#e31b23',
+  'Shopify Rebellion': '#39ff14',
+  'Team Liquid': '#3b82f6',
+  'TSM': '#f8fafc',
+
+  // Provisional historical LCS colors; easy to update after confirmation.
+  'Counter Logic Gaming': '#5dade2',
+  'Evil Geniuses': '#00a88f',
+  'Golden Guardians': '#ff9e1b',
+  'NRG': '#ff5c35'
+};
+
+const TEAM_ALIASES = {
+  'Cloud9 Kia': 'Cloud9',
+  'Team Liquid Alienware': 'Team Liquid'
+};
+
+const FALLBACK_TEAM_COLORS = [
+  '#9b5de5', '#f15bb5', '#00bbf9', '#00f5d4', '#f97316',
+  '#a3e635', '#fb7185', '#818cf8', '#22d3ee', '#c084fc'
+];
+
+function getTeamColor(teamName) {
+  const rawName = String(teamName || 'Unknown').trim();
+  const canonicalName = TEAM_ALIASES[rawName] || rawName;
+  if (TEAM_COLORS[canonicalName]) return TEAM_COLORS[canonicalName];
+
+  let hash = 0;
+  for (let i = 0; i < canonicalName.length; i += 1) {
+    hash = ((hash << 5) - hash + canonicalName.charCodeAt(i)) | 0;
+  }
+  return FALLBACK_TEAM_COLORS[Math.abs(hash) % FALLBACK_TEAM_COLORS.length];
+}
+
+function colorWithAlpha(hex, alphaHex = '26') {
+  return /^#[0-9a-f]{6}$/i.test(hex) ? `${hex}${alphaHex}` : hex;
+}
+
+const patchBoundaryPlugin = {
+  id: 'patchBoundaries',
+  afterDraw(chart, _args, options) {
+    const markers = options && options.markers;
+    if (!markers || !markers.initialPatch || !chart.chartArea || !chart.scales.x) return;
+
+    const { ctx, chartArea, scales } = chart;
+    ctx.save();
+    ctx.font = '700 11px Inter, sans-serif';
+    ctx.fillStyle = '#ffb703';
+    ctx.textBaseline = 'top';
+    ctx.fillText(`Patch ${markers.initialPatch}`, chartArea.left + 6, chartArea.top + 6);
+
+    markers.boundaries.forEach(boundary => {
+      const previousX = scales.x.getPixelForValue(Math.max(0, boundary.index - 1));
+      const currentX = scales.x.getPixelForValue(boundary.index);
+      const x = (previousX + currentX) / 2;
+
+      ctx.beginPath();
+      ctx.setLineDash([6, 4]);
+      ctx.strokeStyle = '#ffb703';
+      ctx.lineWidth = 2;
+      ctx.moveTo(x, chartArea.top);
+      ctx.lineTo(x, chartArea.bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      const label = `Patch ${boundary.patch}`;
+      const labelWidth = ctx.measureText(label).width + 10;
+      ctx.fillStyle = 'rgba(10, 14, 23, 0.9)';
+      ctx.fillRect(x + 4, chartArea.top + 4, labelWidth, 18);
+      ctx.fillStyle = '#ffb703';
+      ctx.fillText(label, x + 9, chartArea.top + 7);
+    });
+    ctx.restore();
+  }
+};
+
+function buildPatchMarkers(entries) {
+  let activePatch = null;
+  const boundaries = [];
+
+  entries.forEach((entry, index) => {
+    const patch = String(entry && entry.patch || '').trim();
+    if (!patch) return;
+    if (activePatch === null) {
+      activePatch = patch;
+    } else if (patch !== activePatch) {
+      boundaries.push({ index, patch });
+      activePatch = patch;
+    }
+  });
+
+  return {
+    initialPatch: entries.map(entry => String(entry && entry.patch || '').trim()).find(Boolean) || null,
+    boundaries
+  };
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   await loadDashboardData();
   setupEventListeners();
@@ -45,8 +150,12 @@ function populateFilterDropdowns() {
   }
 
   // Populate Years
-  const years = ['ALL', ...rawData.years.sort().reverse()];
+  const sortedYears = [...rawData.years].sort().reverse();
+  const years = ['ALL', ...sortedYears];
   yearSelect.innerHTML = years.map(y => `<option value="${y}">${y === 'ALL' ? 'All Years' : y}</option>`).join('');
+  if (sortedYears.length > 0) {
+    yearSelect.value = sortedYears[0];
+  }
 
   updateSplitDropdown();
 }
@@ -168,6 +277,50 @@ function setupEventListeners() {
   });
 }
 
+function getActivePriceHistory(player, selectedSplit) {
+  const history = Array.isArray(player.price_history) ? player.price_history : [];
+  return history
+    .filter(entry => selectedSplit === 'ALL' || entry.split === selectedSplit)
+    .slice()
+    .sort((a, b) => {
+      const dateCompare = String(a.week_start || a.captured_at_utc || '')
+        .localeCompare(String(b.week_start || b.captured_at_utc || ''));
+      return dateCompare || ((a.week_num || 0) - (b.week_num || 0));
+    });
+}
+
+function getActivePriceMetrics(player, selectedSplit) {
+  const history = getActivePriceHistory(player, selectedSplit);
+  if (history.length === 0) {
+    return {
+      history,
+      start: Number(player.start_price || 15.0),
+      current: Number(player.current_price || 15.0),
+      latestChange: Number(player.latest_weekly_change || 0.0),
+      totalChange: Number(player.total_price_change || 0.0),
+      source: player.pricing_source || 'estimated_baseline_13'
+    };
+  }
+
+  const first = history[0];
+  const latest = history[history.length - 1];
+  const firstPrice = Number(first.price || 0);
+  const firstChange = Number(first.change || 0);
+  const start = first.previous_price != null
+    ? Number(first.previous_price)
+    : firstPrice - firstChange;
+  const current = Number(latest.price || 0);
+
+  return {
+    history,
+    start,
+    current,
+    latestChange: Number(latest.change || 0),
+    totalChange: current - start,
+    source: latest.source || 'estimated_baseline_13'
+  };
+}
+
 function applyFilters() {
   if (!rawData || !rawData.players) return;
 
@@ -203,6 +356,7 @@ function applyFilters() {
     p._active_total = totalGames > 0 ? (totalPts / totalGames) : 0; // Average per game for fantasy ranking
     p._active_sum = totalPts;
     p._active_games = totalGames;
+    p._active_price = getActivePriceMetrics(p, split);
   });
 
   // Sort
@@ -219,11 +373,11 @@ function applyFilters() {
       valB = b.teamname;
       return currentSortDir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
     } else if (currentSortCol === 'current_price') {
-      valA = a.current_price || 15.0;
-      valB = b.current_price || 15.0;
+      valA = a._active_price.current;
+      valB = b._active_price.current;
     } else if (currentSortCol === 'total_price_change') {
-      valA = a.total_price_change || 0;
-      valB = b.total_price_change || 0;
+      valA = a._active_price.totalChange;
+      valB = b._active_price.totalChange;
     } else if (currentSortCol === 'avg_pts' || currentSortCol === 'total_pts') {
       valA = a._active_total;
       valB = b._active_total;
@@ -403,10 +557,14 @@ function renderPriceTable() {
   `;
 
   filteredPlayers.forEach((p, idx) => {
-    const basePrice = (p.start_price || 15.0).toFixed(2);
-    const currPrice = (p.current_price || 15.0).toFixed(2);
-    const weeklyChg = p.latest_weekly_change || 0.0;
-    const totalChg = p.total_price_change || 0.0;
+    const metrics = p._active_price || getActivePriceMetrics(p, document.getElementById('splitSelect').value);
+    const basePrice = metrics.start.toFixed(2);
+    const currPrice = metrics.current.toFixed(2);
+    const weeklyChg = metrics.latestChange;
+    const totalChg = metrics.totalChange;
+    const priceSource = metrics.source === 'official_market_api'
+      ? '<div style="font-size: 10px; color: #00e676; margin-top: 2px;">OFFICIAL API</div>'
+      : '<div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">ESTIMATED</div>';
 
     let wBadgeClass = 'neutral';
     let wPrefix = '';
@@ -453,13 +611,11 @@ function openPriceModal(pname, year, league) {
   if (!player || !player.price_history) return;
 
   const selectedSplit = document.getElementById('splitSelect').value;
-  const filteredHist = (player.price_history || []).filter(h => {
-    return selectedSplit === 'ALL' || h.week.startsWith(selectedSplit) || h.split === selectedSplit;
-  });
-  const historyToUse = filteredHist.length > 0 ? filteredHist : player.price_history;
+  const metrics = getActivePriceMetrics(player, selectedSplit);
+  const historyToUse = metrics.history;
 
   const detailsEl = document.getElementById('priceModalDetails');
-  const totalChg = player.total_price_change || 0;
+  const totalChg = metrics.totalChange;
   const isUp = totalChg >= 0;
 
   let swapNotice = '';
@@ -488,7 +644,7 @@ function openPriceModal(pname, year, league) {
     `;
   }).join('');
 
-  const pricingNotice = player.pricing_source === 'official_market_api'
+  const pricingNotice = metrics.source === 'official_market_api'
     ? '<div style="color: #00e676; font-size: 12px; margin-top: 3px;">Official LCS Fantasy market API price</div>'
     : '<div style="color: var(--text-muted); font-size: 12px; margin-top: 3px;">Experimental estimated price; no official snapshot captured</div>';
 
@@ -499,10 +655,10 @@ function openPriceModal(pname, year, league) {
         <div style="color: var(--text-muted); font-size: 13px;">${escapeHtml(player.teamname)} • ${player.position} • ${player.league} ${player.year} ${selectedSplit !== 'ALL' ? `(${selectedSplit})` : ''}</div>
       </div>
       <div style="text-align: right;">
-        <div style="font-size: 24px; font-weight: 900; color: var(--accent-cyan);">${player.current_price.toFixed(2)} Gold</div>
+        <div style="font-size: 24px; font-weight: 900; color: var(--accent-cyan);">${metrics.current.toFixed(2)} Gold</div>
         ${pricingNotice}
         <div style="font-size: 13px; font-weight: 800; color: ${isUp ? '#00e676' : '#ff1744'};">
-          ${isUp ? '+' : ''}${totalChg.toFixed(2)}g (${((totalChg / player.start_price)*100).toFixed(1)}%)
+          ${isUp ? '+' : ''}${totalChg.toFixed(2)}g (${metrics.start ? ((totalChg / metrics.start)*100).toFixed(1) : '0.0'}%)
         </div>
       </div>
     </div>
@@ -541,6 +697,9 @@ function openPriceModal(pname, year, league) {
     const ctx = canvas.getContext('2d');
     const labels = historyToUse.map(h => selectedSplit !== 'ALL' ? h.week.replace(selectedSplit, '').trim() : h.week);
     const prices = historyToUse.map(h => h.price);
+    const teamColors = historyToUse.map(h => getTeamColor(h.teamname || player.teamname));
+    const primaryTeamColor = teamColors[teamColors.length - 1] || getTeamColor(player.teamname);
+    const patchMarkers = buildPatchMarkers(historyToUse);
 
     new Chart(ctx, {
       type: 'line',
@@ -549,21 +708,32 @@ function openPriceModal(pname, year, league) {
         datasets: [{
           label: 'Market Price (Gold)',
           data: prices,
-          borderColor: isUp ? '#00e676' : '#ff1744',
-          backgroundColor: isUp ? 'rgba(0, 230, 118, 0.15)' : 'rgba(255, 23, 68, 0.15)',
+          borderColor: primaryTeamColor,
+          backgroundColor: colorWithAlpha(primaryTeamColor),
+          pointBackgroundColor: teamColors,
+          pointBorderColor: teamColors,
+          segment: {
+            borderColor: context => teamColors[context.p1DataIndex] || primaryTeamColor
+          },
           fill: true,
           tension: 0.3,
           pointRadius: 5,
           pointHoverRadius: 8
         }]
       },
+      plugins: [patchBoundaryPlugin],
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: { display: false },
+          patchBoundaries: { markers: patchMarkers },
           tooltip: {
             callbacks: {
+              afterTitle: items => {
+                const entry = historyToUse[items[0].dataIndex];
+                return entry && entry.patch ? `Patch ${entry.patch}` : '';
+              },
               label: (ctx) => `Price: ${ctx.raw.toFixed(2)} Gold`
             }
           }
@@ -594,6 +764,7 @@ function sortTable(column) {
 function renderTrendChart() {
   const ctx = document.getElementById('trendChart').getContext('2d');
   const selectedSplit = document.getElementById('splitSelect').value;
+  const selectedYear = document.getElementById('yearSelect').value;
   
   if (trendChart) {
     trendChart.destroy();
@@ -612,23 +783,41 @@ function renderTrendChart() {
     });
   });
 
-  const weeks = Array.from(weekSet).sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+  const weekStart = week => {
+    for (const player of top5) {
+      const stats = player.weekly_stats[week];
+      if (stats && stats.week_start) return stats.week_start;
+    }
+    return '';
+  };
+  const weeks = Array.from(weekSet).sort((a, b) => {
+    const dateCompare = weekStart(a).localeCompare(weekStart(b));
+    return dateCompare || a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+  });
 
   if (weeks.length === 0) return;
 
-  const colors = ['#00f2fe', '#ff4d6d', '#7209b7', '#ffb703', '#00e676'];
-
-  const datasets = top5.map((p, i) => {
+  const datasets = top5.map(p => {
     const dataPoints = weeks.map(w => {
       const s = p.weekly_stats[w];
       return s ? (pointsMode === 'adjusted' ? s.adjusted_pts : s.fantasy_pts) : null;
     });
+    const teamColors = weeks.map(w => {
+      const s = p.weekly_stats[w];
+      return getTeamColor(s && s.teamname ? s.teamname : p.teamname);
+    });
+    const primaryTeamColor = getTeamColor(p.teamname);
 
     return {
       label: `${p.playername} (${p.teamname})`,
       data: dataPoints,
-      borderColor: colors[i % colors.length],
-      backgroundColor: colors[i % colors.length] + '20',
+      borderColor: primaryTeamColor,
+      backgroundColor: colorWithAlpha(primaryTeamColor, '20'),
+      pointBackgroundColor: teamColors,
+      pointBorderColor: teamColors,
+      segment: {
+        borderColor: context => teamColors[context.p1DataIndex] || primaryTeamColor
+      },
       tension: 0.3,
       fill: false,
       pointRadius: 5,
@@ -637,6 +826,15 @@ function renderTrendChart() {
   });
 
   const displayLabels = weeks.map(w => selectedSplit !== 'ALL' ? w.replace(selectedSplit, '').trim() : w);
+  const patchTimeline = weeks.map(w => {
+    for (const player of top5) {
+      if (player.weekly_stats[w] && player.weekly_stats[w].patch) return player.weekly_stats[w];
+    }
+    return {};
+  });
+  const patchMarkers = selectedYear === 'ALL'
+    ? { initialPatch: null, boundaries: [] }
+    : buildPatchMarkers(patchTimeline);
 
   trendChart = new Chart(ctx, {
     type: 'line',
@@ -644,6 +842,7 @@ function renderTrendChart() {
       labels: displayLabels,
       datasets: datasets
     },
+    plugins: [patchBoundaryPlugin],
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -651,9 +850,16 @@ function renderTrendChart() {
         legend: {
           labels: { color: '#f0f4fc', font: { family: 'Inter', size: 12 } }
         },
+        patchBoundaries: { markers: patchMarkers },
         tooltip: {
           mode: 'index',
-          intersect: false
+          intersect: false,
+          callbacks: {
+            afterTitle: items => {
+              const entry = patchTimeline[items[0].dataIndex];
+              return entry && entry.patch ? `Patch ${entry.patch}` : '';
+            }
+          }
         }
       },
       scales: {
