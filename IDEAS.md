@@ -299,10 +299,10 @@ Version Fearless rules by league, split, stage, series format, and effective dat
 
 ### Cross-region meta and adoption speed
 
-LCK and LPL picks, bans, role assignments, and successful compositions should be important leading indicators for LCS. LEC can be included as another source with its own learned weight. For every LCS team and coach, estimate whether they are a fast, average, selective, or slow adopter of signals from each source region.
+LCK, LPL, and international tournament (First Stand, MSI, EWC) picks, bans, role assignments, and successful compositions are primary leading indicators for LCS adoption.
 
 Track:
-
+- **Patch-Distance & Patch-Magnitude Decay**: Meta decay in pro play is governed by **Patch Distance ($\Delta \text{patch}$)** and **Patch Impact Magnitude** (e.g. major tournament/preseason resets vs. minor hotfixes) rather than calendar days. Track meta decay across patch transitions ($\text{Patch}_N \to \text{Patch}_{N+1}$); major patch changes accelerate decay instantly, while minor patches retain higher meta continuity.
 - First source-region appearance and first meaningful rise in presence by champion-role-patch
 - Time until an LCS team first bans, picks, and repeatedly uses the signal
 - Separate adoption lags for individual champions, flex roles, pair synergies, and broader composition styles
@@ -310,7 +310,24 @@ Track:
 - Successful adoption versus imitation without good results
 - Patch alignment and information availability before the target roster lock
 
-This should extend the cross-region meta-adoption model above rather than create an unrelated duplicate feature.
+### Pro Play Anchor Pairs & Composition Shells
+
+Pro play drafts are almost universally anchored by 2-champion core combos and 3-man composition shells:
+- **Bot/Support Duo Mining**: Bot lane pairings (ADC + Support) are the most prevalent and easiest to extract. Mine high-elo solo queue duo data (KR & EUW Challenger/Grandmaster) to detect emerging bot-lane duos before pro teams debut them.
+- **Patch-Tier Weighted Synergies**: Theoretical pairs (e.g., Sejuani + Yone) must be gated by current-patch individual champion strength. If Sejuani is B-tier on a patch compared to S-tier junglers (Jarvan IV, Vi, Maokai), the pair's overall priority scales down accordingly:
+  $$\text{Pair Priority}(A, B) = \text{Base Synergy}(A, B) \cdot \text{Patch Tier}(A) \cdot \text{Patch Tier}(B)$$
+- **Mid/Jungle Anchor Pairs**: Vi + Ahri, Sejuani + Yone/Jayce, Nocturne + Neeko/Orianna, Jarvan IV + Galio/Sylas.
+- **Bot/Support Anchor Pairs**: Lucian + Nami, Zeri + Yuumi, Kalista + Renata/Rakan, Caitlyn + Lux, Draven + Nautilus.
+- **Top/Jungle Anchor Pairs**: Rumble + Jarvan IV, Renekton + Nidalee/Elise.
+
+When a team locks piece #1 of an established anchor pair, the conditional probability of selecting piece #2 increases exponentially. Model pair synergies explicitly with minimum-sample shrinkage before expanding to 3-man core shells.
+
+### Macro Win Conditions & Early Lane Priority (Lane Prio)
+
+Draft decisions are strongly driven by a team's intended macro win condition:
+- **Early Lane Priority & Dragon Stacking Strategy**: Drafting high-prio, early-push lanes (e.g. Varus/Kalista + Karma/Renata bot, Jayce/Lucian mid) to guarantee river priority, control early Void Grubs, and stack Dragons on cooldown.
+- **Late-Game Scaling & Teamfight Strategy**: Drafting weakside lanes (e.g. K'Sante top, Smolder/Azir mid) that concede early dragon control to scale for 25+ minute Baron and Elder fights.
+- **Lane Prio Feature Matrix**: Measure champion early push rates, lane matchup advantage, CS diff at 15, and team first-dragon rates to predict whether a team will select an early-prio duo vs a scaling carry.
 
 ### Deferred high-elo solo-queue signal
 

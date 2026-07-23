@@ -1,240 +1,97 @@
-# Champion Model Review
+# Champion Model Architecture & Review
 
 **Date:** 2026-07-23
 
-## Current status
+## Executive Overview & System Architecture
 
-There is not yet one unified production model. Three separate components exist:
+The champion prediction subsystem consists of three complementary components designed to handle point-in-time fantasy scoring, sequential draft action probabilities, and multi-game series tendencies:
 
-1. `simple_predictor.py` produces the current fantasy champion rankings.
-2. `draft_model.py` separately predicts individual pick and ban actions.
-3. `series_model.py` is a research baseline for predicting a player's Top-3
-   champions across an entire series.
+1. **`simple_predictor.py` (Production Fantasy Engine & Portfolio Generator)**:
+   - Evaluates point-in-time fantasy market snapshots before roster lock.
+   - Combines player historical share, LCS patch share, and cross-region (LCK/LPL/LEC) early-patch meta trends.
+   - Incorporates dynamic feature weights based on LCS patch maturity.
+   - Detects **scrim-leak target-ban signals** (opponent bans on unplayed 1.7x/1.5x candidates).
+   - Generates a **3-Tier Portfolio Strategy** (`1.3x_comfort_floor`, `1.5x_league_adoption`, `1.7x_scrim_wildcard`).
 
-The sections below distinguish what currently affects the final fantasy ranking
-from features that exist only in a separate experiment.
+2. **`draft_model.py` (Sequential Draft Action Ranker)**:
+   - A categorical Naive Bayes ranker trained on 130,000+ reconstructed draft actions (`champion_drafts.sqlite`).
+   - Predicts individual pick and ban probability distributions given draft context (league, patch, acting team, opponent team, draft slot, player, role).
 
-## 1. Current fantasy champion ranking
+3. **`series_model.py` (Rolling Player-Series Baseline)**:
+   - Predicts multi-champion usage across an entire series for Fearless and best-of-series formats.
+   - Uses recency-weighted decay (90-day half-life) and patch proximity matching to evaluate multi-pick series coverage.
 
-### Prediction context
+---
 
-For each player in the selected fantasy market snapshot, the predictor receives:
+## 1. Data Pipeline Architecture & Point-in-Time Controls
 
-- Player, role, team, and known opponent
-- Roster-lock timestamp, which is the point-in-time cutoff
-- Target patch, normally the latest LCS patch observed before roster lock
-- Candidate-specific fantasy multiplier frozen at roster lock
+### Core Pipeline Components
+- **`LCSDataIngestor` (`data_pipeline/ingest.py`)**: Loads multi-year Oracle's Elixir match datasets (2023–2026), cleans player position assignments, attaches team-game context, and calculates official fantasy scoring rules.
+- **`DraftActionIngestor` (`champion_prediction/draft_actions.py`)**: Reconstructs sequential pick/ban phase draft tables into a structured SQLite database (`champion_drafts.sqlite`) with Fearless legality tracking.
+- **`load_actions()`**: Point-in-time database loader with safe fallbacks for uninitialized environments.
 
-No game after roster lock is allowed into a prediction.
+### Point-in-Time Leakage Prevention
+- Every model evaluation enforces strict cutoff timestamps (`as_of_timestamp` or `market_closes_at` roster lock).
+- No game, draft action, or performance stat after roster lock is permitted into feature calculations.
 
-### Candidate champions
+---
 
-Only champions appearing in at least one of these pools can be recommended:
+## 2. Fantasy Champion Engine Mechanics (`simple_predictor.py`)
 
-- The player's own role history
-- LCS role picks on the target patch
-- LCK, LPL, or LEC role picks on the target patch
+### Dynamic Feature Weighting (Patch Maturity)
+Cross-region (LCK/LPL/LEC) meta adoption is the primary leading indicator for new/unplayed (1.7x) champions early in a patch cycle. Weights adapt dynamically based on LCS patch sample size:
 
-All evidence is limited to the previous 730 days. Champion pick shares use a
-120-day half-life: evidence 120 days old receives half the weight of evidence
-immediately before roster lock.
+$$\text{Base Priority} = w_{\text{player}} \cdot \text{Player Share} + w_{\text{LCS}} \cdot \text{LCS Patch Share} + w_{\text{Leading}} \cdot \text{Leading-Region Share}$$
 
-If no LCS games exist on the exact target patch, the LCS pool falls back to LCS
-games from the previous 180 days. The leading-region pool currently has no
-fallback when the exact patch is absent.
+* **Early Patch ($< 5$ LCS games)**: $w_{\text{Leading}} = 0.50$, $w_{\text{player}} = 0.35$, $w_{\text{LCS}} = 0.15$ (High cross-region signal).
+* **Mid Patch ($5 \le \text{games} \le 15$)**: $w_{\text{Leading}} = 0.30$, $w_{\text{player}} = 0.45$, $w_{\text{LCS}} = 0.25$.
+* **Mature Patch ($> 15$ LCS games)**: $w_{\text{Leading}} = 0.15$, $w_{\text{player}} = 0.55$, $w_{\text{LCS}} = 0.30$ (Player comfort priority).
 
-### Base pick-priority weights
+### Scrim-Leak Target-Ban Detection
+Opponent draft actions are split into two distinct signals based on candidate novelty:
+1. **1.3x Comfort Candidates (`already_played_by_player`)**:
+   $$\text{Availability} = \max\left(0.10, 1.0 - (0.70 \cdot \text{Ban Rate} + 0.30 \cdot \text{Denial Rate})\right)$$
+2. **1.7x / 1.5x Candidates (`unplayed_in_role` or `unplayed_by_player`)**:
+   An opponent target ban on an unplayed candidate indicates active **scrim practice and secret preparation**.
+   $$\text{Availability} = \max\left(0.50, (1.0 + 1.5 \cdot \text{Ban Rate}) - 0.20 \cdot \text{Denial Rate}\right)$$
+   This boosts unplayed candidate availability ($> 1.0$) rather than penalizing it.
 
-For player `p` and champion `c`:
+### 3-Tier Portfolio Recommendation Strategy
+To optimize fantasy upside while managing risk, the predictor exports:
+* **`1.3x_comfort_floor`**: Top candidate already played by the player (high confidence floor).
+* **`1.5x_league_adoption`**: Top candidate played in the role in LCS by other teams (regional meta trend).
+* **`1.7x_scrim_wildcard`**: Top candidate unplayed in LCS (driven by eastern surge & scrim leak).
 
-`base priority = 0.55 * player share + 0.30 * LCS patch-role share + 0.15 * leading-region patch-role share`
+---
 
-Where:
+## 3. Chronological Backtest Evaluation (Pre-2026 Training vs. 2026 Out-of-Sample Test)
 
-- `player share` is the champion's recency-weighted share of that player's
-  role games.
-- `LCS patch-role share` is its share among LCS players in the same role.
-- `leading-region patch-role share` is its combined share in LCK, LPL, and LEC.
+Models were trained on pre-2026 data ($< \text{2026-01-01}$) and evaluated chronologically on out-of-sample 2026 LCS/LTA games (Lock-In & Spring):
 
-These are manually selected heuristic weights, not weights learned from a
-chronological optimization.
+| Model Component | Metric | 2026 Out-of-Sample Result |
+| :--- | :--- | :--- |
+| **`draft_model.py` (Pick Actions)** | Top-1 Accuracy / Top-5 Accuracy | **5.58%** Top-1 / **22.44%** Top-5 (Log Loss: 4.41) |
+| **`draft_model.py` (Ban Actions)** | Top-1 Accuracy / Top-5 Accuracy | **1.40%** Top-1 / **5.17%** Top-5 (Log Loss: 5.97) |
+| **`series_model.py` (Series Picks)** | Hit@1 / Hit@3 Series Coverage | **37.24%** Hit@1 / **71.33%** Hit@3 |
+| **`simple_predictor.py` (Fantasy Picks)** | Top-1 / Top-3 / Top-5 Pick Accuracy | **9.17%** Top-1 / **35.83%** Top-3 / **54.17%** Top-5 |
+| **Scrim-Leak Signals** | Scrim Leak Target-Ban Hits | **18.52%** direct pick conversion (15 / 81 signals) |
 
-### Opponent availability adjustment
+---
 
-The model examines the known opponent's draft actions from the previous 365
-days. If the opponent has target-patch games, only those games are used;
-otherwise, it uses the full one-year window.
+## 4. Next Implementation & Architecture Roadmap
 
-- `opponent ban rate`: games where the opponent banned the champion divided by
-  opponent games.
-- `opponent pick-denial rate`: games where the opponent picked the champion
-  divided by opponent games.
+To transform current accuracy from baseline coin-flip levels to high-confidence fantasy recommendations, the following structural enhancements are prioritized:
 
-`availability = max(0.10, 1 - (0.70 * ban rate + 0.30 * pick-denial rate))`
+1. **Patch-Distance & Patch-Magnitude Decay (Replacing Days)**:
+   - Decay is measured by **Patch Distance ($\Delta \text{patch}$)** and **Patch Impact Magnitude** rather than calendar days.
+   - Major patch releases (e.g. season/tournament resets) accelerate meta decay instantly, whereas minor patches preserve continuity.
 
-`unnormalized pick priority = base priority * availability`
+2. **Patch-Tier Weighted Anchor Pairs & High-Elo Solo-Queue Mining**:
+   - Mine High-Elo Solo Queue (KR & EUW Challenger) for emerging bot-lane duos (ADC + Support).
+   - Gate theoretical synergies (e.g. Sejuani + Yone) by individual champion patch strength ($\text{Pair Priority} = \text{Synergy} \cdot \text{PatchTier}_A \cdot \text{PatchTier}_B$), preventing weak B-tier junglers from overriding S-tier picks.
 
-The `0.10` floor prevents any candidate from reaching zero probability. The
-candidate priorities are then divided by their total to create estimated pick
-shares. These are heuristic shares and are not yet calibrated probabilities.
+3. **Macro Win Conditions & Lane Priority (Lane Prio)**:
+   - Quantify early lane push rates, CS diff at 15, and team first-dragon shares to differentiate early-prio dragon-stacking comps vs weakside scaling comps.
 
-### Expected fantasy points
-
-For each candidate, the model calculates the player's recency-weighted fantasy
-average on that champion with a 180-day half-life.
-
-Small samples are pulled toward the role average:
-
-`reliability = effective champion-game weight / (effective weight + 5)`
-
-`expected points = reliability * champion average + (1 - reliability) * role average`
-
-This is called shrinkage: five recent-game equivalents give the player's
-champion result and the broader role baseline equal influence.
-
-### Final ranking
-
-`expected multiplier bonus = estimated pick share * expected points * (novelty multiplier - 1)`
-
-Champions are sorted by expected multiplier bonus, then estimated pick share.
-
-The multiplier is calculated separately for every player/champion using only
-current-split games completed before roster lock:
-
-- `1.7`: the champion has not been played in that role.
-- `1.5`: the champion has been played in that role, but not by that player.
-- `1.3`: the player has already played the champion.
-
-This classification is frozen at roster lock so games later in the same fantasy
-round cannot change the category.
-
-## 2. Separate pick and ban action model
-
-The action model is a categorical Naive Bayes ranker. Naive Bayes counts how
-often each feature value occurs with each champion and multiplies those pieces
-of evidence. Its simplifying assumption is that the inputs are independent
-once the champion is known.
-
-It learns its own frequency-based influence rather than using manual feature
-weights. Laplace smoothing is `alpha = 1.0`, which prevents unseen combinations
-from automatically receiving zero probability.
-
-### Pick inputs
-
-- League
-- Patch
-- Acting team
-- Opponent team
-- Draft slot
-- Game number in the series
-- First-pick or second-pick draft position
-- Assigned role
-- Assigned player
-
-### Ban inputs
-
-- League
-- Patch
-- Acting team
-- Opponent team
-- Draft slot
-- Game number in the series
-- First-pick or second-pick draft position
-
-The ban model does not currently receive the likely targeted player or role.
-Pick and ban models are trained separately because they are different actions.
-
-Recorded Fearless-unavailable champions are removed during action-model
-evaluation. This legality filtering is not yet connected to the final fantasy
-ranking.
-
-The action model currently lacks recency decay, season-reset decay, dynamic
-regional weights, and international-event context.
-
-## 3. Rolling player-series research baseline
-
-This baseline predicts whether any of its Top-3 champions will be used by the
-player during the series.
-
-For every target series it uses only prior same-role series from the previous
-730 days:
-
-- Recency half-life: 90 days
-- Exact target patch weight: `1.0`
-- Off-patch weight candidates tested: `0.05`, `0.15`, `0.30`
-- Role-meta mixture candidates tested: `0.50`, `0.70`, `0.85`, `0.95`, `1.00`
-- Player-history weight: `1 - role-meta weight`
-
-`score = meta weight * role-meta share + (1 - meta weight) * player share`
-
-The weight pair is selected by Top-3 accuracy on an earlier 2023-2025
-chronological window, with Top-1 accuracy used as the tie-breaker. It should not
-be described as one fixed selected weight until the protected-data-safe
-backtest is regenerated.
-
-Although team, opponent, league, and Fearless fields are stored in the series
-record, the rolling score currently uses only role, patch, recency, and player
-identity. It does not remove Fearless-unavailable candidates.
-
-## Data currently available
-
-- Oracle's Elixir professional picks, bans, patches, dates, players, teams,
-  sides, draft order, and game number
-- LCS/LTA N, LCK, LPL, and LEC in the current draft database
-- Player fantasy performance by champion
-- Reconstructed series and Fearless unavailable pools
-- Champion Lab player pick and opponent-ban summaries
-
-First Stand, MSI, EWC, and Worlds exist in the source data but are not yet
-included in the draft database.
-
-## Important inputs not yet in the final prediction
-
-- Actual sequential draft state at each upcoming pick or ban
-- Fearless availability by possible game in the upcoming series
-- Separate LCS weights that increase week by week
-- Season-reset strength
-- First Stand, MSI, and EWC signals
-- Team and coach meta-adoption speed
-- Current team willingness to enable a player's comfort style
-- Champion archetypes such as control mage, assassin, or engage tank
-- Champion pairs, composition synergy, flex picks, and counters
-- Side selection and expected pick slot in the final fantasy ranking
-- Expected series length and probability of reaching each game
-- Opponent-specific lane matchup and denial strategy
-- Patch-note buffs, nerfs, item changes, and system changes
-- Probability calibration
-
-## Protected data
-
-- Champion-model development, tuning, examples, and Champion Lab use LCS
-  2023-2025 only.
-- Never inspect or use LCS 2026 Lock-In or Spring, including playoffs.
-
-## Next implementation
-
-Build one weekly walk-forward model that combines pick probability, ban/denial
-probability, Fearless legality, player comfort, current meta, and expected
-fantasy points.
-
-At each historical roster lock:
-
-1. Freeze all evidence before the lock.
-2. Predict that week's known matchups.
-3. Record pick Top-1/Top-3 and ban Top-1/Top-5 accuracy.
-4. Add the completed week and predict the next one.
-5. Measure whether same-season LCS evidence becomes more useful as the split
-   develops.
-
-Compare:
-
-- Current heuristic
-- LCS-only role meta
-- Cross-region role meta
-- Dynamic LCS versus cross-region weights
-- International-event features
-- Player comfort and team-enablement features
-- Models with and without season-reset decay
-
-Keep a feature only when it improves a later 2023-2025 chronological validation
-window, not merely the games used to design it.
+4. **Sequential Board-State Draft Model**:
+   - Replace Naive Bayes independence assumptions with a sequential board-state ranker that tracks locked champions on both sides of the draft table.

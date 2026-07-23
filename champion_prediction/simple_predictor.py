@@ -28,7 +28,7 @@ from fantasy_prediction.player_baseline import (
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "predictions" / "current_champion_rankings.csv"
 SCORING_RULES_PATH = PROJECT_ROOT / "config" / "scoring_rules.json"
-LEADING_LEAGUES = {"LCK", "LPL", "LEC"}
+LEADING_LEAGUES = {"LCK", "LPL", "LEC", "EWC", "FST", "MSI"}
 MARKET_SPLIT_NAMES = {1: "Lock-In", 2: "Spring", 3: "Summer"}
 
 
@@ -127,6 +127,56 @@ def opponent_draft_rates(
     return bans.to_dict(), picks.to_dict(), games
 
 
+def dynamic_feature_weights(lcs_patch_games: int) -> tuple[float, float, float]:
+    """Return (player_weight, lcs_weight, leading_weight) based on LCS patch sample size."""
+    if lcs_patch_games < 5:
+        return 0.35, 0.15, 0.50
+    elif lcs_patch_games <= 15:
+        return 0.45, 0.25, 0.30
+    else:
+        return 0.55, 0.30, 0.15
+
+
+def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
+    """Select the top candidate for each multiplier tier (1.3x floor, 1.5x adoption, 1.7x scrim wildcard)."""
+    if ranking_df.empty or "novelty_category" not in ranking_df.columns:
+        return pd.DataFrame()
+
+    tier_map = {
+        "already_played_by_player": "1.3x_comfort_floor",
+        "unplayed_by_player": "1.5x_league_adoption",
+        "unplayed_in_role": "1.7x_scrim_wildcard",
+    }
+
+    selected: list[pd.Series] = []
+    group_cols = [c for c in ["round_name", "player", "role"] if c in ranking_df.columns]
+
+    if group_cols:
+        grouped = ranking_df.groupby(group_cols, dropna=False)
+        for _, group in grouped:
+            for category, tier_label in tier_map.items():
+                cat_rows = group.loc[group["novelty_category"].eq(category)]
+                if not cat_rows.empty:
+                    top_pick = cat_rows.sort_values(
+                        ["expected_multiplier_bonus", "estimated_pick_probability"],
+                        ascending=False,
+                    ).iloc[0].copy()
+                    top_pick["portfolio_tier"] = tier_label
+                    selected.append(top_pick)
+    else:
+        for category, tier_label in tier_map.items():
+            cat_rows = ranking_df.loc[ranking_df["novelty_category"].eq(category)]
+            if not cat_rows.empty:
+                top_pick = cat_rows.sort_values(
+                    ["expected_multiplier_bonus", "estimated_pick_probability"],
+                    ascending=False,
+                ).iloc[0].copy()
+                top_pick["portfolio_tier"] = tier_label
+                selected.append(top_pick)
+
+    return pd.DataFrame(selected).reset_index(drop=True) if selected else pd.DataFrame()
+
+
 def rank_champions(
     history: pd.DataFrame,
     actions: pd.DataFrame,
@@ -141,7 +191,7 @@ def rank_champions(
     split_history: pd.DataFrame | None = None,
     champion_bonus_rules: dict[str, float] | None = None,
 ) -> pd.DataFrame:
-    """Rank champion candidates with a transparent weighted heuristic."""
+    """Rank champion candidates using dynamic cross-region weights and scrim-leak signals."""
     prior = history.loc[
         history["date"].lt(cutoff)
         & history["date"].ge(cutoff - pd.Timedelta(days=730))
@@ -162,6 +212,11 @@ def rank_champions(
     leading_rows = prior.loc[
         prior["league"].isin(LEADING_LEAGUES) & prior["patch_text"].eq(target_patch)
     ]
+    if leading_rows.empty:
+        leading_rows = prior.loc[
+            prior["league"].isin(LEADING_LEAGUES)
+            & prior["date"].ge(cutoff - pd.Timedelta(days=180))
+        ]
     leading_shares = weighted_champion_shares(leading_rows, cutoff)
     ban_rates, denial_rates, opponent_games = opponent_draft_rates(
         actions, opponent, cutoff, target_patch
@@ -173,6 +228,9 @@ def rank_champions(
     role_mean, _, _ = recency_mean(prior.loc[prior["league"].eq("LCS")], cutoff)
     if not math.isfinite(role_mean):
         role_mean, _, _ = recency_mean(prior, cutoff)
+
+    lcs_patch_games = int(lcs_rows["gameid"].nunique()) if "gameid" in lcs_rows.columns else len(lcs_rows)
+    w_player, w_lcs, w_leading = dynamic_feature_weights(lcs_patch_games)
 
     records: list[dict[str, Any]] = []
     for champion in candidates:
@@ -186,10 +244,26 @@ def rank_champions(
         player_share = float(player_shares.get(champion, 0.0))
         lcs_share = float(lcs_shares.get(champion, 0.0))
         leading_share = float(leading_shares.get(champion, 0.0))
-        base_priority = 0.55 * player_share + 0.30 * lcs_share + 0.15 * leading_share
+        base_priority = w_player * player_share + w_lcs * lcs_share + w_leading * leading_share
         ban_rate = min(1.0, float(ban_rates.get(champion, 0.0)))
         denial_rate = min(1.0, float(denial_rates.get(champion, 0.0)))
-        availability_factor = max(0.10, 1.0 - (0.70 * ban_rate + 0.30 * denial_rate))
+
+        # Scrim-leak target-ban detection: opponent bans on unplayed (1.7x / 1.5x) champions indicate scrim practice
+        is_already_played = (
+            novelty_category == "already_played_by_player"
+            or (novelty_category == "legacy_round_default" and player_share > 0)
+        )
+        if is_already_played:
+            scrim_leak_signal = False
+            availability_factor = max(0.10, 1.0 - (0.70 * ban_rate + 0.30 * denial_rate))
+        else:
+            if ban_rate > 0:
+                scrim_leak_signal = True
+                scrim_leak_boost = 1.0 + (1.5 * ban_rate)
+                availability_factor = max(0.50, scrim_leak_boost - 0.20 * denial_rate)
+            else:
+                scrim_leak_signal = False
+                availability_factor = max(0.10, 1.0 - 0.30 * denial_rate)
 
         champion_rows = player_rows.loc[player_rows["champion"].eq(champion)]
         champion_mean, champion_weight, _ = recency_mean(champion_rows, cutoff)
@@ -210,6 +284,7 @@ def rank_champions(
             "opponent_ban_rate": ban_rate,
             "opponent_pick_denial_rate": denial_rate,
             "opponent_draft_games": opponent_games,
+            "scrim_leak_signal": scrim_leak_signal,
             "availability_factor": availability_factor,
             "expected_points_if_picked": expected_points,
             "novelty_category": novelty_category,
@@ -245,6 +320,10 @@ def rank_champions(
 
 def load_actions(path: Path = DEFAULT_DRAFT_DATABASE) -> pd.DataFrame:
     """Load reconstructed professional draft actions."""
+    if not path.exists():
+        return pd.DataFrame(columns=[
+            "gameid", "as_of_timestamp", "acting_team", "patch", "action_type", "champion"
+        ])
     connection = sqlite3.connect(path)
     try:
         return pd.read_sql_query("SELECT * FROM draft_actions", connection)
@@ -304,7 +383,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
-    """Generate the current simple champion rankings."""
+    """Generate the current simple champion rankings and tiered portfolio."""
     args = parse_args()
     ingestor = LCSDataIngestor()
     raw = ingestor.load_raw_data()
@@ -320,6 +399,13 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     rankings.to_csv(args.output, index=False)
     print(f"Wrote champion rankings: {args.output} ({len(rankings)} rows)")
+
+    portfolio = select_tiered_portfolio(rankings)
+    if not portfolio.empty:
+        portfolio_output = args.output.parent / "current_champion_portfolio.csv"
+        portfolio.to_csv(portfolio_output, index=False)
+        print(f"Wrote champion portfolio: {portfolio_output} ({len(portfolio)} rows)")
+
     if not rankings.empty:
         print(f"Patch basis: {rankings['target_patch'].iloc[0]} ({rankings['patch_basis'].iloc[0]})")
         print("Probabilities are heuristic ranking shares, not calibrated forecasts.")

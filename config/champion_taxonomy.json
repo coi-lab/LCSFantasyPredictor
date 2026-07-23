@@ -1,0 +1,83 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-07-23",
+  "description": "Project champion-role taxonomy, cross-lane counter relationships, and synergy pairs.",
+  "archetypes": {
+    "point_and_click_lockdown": ["Vi", "Nautilus", "Malzahar", "Skelter", "Lissandra", "Camille"],
+    "hyper_mobile_carry": ["Zeri", "Ezreal", "Kalista", "Lucian", "Vayne", "Ahri", "LeBlanc", "Yone"],
+    "anti_dash_peel": ["Poppy", "Taliyah", "Vex", "Janna", "Cassiopeia"],
+    "big_ult_steal_target": ["Sejuani", "Malphite", "Alistar", "Ornn", "Amumu", "Rakan"],
+    "tank_melter_anti_tank": ["Trundle", "Vayne", "Kog'Maw", "Gwen", "Fiora"],
+    "wombo_engage_delivery": ["Jarvan IV", "Nocturne", "Malphite", "Rakan", "Rumble", "Orianna", "Neeko"],
+    "early_lane_prio_bot": ["Varus", "Kalista", "Caitlyn", "Draven", "Karma", "Ashe", "Heimerdinger"],
+    "weakside_scaling_top": ["K'Sante", "Sion", "Ornn", "Cho'Gath", "Gragas"]
+  },
+  "cross_lane_counters": [
+    {
+      "counter_champion": "Vi",
+      "target_archetype": "hyper_mobile_carry",
+      "target_champions": ["Zeri", "Ezreal", "Kalista", "Ahri"],
+      "mechanism": "Point-and-click un-dodgeable lockdown (Assault and Battery) neutralizes hyper-mobile carries.",
+      "severity": "hard_counter"
+    },
+    {
+      "counter_champion": "Poppy",
+      "target_archetype": "hyper_mobile_carry",
+      "target_champions": ["Riven", "Lee Sin", "Lucian", "Kalista", "Dash-heavy"],
+      "mechanism": "Steadfast Presence (W) blocks all dashes, grounding aggressive divers.",
+      "severity": "hard_counter"
+    },
+    {
+      "counter_champion": "Sylas",
+      "target_archetype": "big_ult_steal_target",
+      "target_champions": ["Sejuani", "Malphite", "Alistar", "Ornn"],
+      "mechanism": "Hijack steals game-changing teamfight ultimates with AP scaling.",
+      "severity": "hard_counter"
+    },
+    {
+      "counter_champion": "Trundle",
+      "target_archetype": "weakside_scaling_top",
+      "target_champions": ["Sejuani", "Ornn", "Sion", "K'Sante"],
+      "mechanism": "Subjugate steals 40% of armor and magic resist from primary tanks.",
+      "severity": "hard_counter"
+    }
+  ],
+  "synergy_pairs": [
+    {
+      "champions": ["Jarvan IV", "Rumble"],
+      "roles": ["jgl", "top"],
+      "mechanism": "Cataclysm traps enemies inside Equalizer fire zone.",
+      "synergy_score": 1.45
+    },
+    {
+      "champions": ["Nocturne", "Orianna"],
+      "roles": ["jgl", "mid"],
+      "mechanism": "Paranoia darkens map and delivers Command: Shockwave ball into enemy backline.",
+      "synergy_score": 1.40
+    },
+    {
+      "champions": ["Vi", "Ahri"],
+      "roles": ["jgl", "mid"],
+      "mechanism": "Vi lockdown guarantees hit on Ahri Charm and full burst combo.",
+      "synergy_score": 1.35
+    },
+    {
+      "champions": ["Lucian", "Nami"],
+      "roles": ["bot", "sup"],
+      "mechanism": "Electrocute + Tidecaller's Blessing burst on Lucian passive dash.",
+      "synergy_score": 1.42
+    },
+    {
+      "champions": ["Zeri", "Yuumi"],
+      "roles": ["bot", "sup"],
+      "mechanism": "Move-speed buffs and shields amplify Zeri's infinite kite potential.",
+      "synergy_score": 1.38
+    },
+    {
+      "champions": ["Sejuani", "Yone"],
+      "roles": ["jgl", "mid"],
+      "mechanism": "Melee attack stacks Permafrost stun instantly for double knock-up burst.",
+      "synergy_score": 1.32
+    }
+  ]
+}

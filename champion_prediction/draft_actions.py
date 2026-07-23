@@ -23,7 +23,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATS_DIR = PROJECT_ROOT / "LCS_stats"
 DEFAULT_RULES_PATH = PROJECT_ROOT / "config" / "draft_rules.json"
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "champion_prediction" / "champion_drafts.sqlite"
-DEFAULT_LEAGUES = ("LCS", "LTA N", "LEC", "LCK", "LPL")
+DEFAULT_LEAGUES = ("LCS", "LTA N", "LEC", "LCK", "LPL", "EWC", "FST", "MSI")
 SERIES_GAP_LIMIT = timedelta(hours=12)
 
 DRAFT_COLUMNS = tuple(
