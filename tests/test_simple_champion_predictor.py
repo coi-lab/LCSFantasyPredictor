@@ -6,7 +6,7 @@ import unittest
 
 import pandas as pd
 
-from champion_prediction.simple_predictor import rank_champions
+from champion_prediction.simple_predictor import champion_multiplier, rank_champions
 
 
 class SimpleChampionPredictorTests(unittest.TestCase):
@@ -48,6 +48,30 @@ class SimpleChampionPredictorTests(unittest.TestCase):
 
         self.assertEqual(orianna["opponent_ban_rate"], 1.0)
         self.assertLess(orianna["availability_factor"], 0.5)
+
+    def test_champion_multiplier_uses_all_three_official_tiers(self) -> None:
+        split_history = pd.DataFrame([
+            {"role": "mid", "player": "Other", "champion": "Azir"},
+            {"role": "mid", "player": "One", "champion": "Orianna"},
+        ])
+        rules = {
+            "unplayed_in_role": 1.7,
+            "unplayed_by_player": 1.5,
+            "already_played_by_player": 1.3,
+        }
+
+        self.assertEqual(
+            champion_multiplier(split_history, "One", "mid", "Syndra", rules),
+            ("unplayed_in_role", 1.7),
+        )
+        self.assertEqual(
+            champion_multiplier(split_history, "One", "mid", "Azir", rules),
+            ("unplayed_by_player", 1.5),
+        )
+        self.assertEqual(
+            champion_multiplier(split_history, "One", "mid", "Orianna", rules),
+            ("already_played_by_player", 1.3),
+        )
 
 
 if __name__ == "__main__":

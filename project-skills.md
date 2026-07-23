@@ -32,6 +32,7 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 - Gold chart separators indicate a recorded patch change. Cross-year views suppress patch boundaries because unrelated patch timelines would be misleading.
 - Champion Lab is a protected LCS 2023-2025 audit surface generated with the normal dashboard export. Its exporter hard-excludes every 2026 profile so Lock-In and Spring cannot leak into player-style analysis.
 - Champion Lab's `ban lift` is the player-facing ban rate minus the same league/year/split team-side ban rate. Treat it as unusual opponent attention, not proof that a ban targeted the player.
+- Champion multipliers are candidate-specific and frozen at roster lock: x1.7 when unplayed in the role during the split, x1.5 when played in the role but not by the player, and x1.3 when already played by the player. Never replace these with one round-wide multiplier.
 
 ## Modeling conventions
 

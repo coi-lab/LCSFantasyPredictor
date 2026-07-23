@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import math
+import re
 import sqlite3
 from pathlib import Path
 from typing import Any
@@ -25,7 +27,50 @@ from fantasy_prediction.player_baseline import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "predictions" / "current_champion_rankings.csv"
+SCORING_RULES_PATH = PROJECT_ROOT / "config" / "scoring_rules.json"
 LEADING_LEAGUES = {"LCK", "LPL", "LEC"}
+MARKET_SPLIT_NAMES = {1: "Lock-In", 2: "Spring", 3: "Summer"}
+
+
+def load_champion_bonus_rules() -> dict[str, float]:
+    """Load the three official champion multiplier categories."""
+    with SCORING_RULES_PATH.open("r", encoding="utf-8") as rules_file:
+        rules = json.load(rules_file)
+    return {
+        str(key): float(value)
+        for key, value in rules["champion_bonus"].items()
+    }
+
+
+def market_split_name(round_name: str) -> str:
+    """Map an official market round label to the match-data split name."""
+    match = re.search(r"Split\s+(\d+)", str(round_name), flags=re.IGNORECASE)
+    if not match or int(match.group(1)) not in MARKET_SPLIT_NAMES:
+        raise ValueError(f"Cannot determine split from market round name: {round_name!r}")
+    return MARKET_SPLIT_NAMES[int(match.group(1))]
+
+
+def champion_multiplier(
+    split_history: pd.DataFrame,
+    player: str,
+    role: str,
+    champion: str,
+    bonus_rules: dict[str, float],
+) -> tuple[str, float]:
+    """Classify one candidate using only current-split games before roster lock."""
+    champion_rows = split_history.loc[
+        split_history["champion"].astype(str).eq(champion)
+    ]
+    role_has_played = champion_rows["role"].astype(str).eq(role).any()
+    if not role_has_played:
+        return "unplayed_in_role", bonus_rules["unplayed_in_role"]
+
+    player_has_played = champion_rows["player"].astype(str).str.casefold().eq(
+        player.casefold()
+    ).any()
+    if not player_has_played:
+        return "unplayed_by_player", bonus_rules["unplayed_by_player"]
+    return "already_played_by_player", bonus_rules["already_played_by_player"]
 
 
 def weighted_champion_shares(
@@ -91,8 +136,10 @@ def rank_champions(
     opponent: str,
     cutoff: pd.Timestamp,
     target_patch: str,
-    novelty_multiplier: float,
+    novelty_multiplier: float | None,
     top_n: int = 5,
+    split_history: pd.DataFrame | None = None,
+    champion_bonus_rules: dict[str, float] | None = None,
 ) -> pd.DataFrame:
     """Rank champion candidates with a transparent weighted heuristic."""
     prior = history.loc[
@@ -129,6 +176,13 @@ def rank_champions(
 
     records: list[dict[str, Any]] = []
     for champion in candidates:
+        if split_history is not None and champion_bonus_rules is not None:
+            novelty_category, candidate_multiplier = champion_multiplier(
+                split_history, player, role, champion, champion_bonus_rules
+            )
+        else:
+            novelty_category = "legacy_round_default"
+            candidate_multiplier = float(novelty_multiplier or 1.0)
         player_share = float(player_shares.get(champion, 0.0))
         lcs_share = float(lcs_shares.get(champion, 0.0))
         leading_share = float(leading_shares.get(champion, 0.0))
@@ -158,7 +212,8 @@ def rank_champions(
             "opponent_draft_games": opponent_games,
             "availability_factor": availability_factor,
             "expected_points_if_picked": expected_points,
-            "novelty_multiplier": novelty_multiplier,
+            "novelty_category": novelty_category,
+            "novelty_multiplier": candidate_multiplier,
             "unnormalized_pick_priority": base_priority * availability_factor,
         })
 
@@ -172,12 +227,13 @@ def rank_champions(
     ranking["expected_multiplier_bonus"] = (
         ranking["estimated_pick_probability"]
         * ranking["expected_points_if_picked"]
-        * (novelty_multiplier - 1.0)
+        * (ranking["novelty_multiplier"] - 1.0)
     )
     numeric_columns = [
         "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
         "opponent_ban_rate", "opponent_pick_denial_rate", "availability_factor",
-        "expected_points_if_picked", "estimated_pick_probability", "expected_multiplier_bonus",
+        "expected_points_if_picked", "novelty_multiplier",
+        "estimated_pick_probability", "expected_multiplier_bonus",
     ]
     ranking[numeric_columns] = ranking[numeric_columns].round(4)
     return ranking.sort_values(
@@ -209,9 +265,16 @@ def build_current_rankings(
         str(row.team_code): canonical_team(row.team_name)
         for row in market[["team_code", "team_name"]].drop_duplicates().itertuples()
     }
-    # At Round 1, every champion is unplayed in the new split/role history.
-    round_index = int(pd.to_numeric(market["round_index_in_split"].iloc[0]))
-    multiplier = 1.7 if round_index == 0 else 1.3
+    split_name = market_split_name(str(market["round_name"].iloc[0]))
+    target_year = cutoff.year
+    history_year = pd.to_numeric(history["year"], errors="coerce")
+    split_history = history.loc[
+        history["date"].lt(cutoff)
+        & history["league"].eq("LCS")
+        & history_year.eq(target_year)
+        & history["split"].astype(str).str.casefold().eq(split_name.casefold())
+    ].copy()
+    bonus_rules = load_champion_bonus_rules()
     outputs: list[pd.DataFrame] = []
     for row in market.loc[~market["role"].astype(str).str.casefold().eq("coach")].itertuples():
         opponent_code = str(row.opponent_codes).split("|")[0]
@@ -219,7 +282,8 @@ def build_current_rankings(
         role = ROLE_MAP.get(str(row.role).casefold(), str(row.role).casefold())
         ranked = rank_champions(
             history, actions, str(row.summoner_name), role, str(row.team_name), opponent,
-            cutoff, patch, multiplier,
+            cutoff, patch, None, split_history=split_history,
+            champion_bonus_rules=bonus_rules,
         )
         if not ranked.empty:
             ranked.insert(0, "round_name", row.round_name)

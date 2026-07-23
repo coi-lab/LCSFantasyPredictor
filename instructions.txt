@@ -11,4 +11,5 @@ Every week we need to run this:
 python data_pipeline/snapshot_official_market.py
 python data_pipeline/export_dashboard_data.py
 
-ok so before moving on I looked at the player pricing in gold and it seems to go up a lot more than how lcs fantay does it as it really hard for even a player to reach above 30 which berserker did in the latest season so something is wrong with how we calculate it. 
+ok so before moving on I looked at the player pricing in gold and it seems to go up a lot more than how lcs fantay does it as it really hard for even a player to reach above 30 which berserker did in the latest season so something is wrong with how we calculate it.
+Another thing to optimize is predicting the champ in the gamre that it will earn the most bonus in 
