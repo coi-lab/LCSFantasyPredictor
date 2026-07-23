@@ -157,7 +157,7 @@ def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
     tier_map = {
         "already_played_by_player": "1.3x_comfort_floor",
         "unplayed_by_player": "1.5x_league_adoption",
-        "unplayed_in_role": "1.7x_scrim_wildcard",
+        "unplayed_in_role": "1.7x_novelty_wildcard",
     }
 
     selected: list[pd.Series] = []
@@ -204,8 +204,11 @@ def rank_champions(
     champion_bonus_rules: dict[str, float] | None = None,
     tier_matrix: PatchTierMatrix | None = None,
     prio_matrix: LanePriorityMatrix | None = None,
+    hyperparameters: dict[str, float] | None = None,
 ) -> pd.DataFrame:
     """Rank champion candidates using dynamic cross-region weights and scrim-leak signals."""
+    hp = hyperparameters or {}
+    hl = hp.get("half_life_days", 120.0)
     prior = history.loc[
         history["date"].lt(cutoff)
         & history["date"].ge(cutoff - pd.Timedelta(days=730))
@@ -213,7 +216,7 @@ def rank_champions(
     ].copy()
     prior["patch_text"] = prior["patch"].astype(str).str.strip()
     player_rows = prior.loc[prior["player"].str.casefold().eq(player.casefold())]
-    player_shares = weighted_champion_shares(player_rows, cutoff)
+    player_shares = weighted_champion_shares(player_rows, cutoff, half_life_days=hl)
 
     lcs_rows = prior.loc[prior["league"].eq("LCS") & prior["patch_text"].eq(target_patch)]
     if lcs_rows.empty:
@@ -221,7 +224,7 @@ def rank_champions(
             prior["league"].eq("LCS")
             & prior["date"].ge(cutoff - pd.Timedelta(days=180))
         ]
-    lcs_shares = weighted_champion_shares(lcs_rows, cutoff)
+    lcs_shares = weighted_champion_shares(lcs_rows, cutoff, half_life_days=hl)
 
     leading_rows = prior.loc[
         prior["league"].isin(LEADING_LEAGUES) & prior["patch_text"].eq(target_patch)
@@ -231,7 +234,7 @@ def rank_champions(
             prior["league"].isin(LEADING_LEAGUES)
             & prior["date"].ge(cutoff - pd.Timedelta(days=180))
         ]
-    leading_shares = weighted_champion_shares(leading_rows, cutoff)
+    leading_shares = weighted_champion_shares(leading_rows, cutoff, half_life_days=hl)
     ban_rates, denial_rates, public_ban_rates, opponent_games = opponent_draft_rates(
         actions, opponent, cutoff, target_patch
     )
@@ -244,7 +247,12 @@ def rank_champions(
         role_mean, _, _ = recency_mean(prior, cutoff)
 
     lcs_patch_games = int(lcs_rows["gameid"].nunique()) if "gameid" in lcs_rows.columns else len(lcs_rows)
-    w_player, w_lcs, w_leading = dynamic_feature_weights(lcs_patch_games)
+    if "w_player" in hp and "w_lcs" in hp and "w_leading" in hp:
+        w_player = hp["w_player"]
+        w_lcs = hp["w_lcs"]
+        w_leading = hp["w_leading"]
+    else:
+        w_player, w_lcs, w_leading = dynamic_feature_weights(lcs_patch_games)
 
     if tier_matrix is None:
         tier_matrix = PatchTierMatrix()
@@ -308,6 +316,8 @@ def rank_champions(
             "public_meta_ban_rate": public_ban_rate,
             "unusual_opponent_ban_interest": unusual_ban_interest,
             "availability_factor": availability_factor,
+            "patch_tier_multiplier": tier_mult,
+            "lane_priority_multiplier": prio_mult,
             "expected_points_if_picked": expected_points,
             "novelty_category": novelty_category,
             "novelty_multiplier": candidate_multiplier,
@@ -333,6 +343,7 @@ def rank_champions(
         "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
         "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
         "unusual_opponent_ban_interest", "availability_factor", "ranking_share",
+        "patch_tier_multiplier", "lane_priority_multiplier",
         "expected_points_if_picked", "novelty_multiplier",
         "estimated_pick_probability", "expected_multiplier_bonus",
     ]
@@ -397,11 +408,27 @@ def rank_weekly_opponents(
         matchup_count=("opponent", "nunique"),
     )
     weekly["opponent"] = "|".join(opponents)
-    return weekly.sort_values(
+    ordered = weekly.sort_values(
         ["expected_multiplier_bonus", "ranking_share"],
         ascending=False,
         kind="stable",
-    ).head(top_n).reset_index(drop=True)
+    )
+    # Retain the best candidate from every official multiplier category even
+    # when it falls outside the overall Top-N. This lets downstream weekly
+    # displays populate all tiers as a split develops.
+    tier_leaders = ordered.groupby(
+        "novelty_category", as_index=False, sort=False
+    ).head(1)
+    return (
+        pd.concat([ordered.head(top_n), tier_leaders], ignore_index=True)
+        .drop_duplicates("champion")
+        .sort_values(
+            ["expected_multiplier_bonus", "ranking_share"],
+            ascending=False,
+            kind="stable",
+        )
+        .reset_index(drop=True)
+    )
 
 
 def load_actions(path: Path = DEFAULT_DRAFT_DATABASE) -> pd.DataFrame:
@@ -492,6 +519,11 @@ def main() -> None:
         portfolio_output = args.output.parent / "current_champion_portfolio.csv"
         portfolio.to_csv(portfolio_output, index=False)
         print(f"Wrote champion portfolio: {portfolio_output} ({len(portfolio)} rows)")
+        from data_pipeline.export_weekly_champion_predictions import (
+            export_weekly_predictions,
+        )
+
+        export_weekly_predictions(portfolio_path=portfolio_output)
 
     if not rankings.empty:
         print(f"Patch basis: {rankings['target_patch'].iloc[0]} ({rankings['patch_basis'].iloc[0]})")

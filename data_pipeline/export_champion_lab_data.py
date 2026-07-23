@@ -12,7 +12,7 @@ import pandas as pd
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BAN_COLUMNS = ["ban1", "ban2", "ban3", "ban4", "ban5"]
 PROFILE_COLUMNS = ["playername", "league", "year_str", "phase", "position"]
-CHAMPION_LAB_MIN_YEAR = 2023
+CHAMPION_LAB_MIN_YEAR = 2020
 CHAMPION_LAB_MAX_YEAR = 2025
 
 
@@ -87,7 +87,7 @@ def _build_split_segments(group: pd.DataFrame) -> List[Dict[str, Any]]:
 
 
 def build_champion_lab_payload(player_data: pd.DataFrame) -> Dict[str, Any]:
-    """Build LCS 2023-2025 profiles without exposing the protected 2026 holdout."""
+    """Build LCS 2020-2025 training-data profiles without test-period leakage."""
     if player_data.empty:
         return {"profiles": [], "players": [], "leagues": [], "years": []}
 
@@ -104,7 +104,7 @@ def build_champion_lab_payload(player_data: pd.DataFrame) -> Dict[str, Any]:
     ].copy()
     if df.empty:
         return {
-            "description": "LCS 2023-2025 only. Protected 2026 holdout data is excluded.",
+            "description": "LCS 2020-2025 training data. The 2026 test period is excluded.",
             "profiles": [],
             "players": [],
             "leagues": ["LCS"],
@@ -249,8 +249,8 @@ def build_champion_lab_payload(player_data: pd.DataFrame) -> Dict[str, Any]:
     ))
     return {
         "description": (
-            "LCS 2023-2025 observed player picks and opponent bans. "
-            "Protected 2026 holdout data is excluded; opponent bans are "
+            "LCS 2020-2025 observed player picks and opponent bans. "
+            "The 2026 test period is excluded; opponent bans are "
             "associations, not proven targets."
         ),
         "profiles": profiles,

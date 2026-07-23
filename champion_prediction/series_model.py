@@ -153,7 +153,7 @@ def rolling_rankings(
 
 
 def tune_rolling_model(series: pd.DataFrame) -> dict[str, Any]:
-    """Tune on late 2024, then evaluate rolling point-in-time on late 2025."""
+    """Tune on 2024, validate on 2025, and freeze for the 2026 test."""
     validation = series.loc[
         series["league"].isin(["LCS", "LTA N"])
         & series["series_start"].ge(pd.Timestamp("2024-07-01", tz="UTC"))
@@ -163,6 +163,10 @@ def tune_rolling_model(series: pd.DataFrame) -> dict[str, Any]:
         series["league"].isin(["LCS", "LTA N"])
         & series["series_start"].ge(pd.Timestamp("2025-07-01", tz="UTC"))
         & series["series_start"].lt(pd.Timestamp("2026-01-01", tz="UTC"))
+    ]
+    premier_test = series.loc[
+        series["league"].isin(["LCS", "LTA N"])
+        & series["series_start"].ge(pd.Timestamp("2026-01-01", tz="UTC"))
     ]
     trials: list[dict[str, float]] = []
     for meta_weight in (0.50, 0.70, 0.85, 0.95, 1.00):
@@ -180,6 +184,9 @@ def tune_rolling_model(series: pd.DataFrame) -> dict[str, Any]:
     test_top_1, test_top_3, examples = rolling_rankings(
         series, test, best["meta_weight"], best["off_patch_weight"]
     )
+    premier_top_1, premier_top_3, premier_examples = rolling_rankings(
+        series, premier_test, best["meta_weight"], best["off_patch_weight"]
+    )
     meta_only = max(
         (trial for trial in trials if trial["meta_weight"] == 1.0),
         key=lambda trial: (trial["validation_hit_at_3"], trial["validation_hit_at_1"]),
@@ -193,23 +200,26 @@ def tune_rolling_model(series: pd.DataFrame) -> dict[str, Any]:
         "selected_parameters": best,
         "rolling_test_hit_at_1": round(test_top_1, 4),
         "rolling_test_hit_at_3": round(test_top_3, 4),
+        "premier_2026_player_series": len(premier_test),
+        "premier_2026_hit_at_1": round(premier_top_1, 4),
+        "premier_2026_hit_at_3": round(premier_top_3, 4),
+        "premier_2026_exposure": "previously_exposed_not_pristine",
         "current_meta_only_test_hit_at_1": round(meta_only_top_1, 4),
         "current_meta_only_test_hit_at_3": round(meta_only_top_3, 4),
         "rolling_examples": examples,
+        "premier_2026_examples": premier_examples,
         "tuning_trials": trials,
     }
 
 
 def train_and_evaluate(rows: pd.DataFrame) -> dict[str, Any]:
-    """Train chronologically and evaluate on late-2025 LCS player-series."""
-    cutoff = pd.Timestamp("2025-07-01", tz="UTC")
-    validation_end = pd.Timestamp("2026-01-01", tz="UTC")
+    """Fit on 2020-2025 and evaluate on 2026 LCS player-series."""
+    cutoff = pd.Timestamp("2026-01-01", tz="UTC")
     series = build_player_series(rows)
     train_series = series.loc[series["series_start"].lt(cutoff)]
     test_series = series.loc[
         series["league"].isin(["LCS", "LTA N"])
         & series["series_start"].ge(cutoff)
-        & series["series_start"].lt(validation_end)
     ]
     expanded = expand_training_champions(train_series)
     weights = training_weights(expanded, cutoff)
@@ -251,8 +261,8 @@ def train_and_evaluate(rows: pd.DataFrame) -> dict[str, Any]:
     count = len(test_series)
     report = {
         "training_cutoff": cutoff.isoformat(),
-        "validation_end": validation_end.isoformat(),
-        "target": "LCS late 2025",
+        "target": "LCS 2026 premier chronological test",
+        "test_exposure": "previously_exposed_not_pristine",
         "training_player_series": len(train_series),
         "test_player_series": count,
         "series_hit_at_1": round(hit_1 / count, 4) if count else 0.0,
@@ -283,7 +293,7 @@ def main() -> None:
     summary = {key: value for key, value in report.items() if key not in {"examples", "rolling_point_in_time"}}
     summary["rolling_point_in_time"] = {
         key: value for key, value in report["rolling_point_in_time"].items()
-        if key not in {"rolling_examples", "tuning_trials"}
+        if key not in {"rolling_examples", "premier_2026_examples", "tuning_trials"}
     }
     print(json.dumps(summary, indent=2))
     print(f"Wrote series backtest report: {args.report}")

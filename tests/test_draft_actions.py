@@ -92,6 +92,11 @@ class DraftActionTests(unittest.TestCase):
         self.assertEqual(game_two.loc[6, "slot"], "pick1")
         self.assertEqual(game_two.loc[7, "map_side"], "Blue")
         self.assertEqual(game_two.loc[7, "draft_position"], "second")
+        self.assertEqual(json.loads(game_two.loc[6, "allies_picked_before"]), [])
+        self.assertEqual(
+            json.loads(game_two.loc[7, "enemies_picked_before"]),
+            [game_two.loc[6, "champion"]],
+        )
         self.assertEqual(
             games.loc[games["gameid"].eq("g2"), "first_pick_team"].iloc[0],
             "Alpha",

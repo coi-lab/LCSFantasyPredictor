@@ -30,7 +30,9 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 - Official API prices apply only to their mapped league/year/split; they must be merged into modeled history rather than replacing unrelated splits.
 - Current LCS team graph colors are centralized in `dashboard/app.js`. Historical aliases such as Cloud9 Kia and Team Liquid Alienware normalize to their base team identities.
 - Gold chart separators indicate a recorded patch change. Cross-year views suppress patch boundaries because unrelated patch timelines would be misleading.
-- Champion Lab is a protected LCS 2023-2025 audit surface generated with the normal dashboard export. Its exporter hard-excludes every 2026 profile so Lock-In and Spring cannot leak into player-style analysis.
+- Champion Lab is a training-data audit surface for LCS 2020-2025. Its exporter
+  excludes 2026 so test-period outcomes cannot enter fitted player-style
+  features.
 - Champion Lab's `ban lift` is the player-facing ban rate minus the same league/year/split team-side ban rate. Treat it as unusual opponent attention, not proof that a ban targeted the player.
 - Champion multipliers are candidate-specific and frozen at roster lock: x1.7 when unplayed in the role during the split, x1.5 when played in the role but not by the player, and x1.3 when already played by the player. Never replace these with one round-wide multiplier.
 
@@ -44,7 +46,9 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   described as proof of private scrim activity.
 - Production prepared history uses `role`; reusable feature builders should
   accept that schema rather than silently requiring raw `position`.
-- Champion-model training, tuning, examples, and audits use LCS 2023-2025 only. The protected 2026 Lock-In and Spring holdout must not be inspected or surfaced.
+- Champion-model fitting and tuning use 2020-2025 only. Use 2026 as the premier
+  frozen chronological test and label it as previously exposed rather than a
+  pristine blind holdout.
 - Predict each known weekly matchup and series independently; Fearless state resets between series.
 - Picks and bans are separate actions in one sequential two-team draft system.
 - Coach, roster, player, and team-era effects should be modeled hierarchically rather than permanently attributed to an organization name.
@@ -53,6 +57,30 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 - Treat action legality fields as source/configuration audits. Retain observed actions even when reconstructed rules mark a conflict.
 
 ## Agent Learnings Log
+
+### 2026-07-23
+
+- Added a memory-conscious champion-weight tuner that builds cutoff-safe
+  player-series candidate features once, caches them locally, and searches
+  source weights without repeatedly filtering the 119,335-row player history.
+  The tuner keeps 2026 completely outside weight selection.
+- A deterministic 300-trial search at a fixed 120-day half-life selected
+  player/LCS/leading-region weights of 0.2192/0.3710/0.4098. On the separate
+  2024-07-01 through 2025-06-01 confirmation window, it improved Top-1 from
+  27.50% for the 0.45/0.25/0.30 baseline to 28.91%, and mean realized fantasy
+  bonus from 0.8130 to 1.0183. Treat these as promising static-weight results,
+  not yet as tuned maturity-regime or half-life parameters.
+- Added Oracle's Elixir 2020-2022 files to the development pool. They contribute
+  915 LCS games: 264 in 2020, 345 in 2021, and 306 in 2022.
+- Twenty-nine 2022 LCS Spring playoff games have a missing source split label.
+  The ingestion and draft builders now infer missing LCS splits as Spring for
+  January-June and Summer for July-December.
+- The rebuilt 2020-2026 professional draft database contains 12,738 canonical
+  games and 252,860 actions. Six source/rule conflicts remain visible.
+- The pre-2026 fixed Naive Bayes series model loses to role popularity on the
+  2026 test. Keep it as a negative baseline.
+- The rolling model selected on pre-2026 data reaches 35.84% Hit@1 and 73.95%
+  Hit@3 on 572 player-series in the exposed 2026 premier test.
 
 ### 2026-07-22
 
@@ -68,6 +96,25 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 - Full-patch champion audit summaries are descriptive only. Recompute rates at each historical cutoff before using them as model features.
 - Champion prediction is evaluated primarily at the player-series level: Top-1 is the actual fantasy choice, while Top-3 is an explanation/coverage list. A hit occurs when the player uses the champion in any game of the series.
 - Preserve the recency/patch-weighted Naive Bayes model as a negative baseline and require candidate-level models to beat role popularity on chronological pre-2026 validation before integration.
-- Rolling point-in-time evaluation must tune on an earlier 2023-2025 window and score a later 2023-2025 window, using only matches before each target series.
+- Rolling point-in-time evaluation tunes on earlier 2020-2024 windows, validates
+  final choices on 2025, and evaluates the frozen model on 2026.
 - Built the first point-in-time champion dataset with 6,565 canonical games and 130,600 sequential pick/ban actions across LCS/LTA N, LEC, LCK, and LPL.
 - The reconstructed data retains two known legality conflicts among 130,600 actions: one same-draft duplicate ban and one LPL 2025 prior-Fearless-pick ban. Conflict types are stored explicitly for later source auditing rather than silently rewritten.
+- Recovered and corrected the unexpected-ban experiment after an interrupted
+  implementation. The original 100% repeat-pick result was denominator leakage:
+  it counted only picks that already matched a prior ban. On 1,570 LCS 2026 ban
+  events, unexpected team-level ban features hurt same-series log loss
+  (`-0.006742`) and only slightly helped next-series/14-day log loss
+  (`+0.001869`/`+0.001251`). Keep production weight at zero.
+- Draft actions now store acting-side `allies_picked_before` and
+  `enemies_picked_before`; `previous_picks` contains both teams and must not be
+  interpreted as an allied composition.
+- The corrected board-state ranker uses a pre-2026 champion universe. On the
+  exposed 2026 test its pick model reaches 4.90% Top-1 and 13.44% Top-5, while
+  its ban model reaches 0.89% Top-1 and 11.15% Top-5. Neither is ready for
+  production.
+- The weekly champion dashboard joins the official market's projected starters
+  to one recommendation per multiplier tier. In Split 3 Round 1 all valid
+  candidates are x1.7 because no earlier round exists; x1.3 and x1.5 must be
+  displayed as unavailable rather than fabricated.
+- Replaced Categorical Naive Bayes for draft prediction with a Softmax / Conditional Logit Legal-Candidate Board-State Ranker. On the 2026 premier test, legal-candidate pick Top-1 accuracy improved from 2.68% to 11.02% (+8.34%) and Pick Top-5 accuracy improved from 10.13% to 36.62% (+26.49%).

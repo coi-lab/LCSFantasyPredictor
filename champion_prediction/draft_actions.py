@@ -124,7 +124,12 @@ def load_team_drafts(
 
     if not frames:
         raise ValueError(f"No team draft rows found for leagues: {sorted(league_set)}")
-    return pd.concat(frames, ignore_index=True)
+    combined = pd.concat(frames, ignore_index=True)
+    dates = pd.to_datetime(combined["date"], errors="coerce")
+    missing_lcs_split = combined["league"].eq("LCS") & combined["split"].isna()
+    combined.loc[missing_lcs_split & dates.dt.month.le(6), "split"] = "Spring"
+    combined.loc[missing_lcs_split & dates.dt.month.gt(6), "split"] = "Summer"
+    return combined
 
 
 def _side_record(rows: pd.DataFrame, side: str) -> pd.Series:
@@ -317,6 +322,7 @@ def build_draft_actions(
                 second_side = "Red" if first_side == "Blue" else "Blue"
                 current_picks: list[str] = []
                 current_bans: list[str] = []
+                picks_by_side: dict[str, list[str]] = {"Blue": [], "Red": []}
 
                 for action_number, (action_type, relative_side, column, phase) in enumerate(
                     RELATIVE_DRAFT_ORDER,
@@ -364,6 +370,10 @@ def build_draft_actions(
                         "fearless_unavailable": _json_list(fearless_unavailable),
                         "previous_picks": _json_list(current_picks),
                         "previous_bans": _json_list(current_bans),
+                        "allies_picked_before": _json_list(picks_by_side[side]),
+                        "enemies_picked_before": _json_list(
+                            picks_by_side["Red" if side == "Blue" else "Blue"]
+                        ),
                         "unavailable_before_action": _json_list(unavailable),
                         "is_current_draft_duplicate": is_current_draft_duplicate,
                         "is_fearless_conflict": is_fearless_conflict,
@@ -372,6 +382,7 @@ def build_draft_actions(
                     })
                     if action_type == "pick":
                         current_picks.append(champion)
+                        picks_by_side[side].append(champion)
                     else:
                         current_bans.append(champion)
 

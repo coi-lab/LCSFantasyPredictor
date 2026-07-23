@@ -242,14 +242,12 @@ def project_market(
     return players, pd.DataFrame.from_records(coach_records)
 
 
-def backtest_late_2025(history: pd.DataFrame) -> dict[str, float | int | str]:
-    """Evaluate a rolling chronological baseline on late-2025 LCS games."""
-    training_cutoff = pd.Timestamp("2025-07-01", tz="UTC")
-    validation_end = pd.Timestamp("2026-01-01", tz="UTC")
+def backtest_2026(history: pd.DataFrame) -> dict[str, float | int | str]:
+    """Evaluate rolling point-in-time projections on the 2026 test period."""
+    training_cutoff = pd.Timestamp("2026-01-01", tz="UTC")
     targets = history.loc[
-        history["league"].isin(["LCS", "LTA N"])
+        history["league"].eq("LCS")
         & history["date"].ge(training_cutoff)
-        & history["date"].lt(validation_end)
     ].copy()
     predicted: list[float] = []
     role_baselines: list[float] = []
@@ -269,8 +267,8 @@ def backtest_late_2025(history: pd.DataFrame) -> dict[str, float | int | str]:
     role_array = np.asarray(role_baselines)
     return {
         "training_cutoff": training_cutoff.isoformat(),
-        "validation_end": validation_end.isoformat(),
-        "target": "LCS late-2025 player-games",
+        "target": "LCS 2026 player-games",
+        "test_exposure": "previously_exposed_not_pristine",
         "evaluation_mode": "rolling_point_in_time",
         "observations": int(len(actual)),
         "mae": round(float(np.mean(np.abs(actual - prediction_array))), 3),
@@ -299,7 +297,7 @@ def main() -> None:
     market_path = args.market or latest_market_snapshot()
     market = pd.read_csv(market_path)
     player_projections, coach_projections = project_market(history, market)
-    backtest = backtest_late_2025(history)
+    backtest = backtest_2026(history)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     player_path = args.output_dir / "current_player_projections.csv"
@@ -308,7 +306,7 @@ def main() -> None:
     coach_projections.to_csv(coach_path, index=False)
     print(f"Wrote player projections: {player_path}")
     print(f"Wrote coach projections: {coach_path}")
-    print(f"Late-2025 chronological backtest: {backtest}")
+    print(f"2026 chronological test: {backtest}")
 
 
 if __name__ == "__main__":

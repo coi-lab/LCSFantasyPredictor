@@ -1,0 +1,1369 @@
+{
+  "round_name": "Round 1 (Split 3)",
+  "roster_lock": "2026-07-25T20:00:00+00:00",
+  "patch": "16.13",
+  "starter_method": "most recent historical participant by team and role",
+  "model_status": "heuristic ranking shares; not calibrated probabilities",
+  "players": [
+    {
+      "player": "Zven",
+      "role": "BOT",
+      "team": "Cloud9",
+      "opponent": "Team Liquid",
+      "projected_fantasy_points": 17.44,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jhin",
+            "ranking_share": 0.2284,
+            "expected_multiplier_bonus": 3.0028,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 12
+          }
+        }
+      }
+    },
+    {
+      "player": "Blaber",
+      "role": "JGL",
+      "team": "Cloud9",
+      "opponent": "Team Liquid",
+      "projected_fantasy_points": 17.46,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.2209,
+            "expected_multiplier_bonus": 2.4913,
+            "availability": 0.975,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 12
+          }
+        }
+      }
+    },
+    {
+      "player": "APA",
+      "role": "MID",
+      "team": "Cloud9",
+      "opponent": "Team Liquid",
+      "projected_fantasy_points": 15.0,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Viktor",
+            "ranking_share": 0.1349,
+            "expected_multiplier_bonus": 1.7849,
+            "availability": 0.9167,
+            "opponent_ban_rate": 0.0833,
+            "sample_games": 12
+          }
+        }
+      }
+    },
+    {
+      "player": "Vulcan",
+      "role": "SUP",
+      "team": "Cloud9",
+      "opponent": "Team Liquid",
+      "projected_fantasy_points": 18.55,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "ranking_share": 0.1777,
+            "expected_multiplier_bonus": 2.5842,
+            "availability": 0.8917,
+            "opponent_ban_rate": 0.0833,
+            "sample_games": 12
+          }
+        }
+      }
+    },
+    {
+      "player": "Thanatos",
+      "role": "TOP",
+      "team": "Cloud9",
+      "opponent": "Team Liquid",
+      "projected_fantasy_points": 13.18,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Gnar",
+            "ranking_share": 0.1662,
+            "expected_multiplier_bonus": 1.7312,
+            "availability": 0.95,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 12
+          }
+        }
+      }
+    },
+    {
+      "player": "FBI",
+      "role": "BOT",
+      "team": "Dignitas",
+      "opponent": "Sentinels",
+      "projected_fantasy_points": 15.78,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jhin",
+            "ranking_share": 0.2263,
+            "expected_multiplier_bonus": 2.9764,
+            "availability": 0.85,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 4
+          }
+        }
+      }
+    },
+    {
+      "player": "eXyu",
+      "role": "JGL",
+      "team": "Dignitas",
+      "opponent": "Sentinels",
+      "projected_fantasy_points": 12.28,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.1964,
+            "expected_multiplier_bonus": 2.168,
+            "availability": 0.75,
+            "opponent_ban_rate": 0.25,
+            "sample_games": 4
+          }
+        }
+      }
+    },
+    {
+      "player": "Palafox",
+      "role": "MID",
+      "team": "Dignitas",
+      "opponent": "Sentinels",
+      "projected_fantasy_points": 11.11,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Orianna",
+            "ranking_share": 0.1749,
+            "expected_multiplier_bonus": 1.7391,
+            "availability": 0.925,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 4
+          }
+        }
+      }
+    },
+    {
+      "player": "Ignar",
+      "role": "SUP",
+      "team": "Dignitas",
+      "opponent": "Sentinels",
+      "projected_fantasy_points": 14.08,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "ranking_share": 0.1571,
+            "expected_multiplier_bonus": 1.7713,
+            "availability": 0.925,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 4
+          }
+        }
+      }
+    },
+    {
+      "player": "Denathor",
+      "role": "TOP",
+      "team": "Dignitas",
+      "opponent": "Sentinels",
+      "projected_fantasy_points": 12.79,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "ranking_share": 0.1554,
+            "expected_multiplier_bonus": 1.3616,
+            "availability": 0.925,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 4
+          }
+        }
+      }
+    },
+    {
+      "player": "sajed",
+      "role": "BOT",
+      "team": "Disguised",
+      "opponent": "Shopify Rebellion",
+      "projected_fantasy_points": 13.37,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jhin",
+            "ranking_share": 0.1703,
+            "expected_multiplier_bonus": 2.0311,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "KryRa",
+      "role": "JGL",
+      "team": "Disguised",
+      "opponent": "Shopify Rebellion",
+      "projected_fantasy_points": 15.29,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.1623,
+            "expected_multiplier_bonus": 2.0913,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Callme",
+      "role": "MID",
+      "team": "Disguised",
+      "opponent": "Shopify Rebellion",
+      "projected_fantasy_points": 14.21,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "ranking_share": 0.1728,
+            "expected_multiplier_bonus": 1.4832,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Lyonz",
+      "role": "SUP",
+      "team": "Disguised",
+      "opponent": "Shopify Rebellion",
+      "projected_fantasy_points": 16.51,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "ranking_share": 0.2204,
+            "expected_multiplier_bonus": 2.6612,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Srtty",
+      "role": "TOP",
+      "team": "Disguised",
+      "opponent": "Shopify Rebellion",
+      "projected_fantasy_points": 13.29,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "ranking_share": 0.1827,
+            "expected_multiplier_bonus": 1.6277,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Massu",
+      "role": "BOT",
+      "team": "FlyQuest",
+      "opponent": "LYON",
+      "projected_fantasy_points": 17.08,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jhin",
+            "ranking_share": 0.2248,
+            "expected_multiplier_bonus": 2.5292,
+            "availability": 0.97,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 20
+          }
+        }
+      }
+    },
+    {
+      "player": "Gryffinn",
+      "role": "JGL",
+      "team": "FlyQuest",
+      "opponent": "LYON",
+      "projected_fantasy_points": 17.48,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.188,
+            "expected_multiplier_bonus": 2.3149,
+            "availability": 0.955,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 20
+          }
+        }
+      }
+    },
+    {
+      "player": "Quad",
+      "role": "MID",
+      "team": "FlyQuest",
+      "opponent": "LYON",
+      "projected_fantasy_points": 16.62,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Viktor",
+            "ranking_share": 0.1813,
+            "expected_multiplier_bonus": 1.9287,
+            "availability": 0.91,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 20
+          }
+        }
+      }
+    },
+    {
+      "player": "Cryogen",
+      "role": "SUP",
+      "team": "FlyQuest",
+      "opponent": "LYON",
+      "projected_fantasy_points": 18.51,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "ranking_share": 0.1783,
+            "expected_multiplier_bonus": 2.689,
+            "availability": 0.76,
+            "opponent_ban_rate": 0.3,
+            "sample_games": 20
+          }
+        }
+      }
+    },
+    {
+      "player": "Gakgos",
+      "role": "TOP",
+      "team": "FlyQuest",
+      "opponent": "LYON",
+      "projected_fantasy_points": 12.66,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "ranking_share": 0.1861,
+            "expected_multiplier_bonus": 1.7939,
+            "availability": 0.965,
+            "opponent_ban_rate": 0.05,
+            "sample_games": 20
+          }
+        }
+      }
+    },
+    {
+      "player": "Berserker",
+      "role": "BOT",
+      "team": "LYON",
+      "opponent": "FlyQuest",
+      "projected_fantasy_points": 19.01,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jhin",
+            "ranking_share": 0.2091,
+            "expected_multiplier_bonus": 2.4495,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Inspired",
+      "role": "JGL",
+      "team": "LYON",
+      "opponent": "FlyQuest",
+      "projected_fantasy_points": 17.74,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.1933,
+            "expected_multiplier_bonus": 2.1392,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Saint",
+      "role": "MID",
+      "team": "LYON",
+      "opponent": "FlyQuest",
+      "projected_fantasy_points": 17.56,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "ranking_share": 0.136,
+            "expected_multiplier_bonus": 1.602,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Isles",
+      "role": "SUP",
+      "team": "LYON",
+      "opponent": "FlyQuest",
+      "projected_fantasy_points": 18.29,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "ranking_share": 0.2008,
+            "expected_multiplier_bonus": 2.6182,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Dhokla",
+      "role": "TOP",
+      "team": "LYON",
+      "opponent": "FlyQuest",
+      "projected_fantasy_points": 13.59,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "ranking_share": 0.2111,
+            "expected_multiplier_bonus": 2.2666,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Rahel",
+      "role": "BOT",
+      "team": "Sentinels",
+      "opponent": "Dignitas",
+      "projected_fantasy_points": 18.9,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Caitlyn",
+            "ranking_share": 0.1995,
+            "expected_multiplier_bonus": 2.9948,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "HamBak",
+      "role": "JGL",
+      "team": "Sentinels",
+      "opponent": "Dignitas",
+      "projected_fantasy_points": 19.02,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.2589,
+            "expected_multiplier_bonus": 2.9221,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "DARKWINGS",
+      "role": "MID",
+      "team": "Sentinels",
+      "opponent": "Dignitas",
+      "projected_fantasy_points": 16.16,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Viktor",
+            "ranking_share": 0.183,
+            "expected_multiplier_bonus": 2.2104,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "huhi",
+      "role": "SUP",
+      "team": "Sentinels",
+      "opponent": "Dignitas",
+      "projected_fantasy_points": 19.32,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "ranking_share": 0.2319,
+            "expected_multiplier_bonus": 3.5285,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Impact",
+      "role": "TOP",
+      "team": "Sentinels",
+      "opponent": "Dignitas",
+      "projected_fantasy_points": 12.83,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "ranking_share": 0.1718,
+            "expected_multiplier_bonus": 1.5992,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Bvoy",
+      "role": "BOT",
+      "team": "Shopify Rebellion",
+      "opponent": "Disguised",
+      "projected_fantasy_points": 15.87,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Caitlyn",
+            "ranking_share": 0.1732,
+            "expected_multiplier_bonus": 2.0569,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Contractz",
+      "role": "JGL",
+      "team": "Shopify Rebellion",
+      "opponent": "Disguised",
+      "projected_fantasy_points": 14.12,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.1819,
+            "expected_multiplier_bonus": 2.2962,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Zinie",
+      "role": "MID",
+      "team": "Shopify Rebellion",
+      "opponent": "Disguised",
+      "projected_fantasy_points": 10.89,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "ranking_share": 0.1609,
+            "expected_multiplier_bonus": 1.3637,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Zeyzal",
+      "role": "SUP",
+      "team": "Shopify Rebellion",
+      "opponent": "Disguised",
+      "projected_fantasy_points": 17.35,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Nautilus",
+            "ranking_share": 0.1681,
+            "expected_multiplier_bonus": 2.0586,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Fudge",
+      "role": "TOP",
+      "team": "Shopify Rebellion",
+      "opponent": "Disguised",
+      "projected_fantasy_points": 10.53,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "ranking_share": 0.2133,
+            "expected_multiplier_bonus": 1.7107,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Yeon",
+      "role": "BOT",
+      "team": "Team Liquid",
+      "opponent": "Cloud9",
+      "projected_fantasy_points": 16.69,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Caitlyn",
+            "ranking_share": 0.1802,
+            "expected_multiplier_bonus": 2.1999,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Josedeodo",
+      "role": "JGL",
+      "team": "Team Liquid",
+      "opponent": "Cloud9",
+      "projected_fantasy_points": 18.96,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "ranking_share": 0.2187,
+            "expected_multiplier_bonus": 3.1434,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Quid",
+      "role": "MID",
+      "team": "Team Liquid",
+      "opponent": "Cloud9",
+      "projected_fantasy_points": 18.28,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "ranking_share": 0.1673,
+            "expected_multiplier_bonus": 2.3789,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "CoreJJ",
+      "role": "SUP",
+      "team": "Team Liquid",
+      "opponent": "Cloud9",
+      "projected_fantasy_points": 18.79,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "ranking_share": 0.1859,
+            "expected_multiplier_bonus": 2.6024,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    },
+    {
+      "player": "Morgan",
+      "role": "TOP",
+      "team": "Team Liquid",
+      "opponent": "Cloud9",
+      "projected_fantasy_points": 12.16,
+      "picks": {
+        "1.3x": {
+          "label": "Comfort",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.5x": {
+          "label": "League adoption",
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null
+        },
+        "1.7x": {
+          "label": "Novelty",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "ranking_share": 0.1631,
+            "expected_multiplier_bonus": 1.5454,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
+          }
+        }
+      }
+    }
+  ]
+}

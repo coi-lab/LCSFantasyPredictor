@@ -861,6 +861,106 @@ tr:hover {
   color: var(--text-muted);
 }
 
+/* Weekly champion predictions */
+.weekly-champion-header,
+.weekly-matchup-title,
+.weekly-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.weekly-champion-header {
+  margin-bottom: 14px;
+}
+
+.weekly-eyebrow {
+  color: var(--accent-cyan);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+}
+
+.weekly-champion-header h2 {
+  margin: 5px 0;
+  font-size: 25px;
+}
+
+.weekly-champion-header p,
+.weekly-matchup-title span {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.tier-chip {
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.tier-13 { color: #67e8f9; background: rgba(103, 232, 249, 0.08); }
+.tier-15 { color: #c4b5fd; background: rgba(196, 181, 253, 0.08); }
+.tier-17 { color: #fbbf24; background: rgba(251, 191, 36, 0.08); }
+
+.weekly-champion-notice {
+  margin-bottom: 18px;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 12px;
+  padding: 12px 15px;
+  color: #fde68a;
+  background: rgba(251, 191, 36, 0.07);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.weekly-matchup-card {
+  margin-bottom: 18px;
+}
+
+.weekly-matchup-title {
+  margin-bottom: 14px;
+}
+
+.weekly-matchup-title h3 {
+  font-size: 17px;
+}
+
+.weekly-picks-table td {
+  min-width: 150px;
+  vertical-align: top;
+}
+
+.weekly-picks-table td > small,
+.weekly-pick span,
+.weekly-pick small {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.weekly-pick strong {
+  font-size: 15px;
+}
+
+.tier-13-cell strong { color: #67e8f9; }
+.tier-15-cell strong { color: #c4b5fd; }
+.tier-17-cell strong { color: #fbbf24; }
+
+.weekly-pick.unavailable {
+  opacity: 0.55;
+}
+
+.weekly-pick.unavailable span {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
 @media (max-width: 1100px) {
   .champion-summary-grid {
     grid-template-columns: repeat(3, minmax(130px, 1fr));
@@ -869,7 +969,9 @@ tr:hover {
 
 @media (max-width: 760px) {
   .view-tabs,
-  .champion-lab-toolbar {
+  .champion-lab-toolbar,
+  .weekly-champion-header,
+  .weekly-legend {
     align-items: stretch;
     flex-direction: column;
   }

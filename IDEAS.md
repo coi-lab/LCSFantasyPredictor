@@ -364,24 +364,19 @@ For player `p`, champion `c`, opponent `o`, and possible series game `g`, rank c
 
 `sum_g(P(series reaches g) * P(c is fearless-legal) * P(c is not banned or denied) * P(team assigns c to p | available) * expected_fantasy_points(p, c, o, patch) * (novelty_multiplier - 1))`
 
-### Protected 2026 LCS holdout
+### Chronological 2026 premier test
 
-Champion-model research, feature design, manual audits, and tuning use LCS
-2023–2025 only. LCS 2026 Lock-In and Spring—including regular season and
-playoffs—are protected data and must not be inspected, queried, summarized, or
-visualized during development. Their presence in local source files does not
-authorize their use.
+Champion-model fitting and tuning use professional data from 2020–2025. LCS
+2026 is the premier current-format chronological test period. Some 2026 results
+were exposed during earlier review, so reports must describe it as the closest
+current-season test rather than a pristine blind holdout.
 
 - Fit champion, player, team, opponent, synergy, regional, and adoption features using data no later than December 31, 2025.
-- Tune and compare models with chronological validation windows entirely inside 2023–2025.
+- Tune and compare models with chronological validation windows inside 2020–2025.
 - Freeze every feature at the historical roster-lock timestamp, including champion novelty and tier/adoption signals.
-- Compare top-1 and top-3 accuracy, probability calibration, expected fantasy bonus, and simple baselines on those pre-2026 validation windows.
-- Do not use any observation from protected 2026 splits to select weights, features, player archetypes, or model structure.
-- Do not expose protected profiles in Champion Lab or other champion-model audit artifacts.
-
-Evaluation on protected data remains deferred unless the user explicitly
-replaces this iron rule in writing and establishes a controlled evaluation
-procedure.
+- Select features and weights using pre-2026 validation only, then evaluate the frozen selection on 2026.
+- Compare top-1 and top-3 accuracy, calibration, expected fantasy bonus, and simple baselines on both pre-2026 validation and the separate 2026 test.
+- Do not feed 2026 outcomes back into the trained model when reporting the premier frozen test.
 
 ## Player condition, form, and availability
 

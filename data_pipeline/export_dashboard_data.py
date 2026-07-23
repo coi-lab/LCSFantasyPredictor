@@ -401,7 +401,7 @@ def export_dashboard_json(output_path: str = None) -> str:
     print(f"Dashboard data successfully exported to: {output_path}")
     print(f"   Processed {len(player_list)} unique player-season profiles.")
     if HAS_PANDAS and isinstance(data, pd.DataFrame):
-        # Champion Lab enforces its protected LCS 2023-2025 scope internally.
+        # Champion Lab enforces its 2020-2025 training-data scope internally.
         export_champion_lab_json(data)
     return output_path
 

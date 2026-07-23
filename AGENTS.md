@@ -48,12 +48,12 @@ Read `README.md` for current usage, `IDEAS.md` for the modeling roadmap, `analys
 
 ## Modeling and data requirements
 
-- **Iron rule — protected 2026 LCS holdout:** Never inspect, query, summarize,
-  visualize, tune on, or derive champion-model features from LCS 2026 Lock-In
-  or Spring data, including regular-season and playoff games. Do not use
-  examples from those splits to choose weights, features, archetypes, or model
-  structure. Champion-model development and Champion Lab must use LCS
-  2023–2025 only unless the user explicitly replaces this rule in writing.
+- **Chronological model boundary:** Champion-model training, feature fitting,
+  and parameter tuning use 2020–2025 data only. Use 2026 as the premier
+  chronological test period and never allow 2026 outcomes into fitted features
+  or weights. Because some 2026 results were previously exposed, label this
+  evaluation honestly; it is the closest current-season test, not a pristine
+  blind holdout.
 - **Riot API Rate Limits (Strictly Enforce)**: All scripts querying the Riot Games API must enforce rate limits: maximum **20 requests per 1 second** and **100 requests per 2 minutes (120 seconds)**. Handle API key expiration gracefully by loading `RIOT_API_KEY` from `.env`.
 - Every historical feature must have an `as_of` time or an equivalent enforceable cutoff.
 - Never use games, drafts, market prices, novelty state, or outcomes that occurred after the prediction lock.

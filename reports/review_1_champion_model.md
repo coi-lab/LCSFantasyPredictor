@@ -2,10 +2,10 @@
 
 **Date:** 2026-07-23
 
-> **Quarantined holdout artifact:** This report contains results from the
-> protected evaluation period. Do not use its metrics, examples, or conclusions
-> to select features, weights, archetypes, or model structure. Champion-model
-> development must use chronological 2023-2025 folds.
+> **Previously exposed test artifact:** This report contains 2026 results.
+> Preserve it for current-format diagnostics, but do not use its metrics or
+> conclusions to fit features or weights. Training and tuning use chronological
+> 2020-2025 data.
 
 ## Executive Overview & System Architecture
 

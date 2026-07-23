@@ -82,6 +82,18 @@ class LCSDataIngestor:
             if not dfs:
                 raise ValueError("No valid data loaded from CSV files.")
             combined = pd.concat(dfs, ignore_index=True)
+            if {"league", "year", "split", "date"}.issubset(combined.columns):
+                dates = pd.to_datetime(combined["date"], errors="coerce")
+                missing_lcs_split = (
+                    combined["league"].astype(str).eq("LCS")
+                    & combined["split"].isna()
+                )
+                combined.loc[
+                    missing_lcs_split & dates.dt.month.le(6), "split"
+                ] = "Spring"
+                combined.loc[
+                    missing_lcs_split & dates.dt.month.gt(6), "split"
+                ] = "Summer"
             print(f"Loaded total raw rows: {len(combined)}")
             return combined
         else:
@@ -155,8 +167,12 @@ class LCSDataIngestor:
         lcs_primary_2025 = {"100 Thieves", "Cloud9", "Dignitas", "Disguised", "FlyQuest", "LYON", "Shopify Rebellion", "Team Liquid"}
         lcs_primary_2024 = {"100 Thieves", "Cloud9", "Dignitas", "FlyQuest", "Immortals", "NRG", "Shopify Rebellion", "Team Liquid"}
         lcs_primary_2023 = {"100 Thieves", "Cloud9", "Counter Logic Gaming", "Dignitas", "Evil Geniuses", "FlyQuest", "Golden Guardians", "Immortals", "NRG", "TSM", "Team Liquid"}
+        lcs_primary_2020_2022 = {"100 Thieves", "Cloud9", "Counter Logic Gaming", "Dignitas", "Evil Geniuses", "FlyQuest", "Golden Guardians", "Immortals", "TSM", "Team Liquid"}
 
         primary_teams_map = {
+            ("LCS", "2020"): lcs_primary_2020_2022,
+            ("LCS", "2021"): lcs_primary_2020_2022,
+            ("LCS", "2022"): lcs_primary_2020_2022,
             ("LCS", "2023"): lcs_primary_2023,
             ("LCS", "2024"): lcs_primary_2024,
             ("LCS", "2025"): lcs_primary_2025,

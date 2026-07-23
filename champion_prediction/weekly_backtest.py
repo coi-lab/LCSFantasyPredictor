@@ -1,9 +1,9 @@
 """Point-in-time fantasy champion evaluation on protected-safe historical series.
 
 This module evaluates the decision made at a series boundary: select one
-champion for one player using only earlier evidence. It intentionally accepts
-prepared DataFrames rather than loading every repository CSV, so callers can
-enforce the protected 2023-2025 development scope before evaluation.
+champion for one player using only earlier evidence. Feature values may update
+through the test period at each cutoff, while feature definitions and weights
+must be selected on 2020-2025.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from champion_prediction.simple_predictor import (
 )
 
 
-PROTECTED_DEVELOPMENT_END = pd.Timestamp("2026-01-01", tz="UTC")
+TRAINING_END = pd.Timestamp("2026-01-01", tz="UTC")
 
 
 def calibration_table(
@@ -54,6 +54,7 @@ def evaluate_series_choices(
     model_rows: pd.DataFrame,
     start: pd.Timestamp,
     end: pd.Timestamp,
+    predictor_kwargs: dict[str, Any] | None = None,
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Evaluate one locked champion choice per historical player-series.
 
@@ -61,8 +62,8 @@ def evaluate_series_choices(
     A later weekly evaluator can sum multiple scheduled series once historical
     roster-lock schedules are stored explicitly.
     """
-    if end > PROTECTED_DEVELOPMENT_END:
-        raise ValueError("Champion-model development is restricted to dates before 2026")
+    if start >= end:
+        raise ValueError("Backtest start must be earlier than end")
 
     series = build_player_series(model_rows)
     targets = series.loc[
@@ -72,6 +73,8 @@ def evaluate_series_choices(
     ].sort_values("series_start", kind="stable")
     rules = load_champion_bonus_rules()
     records: list[dict[str, Any]] = []
+    
+    kwargs = predictor_kwargs or {}
 
     for target in targets.to_dict("records"):
         cutoff = pd.Timestamp(target["series_start"])
@@ -97,6 +100,7 @@ def evaluate_series_choices(
             top_n=250,
             split_history=split_history,
             champion_bonus_rules=rules,
+            **kwargs,
         )
         if ranking.empty:
             records.append({
@@ -156,6 +160,7 @@ def evaluate_series_choices(
     report = {
         "start": start.isoformat(),
         "end": end.isoformat(),
+        "model_selection_data_end": TRAINING_END.isoformat(),
         "target_series": len(results),
         "scored_series": len(scored),
         "cold_start_series": int((results["prediction_status"] == "cold_start").sum())

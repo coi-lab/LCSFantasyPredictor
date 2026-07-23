@@ -8,6 +8,9 @@ data/champion_prediction/audit/*.csv
 data/predictions/*.csv
 data/predictions/*.json
 
+# Source dataset exceeds GitHub's 100 MiB per-file limit.
+LCS_stats/2021_LoL_esports_match_data_from_OraclesElixir.csv
+
 # Local browser diagnostic artifacts.
 .edge-*/
 *.png

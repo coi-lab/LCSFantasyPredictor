@@ -73,7 +73,7 @@ class ChampionLabExportTests(unittest.TestCase):
         self.assertEqual(ziggs["global_side_ban_rate"], 0.5)
         self.assertEqual(ziggs["targeted_ban_lift"], 0.5)
 
-    def test_protected_2026_lcs_profiles_are_excluded(self) -> None:
+    def test_2026_test_period_profiles_are_excluded_from_training_audit(self) -> None:
         protected = pd.DataFrame([{
             "gameid": "protected-game",
             "league": "LCS",

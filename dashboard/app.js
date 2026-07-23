@@ -2,6 +2,7 @@
 
 let rawData = null;
 let championLabData = null;
+let weeklyChampionData = null;
 let filteredPlayers = [];
 let currentPositionFilter = 'ALL';
 let currentSortCol = 'total_pts';
@@ -134,18 +135,23 @@ function addChampionLabTab() {
 
 async function loadDashboardData() {
   try {
-    const [resp, championResp] = await Promise.all([
+    const [resp, championResp, weeklyChampionResp] = await Promise.all([
       fetch('./dashboard_data.json'),
-      fetch('./champion_lab_data.json')
+      fetch('./champion_lab_data.json'),
+      fetch('./weekly_champion_predictions.json')
     ]);
     if (!resp.ok) throw new Error('Could not load dashboard_data.json');
     rawData = await resp.json();
     championLabData = championResp.ok
       ? await championResp.json()
       : { profiles: [], players: [] };
+    weeklyChampionData = weeklyChampionResp.ok
+      ? await weeklyChampionResp.json()
+      : { players: [] };
 
     populateFilterDropdowns();
     applyFilters();
+    renderWeeklyChampionPicks();
   } catch (err) {
     console.error('Error loading dashboard data:', err);
     document.getElementById('tableContainer').innerHTML = `
@@ -257,6 +263,8 @@ function setupEventListeners() {
         } else {
           renderChampionLab();
         }
+      } else if (targetViewId === 'view-weekly-champions') {
+        renderWeeklyChampionPicks();
       }
     });
   });
@@ -306,6 +314,85 @@ function setupEventListeners() {
     if (e.target.id === 'modalOverlay') closeModal();
   });
   document.getElementById('championPlayerSelect').addEventListener('change', renderChampionLab);
+}
+
+function renderWeeklyChampionPicks() {
+  const container = document.getElementById('weeklyChampionMatchups');
+  const notice = document.getElementById('weeklyChampionNotice');
+  if (!container || !notice) return;
+  const players = weeklyChampionData && Array.isArray(weeklyChampionData.players)
+    ? weeklyChampionData.players
+    : [];
+  if (players.length === 0) {
+    notice.textContent = 'No current weekly champion predictions are available.';
+    container.innerHTML = '';
+    return;
+  }
+
+  document.getElementById('weeklyChampionTitle').textContent =
+    `${weeklyChampionData.round_name || 'Current Round'} Champion Picks`;
+  document.getElementById('weeklyChampionMeta').textContent =
+    `Patch ${weeklyChampionData.patch || 'unknown'} | Roster lock ${weeklyChampionData.roster_lock || 'unknown'} | ${players.length} projected starters`;
+
+  const tierAvailability = ['1.3x', '1.5x', '1.7x'].map(tier =>
+    players.some(player => player.picks && player.picks[tier] && player.picks[tier].available)
+  );
+  notice.textContent = tierAvailability[0] || tierAvailability[1]
+    ? 'Each column shows the best candidate currently eligible for that official multiplier.'
+    : 'Round 1 note: no champion has prior Split 3 usage, so every eligible prediction is x1.7. The x1.3 and x1.5 tiers will populate after earlier rounds create split history.';
+
+  const matchupGroups = new Map();
+  players.forEach(player => {
+    const teams = [String(player.team), String(player.opponent)].sort();
+    const key = teams.join(' vs ');
+    if (!matchupGroups.has(key)) matchupGroups.set(key, []);
+    matchupGroups.get(key).push(player);
+  });
+
+  const renderTier = (player, tier, cssClass) => {
+    const entry = player.picks && player.picks[tier];
+    if (!entry || !entry.available || !entry.pick) {
+      return `<td class="weekly-pick unavailable"><span>Not available</span><small>Current split history</small></td>`;
+    }
+    const pick = entry.pick;
+    return `
+      <td class="weekly-pick ${cssClass}">
+        <strong>${escapeHtml(pick.champion)}</strong>
+        <span>${(Number(pick.ranking_share) * 100).toFixed(1)}% ranking share</span>
+        <small>Availability ${(Number(pick.availability) * 100).toFixed(0)}% · Bonus ${Number(pick.expected_multiplier_bonus).toFixed(2)}</small>
+      </td>
+    `;
+  };
+
+  container.innerHTML = Array.from(matchupGroups.entries()).map(([matchup, group]) => `
+    <section class="card weekly-matchup-card">
+      <div class="weekly-matchup-title">
+        <h3>${escapeHtml(matchup)}</h3>
+        <span>${group.length} projected starters</span>
+      </div>
+      <div class="table-responsive">
+        <table class="weekly-picks-table">
+          <thead>
+            <tr><th>Player</th><th>Team / Role</th><th>x1.3 Comfort</th><th>x1.5 Adoption</th><th>x1.7 Novelty</th></tr>
+          </thead>
+          <tbody>
+            ${group.sort((a, b) =>
+              String(a.team).localeCompare(String(b.team)) ||
+              String(a.role).localeCompare(String(b.role))
+            ).map(player => `
+              <tr>
+                <td><strong>${escapeHtml(player.player)}</strong><small>Proj. ${Number(player.projected_fantasy_points).toFixed(2)} pts</small></td>
+                <td><span class="team-badge">${escapeHtml(player.team)}</span><small>${escapeHtml(player.role)} vs ${escapeHtml(player.opponent)}</small></td>
+                ${renderTier(player, '1.3x', 'tier-13-cell')}
+                ${renderTier(player, '1.5x', 'tier-15-cell')}
+                ${renderTier(player, '1.7x', 'tier-17-cell')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `).join('');
 }
 
 function getActivePriceHistory(player, selectedSplit) {

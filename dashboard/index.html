@@ -100,6 +100,9 @@
       <button class="view-tab-btn" data-view="view-prices">
         <span>💰 Player Market Prices & Trends</span>
       </button>
+      <button class="view-tab-btn" data-view="view-weekly-champions">
+        <span>Weekly Champion Picks</span>
+      </button>
     </div>
 
     <!-- View 1: Leaderboard Grid (Table + Chart) -->
@@ -142,7 +145,25 @@
       </div>
     </div>
 
-    <!-- View 3: Player champion tendencies and opponent ban context -->
+    <!-- View 3: Current fantasy-week champion recommendations -->
+    <div class="view-section" id="view-weekly-champions">
+      <div class="card weekly-champion-header">
+        <div>
+          <span class="weekly-eyebrow">Current roster lock</span>
+          <h2 id="weeklyChampionTitle">Weekly Champion Picks</h2>
+          <p id="weeklyChampionMeta"></p>
+        </div>
+        <div class="weekly-legend">
+          <span class="tier-chip tier-13">x1.3 Comfort</span>
+          <span class="tier-chip tier-15">x1.5 Adoption</span>
+          <span class="tier-chip tier-17">x1.7 Novelty</span>
+        </div>
+      </div>
+      <div class="weekly-champion-notice" id="weeklyChampionNotice"></div>
+      <div id="weeklyChampionMatchups"></div>
+    </div>
+
+    <!-- View 4: Player champion tendencies and opponent ban context -->
     <div class="view-section" id="view-champion-lab">
       <div class="champion-lab-toolbar card">
         <div>
@@ -151,8 +172,8 @@
         </div>
         <p>
           The main league, year, split, role, and search filters select the current profile.
-          Champion Lab is intentionally limited to LCS 2023-2025. The protected
-          2026 Lock-In and Spring holdout data is not exported to this page.
+          Champion Lab is intentionally limited to LCS 2020-2025 training data.
+          The 2026 premier test period is not exported to this page.
         </p>
       </div>
 
@@ -454,6 +475,6 @@
     </div>
   </div>
 
-  <script src="./app.js?v=20260723-7"></script>
+  <script src="./app.js?v=20260723-8"></script>
 </body>
 </html>

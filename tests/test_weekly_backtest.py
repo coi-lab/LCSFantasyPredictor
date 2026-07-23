@@ -20,13 +20,13 @@ class WeeklyBacktestTests(unittest.TestCase):
 
         self.assertEqual(sum(row["observations"] for row in table), 2)
 
-    def test_rejects_protected_period(self) -> None:
+    def test_rejects_reversed_period(self) -> None:
         with self.assertRaises(ValueError):
             evaluate_series_choices(
                 pd.DataFrame(),
                 pd.DataFrame(),
-                pd.Timestamp("2025-01-01", tz="UTC"),
                 pd.Timestamp("2026-02-01", tz="UTC"),
+                pd.Timestamp("2025-01-01", tz="UTC"),
             )
 
 

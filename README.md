@@ -13,7 +13,7 @@ Follow these simple steps every week before fantasy roster lock:
 
 ### Step 1: Update Current Match Data
 Re-download the current year's Oracle's Elixir match file `2026_LoL_esports_match_data_from_OraclesElixir.csv` into `LCS_stats/`.
-* **Important**: Do **NOT** delete historical files (`2023`, `2024`, `2025`). The system auto-detects and loads all years together.
+* **Important**: Do **NOT** delete historical files (`2020` through `2025`). The system auto-detects and loads all years together.
 
 ### Step 2: Refresh Your 24-Hour Riot API Key
 1. Go to [https://developer.riotgames.com/](https://developer.riotgames.com/) and log in with your Riot account.
@@ -36,6 +36,12 @@ python -m champion_prediction.simple_predictor
 Generates two files under `data/predictions/`:
 * `current_champion_rankings.csv` (All ranked candidates)
 * `current_champion_portfolio.csv` (Top 1.3x Comfort Floor, 1.5x League Adoption, and 1.7x Novelty Wildcard picks)
+
+It also exports `dashboard/weekly_champion_predictions.json`, containing the
+three multiplier columns for every projected starter in the current official
+market. A tier is explicitly marked unavailable when current-split history
+cannot produce that official multiplier, as happens for x1.3 and x1.5 in the
+first round of a split.
 
 ---
 

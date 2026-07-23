@@ -13,6 +13,7 @@ from typing import Any, Iterable
 import numpy as np
 import pandas as pd
 
+from champion_prediction.board_state_ranker import train_and_backtest_board_state_ranker
 from champion_prediction.draft_actions import DEFAULT_OUTPUT_PATH as DEFAULT_DATABASE
 from data_pipeline.ingest import LCSDataIngestor
 from fantasy_prediction.player_baseline import canonical_team, prepare_history
@@ -24,18 +25,11 @@ BASE_FEATURES = (
     "league", "patch", "acting_team", "opponent_team", "slot", "action_phase",
     "action_number", "game_number", "draft_position", "map_side", "is_fearless",
 )
-# Final player/role assignment is deliberately excluded. For a flex pick, that
-# assignment is not known at the moment the sequential action is predicted.
 PICK_FEATURES = BASE_FEATURES
 
 
 class CategoricalNaiveBayesRanker:
-    """Rank champions from smoothed categorical frequencies.
-
-    Naive Bayes learns how often each feature value occurs with each champion,
-    then combines those pieces of evidence. "Naive" means it treats the inputs
-    as independent after the champion is known; that is intentionally simple.
-    """
+    """Rank champions from smoothed categorical frequencies."""
 
     def __init__(self, features: Iterable[str], alpha: float = 1.0) -> None:
         self.features = tuple(features)
@@ -54,7 +48,7 @@ class CategoricalNaiveBayesRanker:
         self,
         rows: pd.DataFrame,
         sample_weights: pd.Series | None = None,
-    ) -> "CategoricalNaiveBayesRanker":
+    ) -> CategoricalNaiveBayesRanker:
         """Learn champion and feature frequencies from training actions."""
         weights = sample_weights if sample_weights is not None else pd.Series(1.0, index=rows.index)
         for index, row in zip(rows.index, rows.itertuples(index=False)):
@@ -160,28 +154,30 @@ def evaluate(
 
 
 def train_and_backtest(rows: pd.DataFrame) -> tuple[dict[str, Any], dict[str, CategoricalNaiveBayesRanker]]:
-    """Train chronologically and evaluate on late-2025 LCS actions."""
-    cutoff = pd.Timestamp("2025-07-01", tz="UTC")
-    validation_end = pd.Timestamp("2026-01-01", tz="UTC")
+    """Fit on 2020-2025 and evaluate on the premier 2026 test period."""
+    cutoff = pd.Timestamp("2026-01-01", tz="UTC")
     train = rows.loc[rows["as_of_timestamp"].lt(cutoff) & rows["chosen_was_legal"].astype(bool)]
     test = rows.loc[
         rows["league"].isin(["LCS", "LTA N"])
         & rows["as_of_timestamp"].ge(cutoff)
-        & rows["as_of_timestamp"].lt(validation_end)
         & rows["chosen_was_legal"].astype(bool)
     ]
     models: dict[str, CategoricalNaiveBayesRanker] = {}
+
+    board_state_report = train_and_backtest_board_state_ranker(rows)
+
     report: dict[str, Any] = {
         "training_cutoff": cutoff.isoformat(),
-        "validation_end": validation_end.isoformat(),
-        "target": "LCS late 2025",
+        "target": "LCS 2026 premier chronological test",
+        "test_exposure": "previously_exposed_not_pristine",
+        "board_state_ranker_2026_test": board_state_report,
     }
     for action_type, features in (("pick", PICK_FEATURES), ("ban", BASE_FEATURES)):
         training_rows = train.loc[train["action_type"].eq(action_type)].copy()
         testing_rows = test.loc[test["action_type"].eq(action_type)].copy()
         model = CategoricalNaiveBayesRanker(features).fit(training_rows)
         models[action_type] = model
-        report[action_type] = {
+        report[f"naive_bayes_{action_type}"] = {
             "training_actions": len(training_rows),
             "test_actions": len(testing_rows),
             **evaluate(model, testing_rows),
