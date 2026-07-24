@@ -1189,6 +1189,29 @@ tr:hover {
   text-transform: uppercase;
 }
 
+.optimizer-picks-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
+  padding-top: 4px;
+}
+
+.optimizer-picks-column {
+  min-width: 0;
+}
+
+.opponent-picks-column {
+  background: rgba(255, 255, 255, 0.015);
+  border-radius: 8px;
+  padding: 0 6px 6px;
+}
+
+.opponent-picks-column .optimizer-pick-title {
+  color: var(--accent-gold);
+}
+
 .optimizer-champion-list {
   display: grid;
   gap: 7px;
@@ -1202,14 +1225,45 @@ tr:hover {
   padding: 8px;
 }
 
+.optimizer-champion-pick.has-collision {
+  background: rgba(251, 191, 36, 0.06);
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
 .optimizer-champion-pick div {
   display: grid;
   gap: 2px;
   min-width: 0;
+  width: 100%;
+}
+
+.optimizer-champ-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
 }
 
 .optimizer-champion-pick strong {
   font-size: 13px;
+}
+
+.collision-badge {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  white-space: nowrap;
+}
+
+.unique-badge {
+  color: #6ee7b7;
+  font-size: 9px;
+  font-weight: 600;
+  opacity: 0.85;
 }
 
 .optimizer-champion-pick small,

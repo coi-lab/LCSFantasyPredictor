@@ -451,26 +451,42 @@ function selectMatchupLineup(rank) {
 }
 
 function matchupChampionOptions(player) {
+  let rawOptions = [];
   if (Array.isArray(player.champion_options) && player.champion_options.length) {
-    return player.champion_options;
+    rawOptions = player.champion_options;
+  } else {
+    const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
+      ? weeklyChampionData.players
+      : [];
+    const match = weeklyPlayers.find(candidate =>
+      String(candidate.player).toLowerCase() === String(player.player).toLowerCase() &&
+      String(candidate.team).toLowerCase() === String(player.team).toLowerCase()
+    );
+    if (match && match.picks) {
+      ['1.3x', '1.5x', '1.7x'].forEach(multiplier => {
+        const tier = match.picks[multiplier];
+        if (!tier || !tier.available) return;
+        const tierOptions = Array.isArray(tier.options) ? tier.options : [];
+        tierOptions.forEach(pick => rawOptions.push({ ...pick, multiplier }));
+      });
+    }
   }
-  const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
-    ? weeklyChampionData.players
-    : [];
-  const match = weeklyPlayers.find(candidate =>
-    String(candidate.player).toLowerCase() === String(player.player).toLowerCase() &&
-    String(candidate.team).toLowerCase() === String(player.team).toLowerCase()
-  );
-  if (!match || !match.picks) return [];
 
-  const options = [];
-  ['1.3x', '1.5x', '1.7x'].forEach(multiplier => {
-    const tier = match.picks[multiplier];
-    if (!tier || !tier.available) return;
-    const tierOptions = Array.isArray(tier.options) ? tier.options : [];
-    tierOptions.forEach(pick => options.push({ ...pick, multiplier }));
+  if (!rawOptions.length) return [];
+
+  // Deduplicate by champion name (keeping highest pick chance), then sort descending by pick chance and take top 3
+  const champMap = new Map();
+  rawOptions.forEach(opt => {
+    const key = String(opt.champion).toLowerCase();
+    const chance = Number(opt.estimated_pick_chance ?? opt.ranking_share ?? 0);
+    if (!champMap.has(key) || chance > Number(champMap.get(key).estimated_pick_chance ?? champMap.get(key).ranking_share ?? 0)) {
+      champMap.set(key, opt);
+    }
   });
-  return options;
+
+  return Array.from(champMap.values())
+    .sort((a, b) => Number(b.estimated_pick_chance ?? b.ranking_share ?? 0) - Number(a.estimated_pick_chance ?? a.ranking_share ?? 0))
+    .slice(0, 3);
 }
 
 function renderMatchupOptimizer() {
@@ -518,49 +534,93 @@ function renderMatchupOptimizer() {
     </button>
   `).join('');
 
-  const renderChampionPicks = player => {
+  const renderChampionPicks = (player, opponentPlayer, isOpponentColumn = false) => {
     const options = matchupChampionOptions(player);
     if (!options.length) {
       return '<div class="optimizer-no-picks">No champion recommendations available</div>';
     }
+    const oppOptions = opponentPlayer ? matchupChampionOptions(opponentPlayer) : [];
+    const oppChamps = new Set(oppOptions.map(o => String(o.champion).toLowerCase()));
+
     return `
       <div class="optimizer-champion-list">
-        ${options.map(pick => `
-          <div class="optimizer-champion-pick">
-            <span class="tier-chip tier-${String(pick.multiplier).replace('.', '').replace('x', '')}">${escapeHtml(pick.multiplier)}</span>
-            <div>
-              <strong>${escapeHtml(pick.champion)}</strong>
-              <small>${escapeHtml(pick.option_basis || '')} ${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}%</small>
+        ${options.map(pick => {
+          const champLower = String(pick.champion).toLowerCase();
+          const isConflict = oppChamps.has(champLower);
+          const oppMatchingPick = oppOptions.find(o => String(o.champion).toLowerCase() === champLower);
+          const oppChance = oppMatchingPick ? (Number(oppMatchingPick.estimated_pick_chance ?? oppMatchingPick.ranking_share) * 100).toFixed(0) : 0;
+
+          return `
+            <div class="optimizer-champion-pick ${isConflict ? 'has-collision' : 'clean-pick'}">
+              <span class="tier-chip tier-${String(pick.multiplier).replace('.', '').replace('x', '')}">${escapeHtml(pick.multiplier)}</span>
+              <div>
+                <div class="optimizer-champ-name-row">
+                  <strong>${escapeHtml(pick.champion)}</strong>
+                  ${isConflict ? `<span class="collision-badge" title="High contest risk: Opponent also has ${oppChance}% pick chance">⚠️ Shared (${oppChance}%)</span>` : '<span class="unique-badge">✓ Uncontested</span>'}
+                </div>
+                <small>${escapeHtml(pick.option_basis || '')} ${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}% pick chance</small>
+              </div>
             </div>
-          </div>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
   };
 
-  const rosterCards = lineup.players.map(player => `
-    <article class="card optimizer-roster-card">
-      <div class="optimizer-card-head">
-        <span class="optimizer-role">${escapeHtml(String(player.role).toUpperCase())}</span>
-        <span class="optimizer-price">${Number(player.price).toFixed(1)}g</span>
-      </div>
-      <h3>${escapeHtml(player.player)}</h3>
-      <p class="optimizer-matchup">
-        <span style="--team-color:${getTeamColor(player.team)}">${escapeHtml(player.team)}</span>
-        vs ${escapeHtml(player.opponent || 'TBD')}
-      </p>
-      <div class="optimizer-point-line">
-        <span>Player projection</span>
-        <strong>${Number(player.projected_points).toFixed(2)}</strong>
-      </div>
-      <div class="optimizer-point-line">
-        <span>Champion upside</span>
-        <strong>+${Number(player.champion_expected_bonus || 0).toFixed(2)}</strong>
-      </div>
-      <div class="optimizer-pick-title">Recommended champion picks</div>
-      ${renderChampionPicks(player)}
-    </article>
-  `).join('');
+  const findOpposingPlayer = (player) => {
+    const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
+      ? weeklyChampionData.players
+      : [];
+    return weeklyPlayers.find(candidate =>
+      String(candidate.role).toLowerCase() === String(player.role).toLowerCase() &&
+      String(candidate.team).toLowerCase() === String(player.opponent).toLowerCase()
+    );
+  };
+
+  const rosterCards = lineup.players.map(player => {
+    const opponentPlayer = findOpposingPlayer(player);
+    const playerPicksHtml = renderChampionPicks(player, opponentPlayer, false);
+    const opponentPicksHtml = opponentPlayer
+      ? renderChampionPicks(opponentPlayer, player, true)
+      : '<div class="optimizer-no-picks">Opponent data unavailable</div>';
+
+    return `
+      <article class="card optimizer-roster-card">
+        <div class="optimizer-card-head">
+          <span class="optimizer-role">${escapeHtml(String(player.role).toUpperCase())}</span>
+          <span class="optimizer-price">${Number(player.price).toFixed(1)}g</span>
+        </div>
+        <h3>${escapeHtml(player.player)}</h3>
+        <p class="optimizer-matchup">
+          <span style="--team-color:${getTeamColor(player.team)}">${escapeHtml(player.team)}</span>
+          vs ${escapeHtml(player.opponent || 'TBD')}
+        </p>
+        <div class="optimizer-point-line">
+          <span>Player projection</span>
+          <strong>${Number(player.projected_points).toFixed(2)}</strong>
+        </div>
+        <div class="optimizer-point-line">
+          <span>Floor / Ceiling range</span>
+          <strong>${player.floor_pts != null ? Number(player.floor_pts).toFixed(1) : '-'} – ${player.ceiling_pts != null ? Number(player.ceiling_pts).toFixed(1) : '-'} pts</strong>
+        </div>
+        <div class="optimizer-point-line">
+          <span>Champion upside</span>
+          <strong>+${Number(player.champion_expected_bonus || 0).toFixed(2)}</strong>
+        </div>
+
+        <div class="optimizer-picks-comparison">
+          <div class="optimizer-picks-column">
+            <div class="optimizer-pick-title">${escapeHtml(player.player)}'s Picks</div>
+            ${playerPicksHtml}
+          </div>
+          <div class="optimizer-picks-column opponent-picks-column">
+            <div class="optimizer-pick-title">${opponentPlayer ? escapeHtml(opponentPlayer.player) : 'Opponent'}'s Picks (${escapeHtml(player.opponent || '')})</div>
+            ${opponentPicksHtml}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
 
   const coach = lineup.coach;
   const matchupConflicts = Array.isArray(lineup.matchup_conflicts)

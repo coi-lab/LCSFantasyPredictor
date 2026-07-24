@@ -237,6 +237,8 @@ def optimize_lineups(
                         "champion_expected_bonus": float(
                             player.get("champion_expected_bonus", 0.0)
                         ),
+                        "floor_pts": float(player.get("floor_pts")) if player.get("floor_pts") is not None else None,
+                        "ceiling_pts": float(player.get("ceiling_pts")) if player.get("ceiling_pts") is not None else None,
                     }
                     for player in player_choices
                 ],

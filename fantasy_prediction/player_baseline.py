@@ -43,6 +43,11 @@ def canonical_team(value: Any) -> str:
 def prepare_history(scored_rows: pd.DataFrame) -> pd.DataFrame:
     """Attach normalized roles and the opposing team to scored player games."""
     rows = scored_rows.copy()
+    if "fantasy_pts" not in rows.columns:
+        from data_pipeline.ingest import LCSDataIngestor
+        ingestor = LCSDataIngestor()
+        rows = ingestor.calculate_fantasy_points(rows)
+
     rows["date"] = pd.to_datetime(rows["date"], errors="coerce", utc=True)
     rows["role"] = rows["position"].astype(str).str.casefold().map(ROLE_MAP)
     rows["team"] = rows["teamname"].map(canonical_team)
@@ -96,6 +101,9 @@ def project_one(
     role: str,
     opponent: str,
     cutoff: pd.Timestamp,
+    team_win_feature_enabled: bool = False,
+    team_win_prob: float = 0.5,
+    return_unrounded: bool = False,
 ) -> dict[str, float | int | str | None]:
     """Project one player's per-game score using only rows before ``cutoff``."""
     prior = history.loc[history["date"].lt(cutoff)]
@@ -128,17 +136,56 @@ def project_one(
         opponent_mean = role_mean
     opponent_reliability = opponent_weight / (opponent_weight + 15.0)
     opponent_effect = opponent_reliability * (opponent_mean - role_mean)
-    projection = shrunk_player + 0.35 * opponent_effect
+
+    # Direct Head-to-Head (H2H) Player vs Team History
+    h2h_pool = player_pool.loc[player_pool["opponent"].eq(canonical_team(opponent))]
+    h2h_mean, h2h_weight, _ = recency_mean(h2h_pool, cutoff)
+    if math.isfinite(h2h_mean) and h2h_weight > 0.5:
+        h2h_reliability = h2h_weight / (h2h_weight + 3.0)
+        h2h_effect = h2h_reliability * (h2h_mean - shrunk_player)
+    else:
+        h2h_effect = 0.0
+
+    # Playoff vs Regular Season Split Adjustment
+    playoff_pool = player_pool.loc[player_pool["playoffs"].astype(str).str.casefold().isin({"1", "true"})] if "playoffs" in player_pool.columns else pd.DataFrame()
+    playoff_mean, playoff_weight, _ = recency_mean(playoff_pool, cutoff)
+    playoff_boost = 0.0
+    if math.isfinite(playoff_mean) and playoff_weight > 1.0:
+        playoff_ratio = playoff_mean / (player_mean if player_mean > 0 else 1.0)
+        playoff_boost = (playoff_ratio - 1.0) * 0.2  # 20% weight adjustment
+
+    win_prob_effect = 0.0
+    if team_win_feature_enabled:
+        win_prob_effect = (team_win_prob - 0.5) * 4.0  # Centered pre-game win prob scale
+
+    projection = shrunk_player + 0.35 * opponent_effect + 0.25 * h2h_effect + shrunk_player * playoff_boost + win_prob_effect
 
     deviation = player_deviation if math.isfinite(player_deviation) else role_deviation
+
+    # Calculate 5-game short-term rolling mean
+    recent_5g_pool = player_pool.sort_values("date", ascending=False).head(5)
+    short_term_5g_mean = float(recent_5g_pool["fantasy_pts"].mean()) if not recent_5g_pool.empty else player_mean
+
+    # Calculate floor (10th percentile) and ceiling (90th percentile)
+    if not player_pool.empty and len(player_pool) >= 3:
+        floor_pts = float(np.percentile(player_pool["fantasy_pts"], 10))
+        ceiling_pts = float(np.percentile(player_pool["fantasy_pts"], 90))
+    else:
+        floor_pts = max(0.0, float(projection - 1.28 * (deviation or 3.0)))
+        ceiling_pts = float(projection + 1.28 * (deviation or 3.0))
+
     return {
-        "projected_fantasy_pts": round(float(projection), 2),
+        "projected_fantasy_pts": float(projection) if return_unrounded else round(float(projection), 2),
         "player_recent_mean": round(float(player_mean), 2),
+        "short_term_5g_mean": round(float(short_term_5g_mean), 2),
         "role_baseline": round(float(role_mean), 2),
         "opponent_adjustment": round(float(0.35 * opponent_effect), 2),
+        "h2h_adjustment": round(float(0.25 * h2h_effect), 2),
         "historical_games": int(len(player_pool)),
         "effective_recent_games": round(float(player_weight), 2),
         "historical_deviation": round(float(deviation), 2) if math.isfinite(deviation) else None,
+        "floor_pts": round(floor_pts, 2),
+        "ceiling_pts": round(ceiling_pts, 2),
         "last_historical_game": (
             player_pool["date"].max().isoformat() if not player_pool.empty else None
         ),
@@ -159,8 +206,8 @@ def project_weekly_opponents(
     ]
     result = dict(projections[0])
     for field in (
-        "projected_fantasy_pts", "player_recent_mean", "role_baseline",
-        "opponent_adjustment", "effective_recent_games",
+        "projected_fantasy_pts", "player_recent_mean", "short_term_5g_mean", "role_baseline",
+        "opponent_adjustment", "h2h_adjustment", "effective_recent_games", "floor_pts", "ceiling_pts",
     ):
         values = [float(item[field]) for item in projections if item[field] is not None]
         result[field] = round(float(np.mean(values)), 2) if values else None

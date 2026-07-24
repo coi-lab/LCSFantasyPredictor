@@ -72,6 +72,10 @@ When the active client is AGY:
   diagnose it rather than repeatedly waiting.
 - For any model, feature, backtest, accuracy, calibration, or fantasy-value
   task, read and follow `prompts/model_change_workflow.md` before editing.
+- For team-win, player-score, roster-construction, matchup-feature, uncertainty,
+  or lineup-simulation work, also read and follow
+  `prompts/roster_model_capability_roadmap.md`. Execute it phase by phase; do
+  not collapse the roadmap into one unsupported completion claim.
 - Never treat a plan, code comment, screenshot, chat message, Markdown report,
   memory entry, or another agent's summary as evidence that a result occurred.
 - Never claim that accuracy, performance, calibration, coverage, or fantasy
