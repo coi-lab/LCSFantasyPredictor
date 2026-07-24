@@ -64,7 +64,11 @@ the dashboard-ready week in `dashboard/matchup_lineups.json`. Open
 `http://localhost:8050/#matchup-optimizer` to switch between saved fantasy
 weeks, compare the top ten legal lineups, inspect each matchup, and see the
 recommended champion choices with estimated pick chances. Re-running a saved
-week replaces that week while retaining the other weeks. See
+week replaces that week while retaining the other weeks. Lineups are ranked
+with a documented five-point penalty for opposing roster slots; conflicts
+involving TOP receive half weight because TOP has shown lower historical score
+variation. Raw projected points remain visible beside the risk-adjusted rank
+score. See
 [`analysis/player_matchup_and_lineup_training.md`](analysis/player_matchup_and_lineup_training.md)
 for the chronological training and validation design.
 
@@ -72,6 +76,9 @@ Production champion-source parameters are frozen in
 `config/champion_model.json`. They were selected with weekly chronological
 targets and patch-distance decay rather than calendar-day half-lives. See
 [`analysis/weekly_patch_weight_tuning.md`](analysis/weekly_patch_weight_tuning.md)
+for both the accepted source-weight run and the rejected current-team
+comfort-persistence experiment. The latter remains disabled because it reduced
+both 2025 Summer Top-1 accuracy and realized fantasy bonus.
 for the validation windows, roster-lock proxy, metrics, and limitations.
 
 ---

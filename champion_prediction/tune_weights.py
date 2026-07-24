@@ -91,7 +91,7 @@ def cached_feature_table(
         if target_splits else ""
     )
     key = (
-        f"weekly_v5{splits_key}_{start:%Y%m%d}_{end:%Y%m%d}"
+        f"weekly_v6{splits_key}_{start:%Y%m%d}_{end:%Y%m%d}"
         f"_pdr{rates_key}.pkl"
     )
     path = cache_dir / key

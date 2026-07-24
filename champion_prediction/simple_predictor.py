@@ -66,6 +66,19 @@ def load_production_hyperparameters(
             key: float(weights[key])
             for key in ("w_player", "w_lcs", "w_leading")
         })
+    comfort = parameters.get("comfort_persistence")
+    if isinstance(comfort, dict) and comfort.get("enabled"):
+        result.update({
+            "comfort_early_strength": float(
+                comfort.get("early_strength", 0.0)
+            ),
+            "comfort_mature_strength": float(
+                comfort.get("mature_strength", 0.0)
+            ),
+            "comfort_games_to_mature": float(
+                comfort.get("games_to_mature", 40.0)
+            ),
+        })
     early_weights = parameters.get("early_weights")
     mature_weights = parameters.get("mature_weights")
     if (
@@ -140,6 +153,94 @@ def weighted_champion_shares(
     if denominator <= 0:
         return {}
     return (totals / denominator).to_dict()
+
+
+def team_player_comfort_persistence(
+    rows: pd.DataFrame,
+    player: str,
+    team: str,
+    cutoff: pd.Timestamp,
+    target_patch: str,
+    patch_decay_rate: float = 0.30,
+) -> dict[str, float]:
+    """Measure repeated current-team comfort across the cutoff-safe season.
+
+    This is an observable team/player continuity proxy, not evidence of a
+    coach's private intent. A champion scores higher when the current team has
+    returned to it across multiple games and competition stages.
+    """
+    if rows.empty:
+        return {}
+    current_team = canonical_team(team)
+    team_values = rows["team"].astype(str).map(canonical_team)
+    row_years = (
+        pd.to_numeric(rows["year"], errors="coerce")
+        if "year" in rows.columns
+        else pd.to_datetime(rows["date"], utc=True, errors="coerce").dt.year
+    )
+    season_rows = rows.loc[
+        rows["date"].lt(cutoff)
+        & row_years.eq(cutoff.year)
+        & rows["player"].astype(str).str.casefold().eq(player.casefold())
+        & team_values.eq(current_team)
+    ].copy()
+    if season_rows.empty:
+        return {}
+
+    shares = weighted_champion_shares(
+        season_rows,
+        cutoff,
+        target_patch,
+        patch_decay_rate,
+    )
+    source = (
+        season_rows["source_league"].astype(str)
+        if "source_league" in season_rows.columns
+        else season_rows.get(
+            "league", pd.Series("unknown", index=season_rows.index)
+        ).astype(str)
+    )
+    domestic_stage = season_rows.get(
+        "split", pd.Series("domestic", index=season_rows.index)
+    ).astype(str)
+    season_rows["_stage"] = np.where(
+        source.isin(INTERNATIONAL_LEAGUES),
+        source,
+        domestic_stage,
+    )
+    game_counts = (
+        season_rows.groupby("champion")["gameid"].nunique()
+        if "gameid" in season_rows.columns
+        else season_rows.groupby("champion").size()
+    )
+    stage_counts = season_rows.groupby("champion")["_stage"].nunique()
+    return {
+        str(champion): (
+            float(share)
+            * (float(game_counts.get(champion, 0)) / (
+                float(game_counts.get(champion, 0)) + 2.0
+            ))
+            * (
+                0.5
+                + 0.5 * min(1.0, float(stage_counts.get(champion, 0)) / 2.0)
+            )
+        )
+        for champion, share in shares.items()
+    }
+
+
+def comfort_persistence_strength(
+    lcs_split_games: int,
+    hyperparameters: dict[str, float],
+) -> float:
+    """Decay season-long comfort influence as Summer supplies local games."""
+    early = float(hyperparameters.get("comfort_early_strength", 0.0))
+    mature = float(hyperparameters.get("comfort_mature_strength", 0.0))
+    games_to_mature = max(
+        1.0, float(hyperparameters.get("comfort_games_to_mature", 40.0))
+    )
+    maturity = min(1.0, max(0.0, float(lcs_split_games) / games_to_mature))
+    return (1.0 - maturity) * early + maturity * mature
 
 
 def latest_observed_lcs_patch(history: pd.DataFrame, cutoff: pd.Timestamp) -> str:
@@ -385,6 +486,14 @@ def rank_champions(
     player_shares = weighted_champion_shares(
         player_rows, cutoff, target_patch, patch_decay_rate
     )
+    team_comfort = team_player_comfort_persistence(
+        player_rows,
+        player,
+        team,
+        cutoff,
+        target_patch,
+        patch_decay_rate,
+    )
 
     domestic_lcs = (
         prior["league"].eq("LCS")
@@ -446,6 +555,7 @@ def rank_champions(
         w_leading = hp["w_leading"]
     else:
         w_player, w_lcs, w_leading = dynamic_feature_weights(lcs_patch_games)
+    comfort_strength = comfort_persistence_strength(lcs_split_games, hp)
 
     if tier_matrix is None:
         tier_matrix = PatchTierMatrix()
@@ -476,6 +586,7 @@ def rank_champions(
         player_share = float(player_shares.get(champion, 0.0))
         lcs_share = float(lcs_shares.get(champion, 0.0))
         leading_share = float(leading_shares.get(champion, 0.0))
+        team_comfort_score = float(team_comfort.get(champion, 0.0))
 
         tier_mult = tier_matrix.get_multiplier(target_patch, role, champion)
         prio_stats = prio_matrix.calculate_lane_prio(prior, champion, role)
@@ -485,6 +596,7 @@ def rank_champions(
             (w_player * player_share + w_lcs * lcs_share + w_leading * leading_share)
             * tier_mult
             * (0.85 + 0.15 * prio_mult)
+            * (1.0 + comfort_strength * team_comfort_score)
         )
         ban_rate = min(1.0, float(ban_rates.get(champion, 0.0)))
         denial_rate = min(1.0, float(denial_rates.get(champion, 0.0)))
@@ -516,6 +628,8 @@ def rank_champions(
             "player_recent_share": player_share,
             "lcs_patch_role_share": lcs_share,
             "leading_region_role_share": leading_share,
+            "team_player_comfort_persistence": team_comfort_score,
+            "comfort_persistence_strength": comfort_strength,
             "opponent_ban_rate": ban_rate,
             "opponent_pick_denial_rate": denial_rate,
             "opponent_draft_games": opponent_games,
@@ -547,6 +661,7 @@ def rank_champions(
     )
     numeric_columns = [
         "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
+        "team_player_comfort_persistence", "comfort_persistence_strength",
         "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
         "unusual_opponent_ban_interest", "availability_factor", "ranking_share",
         "patch_tier_multiplier", "lane_priority_multiplier",
@@ -617,6 +732,7 @@ def rank_weekly_opponents(
     ]
     mean_columns = [
         "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
+        "team_player_comfort_persistence", "comfort_persistence_strength",
         "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
         "unusual_opponent_ban_interest", "availability_factor",
         "expected_points_if_picked", "ranking_share", "estimated_pick_probability",

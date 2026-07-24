@@ -15,6 +15,7 @@ from champion_prediction.simple_predictor import (
     load_production_hyperparameters,
     maturity_blended_feature_weights,
     rank_champions,
+    team_player_comfort_persistence,
 )
 
 
@@ -54,6 +55,68 @@ class SimpleChampionPredictorTests(unittest.TestCase):
 
         self.assertEqual(parameters["patch_decay_rate"], 0.3)
         self.assertEqual(parameters["w_lcs"], 0.36)
+
+    def test_loads_enabled_comfort_persistence_parameters(self) -> None:
+        payload = {
+            "strategy": "static",
+            "parameters": {
+                "patch_decay_rate": 0.3,
+                "weights": {
+                    "w_player": 0.35,
+                    "w_lcs": 0.36,
+                    "w_leading": 0.29,
+                },
+                "comfort_persistence": {
+                    "enabled": True,
+                    "early_strength": 1.0,
+                    "mature_strength": 0.25,
+                    "games_to_mature": 40,
+                },
+            },
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "champion_model.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            parameters = load_production_hyperparameters(path)
+
+        self.assertEqual(parameters["comfort_early_strength"], 1.0)
+        self.assertEqual(parameters["comfort_mature_strength"], 0.25)
+        self.assertEqual(parameters["comfort_games_to_mature"], 40.0)
+
+    def test_team_comfort_uses_current_team_and_season_only(self) -> None:
+        cutoff = pd.Timestamp("2025-07-20", tz="UTC")
+        rows = pd.DataFrame([
+            {
+                "date": pd.Timestamp(date, tz="UTC"),
+                "year": year,
+                "league": league,
+                "source_league": source,
+                "split": split,
+                "patch": patch,
+                "role": "mid",
+                "player": "Star",
+                "team": team,
+                "champion": champion,
+                "gameid": gameid,
+            }
+            for date, year, league, source, split, patch, team, champion, gameid in (
+                ("2025-04-01", 2025, "LCS", "LCS", "Spring", "15.7", "A", "Ahri", "g1"),
+                ("2025-04-08", 2025, "LCS", "LCS", "Spring", "15.8", "A", "Ahri", "g2"),
+                ("2025-06-20", 2025, "MSI", "MSI", "MSI", "15.12", "A", "Ahri", "g3"),
+                ("2025-05-01", 2025, "LCS", "LCS", "Spring", "15.9", "Old", "Yone", "g4"),
+                ("2024-08-01", 2024, "LCS", "LCS", "Summer", "14.15", "A", "Orianna", "g5"),
+                ("2025-08-01", 2025, "LCS", "LCS", "Summer", "15.15", "A", "Syndra", "g6"),
+            )
+        ])
+
+        persistence = team_player_comfort_persistence(
+            rows, "Star", "A", cutoff, "15.14"
+        )
+
+        self.assertGreater(persistence["Ahri"], 0.0)
+        self.assertNotIn("Yone", persistence)
+        self.assertNotIn("Orianna", persistence)
+        self.assertNotIn("Syndra", persistence)
 
     def test_loads_maturity_blend_production_parameters(self) -> None:
         payload = {

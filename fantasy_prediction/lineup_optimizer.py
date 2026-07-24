@@ -28,6 +28,15 @@ DEFAULT_OUTPUT = (
 )
 DEFAULT_DASHBOARD_OUTPUT = PROJECT_ROOT / "dashboard" / "matchup_lineups.json"
 REQUIRED_ROLES = ("top", "jgl", "mid", "bot", "sup")
+DEFAULT_MATCHUP_CONFLICT_PENALTY = 5.0
+MATCHUP_CONFLICT_ROLE_WEIGHTS = {
+    "top": 0.5,
+    "jgl": 1.0,
+    "mid": 1.0,
+    "bot": 1.0,
+    "sup": 1.0,
+    "coach": 1.0,
+}
 
 
 def load_variety_buffs(path: Path = DEFAULT_RULES_PATH) -> dict[int, float]:
@@ -78,12 +87,72 @@ def attach_champion_bonus(
     return enriched
 
 
+def _are_opponents(first: dict[str, Any], second: dict[str, Any]) -> bool:
+    """Return whether two roster slots are scheduled on opposite teams."""
+    first_team = str(first.get("team", "")).strip().casefold()
+    first_opponent = str(first.get("opponent", "")).strip().casefold()
+    second_team = str(second.get("team", "")).strip().casefold()
+    second_opponent = str(second.get("opponent", "")).strip().casefold()
+    if not first_team or not second_team:
+        return False
+    return (
+        first_team == second_opponent
+        or second_team == first_opponent
+    )
+
+
+def build_matchup_conflicts(
+    players: tuple[dict[str, Any], ...],
+    coach: dict[str, Any],
+    penalty_points: float,
+) -> tuple[list[dict[str, Any]], float]:
+    """Describe opposing roster slots and calculate their risk penalty.
+
+    TOP receives half weight because the available historical projections show
+    lower score deviation for that role. The overall point scale remains a
+    manually chosen risk preference until chronological validation can tune it.
+    """
+    slots = [
+        {
+            "name": str(player["player"]),
+            "role": str(player["role"]),
+            "team": str(player["team"]),
+            "opponent": str(player.get("opponent", "")),
+        }
+        for player in players
+    ]
+    slots.append({
+        "name": str(coach["coach"]),
+        "role": "coach",
+        "team": str(coach["team"]),
+        "opponent": str(coach.get("opponent", "")),
+    })
+
+    conflicts: list[dict[str, Any]] = []
+    for first, second in itertools.combinations(slots, 2):
+        if not _are_opponents(first, second):
+            continue
+        risk_weight = min(
+            MATCHUP_CONFLICT_ROLE_WEIGHTS.get(first["role"], 1.0),
+            MATCHUP_CONFLICT_ROLE_WEIGHTS.get(second["role"], 1.0),
+        )
+        conflicts.append({
+            "first": first,
+            "second": second,
+            "risk_weight": risk_weight,
+            "penalty": round(float(penalty_points) * risk_weight, 2),
+        })
+    penalty = sum(float(conflict["penalty"]) for conflict in conflicts)
+    return conflicts, round(penalty, 2)
+
+
 def optimize_lineups(
     players: pd.DataFrame,
     coaches: pd.DataFrame,
     variety_buffs: dict[int, float],
     budget: float = 100.0,
     top_n: int = 10,
+    matchup_conflict_penalty: float = DEFAULT_MATCHUP_CONFLICT_PENALTY,
 ) -> list[dict[str, Any]]:
     """Return the exact highest-projected legal lineups.
 
@@ -135,6 +204,12 @@ def optimize_lineups(
             coach_points = float(coach["projected_fantasy_pts"])
             base_points = player_points + champion_bonus + coach_points
             total_points = base_points * (1.0 + variety_bonus)
+            matchup_conflicts, conflict_penalty = build_matchup_conflicts(
+                player_choices,
+                coach,
+                matchup_conflict_penalty,
+            )
+            risk_adjusted_points = total_points - conflict_penalty
             results.append({
                 "total_cost": round(total_cost, 2),
                 "remaining_gold": round(budget - total_cost, 2),
@@ -145,6 +220,9 @@ def optimize_lineups(
                 "projected_coach_points": round(coach_points, 2),
                 "projected_base_points": round(base_points, 2),
                 "projected_total_points": round(total_points, 2),
+                "matchup_conflicts": matchup_conflicts,
+                "matchup_conflict_penalty": conflict_penalty,
+                "risk_adjusted_points": round(risk_adjusted_points, 2),
                 "players": [
                     {
                         "role": str(player["role"]),
@@ -174,6 +252,7 @@ def optimize_lineups(
     ordered = sorted(
         results,
         key=lambda lineup: (
+            lineup["risk_adjusted_points"],
             lineup["projected_total_points"],
             lineup["projected_base_points"],
             -lineup["total_cost"],
@@ -189,6 +268,7 @@ def build_dashboard_payload(
     players: pd.DataFrame,
     budget: float,
     lineups: list[dict[str, Any]],
+    matchup_conflict_penalty: float = DEFAULT_MATCHUP_CONFLICT_PENALTY,
 ) -> dict[str, Any]:
     """Wrap current recommendations in a multi-week dashboard schema."""
     round_name = (
@@ -210,10 +290,12 @@ def build_dashboard_payload(
             "roster_lock": roster_lock,
             "budget": float(budget),
             "objective": (
-                "maximize expected player + champion + coach points after "
-                "official variety buff"
+                "maximize risk-adjusted player + champion + coach points "
+                "after official variety buff and matchup-conflict penalty"
             ),
             "coach_counts_toward_variety": True,
+            "matchup_conflict_penalty_points": matchup_conflict_penalty,
+            "top_conflict_weight": MATCHUP_CONFLICT_ROLE_WEIGHTS["top"],
             "lineups": lineups,
         }],
     }
@@ -298,6 +380,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--rules", type=Path, default=DEFAULT_RULES_PATH)
     parser.add_argument("--budget", type=float, default=100.0)
     parser.add_argument("--top-n", type=int, default=10)
+    parser.add_argument(
+        "--matchup-conflict-penalty",
+        type=float,
+        default=DEFAULT_MATCHUP_CONFLICT_PENALTY,
+        help=(
+            "Risk points subtracted for each opposing non-TOP slot pair; "
+            "conflicts involving TOP receive half weight."
+        ),
+    )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument(
         "--dashboard-output",
@@ -321,21 +412,29 @@ def main() -> None:
         load_variety_buffs(args.rules),
         budget=float(args.budget),
         top_n=int(args.top_n),
+        matchup_conflict_penalty=float(args.matchup_conflict_penalty),
     )
     payload = {
         "budget": float(args.budget),
         "objective": (
-            "maximize expected player + champion + coach points after "
-            "official variety buff"
+            "maximize risk-adjusted player + champion + coach points after "
+            "official variety buff and matchup-conflict penalty"
         ),
         "coach_counts_toward_variety": True,
+        "matchup_conflict_penalty_points": float(
+            args.matchup_conflict_penalty
+        ),
+        "top_conflict_weight": MATCHUP_CONFLICT_ROLE_WEIGHTS["top"],
         "lineups": lineups,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     dashboard_lineups = attach_dashboard_champion_options(lineups, portfolio)
     current_dashboard_payload = build_dashboard_payload(
-        players, float(args.budget), dashboard_lineups
+        players,
+        float(args.budget),
+        dashboard_lineups,
+        float(args.matchup_conflict_penalty),
     )
     args.dashboard_output.parent.mkdir(parents=True, exist_ok=True)
     existing_dashboard_payload = None
@@ -363,7 +462,8 @@ def main() -> None:
         print(
             f"Best: {names}, Coach {best['coach']['coach']} | "
             f"{best['total_cost']:.1f}g | {best['unique_teams']} teams | "
-            f"{best['projected_total_points']:.2f} projected points"
+            f"{best['projected_total_points']:.2f} projected | "
+            f"{best['risk_adjusted_points']:.2f} risk-adjusted points"
         )
 
 

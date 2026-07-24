@@ -507,14 +507,14 @@ function renderMatchupOptimizer() {
   selectedMatchupLineupRank = Number(lineup.rank);
   meta.textContent = `${selectedWeek.round_name} | Roster lock ${selectedWeek.roster_lock} | ${Number(selectedWeek.budget).toFixed(1)} gold budget`;
   notice.textContent =
-    'Projected totals include player matchup projections, expected champion bonus, coach projection, and the official variety buff. Champion chances are normalized model estimates.';
+    'Lineups are ranked by projected points after matchup-conflict risk. Opposing TOP exposure receives half the normal penalty because TOP scores have been more stable. Champion chances are normalized model estimates.';
   tabs.innerHTML = lineups.map(item => `
     <button
       class="matchup-lineup-tab ${Number(item.rank) === selectedMatchupLineupRank ? 'active' : ''}"
       onclick="selectMatchupLineup(${Number(item.rank)})"
     >
       Lineup ${Number(item.rank)}
-      <small>${Number(item.projected_total_points).toFixed(1)} pts</small>
+      <small>${Number(item.risk_adjusted_points ?? item.projected_total_points).toFixed(1)} risk pts</small>
     </button>
   `).join('');
 
@@ -563,12 +563,33 @@ function renderMatchupOptimizer() {
   `).join('');
 
   const coach = lineup.coach;
+  const matchupConflicts = Array.isArray(lineup.matchup_conflicts)
+    ? lineup.matchup_conflicts
+    : [];
+  const conflictDetails = matchupConflicts.length
+    ? `
+      <div class="optimizer-conflict-list">
+        ${matchupConflicts.map(conflict => `
+          <span>
+            ${escapeHtml(conflict.first.name)} (${escapeHtml(String(conflict.first.role).toUpperCase())})
+            vs ${escapeHtml(conflict.second.name)} (${escapeHtml(String(conflict.second.role).toUpperCase())})
+            <strong>-${Number(conflict.penalty).toFixed(1)}</strong>
+          </span>
+        `).join('')}
+      </div>
+    `
+    : '<div class="optimizer-no-picks">No selected slots oppose one another.</div>';
   content.innerHTML = `
     <div class="optimizer-summary-grid">
       <div class="optimizer-summary-card"><span>Projected total</span><strong>${Number(lineup.projected_total_points).toFixed(2)}</strong></div>
+      <div class="optimizer-summary-card"><span>Risk-adjusted rank score</span><strong>${Number(lineup.risk_adjusted_points ?? lineup.projected_total_points).toFixed(2)}</strong><small>After matchup conflicts</small></div>
       <div class="optimizer-summary-card"><span>Roster cost</span><strong>${Number(lineup.total_cost).toFixed(1)}g</strong><small>${Number(lineup.remaining_gold).toFixed(1)}g left</small></div>
       <div class="optimizer-summary-card"><span>Variety buff</span><strong>+${(Number(lineup.variety_bonus) * 100).toFixed(0)}%</strong><small>${Number(lineup.unique_teams)} teams</small></div>
-      <div class="optimizer-summary-card"><span>Before variety</span><strong>${Number(lineup.projected_base_points).toFixed(2)}</strong><small>Players + champions + coach</small></div>
+      <div class="optimizer-summary-card"><span>Matchup risk</span><strong>-${Number(lineup.matchup_conflict_penalty || 0).toFixed(2)}</strong><small>${matchupConflicts.length} opposing slot pair${matchupConflicts.length === 1 ? '' : 's'}</small></div>
+    </div>
+    <div class="card optimizer-conflict-card">
+      <div class="optimizer-pick-title">Head-to-head exposure</div>
+      ${conflictDetails}
     </div>
     <div class="optimizer-roster-grid">
       ${rosterCards}

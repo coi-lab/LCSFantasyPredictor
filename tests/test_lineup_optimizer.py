@@ -8,6 +8,7 @@ import pandas as pd
 
 from fantasy_prediction.lineup_optimizer import (
     attach_dashboard_champion_options,
+    build_matchup_conflicts,
     build_dashboard_payload,
     merge_dashboard_payload,
     optimize_lineups,
@@ -105,6 +106,84 @@ class LineupOptimizerTests(unittest.TestCase):
         )
 
         self.assertEqual(lineups, [])
+
+    def test_opposing_slots_reduce_risk_adjusted_score(self) -> None:
+        players = pd.DataFrame([
+            {
+                "player": role,
+                "role": role,
+                "team": team,
+                "opponent": opponent,
+                "price": 10.0,
+                "projected_fantasy_pts": 10.0,
+                "projected_starter": True,
+                "champion_expected_bonus": 0.0,
+            }
+            for role, team, opponent in (
+                ("top", "A", "Z"),
+                ("jgl", "B", "Y"),
+                ("mid", "C", "X"),
+                ("bot", "D", "F"),
+                ("sup", "E", "W"),
+            )
+        ])
+        coaches = pd.DataFrame([
+            {
+                "coach": "Conflicted",
+                "team": "F",
+                "opponent": "D",
+                "price": 10.0,
+                "projected_fantasy_pts": 11.0,
+            },
+            {
+                "coach": "Independent",
+                "team": "G",
+                "opponent": "H",
+                "price": 10.0,
+                "projected_fantasy_pts": 10.0,
+            },
+        ])
+
+        lineups = optimize_lineups(
+            players,
+            coaches,
+            {6: 0.25},
+            matchup_conflict_penalty=3.0,
+        )
+
+        self.assertEqual(lineups[0]["coach"]["coach"], "Independent")
+        self.assertEqual(lineups[0]["matchup_conflict_penalty"], 0.0)
+        self.assertGreater(
+            lineups[1]["projected_total_points"],
+            lineups[0]["projected_total_points"],
+        )
+
+    def test_top_conflict_receives_half_weight(self) -> None:
+        players = (
+            {
+                "player": "Top",
+                "role": "top",
+                "team": "A",
+                "opponent": "B",
+            },
+            {
+                "player": "Jungle",
+                "role": "jgl",
+                "team": "C",
+                "opponent": "D",
+            },
+        )
+        coach = {
+            "coach": "Coach",
+            "team": "B",
+            "opponent": "A",
+        }
+
+        conflicts, penalty = build_matchup_conflicts(players, coach, 3.0)
+
+        self.assertEqual(len(conflicts), 1)
+        self.assertEqual(conflicts[0]["risk_weight"], 0.5)
+        self.assertEqual(penalty, 1.5)
 
     def test_dashboard_payload_supports_multiple_week_schema(self) -> None:
         players = pd.DataFrame([{

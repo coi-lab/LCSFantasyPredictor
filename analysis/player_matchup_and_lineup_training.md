@@ -61,6 +61,18 @@ The current optimizer exhaustively evaluates every legal combination:
 - +0%, +5%, +10%, +15%, +20%, or +25% applied for one through six teams;
 - expected champion bonus added for each selected player before the roster
   variety multiplier.
+- head-to-head roster exposure is penalized in the ranking objective because
+  opposing slots have negatively linked win outcomes. This does not change the
+  raw expected-points display; it produces a separate risk-adjusted rank score.
+- a conflict involving TOP receives half weight. In the current cutoff-safe
+  player projection inputs, TOP has the lowest average historical score
+  deviation (about 7.6 points, versus about 9.0-11.2 for other roles), which
+  supports using TOP when maximum team variety forces opposing selections.
+
+The current five-point conflict penalty is a manually chosen risk preference,
+not a trained coefficient. It should be tuned using chronological lineup
+regret once enough frozen weekly slates are available. A losing player can
+still score well, so opposing selections are penalized rather than prohibited.
 
 The coach-count interpretation is inferred from the official six-slot market
 and six-team buff tier: five player slots cannot reach six organizations
@@ -70,4 +82,3 @@ Price-growth optimization should remain disabled until at least two official
 market rounds are captured. One split-opening snapshot contains prices but no
 observed next-round changes, so a learned appreciation model would currently be
 fiction rather than training.
-

@@ -16,11 +16,13 @@ from champion_prediction.simple_predictor import (
     dynamic_feature_weights,
     load_champion_bonus_rules,
     rank_weekly_opponents,
+    team_player_comfort_persistence,
     weighted_champion_shares,
 )
 
 
 FEATURE_COLUMNS = ("player_share", "lcs_share", "leading_share")
+COMFORT_FEATURE = "team_comfort"
 
 
 def decay_column(prefix: str, patch_decay_rate: float) -> str:
@@ -40,6 +42,10 @@ def select_decay_columns(
         if column not in selected.columns:
             raise KeyError(f"Cached table does not contain {column}")
         selected[prefix] = selected[column]
+    comfort_column = decay_column(COMFORT_FEATURE, patch_decay_rate)
+    if comfort_column not in selected.columns:
+        raise KeyError(f"Cached table does not contain {comfort_column}")
+    selected[COMFORT_FEATURE] = selected[comfort_column]
     selected["patch_decay_rate"] = float(patch_decay_rate)
     return selected
 
@@ -213,6 +219,14 @@ def build_feature_table(
                 weighted_champion_shares(
                     leading_rows, cutoff, str(target["patch"]), float(decay_rate)
                 ),
+                team_player_comfort_persistence(
+                    player_rows,
+                    player,
+                    team,
+                    cutoff,
+                    str(target["patch"]),
+                    float(decay_rate),
+                ),
             )
         ranking = rank_weekly_opponents(
             history,
@@ -286,7 +300,9 @@ def build_feature_table(
                         shares_by_decay[decay_rate][index].get(champion, 0.0)
                     )
                     for decay_rate in shares_by_decay
-                    for index, prefix in enumerate(FEATURE_COLUMNS)
+                    for index, prefix in enumerate(
+                        (*FEATURE_COLUMNS, COMFORT_FEATURE)
+                    )
                 },
             })
     return pd.DataFrame.from_records(records)
@@ -325,6 +341,28 @@ def _top_candidate_indexes(
             + maturity[:, None] * mature
         )
         raw_priority = np.sum(feature_values * row_weights, axis=1)
+    elif strategy == "comfort_persistence":
+        if weights is None or len(weights) != 6:
+            raise ValueError(
+                "Comfort evaluation requires three source weights, early and "
+                "mature strengths, and games_to_mature"
+            )
+        raw_priority = feature_values @ np.asarray(weights[:3], dtype=float)
+        games_to_mature = max(1.0, float(weights[5]))
+        maturity = np.clip(
+            table["lcs_split_games"].to_numpy(dtype=float) / games_to_mature,
+            0.0,
+            1.0,
+        )
+        strength = (
+            (1.0 - maturity) * float(weights[3])
+            + maturity * float(weights[4])
+        )
+        raw_priority *= (
+            1.0
+            + strength
+            * table[COMFORT_FEATURE].to_numpy(dtype=float)
+        )
     else:
         if weights is None:
             raise ValueError("Static evaluation requires a weight triple")

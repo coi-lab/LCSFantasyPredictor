@@ -1057,7 +1057,7 @@ tr:hover {
 .optimizer-summary-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   margin-bottom: 18px;
 }
 
@@ -1086,6 +1086,35 @@ tr:hover {
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.optimizer-conflict-card {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+}
+
+.optimizer-conflict-card .optimizer-pick-title {
+  margin-top: 0;
+}
+
+.optimizer-conflict-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.optimizer-conflict-list span {
+  background: rgba(251, 191, 36, 0.06);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 9px;
+  color: var(--text-muted);
+  font-size: 11px;
+  padding: 8px 10px;
+}
+
+.optimizer-conflict-list strong {
+  color: var(--accent-gold);
+  margin-left: 5px;
 }
 
 .optimizer-roster-card {

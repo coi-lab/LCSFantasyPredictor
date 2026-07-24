@@ -77,6 +77,11 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   `dashboard/matchup_lineups.json`. Preserve prior week IDs when refreshing the
   current week, and embed champion options in each snapshot so historical week
   toggles never display recommendations from a later roster lock.
+- Rank lineups with a separate matchup-risk score rather than treating
+  opposing players as independent. Keep the raw projection visible, penalize
+  opposing slot pairs, and give TOP conflicts half weight because current
+  cutoff-safe histories show lower TOP score deviation. The five-point base
+  penalty is a documented heuristic pending chronological tuning.
 - Estimated player-price paths must reset at product split boundaries; regular
   season and playoffs share a path. The former exporter accumulated Lock-In,
   Spring, and EWC phases, creating 15 false 30+ Spring prices. The conservative
@@ -169,4 +174,10 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   to up to three recommendations per available multiplier tier. In Round 1,
   all candidates use the official x1.3 opening baseline. Beginning in Round 2,
   candidate-specific split history determines x1.3, x1.5, or x1.7.
+- A current-season/current-team comfort-persistence proxy was tested for
+  Summer using repeated picks across domestic and international stages. It
+  reduced 2025 validation Top-1 from 39.15% to 38.21% and mean realized bonus
+  from 0.8755 to 0.8008, including worse opening-week results, so it remains
+  disabled. Keep official multiplier eligibility split-only and do not label
+  observed persistence as private coach intent.
 - Replaced Categorical Naive Bayes for draft prediction with a Softmax / Conditional Logit Legal-Candidate Board-State Ranker. On the 2026 premier test, legal-candidate pick Top-1 accuracy improved from 2.68% to 11.02% (+8.34%) and Pick Top-5 accuracy improved from 10.13% to 36.62% (+26.49%).

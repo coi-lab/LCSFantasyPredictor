@@ -67,6 +67,36 @@ match the static model's Top-1 accuracy. The selection rule prioritized Top-1
 and required static to improve over the incumbent dynamic strategy on both
 metrics.
 
+## Current-team comfort-persistence follow-up
+
+A 2026-07-24 follow-up tested the hypothesis that early-Summer champion
+predictions should remember which comfort picks a player's current team
+repeatedly trusted during Spring, First Stand, MSI, and other earlier
+current-season events. The feature is intentionally described as an observable
+team-player persistence proxy, not evidence of a coach's private intent.
+
+For each weekly cutoff, it includes only the player's current team, current
+season, role, and games before the frozen roster-lock proxy. Repeated games and
+appearances across multiple competition stages increase the signal. Official
+x1.3/x1.5/x1.7 eligibility remains based only on the current Summer split.
+
+The experiment froze the existing source weights and selected an
+early-to-mature persistence schedule on 2022-2023 Summer development and 2024
+Summer confirmation. The frozen schedule began at strength 3.0, decayed to
+0.25, and used an 80-game domestic maturity horizon.
+
+| 2025 Summer validation design | Weekly Top-1 | Mean realized bonus |
+| --- | ---: | ---: |
+| Frozen static production baseline | 39.15% | 0.8755 |
+| Current-team comfort persistence | 38.21% | 0.8008 |
+
+The feature failed both production criteria and remains disabled. On the ten
+2025 opening-week targets specifically, Top-1 fell from 30% to 20% and mean
+realized bonus fell from 0.8030 to 0.6813. There are no completed 2026 Summer
+targets, so the exposed test was not run. The implementation remains available
+behind disabled configuration for future experiments with more precise roster
+and coach-tenure data.
+
 ## Chronological design
 
 - Development: 2022-01-01 through 2023-12-31

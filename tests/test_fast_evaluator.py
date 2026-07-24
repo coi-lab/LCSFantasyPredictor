@@ -73,6 +73,53 @@ class FastEvaluatorTests(unittest.TestCase):
         self.assertEqual(len(popularity), 2)
         self.assertEqual(maturity[0], 1.0)
 
+    def test_comfort_persistence_can_break_equal_source_scores(self) -> None:
+        table = pd.DataFrame([
+            {
+                "target_id": "one",
+                "champion": "Comfort",
+                "hit": True,
+                "realized_bonus": 2.0,
+                "player_share": 0.5,
+                "lcs_share": 0.5,
+                "leading_share": 0.5,
+                "team_comfort": 0.6,
+                "availability": 1.0,
+                "tier_mult": 1.0,
+                "prio_mult": 1.0,
+                "expected_points": 10.0,
+                "novelty_mult": 1.3,
+                "lcs_patch_games": 0,
+                "lcs_split_games": 0,
+            },
+            {
+                "target_id": "one",
+                "champion": "Generic",
+                "hit": False,
+                "realized_bonus": 0.0,
+                "player_share": 0.5,
+                "lcs_share": 0.5,
+                "leading_share": 0.5,
+                "team_comfort": 0.0,
+                "availability": 1.0,
+                "tier_mult": 1.0,
+                "prio_mult": 1.0,
+                "expected_points": 10.0,
+                "novelty_mult": 1.3,
+                "lcs_patch_games": 0,
+                "lcs_split_games": 0,
+            },
+        ])
+
+        result = strategy_eval(
+            table,
+            "comfort_persistence",
+            (0.35, 0.36, 0.29, 1.0, 0.0, 40.0),
+        )
+
+        self.assertEqual(result[0], 1.0)
+        self.assertEqual(result[1], 2.0)
+
     def test_weekly_targets_share_first_game_lock_across_weekend(self) -> None:
         actions = pd.DataFrame([
             {
