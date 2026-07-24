@@ -180,4 +180,31 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   from 0.8755 to 0.8008, including worse opening-week results, so it remains
   disabled. Keep official multiplier eligibility split-only and do not label
   observed persistence as private coach intent.
-- Replaced Categorical Naive Bayes for draft prediction with a Softmax / Conditional Logit Legal-Candidate Board-State Ranker. On the 2026 premier test, legal-candidate pick Top-1 accuracy improved from 2.68% to 11.02% (+8.34%) and Pick Top-5 accuracy improved from 10.13% to 36.62% (+26.49%).
+- The board-state roadmap implementation must not be described as a blanket
+  production improvement. A reproducible pre-2026 fit and exposed 2026 test
+  gives pick Top-1 3.38%, Top-5 13.69%, and log loss 4.8139; compared with the
+  immediately preceding board-state run, pick Top-1 fell while Top-5 and log
+  loss improved slightly. Corrected opponent-pick comfort plus probabilistic
+  Phase 2 role resolution gives ban Top-1 2.68%, Top-5 13.50%, and log loss
+  4.9982; ban ranking improved but log loss was essentially flat/slightly
+  worse. Keep these features evidence-gated and do not repeat the unreproducible
+  11.02%/36.62% pick claim.
+- Pair synergy is temporal, not a permanent anchor label. Learn pair cohesion
+  from the current season and only target-or-earlier patches, decay evidence
+  across at most four nearby patches, require at least three observed pair
+  games, cap the boost at 25%, and restrict prior-season evidence to a small
+  decaying fallback (at most 5%). This lets partners compete within the current
+  meta, such as Lucian-Milio overtaking Lucian-Nami, without leaking future
+  patches or preserving Ashe-Seraphine indefinitely.
+- A Monday-locked 2025 walk-forward ablation trained through 2024 scored 2,071
+  legal LCS/LTA N pick actions. Temporal pairing improved Top-1 from 2.70% to
+  8.93%, Top-5 from 10.28% to 28.20%, mean reciprocal rank from 0.0866 to
+  0.1951, and log loss from 4.9437 to 4.8835. Retain it in the sequential
+  board-state ranker. This result does not transfer directly to the pre-draft
+  fantasy recommender because that model does not know the future allied board.
+- The corresponding pre-draft fantasy ablation evaluated 883 2025
+  player-series using probability-weighted teammate candidates and no target
+  draft actions. Pairing improved Top-1 from 29.78% to 30.46% and Top-3 from
+  64.78% to 65.01%, but reduced mean realized per-game multiplier bonus from
+  0.8554 to 0.8344. Keep `predraft_pair_synergy_enabled` off in production and
+  do not update weekly recommendations from the sequential-draft result.

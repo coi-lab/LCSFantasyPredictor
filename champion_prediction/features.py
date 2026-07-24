@@ -14,12 +14,19 @@ class PatchDistanceDecayEngine:
     def __init__(
         self,
         minor_decay_rate: float = 0.15,
-        major_reset_penalty: float = 2.0,
+        tournament_patch_penalty: float = 2.0,
+        preseason_reset_penalty: float = 5.0,
         patches_per_season: int = 24,
+        tournament_boundaries: tuple[int, ...] = (8, 18),
     ) -> None:
         self.minor_decay_rate = minor_decay_rate
-        self.major_reset_penalty = major_reset_penalty
+        self.tournament_patch_penalty = tournament_patch_penalty
+        self.preseason_reset_penalty = preseason_reset_penalty
         self.patches_per_season = patches_per_season
+        # Approximate regime boundaries. Apply one transition penalty when
+        # crossing into the MSI or Worlds patch window, not once per patch in
+        # the whole window.
+        self.tournament_boundaries = tuple(sorted(tournament_boundaries))
 
     @staticmethod
     def parse_patch(patch_str: Any) -> Tuple[int, int]:
@@ -32,17 +39,26 @@ class PatchDistanceDecayEngine:
         return 0, 0
 
     def calculate_patch_distance(self, target_patch: str, historical_patch: str) -> float:
-        """Calculate effective patch distance considering major season/reset boundaries."""
+        """Calculate effective patch distance considering major season resets vs tournament boundaries."""
         t_major, t_minor = self.parse_patch(target_patch)
         h_major, h_minor = self.parse_patch(historical_patch)
 
         if (h_major, h_minor) >= (t_major, t_minor):
             return 0.0 if (h_major, h_minor) == (t_major, t_minor) else float(
-                abs(t_major - h_major) * self.major_reset_penalty
+                abs(t_major - h_major) * self.preseason_reset_penalty
                 + abs(t_minor - h_minor)
             )
+
         if t_major == h_major:
-            return float(t_minor - h_minor)
+            base_dist = float(t_minor - h_minor)
+            boundaries_crossed = sum(
+                h_minor < boundary <= t_minor
+                for boundary in self.tournament_boundaries
+            )
+            return (
+                base_dist
+                + boundaries_crossed * self.tournament_patch_penalty
+            )
 
         completed_historical_season = max(0, self.patches_per_season - h_minor)
         complete_middle_seasons = max(0, t_major - h_major - 1)
@@ -51,8 +67,8 @@ class PatchDistanceDecayEngine:
             + complete_middle_seasons * self.patches_per_season
             + t_minor
         )
-        reset_cost = (t_major - h_major) * self.major_reset_penalty
-        return float(transition_count + reset_cost)
+        season_reset_cost = (t_major - h_major) * self.preseason_reset_penalty
+        return float(transition_count + season_reset_cost)
 
     def calculate_decay_weight(self, target_patch: str, historical_patch: str) -> float:
         """Calculate recency decay weight between 0.0 and 1.0."""

@@ -70,6 +70,34 @@ When the active client is AGY:
   the additional risk.
 - If AGY is waiting on a hidden prompt or an indefinite process, stop and
   diagnose it rather than repeatedly waiting.
+- For any model, feature, backtest, accuracy, calibration, or fantasy-value
+  task, read and follow `prompts/model_change_workflow.md` before editing.
+- Never treat a plan, code comment, screenshot, chat message, Markdown report,
+  memory entry, or another agent's summary as evidence that a result occurred.
+- Never claim that accuracy, performance, calibration, coverage, or fantasy
+  value improved unless AGY ran the relevant evaluation during the current
+  task and the command completed successfully.
+- A passing unit test proves only that tested behavior works. It does not prove
+  that a model improved.
+- Before implementing a model change, identify the real production prediction
+  target, acceptance metric, chronological boundary, baseline command, and
+  baseline artifact. If these cannot be identified, label the result
+  `NOT VERIFIED` and do not invent substitutes.
+- Compare baseline and candidate with the same rows, candidate universe,
+  cutoff policy, metrics, and command. If any of these change, disclose that it
+  is not a controlled comparison.
+- Report every primary metric, including regressions and mixed outcomes. Do not
+  summarize a mixed result as an improvement.
+- Keep experimental features disabled by default. Enable one in production
+  only after the repository's stated validation gate passes.
+- Do not write metrics to `project-skills.md`, `README.md`, `analysis/`, or
+  another durable file until they have been reproduced from a completed
+  command and saved in a machine-readable artifact.
+- Before declaring completion, inspect the final diff, run the focused tests
+  and relevant chronological evaluation, run `git diff --check`, and report
+  the exact commands, exit status, artifact path, and any checks not run.
+- If a command fails, times out, is interrupted, or produces no output, report
+  that failure. Never fill in the expected result.
 
 ## Codex-specific workflow
 

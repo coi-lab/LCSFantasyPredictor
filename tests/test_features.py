@@ -29,9 +29,27 @@ class FeaturesModuleTests(unittest.TestCase):
         self.assertGreater(weight_recent, weight_distant)
 
     def test_adjacent_season_patches_are_not_treated_as_twenty_patches_apart(self) -> None:
-        distance = self.decay_engine.calculate_patch_distance("15.1", "14.24")
+        custom_engine = PatchDistanceDecayEngine(preseason_reset_penalty=2.0)
+        distance = custom_engine.calculate_patch_distance("15.1", "14.24")
 
         self.assertEqual(distance, 3.0)
+
+    def test_tournament_window_adds_one_regime_penalty(self) -> None:
+        before_msi = self.decay_engine.calculate_patch_distance("16.10", "16.7")
+        inside_msi = self.decay_engine.calculate_patch_distance("16.10", "16.8")
+
+        self.assertEqual(before_msi, 5.0)
+        self.assertEqual(inside_msi, 2.0)
+
+    def test_preseason_reset_decays_faster_than_minor_patch(self) -> None:
+        reset_distance = self.decay_engine.calculate_patch_distance(
+            "16.1", "15.24"
+        )
+        minor_distance = self.decay_engine.calculate_patch_distance(
+            "15.24", "15.23"
+        )
+
+        self.assertGreater(reset_distance, minor_distance)
 
     def test_patch_tier_fitting(self) -> None:
         df = pd.DataFrame([

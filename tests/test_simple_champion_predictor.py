@@ -10,6 +10,7 @@ from pathlib import Path
 import pandas as pd
 
 from champion_prediction.simple_predictor import (
+    apply_expected_team_synergy,
     champion_multiplier,
     latest_observed_competitive_patch,
     load_production_hyperparameters,
@@ -17,6 +18,7 @@ from champion_prediction.simple_predictor import (
     rank_champions,
     team_player_comfort_persistence,
 )
+from champion_prediction.synergy import TemporalPairSynergy
 
 
 class SimpleChampionPredictorTests(unittest.TestCase):
@@ -164,6 +166,17 @@ class SimpleChampionPredictorTests(unittest.TestCase):
 
         self.assertEqual(orianna["opponent_ban_rate"], 1.0)
         self.assertLess(orianna["availability_factor"], 0.5)
+        expected_bonus = (
+            float(orianna["base_pick_probability"])
+            * float(orianna["availability_factor"])
+            * float(orianna["expected_points_if_picked"])
+            * (float(orianna["novelty_multiplier"]) - 1.0)
+        )
+        self.assertAlmostEqual(
+            float(orianna["expected_multiplier_bonus"]),
+            expected_bonus,
+            places=3,
+        )
 
     def test_champion_multiplier_uses_all_three_official_tiers(self) -> None:
         split_history = pd.DataFrame([
@@ -377,6 +390,93 @@ class SimpleChampionPredictorTests(unittest.TestCase):
             set(portfolio["champion"]),
             {"Generic", "Comfort", "International"},
         )
+
+    def test_high_ban_risk_comfort_flags_best_upside_pivot(self) -> None:
+        from champion_prediction.simple_predictor import select_tiered_portfolio
+
+        ranking = pd.DataFrame([
+            {
+                "player": "One", "role": "mid", "champion": "Comfort",
+                "novelty_category": "already_played_by_player",
+                "expected_multiplier_bonus": 1.0,
+                "estimated_pick_probability": 0.30,
+                "opponent_ban_rate": 0.40,
+            },
+            {
+                "player": "One", "role": "mid", "champion": "Adoption",
+                "novelty_category": "unplayed_by_player",
+                "expected_multiplier_bonus": 1.4,
+                "estimated_pick_probability": 0.20,
+                "opponent_ban_rate": 0.05,
+            },
+            {
+                "player": "One", "role": "mid", "champion": "Novelty",
+                "novelty_category": "unplayed_in_role",
+                "expected_multiplier_bonus": 1.2,
+                "estimated_pick_probability": 0.15,
+                "opponent_ban_rate": 0.05,
+            },
+        ])
+
+        portfolio = select_tiered_portfolio(ranking)
+        recommended = portfolio.loc[portfolio["risk_pivot_recommended"]]
+
+        self.assertEqual(recommended.iloc[0]["champion"], "Adoption")
+        self.assertEqual(
+            set(portfolio["portfolio_strategy"]),
+            {"pivot_from_high_ban_risk_comfort"},
+        )
+
+    def test_predraft_synergy_uses_teammate_probability_not_locked_pick(self) -> None:
+        pair_rows = []
+        for game in range(8):
+            pair_rows.extend([
+                {
+                    "patch": "16.8", "champion": "Lucian",
+                    "allies_picked_before": "[]",
+                },
+                {
+                    "patch": "16.8", "champion": "Milio",
+                    "allies_picked_before": '["Lucian"]',
+                },
+            ])
+        synergy = TemporalPairSynergy().fit(pd.DataFrame(pair_rows))
+        rankings = pd.DataFrame([
+            {
+                "team": "A", "player": "Bot", "role": "bot",
+                "champion": "Lucian", "target_patch": "16.8",
+                "base_pick_probability": 0.5, "availability_factor": 1.0,
+                "expected_points_if_picked": 10.0, "novelty_multiplier": 1.3,
+            },
+            {
+                "team": "A", "player": "Bot", "role": "bot",
+                "champion": "OtherBot", "target_patch": "16.8",
+                "base_pick_probability": 0.5, "availability_factor": 1.0,
+                "expected_points_if_picked": 10.0, "novelty_multiplier": 1.3,
+            },
+            {
+                "team": "A", "player": "Support", "role": "sup",
+                "champion": "Milio", "target_patch": "16.8",
+                "base_pick_probability": 0.7, "availability_factor": 1.0,
+                "expected_points_if_picked": 10.0, "novelty_multiplier": 1.3,
+            },
+            {
+                "team": "A", "player": "Support", "role": "sup",
+                "champion": "OtherSup", "target_patch": "16.8",
+                "base_pick_probability": 0.3, "availability_factor": 1.0,
+                "expected_points_if_picked": 10.0, "novelty_multiplier": 1.3,
+            },
+        ])
+
+        adjusted = apply_expected_team_synergy(rankings, synergy)
+        lucian = adjusted.loc[adjusted["champion"].eq("Lucian")].iloc[0]
+        other = adjusted.loc[adjusted["champion"].eq("OtherBot")].iloc[0]
+
+        self.assertGreater(
+            lucian["base_pick_probability"],
+            other["base_pick_probability"],
+        )
+        self.assertLess(lucian["expected_team_synergy"], 0.25)
 
 
 if __name__ == "__main__":

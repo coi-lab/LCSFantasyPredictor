@@ -70,6 +70,11 @@ Use ordered `pick1`-`pick5` and `ban1`-`ban5` data rather than only final champi
 
 These probabilities are conditional rather than fully independent, so a later model should learn the complete draft sequence or simulate likely drafts instead of permanently multiplying unrelated average rates.
 
+#### Sequential Draft Handshake & Role Pool Boundaries
+
+1. **Realistic Role Candidate Pool**: Pro play candidate pools per role, patch, and player are narrow (typically 8-12 viable champions). Evaluating accuracy against all 168 champions misleads baseline performance; a 9.17% Top-1 accuracy over an 8-12 champion pro pool is functionally equivalent to random guessing (~10%). Future evaluations must measure top-N accuracy relative to the active pro role pool.
+2. **Phase-1 Ban Handshake**: Phase-1 bans are heavily coupled decisions combining universal patch OP power bans and targeted opponent signature bans (e.g. APA Ziggs, Quad Cassiopeia). Modeling bans independently fails to capture draft leverage (e.g., Red side forced bans given Blue side first-pick threats).
+
 ### Fearless draft and series state
 
 Champion availability changes after every game in a fearless series. Build a series-state table containing the champions already used, which team/player used them, the game number, and the exact fearless rules for that competition.

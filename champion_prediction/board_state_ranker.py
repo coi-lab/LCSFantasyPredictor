@@ -17,9 +17,7 @@ import numpy as np
 import pandas as pd
 
 from champion_prediction.draft_actions import DEFAULT_OUTPUT_PATH as DEFAULT_DATABASE
-from champion_prediction.synergy import PatchTierWeightedSynergy
-
-
+from champion_prediction.synergy import TemporalPairSynergy
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REPORT = PROJECT_ROOT / "data" / "predictions" / "board_state_ranker_backtest.json"
 
@@ -43,11 +41,71 @@ class BoardStateRanker:
         # Feature weights:
         # 0: patch_meta_priority
         # 1: team_comfort
-        # 2: ally_synergy (for picks)
-        # 3: enemy_counter (for picks/bans)
+        # 2: ally_synergy (for picks) / opponent_target_ban (for bans)
+        # 3: enemy_counter (for picks)
         # 4: phase_slot_preference
-        self.weights = np.array([2.5, 1.8, 0.6, 0.4, 0.8])
-        self.synergy_engine = PatchTierWeightedSynergy()
+        self.weights = np.array([2.5, 1.8, 1.2, 0.4, 0.8])
+        self._patch_peak_cache: Dict[Tuple[str, str], float | None] = {}
+    @staticmethod
+    def _role_open_probability(
+        champion: str,
+        enemies: set[str],
+        champion_role_priors: Dict[str, Dict[str, float]],
+    ) -> float:
+        """Estimate whether an opponent still has a plausible role for a champion.
+
+        Drafted champions do not resolve roles with certainty because flex picks
+        and swaps are common. Treat role resolution as a probability rather than
+        making a candidate impossible.
+        """
+        candidate_roles = champion_role_priors.get(champion, {})
+        if not candidate_roles or not enemies:
+            return 1.0
+        open_probability = 0.0
+        for role, candidate_probability in candidate_roles.items():
+            unfilled_probability = 1.0
+            for enemy in enemies:
+                unfilled_probability *= 1.0 - champion_role_priors.get(
+                    enemy, {}
+                ).get(role, 0.0)
+            open_probability += candidate_probability * unfilled_probability
+        return max(0.05, min(1.0, open_probability))
+
+    def _patch_meta_gate(
+        self,
+        league: str,
+        patch: str,
+        candidate: str,
+        ally: str,
+        meta_priors: Dict[Tuple[str, str, str], float],
+    ) -> float:
+        """Gate pair synergy by observed priority on the applicable patch.
+
+        When the patch has no pre-cutoff observations, return a neutral gate
+        rather than pretending the pair is known to be weak.
+        """
+        cache_key = (league, patch)
+        if cache_key not in self._patch_peak_cache:
+            patch_values = [
+                value
+                for (prior_league, prior_patch, _), value in meta_priors.items()
+                if prior_league == league and prior_patch == patch
+            ]
+            self._patch_peak_cache[cache_key] = (
+                max(patch_values) if patch_values else None
+            )
+        patch_peak = self._patch_peak_cache[cache_key]
+        if patch_peak is None:
+            return 1.0
+        if patch_peak <= 0:
+            return 1.0
+        candidate_tier = min(
+            1.0, meta_priors.get((league, patch, candidate), 0.0) / patch_peak
+        )
+        ally_tier = min(
+            1.0, meta_priors.get((league, patch, ally), 0.0) / patch_peak
+        )
+        return math.sqrt(candidate_tier * ally_tier)
 
     @staticmethod
     def _extract_board_state(row: Dict[str, Any]) -> Dict[str, Any]:
@@ -69,6 +127,9 @@ class BoardStateRanker:
         meta_priors: Dict[Tuple[str, str, str], float],
         comfort_priors: Dict[Tuple[str, str], float],
         all_champions: List[str],
+        champion_role_priors: Dict[str, Dict[str, float]] | None = None,
+        opponent_priors: Dict[Tuple[str, str], float] | None = None,
+        pair_synergy: TemporalPairSynergy | None = None,
         lr: float = 0.05,
         epochs: int = 10,
     ) -> "BoardStateRanker":
@@ -77,11 +138,15 @@ class BoardStateRanker:
         sample_limit = min(len(training_rows), 5000)
         samples = training_rows.sample(n=sample_limit, random_state=42) if len(training_rows) > sample_limit else training_rows
 
+        champion_role_priors = champion_role_priors or {}
+        opponent_priors = opponent_priors or {}
+
         for row in samples.to_dict("records"):
             actual = str(row["champion"])
             board = self._extract_board_state(row)
             unavailable = board["unavailable"]
             allies = board["allies"]
+            enemies = board["enemies"]
 
             legal = [c for c in all_champions if c not in unavailable or c == actual]
             if actual not in legal or len(legal) <= 1:
@@ -92,22 +157,38 @@ class BoardStateRanker:
             league = str(row.get("league", ""))
             patch = str(row.get("patch", ""))
             team = str(row.get("acting_team", ""))
+            opponent = str(row.get("opponent_team", ""))
             phase = str(row.get("action_phase", ""))
 
             feats = []
             for c in legal:
                 f_meta = meta_priors.get((league, patch, c), 0.001)
                 f_comfort = comfort_priors.get((team, c), 0.0)
-
-                f_syn = 0.0
                 if self.action_type == "pick":
-                    for ally in allies:
-                        f_syn += self.synergy_engine.calculate_pair_priority(c, ally) - 1.0
+                    f_target = sum(
+                        (
+                            pair_synergy.get_boost(c, ally, patch)
+                            if pair_synergy is not None
+                            else 0.0
+                        )
+                        * self._patch_meta_gate(
+                            league, patch, c, ally, meta_priors
+                        )
+                        for ally in allies
+                    )
+                else:
+                    role_open = (
+                        self._role_open_probability(
+                            c, enemies, champion_role_priors
+                        )
+                        if phase == "ban_phase_2"
+                        else 1.0
+                    )
+                    f_target = opponent_priors.get((opponent, c), 0.0) * role_open
 
                 f_cnt = 0.0
-                f_phase = f_meta if phase == "pick_phase_1" else f_meta * 0.8
-
-                feats.append([f_meta, f_comfort, f_syn, f_cnt, f_phase])
+                f_phase = f_meta if phase in ("pick_phase_1", "ban_phase_1") else f_meta * 0.8
+                feats.append([f_meta, f_comfort, f_target, f_cnt, f_phase])
 
             action_data.append((np.array(feats, dtype=float), actual_idx))
 
@@ -140,6 +221,9 @@ class BoardStateRanker:
         legal_candidates: List[str],
         meta_priors: Dict[Tuple[str, str, str], float],
         comfort_priors: Dict[Tuple[str, str], float],
+        champion_role_priors: Dict[str, Dict[str, float]] | None = None,
+        opponent_priors: Dict[Tuple[str, str], float] | None = None,
+        pair_synergy: TemporalPairSynergy | None = None,
     ) -> Dict[str, float]:
         """Return normalized probabilities over legal candidates."""
         if not legal_candidates:
@@ -147,26 +231,44 @@ class BoardStateRanker:
 
         board = self._extract_board_state(row)
         allies = board["allies"]
+        enemies = board["enemies"]
 
         league = str(row.get("league", ""))
         patch = str(row.get("patch", ""))
         team = str(row.get("acting_team", ""))
+        opponent = str(row.get("opponent_team", ""))
         phase = str(row.get("action_phase", ""))
+
+        champion_role_priors = champion_role_priors or {}
+        opponent_priors = opponent_priors or {}
 
         feats = []
         for c in legal_candidates:
             f_meta = meta_priors.get((league, patch, c), 0.001)
             f_comfort = comfort_priors.get((team, c), 0.0)
-
-            f_syn = 0.0
             if self.action_type == "pick":
-                for ally in allies:
-                    f_syn += self.synergy_engine.calculate_pair_priority(c, ally) - 1.0
+                f_target = sum(
+                    (
+                        pair_synergy.get_boost(c, ally, patch)
+                        if pair_synergy is not None
+                        else 0.0
+                    )
+                    * self._patch_meta_gate(
+                        league, patch, c, ally, meta_priors
+                    )
+                    for ally in allies
+                )
+            else:
+                role_open = (
+                    self._role_open_probability(c, enemies, champion_role_priors)
+                    if phase == "ban_phase_2"
+                    else 1.0
+                )
+                f_target = opponent_priors.get((opponent, c), 0.0) * role_open
 
             f_cnt = 0.0
-            f_phase = f_meta if phase == "pick_phase_1" else f_meta * 0.8
-
-            feats.append([f_meta, f_comfort, f_syn, f_cnt, f_phase])
+            f_phase = f_meta if phase in ("pick_phase_1", "ban_phase_1") else f_meta * 0.8
+            feats.append([f_meta, f_comfort, f_target, f_cnt, f_phase])
 
         X = np.array(feats, dtype=float)
         logits = X @ self.weights
@@ -183,6 +285,9 @@ def evaluate_board_state_ranker(
     meta_priors: Dict[Tuple[str, str, str], float],
     comfort_priors: Dict[Tuple[str, str], float],
     all_champions: List[str],
+    champion_role_priors: Dict[str, Dict[str, float]] | None = None,
+    opponent_priors: Dict[Tuple[str, str], float] | None = None,
+    pair_synergy: TemporalPairSynergy | None = None,
 ) -> Dict[str, float | int]:
     """Evaluate ranking accuracy over legal candidates in test period."""
     ranks: List[int] = []
@@ -199,7 +304,10 @@ def evaluate_board_state_ranker(
             unseen += 1
             continue
 
-        probs = ranker.predict_probabilities(row, legal, meta_priors, comfort_priors)
+        probs = ranker.predict_probabilities(
+            row, legal, meta_priors, comfort_priors, champion_role_priors,
+            opponent_priors, pair_synergy
+        )
         if actual not in probs:
             unseen += 1
             continue
@@ -237,6 +345,35 @@ def train_and_backtest_board_state_ranker(rows: pd.DataFrame) -> Dict[str, Any]:
 
     all_champions = sorted(train["champion"].dropna().unique().tolist())
 
+    # Learn champion role probabilities from pre-cutoff picks. These preserve
+    # flex uncertainty instead of declaring a role resolved after one lock-in.
+    champion_role_priors: Dict[str, Dict[str, float]] = {}
+    if "assigned_role" in train.columns:
+        role_counts = (
+            train.loc[train["action_type"].eq("pick")]
+            .dropna(subset=["assigned_role"])
+            .groupby(["champion", "assigned_role"])
+            .size()
+        )
+        for champion, counts in role_counts.groupby(level=0):
+            total = float(counts.sum())
+            champion_role_priors[str(champion)] = {
+                str(role).casefold(): float(count / total)
+                for (_, role), count in counts.items()
+            }
+
+    pick_actions = train.loc[train["action_type"].eq("pick")].copy()
+    pick_comfort_counts = pick_actions.groupby(["acting_team", "champion"]).size()
+    pick_comfort_totals = pick_actions.groupby("acting_team").size()
+    opponent_pick_priors = {
+        (str(team), str(champion)): float(
+            count / pick_comfort_totals.get(team, 1)
+        )
+        for (team, champion), count in pick_comfort_counts.items()
+    }
+
+    temporal_pair_synergy = TemporalPairSynergy().fit(pick_actions)
+
     report: Dict[str, Any] = {
         "training_cutoff": cutoff.isoformat(),
         "target": "LCS 2026 premier chronological test",
@@ -263,14 +400,36 @@ def train_and_backtest_board_state_ranker(rows: pd.DataFrame) -> Dict[str, Any]:
             for (team, champion), count in comfort_counts.items()
         }
 
+        # Ban targeting uses champions the opponent historically picked, not
+        # champions the opponent historically banned.
+        opponent_priors = opponent_pick_priors if action_type == "ban" else None
+        pair_synergy = temporal_pair_synergy if action_type == "pick" else None
+
         ranker = BoardStateRanker(action_type=action_type)
-        ranker.fit(training_actions, meta_priors, comfort_priors, all_champions)
+        ranker.fit(
+            training_actions,
+            meta_priors,
+            comfort_priors,
+            all_champions,
+            champion_role_priors=champion_role_priors,
+            opponent_priors=opponent_priors,
+            pair_synergy=pair_synergy,
+        )
 
         report[action_type] = {
             "training_actions": len(training_actions),
             "test_actions": len(testing_actions),
             "learned_weights": [round(float(w), 4) for w in ranker.weights],
-            **evaluate_board_state_ranker(ranker, testing_actions, meta_priors, comfort_priors, all_champions),
+            **evaluate_board_state_ranker(
+                ranker,
+                testing_actions,
+                meta_priors,
+                comfort_priors,
+                all_champions,
+                champion_role_priors=champion_role_priors,
+                opponent_priors=opponent_priors,
+                pair_synergy=pair_synergy,
+            ),
         }
 
     return report

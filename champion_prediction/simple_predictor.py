@@ -19,6 +19,7 @@ from champion_prediction.features import (
     PatchDistanceDecayEngine,
     PatchTierMatrix,
 )
+from champion_prediction.synergy import TemporalPairSynergy
 from data_pipeline.ingest import LCSDataIngestor
 from fantasy_prediction.player_baseline import (
     DEFAULT_MARKET_DIR,
@@ -345,7 +346,7 @@ def maturity_blended_feature_weights(
 
 
 def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
-    """Select up to three candidates for each official multiplier tier."""
+    """Select tier candidates and flag a higher-upside ban-risk pivot."""
     if ranking_df.empty or "novelty_category" not in ranking_df.columns:
         return pd.DataFrame()
 
@@ -448,7 +449,53 @@ def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
                     )
                     selected.append(choice)
 
-    return pd.DataFrame(selected).reset_index(drop=True) if selected else pd.DataFrame()
+    if not selected:
+        return pd.DataFrame()
+
+    portfolio = pd.DataFrame(selected).reset_index(drop=True)
+    portfolio["risk_pivot_recommended"] = False
+    portfolio["risk_pivot_from_champion"] = ""
+    portfolio["recommended_portfolio_tier"] = ""
+    portfolio["portfolio_strategy"] = "best_expected_value_within_tier"
+
+    portfolio_groups = (
+        portfolio.groupby(group_cols, dropna=False)
+        if group_cols
+        else [(None, portfolio)]
+    )
+    for _, group in portfolio_groups:
+        comfort = group.loc[
+            group["novelty_category"].eq("already_played_by_player")
+            & group["portfolio_rank"].eq(1)
+        ]
+        if comfort.empty or float(comfort.iloc[0]["opponent_ban_rate"]) <= 0.25:
+            continue
+        upside = group.loc[
+            group["novelty_category"].isin(
+                ["unplayed_by_player", "unplayed_in_role"]
+            )
+            & group["portfolio_rank"].eq(1)
+        ].sort_values(
+            ["expected_multiplier_bonus", "estimated_pick_probability"],
+            ascending=False,
+            kind="stable",
+        )
+        if upside.empty:
+            continue
+        pivot_index = upside.index[0]
+        group_indices = group.index
+        portfolio.loc[group_indices, "risk_pivot_from_champion"] = str(
+            comfort.iloc[0]["champion"]
+        )
+        portfolio.loc[group_indices, "recommended_portfolio_tier"] = str(
+            portfolio.loc[pivot_index, "portfolio_tier"]
+        )
+        portfolio.loc[group_indices, "portfolio_strategy"] = (
+            "pivot_from_high_ban_risk_comfort"
+        )
+        portfolio.loc[pivot_index, "risk_pivot_recommended"] = True
+
+    return portfolio
 
 
 def rank_champions(
@@ -641,10 +688,19 @@ def rank_champions(
             "expected_points_if_picked": expected_points,
             "novelty_category": novelty_category,
             "novelty_multiplier": candidate_multiplier,
+            "unnormalized_base_pick_priority": base_priority,
             "unnormalized_pick_priority": base_priority * availability_factor,
         })
 
     ranking = pd.DataFrame.from_records(records)
+    base_priority_total = float(
+        ranking["unnormalized_base_pick_priority"].sum()
+    )
+    ranking["base_pick_probability"] = (
+        ranking["unnormalized_base_pick_priority"] / base_priority_total
+        if base_priority_total > 0
+        else 1.0 / len(ranking)
+    )
     priority_total = float(ranking["unnormalized_pick_priority"].sum())
     ranking["ranking_share"] = (
         ranking["unnormalized_pick_priority"] / priority_total
@@ -654,8 +710,11 @@ def rank_champions(
     # Backward-compatible alias. This is a normalized heuristic share, not a
     # calibrated forecast; new consumers should use ``ranking_share``.
     ranking["estimated_pick_probability"] = ranking["ranking_share"]
+    # Expected value uses the pre-availability pick probability and applies
+    # public draft availability exactly once.
     ranking["expected_multiplier_bonus"] = (
-        ranking["estimated_pick_probability"]
+        ranking["base_pick_probability"]
+        * ranking["availability_factor"]
         * ranking["expected_points_if_picked"]
         * (ranking["novelty_multiplier"] - 1.0)
     )
@@ -664,6 +723,7 @@ def rank_champions(
         "team_player_comfort_persistence", "comfort_persistence_strength",
         "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
         "unusual_opponent_ban_interest", "availability_factor", "ranking_share",
+        "base_pick_probability",
         "patch_tier_multiplier", "lane_priority_multiplier",
         "expected_points_if_picked", "novelty_multiplier",
         "estimated_pick_probability", "expected_multiplier_bonus",
@@ -769,6 +829,100 @@ def rank_weekly_opponents(
     )
 
 
+def apply_expected_team_synergy(
+    rankings: pd.DataFrame,
+    pair_synergy: TemporalPairSynergy,
+    iterations: int = 2,
+    maximum_team_boost: float = 0.35,
+) -> pd.DataFrame:
+    """Re-rank pre-draft candidates using uncertain teammate distributions.
+
+    No future draft state is assumed. Each candidate receives the expected
+    temporal pair value under the other four players' current probability
+    distributions, and probabilities are renormalized per player.
+    """
+    if rankings.empty:
+        return rankings.copy()
+    adjusted = rankings.copy()
+    adjusted["pre_synergy_base_probability"] = adjusted[
+        "base_pick_probability"
+    ].astype(float)
+    adjusted["expected_team_synergy"] = 0.0
+
+    player_keys = ["team", "player", "role"]
+    for _ in range(max(1, iterations)):
+        boosts = pd.Series(0.0, index=adjusted.index, dtype=float)
+        for _, team_rows in adjusted.groupby("team", dropna=False):
+            player_groups = {
+                key: group
+                for key, group in team_rows.groupby(
+                    ["player", "role"], dropna=False
+                )
+            }
+            if len(player_groups) <= 1:
+                continue
+            for player_key, candidates in player_groups.items():
+                teammates = [
+                    group
+                    for key, group in player_groups.items()
+                    if key != player_key
+                ]
+                for index, candidate in candidates.iterrows():
+                    expected_boost = 0.0
+                    for teammate in teammates:
+                        teammate_value = 0.0
+                        for teammate_candidate in teammate.itertuples():
+                            if str(teammate_candidate.champion) == str(
+                                candidate["champion"]
+                            ):
+                                continue
+                            teammate_value += float(
+                                teammate_candidate.base_pick_probability
+                            ) * pair_synergy.get_boost(
+                                str(candidate["champion"]),
+                                str(teammate_candidate.champion),
+                                str(candidate["target_patch"]),
+                            )
+                        expected_boost += teammate_value
+                    boosts.at[index] = min(
+                        maximum_team_boost, expected_boost
+                    )
+        adjusted["expected_team_synergy"] = boosts
+        adjusted["_synergy_score"] = (
+            adjusted["pre_synergy_base_probability"]
+            * (1.0 + adjusted["expected_team_synergy"])
+        )
+        totals = adjusted.groupby(player_keys)["_synergy_score"].transform("sum")
+        adjusted["base_pick_probability"] = np.where(
+            totals.gt(0),
+            adjusted["_synergy_score"] / totals,
+            adjusted["pre_synergy_base_probability"],
+        )
+
+    adjusted["_available_score"] = (
+        adjusted["base_pick_probability"] * adjusted["availability_factor"]
+    )
+    available_totals = adjusted.groupby(player_keys)[
+        "_available_score"
+    ].transform("sum")
+    adjusted["ranking_share"] = np.where(
+        available_totals.gt(0),
+        adjusted["_available_score"] / available_totals,
+        adjusted["base_pick_probability"],
+    )
+    adjusted["estimated_pick_probability"] = adjusted["ranking_share"]
+    adjusted["expected_multiplier_bonus"] = (
+        adjusted["base_pick_probability"]
+        * adjusted["availability_factor"]
+        * adjusted["expected_points_if_picked"]
+        * (adjusted["novelty_multiplier"] - 1.0)
+    )
+    adjusted.drop(
+        columns=["_synergy_score", "_available_score"], inplace=True
+    )
+    return adjusted
+
+
 def load_actions(path: Path = DEFAULT_DRAFT_DATABASE) -> pd.DataFrame:
     """Load reconstructed professional draft actions."""
     if not path.exists():
@@ -848,7 +1002,23 @@ def build_current_rankings(
                 ),
             )
             outputs.append(ranked)
-    return pd.concat(outputs, ignore_index=True) if outputs else pd.DataFrame()
+    if not outputs:
+        return pd.DataFrame()
+    rankings = pd.concat(outputs, ignore_index=True)
+    action_times = pd.to_datetime(
+        actions.get("as_of_timestamp"), utc=True, errors="coerce"
+    )
+    known_picks = actions.loc[
+        action_times.lt(cutoff)
+        & actions["action_type"].astype(str).eq("pick")
+    ]
+    if model_hyperparameters.get("predraft_pair_synergy_enabled", 0.0):
+        return apply_expected_team_synergy(
+            rankings,
+            TemporalPairSynergy().fit(known_picks),
+        )
+    rankings["expected_team_synergy"] = 0.0
+    return rankings
 
 
 def parse_args() -> argparse.Namespace:

@@ -33,6 +33,9 @@ class WeeklyChampionExportTests(unittest.TestCase):
                 "expected_multiplier_bonus": 2.0 - rank / 10,
                 "availability_factor": 0.9, "opponent_ban_rate": 0.1,
                 "opponent_draft_games": 10, "portfolio_rank": rank,
+                "portfolio_strategy": "pivot_from_high_ban_risk_comfort",
+                "recommended_portfolio_tier": "1.7x_novelty_wildcard",
+                "risk_pivot_from_champion": "Orianna",
             }
             for rank, (champion, chance) in enumerate(
                 [("Ahri", 0.2), ("Azir", 0.15), ("Viktor", 0.1)],
@@ -53,6 +56,10 @@ class WeeklyChampionExportTests(unittest.TestCase):
             ["Ahri", "Azir", "Viktor"],
         )
         self.assertEqual(options[0]["estimated_pick_chance"], 0.2)
+        self.assertEqual(
+            payload["players"][0]["recommended_multiplier_tier"],
+            "1.7x_novelty_wildcard",
+        )
 
     def test_opening_round_baseline_appears_in_x13_tier(self) -> None:
         players = pd.DataFrame([{

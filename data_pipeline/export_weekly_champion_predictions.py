@@ -88,6 +88,24 @@ def build_weekly_prediction_payload(
             "projected_fantasy_points": round(
                 float(player.projected_fantasy_pts), 2
             ),
+            "portfolio_strategy": (
+                str(candidates["portfolio_strategy"].iloc[0])
+                if not candidates.empty
+                and "portfolio_strategy" in candidates.columns
+                else "best_expected_value_within_tier"
+            ),
+            "recommended_multiplier_tier": (
+                str(candidates["recommended_portfolio_tier"].iloc[0])
+                if not candidates.empty
+                and "recommended_portfolio_tier" in candidates.columns
+                else ""
+            ),
+            "risk_pivot_from_champion": (
+                str(candidates["risk_pivot_from_champion"].iloc[0])
+                if not candidates.empty
+                and "risk_pivot_from_champion" in candidates.columns
+                else ""
+            ),
             "picks": picks,
         })
 
