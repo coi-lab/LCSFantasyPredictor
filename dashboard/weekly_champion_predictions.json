@@ -19,43 +19,43 @@
           "pick": {
             "champion": "Ezreal",
             "option_basis": "Overall",
-            "ranking_share": 0.141,
-            "estimated_pick_chance": 0.141,
-            "expected_multiplier_bonus": 0.739,
-            "availability": 0.873,
-            "opponent_ban_rate": 0.127,
-            "sample_games": 63
+            "ranking_share": 0.1393,
+            "estimated_pick_chance": 0.1393,
+            "expected_multiplier_bonus": 0.7303,
+            "availability": 0.8833,
+            "opponent_ban_rate": 0.1667,
+            "sample_games": 12
           },
           "options": [
             {
               "champion": "Ezreal",
               "option_basis": "Overall",
-              "ranking_share": 0.141,
-              "estimated_pick_chance": 0.141,
-              "expected_multiplier_bonus": 0.739,
-              "availability": 0.873,
-              "opponent_ban_rate": 0.127,
-              "sample_games": 63
+              "ranking_share": 0.1393,
+              "estimated_pick_chance": 0.1393,
+              "expected_multiplier_bonus": 0.7303,
+              "availability": 0.8833,
+              "opponent_ban_rate": 0.1667,
+              "sample_games": 12
             },
             {
               "champion": "Ashe",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1044,
-              "estimated_pick_chance": 0.1044,
-              "expected_multiplier_bonus": 0.5318,
-              "availability": 0.9603,
-              "opponent_ban_rate": 0.0159,
-              "sample_games": 63
+              "ranking_share": 0.1062,
+              "estimated_pick_chance": 0.1062,
+              "expected_multiplier_bonus": 0.5408,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 12
             },
             {
               "champion": "Jhin",
               "option_basis": "International meta",
-              "ranking_share": 0.1033,
-              "estimated_pick_chance": 0.1033,
-              "expected_multiplier_bonus": 0.581,
-              "availability": 0.9746,
-              "opponent_ban_rate": 0.0159,
-              "sample_games": 63
+              "ranking_share": 0.1036,
+              "estimated_pick_chance": 0.1036,
+              "expected_multiplier_bonus": 0.5822,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 12
             }
           ]
         },
@@ -89,43 +89,43 @@
           "pick": {
             "champion": "Jarvan IV",
             "option_basis": "Overall",
-            "ranking_share": 0.1535,
-            "estimated_pick_chance": 0.1535,
-            "expected_multiplier_bonus": 0.7399,
-            "availability": 0.8238,
-            "opponent_ban_rate": 0.1905,
-            "sample_games": 63
+            "ranking_share": 0.1834,
+            "estimated_pick_chance": 0.1834,
+            "expected_multiplier_bonus": 0.8838,
+            "availability": 0.975,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 12
           },
           "options": [
             {
               "champion": "Jarvan IV",
               "option_basis": "Overall",
-              "ranking_share": 0.1535,
-              "estimated_pick_chance": 0.1535,
-              "expected_multiplier_bonus": 0.7399,
-              "availability": 0.8238,
-              "opponent_ban_rate": 0.1905,
-              "sample_games": 63
+              "ranking_share": 0.1834,
+              "estimated_pick_chance": 0.1834,
+              "expected_multiplier_bonus": 0.8838,
+              "availability": 0.975,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 12
             },
             {
               "champion": "Nocturne",
               "option_basis": "Player comfort",
-              "ranking_share": 0.104,
-              "estimated_pick_chance": 0.104,
-              "expected_multiplier_bonus": 0.5394,
-              "availability": 0.9016,
-              "opponent_ban_rate": 0.127,
-              "sample_games": 63
+              "ranking_share": 0.0873,
+              "estimated_pick_chance": 0.0873,
+              "expected_multiplier_bonus": 0.4529,
+              "availability": 0.75,
+              "opponent_ban_rate": 0.25,
+              "sample_games": 12
             },
             {
-              "champion": "Lee Sin",
+              "champion": "Naafiri",
               "option_basis": "International meta",
-              "ranking_share": 0.0768,
-              "estimated_pick_chance": 0.0768,
-              "expected_multiplier_bonus": 0.4166,
-              "availability": 0.9762,
-              "opponent_ban_rate": 0.0,
-              "sample_games": 63
+              "ranking_share": 0.0788,
+              "estimated_pick_chance": 0.0788,
+              "expected_multiplier_bonus": 0.417,
+              "availability": 0.9167,
+              "opponent_ban_rate": 0.0833,
+              "sample_games": 12
             }
           ]
         },
@@ -150,52 +150,52 @@
       "role": "MID",
       "team": "Cloud9",
       "opponent": "Team Liquid",
-      "projected_fantasy_points": 14.89,
+      "projected_fantasy_points": 15.0,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
           "available": true,
           "reason": null,
           "pick": {
-            "champion": "Cassiopeia",
+            "champion": "Annie",
             "option_basis": "Overall",
-            "ranking_share": 0.1312,
-            "estimated_pick_chance": 0.1312,
-            "expected_multiplier_bonus": 0.5974,
-            "availability": 0.8794,
-            "opponent_ban_rate": 0.1587,
-            "sample_games": 63
+            "ranking_share": 0.1334,
+            "estimated_pick_chance": 0.1334,
+            "expected_multiplier_bonus": 0.5786,
+            "availability": 0.9417,
+            "opponent_ban_rate": 0.0833,
+            "sample_games": 12
           },
           "options": [
             {
-              "champion": "Cassiopeia",
+              "champion": "Annie",
               "option_basis": "Overall",
-              "ranking_share": 0.1312,
-              "estimated_pick_chance": 0.1312,
-              "expected_multiplier_bonus": 0.5974,
-              "availability": 0.8794,
-              "opponent_ban_rate": 0.1587,
-              "sample_games": 63
+              "ranking_share": 0.1334,
+              "estimated_pick_chance": 0.1334,
+              "expected_multiplier_bonus": 0.5786,
+              "availability": 0.9417,
+              "opponent_ban_rate": 0.0833,
+              "sample_games": 12
             },
             {
-              "champion": "Annie",
+              "champion": "Cassiopeia",
               "option_basis": "Player comfort",
-              "ranking_share": 0.121,
-              "estimated_pick_chance": 0.121,
-              "expected_multiplier_bonus": 0.525,
-              "availability": 0.8952,
-              "opponent_ban_rate": 0.0952,
-              "sample_games": 63
+              "ranking_share": 0.0834,
+              "estimated_pick_chance": 0.0834,
+              "expected_multiplier_bonus": 0.3796,
+              "availability": 0.5333,
+              "opponent_ban_rate": 0.6667,
+              "sample_games": 12
             },
             {
               "champion": "Ryze",
               "option_basis": "International meta",
-              "ranking_share": 0.1026,
-              "estimated_pick_chance": 0.1026,
-              "expected_multiplier_bonus": 0.4002,
-              "availability": 0.9143,
-              "opponent_ban_rate": 0.0476,
-              "sample_games": 63
+              "ranking_share": 0.1117,
+              "estimated_pick_chance": 0.1117,
+              "expected_multiplier_bonus": 0.4357,
+              "availability": 0.95,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 12
             }
           ]
         },
@@ -229,43 +229,43 @@
           "pick": {
             "champion": "Seraphine",
             "option_basis": "Overall",
-            "ranking_share": 0.1244,
-            "estimated_pick_chance": 0.1244,
-            "expected_multiplier_bonus": 0.7868,
-            "availability": 0.9492,
-            "opponent_ban_rate": 0.0317,
-            "sample_games": 63
+            "ranking_share": 0.1288,
+            "estimated_pick_chance": 0.1288,
+            "expected_multiplier_bonus": 0.8144,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 12
           },
           "options": [
             {
               "champion": "Seraphine",
               "option_basis": "Overall",
-              "ranking_share": 0.1244,
-              "estimated_pick_chance": 0.1244,
-              "expected_multiplier_bonus": 0.7868,
-              "availability": 0.9492,
-              "opponent_ban_rate": 0.0317,
-              "sample_games": 63
+              "ranking_share": 0.1288,
+              "estimated_pick_chance": 0.1288,
+              "expected_multiplier_bonus": 0.8144,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 12
             },
             {
               "champion": "Nautilus",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1119,
-              "estimated_pick_chance": 0.1119,
-              "expected_multiplier_bonus": 0.536,
-              "availability": 0.8571,
-              "opponent_ban_rate": 0.1905,
-              "sample_games": 63
+              "ranking_share": 0.1069,
+              "estimated_pick_chance": 0.1069,
+              "expected_multiplier_bonus": 0.512,
+              "availability": 0.8333,
+              "opponent_ban_rate": 0.1667,
+              "sample_games": 12
             },
             {
               "champion": "Bard",
               "option_basis": "International meta",
-              "ranking_share": 0.0923,
-              "estimated_pick_chance": 0.0923,
-              "expected_multiplier_bonus": 0.576,
-              "availability": 0.8206,
-              "opponent_ban_rate": 0.2222,
-              "sample_games": 63
+              "ranking_share": 0.0985,
+              "estimated_pick_chance": 0.0985,
+              "expected_multiplier_bonus": 0.6149,
+              "availability": 0.8917,
+              "opponent_ban_rate": 0.0833,
+              "sample_games": 12
             }
           ]
         },
@@ -299,43 +299,43 @@
           "pick": {
             "champion": "Gnar",
             "option_basis": "Overall",
-            "ranking_share": 0.1369,
-            "estimated_pick_chance": 0.1369,
-            "expected_multiplier_bonus": 0.6119,
-            "availability": 0.9476,
-            "opponent_ban_rate": 0.0476,
-            "sample_games": 63
+            "ranking_share": 0.1356,
+            "estimated_pick_chance": 0.1356,
+            "expected_multiplier_bonus": 0.6063,
+            "availability": 0.95,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 12
           },
           "options": [
             {
               "champion": "Gnar",
               "option_basis": "Overall",
-              "ranking_share": 0.1369,
-              "estimated_pick_chance": 0.1369,
-              "expected_multiplier_bonus": 0.6119,
-              "availability": 0.9476,
-              "opponent_ban_rate": 0.0476,
-              "sample_games": 63
+              "ranking_share": 0.1356,
+              "estimated_pick_chance": 0.1356,
+              "expected_multiplier_bonus": 0.6063,
+              "availability": 0.95,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 12
             },
             {
               "champion": "Sion",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0908,
-              "estimated_pick_chance": 0.0908,
-              "expected_multiplier_bonus": 0.3928,
-              "availability": 0.9175,
-              "opponent_ban_rate": 0.0635,
-              "sample_games": 63
+              "ranking_share": 0.0921,
+              "estimated_pick_chance": 0.0921,
+              "expected_multiplier_bonus": 0.3985,
+              "availability": 0.9417,
+              "opponent_ban_rate": 0.0833,
+              "sample_games": 12
             },
             {
               "champion": "Rumble",
               "option_basis": "International meta",
-              "ranking_share": 0.1118,
-              "estimated_pick_chance": 0.1118,
-              "expected_multiplier_bonus": 0.4507,
-              "availability": 0.8794,
-              "opponent_ban_rate": 0.1111,
-              "sample_games": 63
+              "ranking_share": 0.1193,
+              "estimated_pick_chance": 0.1193,
+              "expected_multiplier_bonus": 0.4813,
+              "availability": 0.95,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 12
             }
           ]
         },
@@ -369,43 +369,43 @@
           "pick": {
             "champion": "Ezreal",
             "option_basis": "Overall",
-            "ranking_share": 0.1632,
-            "estimated_pick_chance": 0.1632,
-            "expected_multiplier_bonus": 0.7681,
-            "availability": 0.9,
-            "opponent_ban_rate": 0.122,
-            "sample_games": 41
+            "ranking_share": 0.1536,
+            "estimated_pick_chance": 0.1536,
+            "expected_multiplier_bonus": 0.7232,
+            "availability": 0.825,
+            "opponent_ban_rate": 0.25,
+            "sample_games": 4
           },
           "options": [
             {
               "champion": "Ezreal",
               "option_basis": "Overall",
-              "ranking_share": 0.1632,
-              "estimated_pick_chance": 0.1632,
-              "expected_multiplier_bonus": 0.7681,
-              "availability": 0.9,
-              "opponent_ban_rate": 0.122,
-              "sample_games": 41
+              "ranking_share": 0.1536,
+              "estimated_pick_chance": 0.1536,
+              "expected_multiplier_bonus": 0.7232,
+              "availability": 0.825,
+              "opponent_ban_rate": 0.25,
+              "sample_games": 4
             },
             {
               "champion": "Ashe",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1539,
-              "estimated_pick_chance": 0.1539,
-              "expected_multiplier_bonus": 0.554,
-              "availability": 0.9561,
+              "ranking_share": 0.1654,
+              "estimated_pick_chance": 0.1654,
+              "expected_multiplier_bonus": 0.5952,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 41
+              "sample_games": 4
             },
             {
               "champion": "Jhin",
               "option_basis": "International meta",
-              "ranking_share": 0.0803,
-              "estimated_pick_chance": 0.0803,
-              "expected_multiplier_bonus": 0.4518,
-              "availability": 0.9537,
-              "opponent_ban_rate": 0.0244,
-              "sample_games": 41
+              "ranking_share": 0.0735,
+              "estimated_pick_chance": 0.0735,
+              "expected_multiplier_bonus": 0.4136,
+              "availability": 0.85,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             }
           ]
         },
@@ -439,43 +439,43 @@
           "pick": {
             "champion": "Xin Zhao",
             "option_basis": "Overall",
-            "ranking_share": 0.206,
-            "estimated_pick_chance": 0.206,
-            "expected_multiplier_bonus": 0.9555,
-            "availability": 0.961,
-            "opponent_ban_rate": 0.0244,
-            "sample_games": 41
+            "ranking_share": 0.203,
+            "estimated_pick_chance": 0.203,
+            "expected_multiplier_bonus": 0.9416,
+            "availability": 0.825,
+            "opponent_ban_rate": 0.25,
+            "sample_games": 4
           },
           "options": [
             {
               "champion": "Xin Zhao",
               "option_basis": "Overall",
-              "ranking_share": 0.206,
-              "estimated_pick_chance": 0.206,
-              "expected_multiplier_bonus": 0.9555,
-              "availability": 0.961,
-              "opponent_ban_rate": 0.0244,
-              "sample_games": 41
+              "ranking_share": 0.203,
+              "estimated_pick_chance": 0.203,
+              "expected_multiplier_bonus": 0.9416,
+              "availability": 0.825,
+              "opponent_ban_rate": 0.25,
+              "sample_games": 4
             },
             {
               "champion": "Jarvan IV",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1474,
-              "estimated_pick_chance": 0.1474,
-              "expected_multiplier_bonus": 0.6948,
-              "availability": 0.8732,
-              "opponent_ban_rate": 0.0976,
-              "sample_games": 41
+              "ranking_share": 0.1454,
+              "estimated_pick_chance": 0.1454,
+              "expected_multiplier_bonus": 0.6851,
+              "availability": 0.75,
+              "opponent_ban_rate": 0.25,
+              "sample_games": 4
             },
             {
               "champion": "Lee Sin",
               "option_basis": "International meta",
-              "ranking_share": 0.0779,
-              "estimated_pick_chance": 0.0779,
-              "expected_multiplier_bonus": 0.3614,
-              "availability": 0.9756,
-              "opponent_ban_rate": 0.0244,
-              "sample_games": 41
+              "ranking_share": 0.0848,
+              "estimated_pick_chance": 0.0848,
+              "expected_multiplier_bonus": 0.3934,
+              "availability": 0.925,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             }
           ]
         },
@@ -509,43 +509,43 @@
           "pick": {
             "champion": "Orianna",
             "option_basis": "Overall",
-            "ranking_share": 0.1367,
-            "estimated_pick_chance": 0.1367,
-            "expected_multiplier_bonus": 0.5854,
-            "availability": 0.8195,
-            "opponent_ban_rate": 0.1951,
-            "sample_games": 41
+            "ranking_share": 0.1452,
+            "estimated_pick_chance": 0.1452,
+            "expected_multiplier_bonus": 0.6218,
+            "availability": 0.925,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 4
           },
           "options": [
             {
               "champion": "Orianna",
               "option_basis": "Overall",
-              "ranking_share": 0.1367,
-              "estimated_pick_chance": 0.1367,
-              "expected_multiplier_bonus": 0.5854,
-              "availability": 0.8195,
-              "opponent_ban_rate": 0.1951,
-              "sample_games": 41
+              "ranking_share": 0.1452,
+              "estimated_pick_chance": 0.1452,
+              "expected_multiplier_bonus": 0.6218,
+              "availability": 0.925,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             },
             {
               "champion": "Taliyah",
               "option_basis": "Player comfort",
-              "ranking_share": 0.076,
-              "estimated_pick_chance": 0.076,
-              "expected_multiplier_bonus": 0.3296,
-              "availability": 0.9171,
-              "opponent_ban_rate": 0.0976,
-              "sample_games": 41
+              "ranking_share": 0.078,
+              "estimated_pick_chance": 0.078,
+              "expected_multiplier_bonus": 0.3382,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             },
             {
               "champion": "Ryze",
               "option_basis": "International meta",
-              "ranking_share": 0.1218,
-              "estimated_pick_chance": 0.1218,
-              "expected_multiplier_bonus": 0.5203,
-              "availability": 0.922,
-              "opponent_ban_rate": 0.0488,
-              "sample_games": 41
+              "ranking_share": 0.1243,
+              "estimated_pick_chance": 0.1243,
+              "expected_multiplier_bonus": 0.5311,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             }
           ]
         },
@@ -579,43 +579,43 @@
           "pick": {
             "champion": "Seraphine",
             "option_basis": "Overall",
-            "ranking_share": 0.1208,
-            "estimated_pick_chance": 0.1208,
-            "expected_multiplier_bonus": 0.538,
-            "availability": 0.939,
-            "opponent_ban_rate": 0.0244,
-            "sample_games": 41
+            "ranking_share": 0.1271,
+            "estimated_pick_chance": 0.1271,
+            "expected_multiplier_bonus": 0.566,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 4
           },
           "options": [
             {
               "champion": "Seraphine",
               "option_basis": "Overall",
-              "ranking_share": 0.1208,
-              "estimated_pick_chance": 0.1208,
-              "expected_multiplier_bonus": 0.538,
-              "availability": 0.939,
-              "opponent_ban_rate": 0.0244,
-              "sample_games": 41
+              "ranking_share": 0.1271,
+              "estimated_pick_chance": 0.1271,
+              "expected_multiplier_bonus": 0.566,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             },
             {
               "champion": "Lulu",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1054,
-              "estimated_pick_chance": 0.1054,
-              "expected_multiplier_bonus": 0.5285,
-              "availability": 0.9585,
-              "opponent_ban_rate": 0.0488,
-              "sample_games": 41
+              "ranking_share": 0.1086,
+              "estimated_pick_chance": 0.1086,
+              "expected_multiplier_bonus": 0.5446,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             },
             {
               "champion": "Bard",
               "option_basis": "International meta",
-              "ranking_share": 0.0953,
-              "estimated_pick_chance": 0.0953,
-              "expected_multiplier_bonus": 0.4622,
-              "availability": 0.9049,
-              "opponent_ban_rate": 0.0732,
-              "sample_games": 41
+              "ranking_share": 0.0963,
+              "estimated_pick_chance": 0.0963,
+              "expected_multiplier_bonus": 0.4668,
+              "availability": 0.925,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             }
           ]
         },
@@ -649,43 +649,43 @@
           "pick": {
             "champion": "Rumble",
             "option_basis": "Overall",
-            "ranking_share": 0.1411,
-            "estimated_pick_chance": 0.1411,
-            "expected_multiplier_bonus": 0.5315,
-            "availability": 0.9195,
-            "opponent_ban_rate": 0.0732,
-            "sample_games": 41
+            "ranking_share": 0.1409,
+            "estimated_pick_chance": 0.1409,
+            "expected_multiplier_bonus": 0.5305,
+            "availability": 0.925,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 4
           },
           "options": [
             {
               "champion": "Rumble",
               "option_basis": "Overall",
-              "ranking_share": 0.1411,
-              "estimated_pick_chance": 0.1411,
-              "expected_multiplier_bonus": 0.5315,
-              "availability": 0.9195,
-              "opponent_ban_rate": 0.0732,
-              "sample_games": 41
+              "ranking_share": 0.1409,
+              "estimated_pick_chance": 0.1409,
+              "expected_multiplier_bonus": 0.5305,
+              "availability": 0.925,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             },
             {
               "champion": "Gnar",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1095,
-              "estimated_pick_chance": 0.1095,
-              "expected_multiplier_bonus": 0.4123,
-              "availability": 0.9683,
-              "opponent_ban_rate": 0.0244,
-              "sample_games": 41
+              "ranking_share": 0.1122,
+              "estimated_pick_chance": 0.1122,
+              "expected_multiplier_bonus": 0.4226,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             },
             {
-              "champion": "Jayce",
+              "champion": "Ambessa",
               "option_basis": "International meta",
-              "ranking_share": 0.0869,
-              "estimated_pick_chance": 0.0869,
-              "expected_multiplier_bonus": 0.3274,
-              "availability": 0.8463,
-              "opponent_ban_rate": 0.2195,
-              "sample_games": 41
+              "ranking_share": 0.076,
+              "estimated_pick_chance": 0.076,
+              "expected_multiplier_bonus": 0.2861,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 4
             }
           ]
         },
@@ -719,43 +719,43 @@
           "pick": {
             "champion": "Ezreal",
             "option_basis": "Overall",
-            "ranking_share": 0.1489,
-            "estimated_pick_chance": 0.1489,
-            "expected_multiplier_bonus": 0.6749,
-            "availability": 0.9159,
-            "opponent_ban_rate": 0.0227,
-            "sample_games": 44
+            "ranking_share": 0.1547,
+            "estimated_pick_chance": 0.1547,
+            "expected_multiplier_bonus": 0.7015,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Ezreal",
               "option_basis": "Overall",
-              "ranking_share": 0.1489,
-              "estimated_pick_chance": 0.1489,
-              "expected_multiplier_bonus": 0.6749,
-              "availability": 0.9159,
-              "opponent_ban_rate": 0.0227,
-              "sample_games": 44
+              "ranking_share": 0.1547,
+              "estimated_pick_chance": 0.1547,
+              "expected_multiplier_bonus": 0.7015,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Caitlyn",
               "option_basis": "Player comfort",
-              "ranking_share": 0.141,
-              "estimated_pick_chance": 0.141,
-              "expected_multiplier_bonus": 0.628,
-              "availability": 0.9795,
+              "ranking_share": 0.137,
+              "estimated_pick_chance": 0.137,
+              "expected_multiplier_bonus": 0.6103,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 44
+              "sample_games": 0
             },
             {
               "champion": "Lucian",
               "option_basis": "International meta",
-              "ranking_share": 0.0681,
-              "estimated_pick_chance": 0.0681,
-              "expected_multiplier_bonus": 0.3259,
-              "availability": 0.9455,
+              "ranking_share": 0.0685,
+              "estimated_pick_chance": 0.0685,
+              "expected_multiplier_bonus": 0.3282,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 44
+              "sample_games": 0
             }
           ]
         },
@@ -789,43 +789,43 @@
           "pick": {
             "champion": "Jarvan IV",
             "option_basis": "Overall",
-            "ranking_share": 0.1242,
-            "estimated_pick_chance": 0.1242,
-            "expected_multiplier_bonus": 0.6824,
-            "availability": 0.8932,
-            "opponent_ban_rate": 0.1136,
-            "sample_games": 44
+            "ranking_share": 0.1236,
+            "estimated_pick_chance": 0.1236,
+            "expected_multiplier_bonus": 0.6793,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Jarvan IV",
               "option_basis": "Overall",
-              "ranking_share": 0.1242,
-              "estimated_pick_chance": 0.1242,
-              "expected_multiplier_bonus": 0.6824,
-              "availability": 0.8932,
-              "opponent_ban_rate": 0.1136,
-              "sample_games": 44
+              "ranking_share": 0.1236,
+              "estimated_pick_chance": 0.1236,
+              "expected_multiplier_bonus": 0.6793,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Pantheon",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0918,
-              "estimated_pick_chance": 0.0918,
-              "expected_multiplier_bonus": 0.4078,
-              "availability": 0.7023,
-              "opponent_ban_rate": 0.3864,
-              "sample_games": 44
+              "ranking_share": 0.1163,
+              "estimated_pick_chance": 0.1163,
+              "expected_multiplier_bonus": 0.5163,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Vi",
               "option_basis": "International meta",
-              "ranking_share": 0.1067,
-              "estimated_pick_chance": 0.1067,
-              "expected_multiplier_bonus": 0.4721,
-              "availability": 0.8227,
-              "opponent_ban_rate": 0.2045,
-              "sample_games": 44
+              "ranking_share": 0.1153,
+              "estimated_pick_chance": 0.1153,
+              "expected_multiplier_bonus": 0.5102,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -859,43 +859,43 @@
           "pick": {
             "champion": "Ryze",
             "option_basis": "Overall",
-            "ranking_share": 0.1537,
-            "estimated_pick_chance": 0.1537,
-            "expected_multiplier_bonus": 0.5692,
-            "availability": 0.8636,
-            "opponent_ban_rate": 0.1364,
-            "sample_games": 44
+            "ranking_share": 0.1621,
+            "estimated_pick_chance": 0.1621,
+            "expected_multiplier_bonus": 0.6002,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Ryze",
               "option_basis": "Overall",
-              "ranking_share": 0.1537,
-              "estimated_pick_chance": 0.1537,
-              "expected_multiplier_bonus": 0.5692,
-              "availability": 0.8636,
-              "opponent_ban_rate": 0.1364,
-              "sample_games": 44
+              "ranking_share": 0.1621,
+              "estimated_pick_chance": 0.1621,
+              "expected_multiplier_bonus": 0.6002,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Akali",
               "option_basis": "Player comfort",
-              "ranking_share": 0.107,
-              "estimated_pick_chance": 0.107,
-              "expected_multiplier_bonus": 0.4527,
-              "availability": 0.9227,
-              "opponent_ban_rate": 0.0909,
-              "sample_games": 44
+              "ranking_share": 0.1056,
+              "estimated_pick_chance": 0.1056,
+              "expected_multiplier_bonus": 0.4468,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Cassiopeia",
               "option_basis": "International meta",
-              "ranking_share": 0.1044,
-              "estimated_pick_chance": 0.1044,
-              "expected_multiplier_bonus": 0.5453,
-              "availability": 0.8977,
-              "opponent_ban_rate": 0.1364,
-              "sample_games": 44
+              "ranking_share": 0.1059,
+              "estimated_pick_chance": 0.1059,
+              "expected_multiplier_bonus": 0.5532,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -929,43 +929,43 @@
           "pick": {
             "champion": "Bard",
             "option_basis": "Overall",
-            "ranking_share": 0.1515,
-            "estimated_pick_chance": 0.1515,
-            "expected_multiplier_bonus": 0.7856,
-            "availability": 0.925,
-            "opponent_ban_rate": 0.0682,
-            "sample_games": 44
+            "ranking_share": 0.1536,
+            "estimated_pick_chance": 0.1536,
+            "expected_multiplier_bonus": 0.7967,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Bard",
               "option_basis": "Overall",
-              "ranking_share": 0.1515,
-              "estimated_pick_chance": 0.1515,
-              "expected_multiplier_bonus": 0.7856,
-              "availability": 0.925,
-              "opponent_ban_rate": 0.0682,
-              "sample_games": 44
+              "ranking_share": 0.1536,
+              "estimated_pick_chance": 0.1536,
+              "expected_multiplier_bonus": 0.7967,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Nami",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1026,
-              "estimated_pick_chance": 0.1026,
-              "expected_multiplier_bonus": 0.5,
-              "availability": 0.9455,
+              "ranking_share": 0.1018,
+              "estimated_pick_chance": 0.1018,
+              "expected_multiplier_bonus": 0.4961,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 44
+              "sample_games": 0
             },
             {
-              "champion": "Lulu",
+              "champion": "Neeko",
               "option_basis": "International meta",
-              "ranking_share": 0.0753,
-              "estimated_pick_chance": 0.0753,
-              "expected_multiplier_bonus": 0.4027,
-              "availability": 0.9841,
-              "opponent_ban_rate": 0.0227,
-              "sample_games": 44
+              "ranking_share": 0.0773,
+              "estimated_pick_chance": 0.0773,
+              "expected_multiplier_bonus": 0.3925,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -999,43 +999,43 @@
           "pick": {
             "champion": "Jayce",
             "option_basis": "Overall",
-            "ranking_share": 0.1776,
-            "estimated_pick_chance": 0.1776,
-            "expected_multiplier_bonus": 0.6928,
-            "availability": 0.8977,
-            "opponent_ban_rate": 0.1364,
-            "sample_games": 44
+            "ranking_share": 0.1817,
+            "estimated_pick_chance": 0.1817,
+            "expected_multiplier_bonus": 0.7085,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Jayce",
               "option_basis": "Overall",
-              "ranking_share": 0.1776,
-              "estimated_pick_chance": 0.1776,
-              "expected_multiplier_bonus": 0.6928,
-              "availability": 0.8977,
-              "opponent_ban_rate": 0.1364,
-              "sample_games": 44
+              "ranking_share": 0.1817,
+              "estimated_pick_chance": 0.1817,
+              "expected_multiplier_bonus": 0.7085,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "K'Sante",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1405,
-              "estimated_pick_chance": 0.1405,
-              "expected_multiplier_bonus": 0.5033,
-              "availability": 0.9659,
+              "ranking_share": 0.1336,
+              "estimated_pick_chance": 0.1336,
+              "expected_multiplier_bonus": 0.4784,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 44
+              "sample_games": 0
             },
             {
               "champion": "Rumble",
               "option_basis": "International meta",
-              "ranking_share": 0.1662,
-              "estimated_pick_chance": 0.1662,
-              "expected_multiplier_bonus": 0.6361,
-              "availability": 0.8568,
-              "opponent_ban_rate": 0.1364,
-              "sample_games": 44
+              "ranking_share": 0.1781,
+              "estimated_pick_chance": 0.1781,
+              "expected_multiplier_bonus": 0.6816,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -1060,7 +1060,7 @@
       "role": "BOT",
       "team": "FlyQuest",
       "opponent": "LYON",
-      "projected_fantasy_points": 17.1,
+      "projected_fantasy_points": 17.08,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -1069,43 +1069,43 @@
           "pick": {
             "champion": "Ezreal",
             "option_basis": "Overall",
-            "ranking_share": 0.1673,
-            "estimated_pick_chance": 0.1673,
-            "expected_multiplier_bonus": 0.8898,
-            "availability": 0.9131,
-            "opponent_ban_rate": 0.082,
-            "sample_games": 61
+            "ranking_share": 0.1576,
+            "estimated_pick_chance": 0.1576,
+            "expected_multiplier_bonus": 0.8384,
+            "availability": 0.87,
+            "opponent_ban_rate": 0.1,
+            "sample_games": 20
           },
           "options": [
             {
               "champion": "Ezreal",
               "option_basis": "Overall",
-              "ranking_share": 0.1673,
-              "estimated_pick_chance": 0.1673,
-              "expected_multiplier_bonus": 0.8898,
-              "availability": 0.9131,
-              "opponent_ban_rate": 0.082,
-              "sample_games": 61
+              "ranking_share": 0.1576,
+              "estimated_pick_chance": 0.1576,
+              "expected_multiplier_bonus": 0.8384,
+              "availability": 0.87,
+              "opponent_ban_rate": 0.1,
+              "sample_games": 20
             },
             {
               "champion": "Lucian",
               "option_basis": "Player comfort",
-              "ranking_share": 0.098,
-              "estimated_pick_chance": 0.098,
-              "expected_multiplier_bonus": 0.5634,
-              "availability": 0.9623,
-              "opponent_ban_rate": 0.0328,
-              "sample_games": 61
+              "ranking_share": 0.0956,
+              "estimated_pick_chance": 0.0956,
+              "expected_multiplier_bonus": 0.5501,
+              "availability": 0.95,
+              "opponent_ban_rate": 0.05,
+              "sample_games": 20
             },
             {
               "champion": "Jhin",
               "option_basis": "International meta",
-              "ranking_share": 0.071,
-              "estimated_pick_chance": 0.071,
-              "expected_multiplier_bonus": 0.3465,
-              "availability": 0.9115,
-              "opponent_ban_rate": 0.0984,
-              "sample_games": 61
+              "ranking_share": 0.0747,
+              "estimated_pick_chance": 0.0747,
+              "expected_multiplier_bonus": 0.3646,
+              "availability": 0.97,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 20
             }
           ]
         },
@@ -1139,43 +1139,43 @@
           "pick": {
             "champion": "Jarvan IV",
             "option_basis": "Overall",
-            "ranking_share": 0.1364,
-            "estimated_pick_chance": 0.1364,
-            "expected_multiplier_bonus": 0.7171,
-            "availability": 0.8607,
-            "opponent_ban_rate": 0.1639,
-            "sample_games": 61
+            "ranking_share": 0.1478,
+            "estimated_pick_chance": 0.1478,
+            "expected_multiplier_bonus": 0.7773,
+            "availability": 0.955,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 20
           },
           "options": [
             {
               "champion": "Jarvan IV",
               "option_basis": "Overall",
-              "ranking_share": 0.1364,
-              "estimated_pick_chance": 0.1364,
-              "expected_multiplier_bonus": 0.7171,
-              "availability": 0.8607,
-              "opponent_ban_rate": 0.1639,
-              "sample_games": 61
+              "ranking_share": 0.1478,
+              "estimated_pick_chance": 0.1478,
+              "expected_multiplier_bonus": 0.7773,
+              "availability": 0.955,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 20
             },
             {
               "champion": "Nocturne",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0841,
-              "estimated_pick_chance": 0.0841,
-              "expected_multiplier_bonus": 0.449,
-              "availability": 0.8508,
-              "opponent_ban_rate": 0.1639,
-              "sample_games": 61
+              "ranking_share": 0.0854,
+              "estimated_pick_chance": 0.0854,
+              "expected_multiplier_bonus": 0.4563,
+              "availability": 0.885,
+              "opponent_ban_rate": 0.1,
+              "sample_games": 20
             },
             {
               "champion": "Naafiri",
               "option_basis": "International meta",
-              "ranking_share": 0.0757,
-              "estimated_pick_chance": 0.0757,
-              "expected_multiplier_bonus": 0.3991,
-              "availability": 0.9607,
-              "opponent_ban_rate": 0.0492,
-              "sample_games": 61
+              "ranking_share": 0.0716,
+              "estimated_pick_chance": 0.0716,
+              "expected_multiplier_bonus": 0.3774,
+              "availability": 0.93,
+              "opponent_ban_rate": 0.1,
+              "sample_games": 20
             }
           ]
         },
@@ -1200,7 +1200,7 @@
       "role": "MID",
       "team": "FlyQuest",
       "opponent": "LYON",
-      "projected_fantasy_points": 16.44,
+      "projected_fantasy_points": 16.62,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -1209,43 +1209,43 @@
           "pick": {
             "champion": "Ryze",
             "option_basis": "Overall",
-            "ranking_share": 0.1111,
-            "estimated_pick_chance": 0.1111,
-            "expected_multiplier_bonus": 0.5549,
-            "availability": 0.9033,
-            "opponent_ban_rate": 0.082,
-            "sample_games": 61
+            "ranking_share": 0.1066,
+            "estimated_pick_chance": 0.1066,
+            "expected_multiplier_bonus": 0.5324,
+            "availability": 0.85,
+            "opponent_ban_rate": 0.15,
+            "sample_games": 20
           },
           "options": [
             {
               "champion": "Ryze",
               "option_basis": "Overall",
-              "ranking_share": 0.1111,
-              "estimated_pick_chance": 0.1111,
-              "expected_multiplier_bonus": 0.5549,
-              "availability": 0.9033,
-              "opponent_ban_rate": 0.082,
-              "sample_games": 61
+              "ranking_share": 0.1066,
+              "estimated_pick_chance": 0.1066,
+              "expected_multiplier_bonus": 0.5324,
+              "availability": 0.85,
+              "opponent_ban_rate": 0.15,
+              "sample_games": 20
             },
             {
               "champion": "Annie",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0891,
-              "estimated_pick_chance": 0.0891,
-              "expected_multiplier_bonus": 0.4356,
-              "availability": 0.9148,
-              "opponent_ban_rate": 0.1148,
-              "sample_games": 61
+              "ranking_share": 0.0909,
+              "estimated_pick_chance": 0.0909,
+              "expected_multiplier_bonus": 0.4442,
+              "availability": 0.915,
+              "opponent_ban_rate": 0.1,
+              "sample_games": 20
             },
             {
               "champion": "Cassiopeia",
               "option_basis": "International meta",
-              "ranking_share": 0.1107,
-              "estimated_pick_chance": 0.1107,
-              "expected_multiplier_bonus": 0.5252,
-              "availability": 0.8934,
-              "opponent_ban_rate": 0.1311,
-              "sample_games": 61
+              "ranking_share": 0.1068,
+              "estimated_pick_chance": 0.1068,
+              "expected_multiplier_bonus": 0.5065,
+              "availability": 0.845,
+              "opponent_ban_rate": 0.2,
+              "sample_games": 20
             }
           ]
         },
@@ -1279,43 +1279,43 @@
           "pick": {
             "champion": "Bard",
             "option_basis": "Overall",
-            "ranking_share": 0.1278,
-            "estimated_pick_chance": 0.1278,
-            "expected_multiplier_bonus": 0.8272,
-            "availability": 0.8492,
-            "opponent_ban_rate": 0.1803,
-            "sample_games": 61
+            "ranking_share": 0.113,
+            "estimated_pick_chance": 0.113,
+            "expected_multiplier_bonus": 0.7314,
+            "availability": 0.76,
+            "opponent_ban_rate": 0.3,
+            "sample_games": 20
           },
           "options": [
             {
               "champion": "Bard",
               "option_basis": "Overall",
-              "ranking_share": 0.1278,
-              "estimated_pick_chance": 0.1278,
-              "expected_multiplier_bonus": 0.8272,
-              "availability": 0.8492,
-              "opponent_ban_rate": 0.1803,
-              "sample_games": 61
+              "ranking_share": 0.113,
+              "estimated_pick_chance": 0.113,
+              "expected_multiplier_bonus": 0.7314,
+              "availability": 0.76,
+              "opponent_ban_rate": 0.3,
+              "sample_games": 20
             },
             {
               "champion": "Lulu",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1064,
-              "estimated_pick_chance": 0.1064,
-              "expected_multiplier_bonus": 0.605,
-              "availability": 0.9213,
-              "opponent_ban_rate": 0.0492,
-              "sample_games": 61
+              "ranking_share": 0.1084,
+              "estimated_pick_chance": 0.1084,
+              "expected_multiplier_bonus": 0.6163,
+              "availability": 0.95,
+              "opponent_ban_rate": 0.05,
+              "sample_games": 20
             },
             {
               "champion": "Nautilus",
               "option_basis": "International meta",
-              "ranking_share": 0.0912,
-              "estimated_pick_chance": 0.0912,
-              "expected_multiplier_bonus": 0.5416,
-              "availability": 0.9016,
-              "opponent_ban_rate": 0.0984,
-              "sample_games": 61
+              "ranking_share": 0.0865,
+              "estimated_pick_chance": 0.0865,
+              "expected_multiplier_bonus": 0.5133,
+              "availability": 0.865,
+              "opponent_ban_rate": 0.15,
+              "sample_games": 20
             }
           ]
         },
@@ -1349,43 +1349,43 @@
           "pick": {
             "champion": "Rumble",
             "option_basis": "Overall",
-            "ranking_share": 0.1423,
-            "estimated_pick_chance": 0.1423,
-            "expected_multiplier_bonus": 0.5885,
-            "availability": 0.841,
-            "opponent_ban_rate": 0.1639,
-            "sample_games": 61
+            "ranking_share": 0.165,
+            "estimated_pick_chance": 0.165,
+            "expected_multiplier_bonus": 0.6825,
+            "availability": 0.965,
+            "opponent_ban_rate": 0.05,
+            "sample_games": 20
           },
           "options": [
             {
               "champion": "Rumble",
               "option_basis": "Overall",
-              "ranking_share": 0.1423,
-              "estimated_pick_chance": 0.1423,
-              "expected_multiplier_bonus": 0.5885,
-              "availability": 0.841,
-              "opponent_ban_rate": 0.1639,
-              "sample_games": 61
+              "ranking_share": 0.165,
+              "estimated_pick_chance": 0.165,
+              "expected_multiplier_bonus": 0.6825,
+              "availability": 0.965,
+              "opponent_ban_rate": 0.05,
+              "sample_games": 20
             },
             {
               "champion": "Jayce",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1415,
-              "estimated_pick_chance": 0.1415,
-              "expected_multiplier_bonus": 0.495,
-              "availability": 0.9459,
-              "opponent_ban_rate": 0.0492,
-              "sample_games": 61
+              "ranking_share": 0.1263,
+              "estimated_pick_chance": 0.1263,
+              "expected_multiplier_bonus": 0.4416,
+              "availability": 0.835,
+              "opponent_ban_rate": 0.15,
+              "sample_games": 20
             },
             {
               "champion": "Gnar",
               "option_basis": "International meta",
-              "ranking_share": 0.0942,
-              "estimated_pick_chance": 0.0942,
-              "expected_multiplier_bonus": 0.3731,
-              "availability": 0.918,
-              "opponent_ban_rate": 0.082,
-              "sample_games": 61
+              "ranking_share": 0.0794,
+              "estimated_pick_chance": 0.0794,
+              "expected_multiplier_bonus": 0.3143,
+              "availability": 0.765,
+              "opponent_ban_rate": 0.25,
+              "sample_games": 20
             }
           ]
         },
@@ -1410,7 +1410,7 @@
       "role": "BOT",
       "team": "LYON",
       "opponent": "FlyQuest",
-      "projected_fantasy_points": 18.72,
+      "projected_fantasy_points": 19.01,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -1419,43 +1419,43 @@
           "pick": {
             "champion": "Ezreal",
             "option_basis": "Overall",
-            "ranking_share": 0.1639,
-            "estimated_pick_chance": 0.1639,
-            "expected_multiplier_bonus": 1.0744,
-            "availability": 0.9129,
-            "opponent_ban_rate": 0.0484,
-            "sample_games": 62
+            "ranking_share": 0.1652,
+            "estimated_pick_chance": 0.1652,
+            "expected_multiplier_bonus": 1.083,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Ezreal",
               "option_basis": "Overall",
-              "ranking_share": 0.1639,
-              "estimated_pick_chance": 0.1639,
-              "expected_multiplier_bonus": 1.0744,
-              "availability": 0.9129,
-              "opponent_ban_rate": 0.0484,
-              "sample_games": 62
+              "ranking_share": 0.1652,
+              "estimated_pick_chance": 0.1652,
+              "expected_multiplier_bonus": 1.083,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Ziggs",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0751,
-              "estimated_pick_chance": 0.0751,
-              "expected_multiplier_bonus": 0.4294,
-              "availability": 0.8194,
-              "opponent_ban_rate": 0.2581,
-              "sample_games": 62
+              "ranking_share": 0.0843,
+              "estimated_pick_chance": 0.0843,
+              "expected_multiplier_bonus": 0.4822,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Jhin",
               "option_basis": "International meta",
-              "ranking_share": 0.0789,
-              "estimated_pick_chance": 0.0789,
-              "expected_multiplier_bonus": 0.3757,
-              "availability": 0.9387,
-              "opponent_ban_rate": 0.0323,
-              "sample_games": 62
+              "ranking_share": 0.0773,
+              "estimated_pick_chance": 0.0773,
+              "expected_multiplier_bonus": 0.3683,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -1480,7 +1480,7 @@
       "role": "JGL",
       "team": "LYON",
       "opponent": "FlyQuest",
-      "projected_fantasy_points": 17.22,
+      "projected_fantasy_points": 17.74,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -1489,43 +1489,43 @@
           "pick": {
             "champion": "Jarvan IV",
             "option_basis": "Overall",
-            "ranking_share": 0.1304,
-            "estimated_pick_chance": 0.1304,
-            "expected_multiplier_bonus": 0.6625,
-            "availability": 0.8113,
-            "opponent_ban_rate": 0.2419,
-            "sample_games": 62
+            "ranking_share": 0.1464,
+            "estimated_pick_chance": 0.1464,
+            "expected_multiplier_bonus": 0.7443,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Jarvan IV",
               "option_basis": "Overall",
-              "ranking_share": 0.1304,
-              "estimated_pick_chance": 0.1304,
-              "expected_multiplier_bonus": 0.6625,
-              "availability": 0.8113,
-              "opponent_ban_rate": 0.2419,
-              "sample_games": 62
+              "ranking_share": 0.1464,
+              "estimated_pick_chance": 0.1464,
+              "expected_multiplier_bonus": 0.7443,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Nocturne",
               "option_basis": "Player comfort",
-              "ranking_share": 0.099,
-              "estimated_pick_chance": 0.099,
-              "expected_multiplier_bonus": 0.5058,
-              "availability": 0.9355,
-              "opponent_ban_rate": 0.0645,
-              "sample_games": 62
+              "ranking_share": 0.0964,
+              "estimated_pick_chance": 0.0964,
+              "expected_multiplier_bonus": 0.4928,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Lee Sin",
               "option_basis": "International meta",
-              "ranking_share": 0.1107,
-              "estimated_pick_chance": 0.1107,
-              "expected_multiplier_bonus": 0.5931,
-              "availability": 0.9661,
-              "opponent_ban_rate": 0.0484,
-              "sample_games": 62
+              "ranking_share": 0.1044,
+              "estimated_pick_chance": 0.1044,
+              "expected_multiplier_bonus": 0.5594,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -1550,7 +1550,7 @@
       "role": "MID",
       "team": "LYON",
       "opponent": "FlyQuest",
-      "projected_fantasy_points": 16.92,
+      "projected_fantasy_points": 17.56,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -1559,43 +1559,43 @@
           "pick": {
             "champion": "Viktor",
             "option_basis": "Overall",
-            "ranking_share": 0.1326,
-            "estimated_pick_chance": 0.1326,
-            "expected_multiplier_bonus": 0.7543,
-            "availability": 0.9387,
-            "opponent_ban_rate": 0.0323,
-            "sample_games": 62
+            "ranking_share": 0.1318,
+            "estimated_pick_chance": 0.1318,
+            "expected_multiplier_bonus": 0.7497,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Viktor",
               "option_basis": "Overall",
-              "ranking_share": 0.1326,
-              "estimated_pick_chance": 0.1326,
-              "expected_multiplier_bonus": 0.7543,
-              "availability": 0.9387,
-              "opponent_ban_rate": 0.0323,
-              "sample_games": 62
+              "ranking_share": 0.1318,
+              "estimated_pick_chance": 0.1318,
+              "expected_multiplier_bonus": 0.7497,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Ryze",
               "option_basis": "Player comfort",
-              "ranking_share": 0.137,
-              "estimated_pick_chance": 0.137,
-              "expected_multiplier_bonus": 0.6867,
-              "availability": 0.9419,
-              "opponent_ban_rate": 0.0484,
-              "sample_games": 62
+              "ranking_share": 0.1357,
+              "estimated_pick_chance": 0.1357,
+              "expected_multiplier_bonus": 0.6802,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Cassiopeia",
               "option_basis": "International meta",
-              "ranking_share": 0.0852,
-              "estimated_pick_chance": 0.0852,
-              "expected_multiplier_bonus": 0.3394,
-              "availability": 0.9532,
-              "opponent_ban_rate": 0.0323,
-              "sample_games": 62
+              "ranking_share": 0.0834,
+              "estimated_pick_chance": 0.0834,
+              "expected_multiplier_bonus": 0.3322,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -1620,7 +1620,7 @@
       "role": "SUP",
       "team": "LYON",
       "opponent": "FlyQuest",
-      "projected_fantasy_points": 17.91,
+      "projected_fantasy_points": 18.29,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -1629,43 +1629,43 @@
           "pick": {
             "champion": "Bard",
             "option_basis": "Overall",
-            "ranking_share": 0.1072,
-            "estimated_pick_chance": 0.1072,
-            "expected_multiplier_bonus": 0.6346,
-            "availability": 0.8258,
-            "opponent_ban_rate": 0.1935,
-            "sample_games": 62
+            "ranking_share": 0.1212,
+            "estimated_pick_chance": 0.1212,
+            "expected_multiplier_bonus": 0.718,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Bard",
               "option_basis": "Overall",
-              "ranking_share": 0.1072,
-              "estimated_pick_chance": 0.1072,
-              "expected_multiplier_bonus": 0.6346,
-              "availability": 0.8258,
-              "opponent_ban_rate": 0.1935,
-              "sample_games": 62
+              "ranking_share": 0.1212,
+              "estimated_pick_chance": 0.1212,
+              "expected_multiplier_bonus": 0.718,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Nautilus",
               "option_basis": "Player comfort",
-              "ranking_share": 0.094,
-              "estimated_pick_chance": 0.094,
-              "expected_multiplier_bonus": 0.509,
-              "availability": 0.8677,
-              "opponent_ban_rate": 0.1613,
-              "sample_games": 62
+              "ranking_share": 0.1012,
+              "estimated_pick_chance": 0.1012,
+              "expected_multiplier_bonus": 0.548,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Camille",
               "option_basis": "International meta",
-              "ranking_share": 0.0771,
-              "estimated_pick_chance": 0.0771,
-              "expected_multiplier_bonus": 0.4286,
+              "ranking_share": 0.072,
+              "estimated_pick_chance": 0.072,
+              "expected_multiplier_bonus": 0.4004,
               "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 62
+              "sample_games": 0
             }
           ]
         },
@@ -1690,7 +1690,7 @@
       "role": "TOP",
       "team": "LYON",
       "opponent": "FlyQuest",
-      "projected_fantasy_points": 12.69,
+      "projected_fantasy_points": 13.59,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -1699,43 +1699,43 @@
           "pick": {
             "champion": "Rumble",
             "option_basis": "Overall",
-            "ranking_share": 0.1221,
-            "estimated_pick_chance": 0.1221,
-            "expected_multiplier_bonus": 0.5517,
-            "availability": 0.8919,
-            "opponent_ban_rate": 0.0645,
-            "sample_games": 62
+            "ranking_share": 0.1287,
+            "estimated_pick_chance": 0.1287,
+            "expected_multiplier_bonus": 0.5818,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Rumble",
               "option_basis": "Overall",
-              "ranking_share": 0.1221,
-              "estimated_pick_chance": 0.1221,
-              "expected_multiplier_bonus": 0.5517,
-              "availability": 0.8919,
-              "opponent_ban_rate": 0.0645,
-              "sample_games": 62
+              "ranking_share": 0.1287,
+              "estimated_pick_chance": 0.1287,
+              "expected_multiplier_bonus": 0.5818,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Gnar",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1404,
-              "estimated_pick_chance": 0.1404,
-              "expected_multiplier_bonus": 0.5509,
-              "availability": 0.9855,
+              "ranking_share": 0.134,
+              "estimated_pick_chance": 0.134,
+              "expected_multiplier_bonus": 0.5258,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 62
+              "sample_games": 0
             },
             {
               "champion": "Ambessa",
               "option_basis": "International meta",
-              "ranking_share": 0.07,
-              "estimated_pick_chance": 0.07,
-              "expected_multiplier_bonus": 0.2626,
-              "availability": 0.9387,
-              "opponent_ban_rate": 0.0323,
-              "sample_games": 62
+              "ranking_share": 0.0701,
+              "estimated_pick_chance": 0.0701,
+              "expected_multiplier_bonus": 0.2631,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -1769,43 +1769,43 @@
           "pick": {
             "champion": "Caitlyn",
             "option_basis": "Overall",
-            "ranking_share": 0.1642,
-            "estimated_pick_chance": 0.1642,
-            "expected_multiplier_bonus": 1.0548,
+            "ranking_share": 0.1553,
+            "estimated_pick_chance": 0.1553,
+            "expected_multiplier_bonus": 0.9978,
             "availability": 1.0,
             "opponent_ban_rate": 0.0,
-            "sample_games": 35
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Caitlyn",
               "option_basis": "Overall",
-              "ranking_share": 0.1642,
-              "estimated_pick_chance": 0.1642,
-              "expected_multiplier_bonus": 1.0548,
+              "ranking_share": 0.1553,
+              "estimated_pick_chance": 0.1553,
+              "expected_multiplier_bonus": 0.9978,
               "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 35
+              "sample_games": 0
             },
             {
               "champion": "Jhin",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1419,
-              "estimated_pick_chance": 0.1419,
-              "expected_multiplier_bonus": 0.7086,
-              "availability": 0.9657,
+              "ranking_share": 0.139,
+              "estimated_pick_chance": 0.139,
+              "expected_multiplier_bonus": 0.6941,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 35
+              "sample_games": 0
             },
             {
               "champion": "Ezreal",
               "option_basis": "International meta",
-              "ranking_share": 0.1059,
-              "estimated_pick_chance": 0.1059,
-              "expected_multiplier_bonus": 0.566,
-              "availability": 0.9143,
-              "opponent_ban_rate": 0.0857,
-              "sample_games": 35
+              "ranking_share": 0.1096,
+              "estimated_pick_chance": 0.1096,
+              "expected_multiplier_bonus": 0.5856,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -1839,43 +1839,43 @@
           "pick": {
             "champion": "Jarvan IV",
             "option_basis": "Overall",
-            "ranking_share": 0.1946,
-            "estimated_pick_chance": 0.1946,
-            "expected_multiplier_bonus": 0.9392,
-            "availability": 0.8857,
-            "opponent_ban_rate": 0.1143,
-            "sample_games": 35
+            "ranking_share": 0.2053,
+            "estimated_pick_chance": 0.2053,
+            "expected_multiplier_bonus": 0.9906,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Jarvan IV",
               "option_basis": "Overall",
-              "ranking_share": 0.1946,
-              "estimated_pick_chance": 0.1946,
-              "expected_multiplier_bonus": 0.9392,
-              "availability": 0.8857,
-              "opponent_ban_rate": 0.1143,
-              "sample_games": 35
+              "ranking_share": 0.2053,
+              "estimated_pick_chance": 0.2053,
+              "expected_multiplier_bonus": 0.9906,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Skarner",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0921,
-              "estimated_pick_chance": 0.0921,
-              "expected_multiplier_bonus": 0.561,
-              "availability": 0.9629,
-              "opponent_ban_rate": 0.0286,
-              "sample_games": 35
+              "ranking_share": 0.0894,
+              "estimated_pick_chance": 0.0894,
+              "expected_multiplier_bonus": 0.5443,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Lee Sin",
               "option_basis": "International meta",
-              "ranking_share": 0.1152,
-              "estimated_pick_chance": 0.1152,
-              "expected_multiplier_bonus": 0.6349,
-              "availability": 0.9914,
+              "ranking_share": 0.1086,
+              "estimated_pick_chance": 0.1086,
+              "expected_multiplier_bonus": 0.5983,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 35
+              "sample_games": 0
             }
           ]
         },
@@ -1907,45 +1907,45 @@
           "available": true,
           "reason": null,
           "pick": {
-            "champion": "Viktor",
+            "champion": "Orianna",
             "option_basis": "Overall",
-            "ranking_share": 0.1271,
-            "estimated_pick_chance": 0.1271,
-            "expected_multiplier_bonus": 0.6608,
-            "availability": 0.9629,
-            "opponent_ban_rate": 0.0286,
-            "sample_games": 35
+            "ranking_share": 0.1517,
+            "estimated_pick_chance": 0.1517,
+            "expected_multiplier_bonus": 0.8074,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
-              "champion": "Viktor",
+              "champion": "Orianna",
               "option_basis": "Overall",
-              "ranking_share": 0.1271,
-              "estimated_pick_chance": 0.1271,
-              "expected_multiplier_bonus": 0.6608,
-              "availability": 0.9629,
-              "opponent_ban_rate": 0.0286,
-              "sample_games": 35
+              "ranking_share": 0.1517,
+              "estimated_pick_chance": 0.1517,
+              "expected_multiplier_bonus": 0.8074,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
-              "champion": "Orianna",
+              "champion": "Viktor",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1218,
-              "estimated_pick_chance": 0.1218,
-              "expected_multiplier_bonus": 0.6479,
-              "availability": 0.7257,
-              "opponent_ban_rate": 0.3429,
-              "sample_games": 35
+              "ranking_share": 0.1194,
+              "estimated_pick_chance": 0.1194,
+              "expected_multiplier_bonus": 0.6206,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Ryze",
               "option_basis": "International meta",
-              "ranking_share": 0.121,
-              "estimated_pick_chance": 0.121,
-              "expected_multiplier_bonus": 0.5478,
-              "availability": 0.8171,
-              "opponent_ban_rate": 0.2,
-              "sample_games": 35
+              "ranking_share": 0.1339,
+              "estimated_pick_chance": 0.1339,
+              "expected_multiplier_bonus": 0.6062,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -1979,43 +1979,43 @@
           "pick": {
             "champion": "Bard",
             "option_basis": "Overall",
-            "ranking_share": 0.1512,
-            "estimated_pick_chance": 0.1512,
-            "expected_multiplier_bonus": 0.987,
-            "availability": 0.7543,
-            "opponent_ban_rate": 0.3143,
-            "sample_games": 35
+            "ranking_share": 0.1814,
+            "estimated_pick_chance": 0.1814,
+            "expected_multiplier_bonus": 1.184,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Bard",
               "option_basis": "Overall",
-              "ranking_share": 0.1512,
-              "estimated_pick_chance": 0.1512,
-              "expected_multiplier_bonus": 0.987,
-              "availability": 0.7543,
-              "opponent_ban_rate": 0.3143,
-              "sample_games": 35
+              "ranking_share": 0.1814,
+              "estimated_pick_chance": 0.1814,
+              "expected_multiplier_bonus": 1.184,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Blitzcrank",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0647,
-              "estimated_pick_chance": 0.0647,
-              "expected_multiplier_bonus": 0.3564,
+              "ranking_share": 0.0585,
+              "estimated_pick_chance": 0.0585,
+              "expected_multiplier_bonus": 0.3225,
               "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 35
+              "sample_games": 0
             },
             {
               "champion": "Camille",
               "option_basis": "International meta",
-              "ranking_share": 0.0875,
-              "estimated_pick_chance": 0.0875,
-              "expected_multiplier_bonus": 0.4698,
+              "ranking_share": 0.0792,
+              "estimated_pick_chance": 0.0792,
+              "expected_multiplier_bonus": 0.4251,
               "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 35
+              "sample_games": 0
             }
           ]
         },
@@ -2040,7 +2040,7 @@
       "role": "TOP",
       "team": "Sentinels",
       "opponent": "Dignitas",
-      "projected_fantasy_points": 12.7,
+      "projected_fantasy_points": 12.83,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -2049,43 +2049,43 @@
           "pick": {
             "champion": "Rumble",
             "option_basis": "Overall",
-            "ranking_share": 0.1466,
-            "estimated_pick_chance": 0.1466,
-            "expected_multiplier_bonus": 0.5854,
-            "availability": 0.8457,
-            "opponent_ban_rate": 0.1714,
-            "sample_games": 35
+            "ranking_share": 0.1627,
+            "estimated_pick_chance": 0.1627,
+            "expected_multiplier_bonus": 0.6498,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Rumble",
               "option_basis": "Overall",
-              "ranking_share": 0.1466,
-              "estimated_pick_chance": 0.1466,
-              "expected_multiplier_bonus": 0.5854,
-              "availability": 0.8457,
-              "opponent_ban_rate": 0.1714,
-              "sample_games": 35
+              "ranking_share": 0.1627,
+              "estimated_pick_chance": 0.1627,
+              "expected_multiplier_bonus": 0.6498,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Renekton",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1458,
-              "estimated_pick_chance": 0.1458,
-              "expected_multiplier_bonus": 0.5537,
-              "availability": 0.9457,
-              "opponent_ban_rate": 0.0286,
-              "sample_games": 35
+              "ranking_share": 0.1447,
+              "estimated_pick_chance": 0.1447,
+              "expected_multiplier_bonus": 0.5496,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Gnar",
               "option_basis": "International meta",
-              "ranking_share": 0.0845,
-              "estimated_pick_chance": 0.0845,
-              "expected_multiplier_bonus": 0.3501,
-              "availability": 0.9829,
+              "ranking_share": 0.0807,
+              "estimated_pick_chance": 0.0807,
+              "expected_multiplier_bonus": 0.3344,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 35
+              "sample_games": 0
             }
           ]
         },
@@ -2119,43 +2119,43 @@
           "pick": {
             "champion": "Ezreal",
             "option_basis": "Overall",
-            "ranking_share": 0.2292,
-            "estimated_pick_chance": 0.2292,
-            "expected_multiplier_bonus": 1.1371,
-            "availability": 0.9283,
-            "opponent_ban_rate": 0.0667,
-            "sample_games": 60
+            "ranking_share": 0.2325,
+            "estimated_pick_chance": 0.2325,
+            "expected_multiplier_bonus": 1.1534,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Ezreal",
               "option_basis": "Overall",
-              "ranking_share": 0.2292,
-              "estimated_pick_chance": 0.2292,
-              "expected_multiplier_bonus": 1.1371,
-              "availability": 0.9283,
-              "opponent_ban_rate": 0.0667,
-              "sample_games": 60
+              "ranking_share": 0.2325,
+              "estimated_pick_chance": 0.2325,
+              "expected_multiplier_bonus": 1.1534,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Corki",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0837,
-              "estimated_pick_chance": 0.0837,
-              "expected_multiplier_bonus": 0.3812,
-              "availability": 0.97,
+              "ranking_share": 0.0812,
+              "estimated_pick_chance": 0.0812,
+              "expected_multiplier_bonus": 0.37,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 60
+              "sample_games": 0
             },
             {
               "champion": "Caitlyn",
               "option_basis": "International meta",
-              "ranking_share": 0.121,
-              "estimated_pick_chance": 0.121,
-              "expected_multiplier_bonus": 0.6138,
-              "availability": 0.99,
+              "ranking_share": 0.1151,
+              "estimated_pick_chance": 0.1151,
+              "expected_multiplier_bonus": 0.5838,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 60
+              "sample_games": 0
             }
           ]
         },
@@ -2189,43 +2189,43 @@
           "pick": {
             "champion": "Jarvan IV",
             "option_basis": "Overall",
-            "ranking_share": 0.1113,
-            "estimated_pick_chance": 0.1113,
-            "expected_multiplier_bonus": 0.5998,
-            "availability": 0.7933,
-            "opponent_ban_rate": 0.2667,
-            "sample_games": 60
+            "ranking_share": 0.1274,
+            "estimated_pick_chance": 0.1274,
+            "expected_multiplier_bonus": 0.6863,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Jarvan IV",
               "option_basis": "Overall",
-              "ranking_share": 0.1113,
-              "estimated_pick_chance": 0.1113,
-              "expected_multiplier_bonus": 0.5998,
-              "availability": 0.7933,
-              "opponent_ban_rate": 0.2667,
-              "sample_games": 60
+              "ranking_share": 0.1274,
+              "estimated_pick_chance": 0.1274,
+              "expected_multiplier_bonus": 0.6863,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Wukong",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0992,
-              "estimated_pick_chance": 0.0992,
-              "expected_multiplier_bonus": 0.4578,
-              "availability": 0.8967,
-              "opponent_ban_rate": 0.0833,
-              "sample_games": 60
+              "ranking_share": 0.1005,
+              "estimated_pick_chance": 0.1005,
+              "expected_multiplier_bonus": 0.4635,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
-              "champion": "Naafiri",
+              "champion": "Vi",
               "option_basis": "International meta",
-              "ranking_share": 0.0705,
-              "estimated_pick_chance": 0.0705,
-              "expected_multiplier_bonus": 0.3612,
-              "availability": 0.995,
+              "ranking_share": 0.0993,
+              "estimated_pick_chance": 0.0993,
+              "expected_multiplier_bonus": 0.3817,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 60
+              "sample_games": 0
             }
           ]
         },
@@ -2259,43 +2259,43 @@
           "pick": {
             "champion": "Ryze",
             "option_basis": "Overall",
-            "ranking_share": 0.142,
-            "estimated_pick_chance": 0.142,
-            "expected_multiplier_bonus": 0.52,
-            "availability": 0.9433,
-            "opponent_ban_rate": 0.0167,
-            "sample_games": 60
+            "ranking_share": 0.1403,
+            "estimated_pick_chance": 0.1403,
+            "expected_multiplier_bonus": 0.5137,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Ryze",
               "option_basis": "Overall",
-              "ranking_share": 0.142,
-              "estimated_pick_chance": 0.142,
-              "expected_multiplier_bonus": 0.52,
-              "availability": 0.9433,
-              "opponent_ban_rate": 0.0167,
-              "sample_games": 60
+              "ranking_share": 0.1403,
+              "estimated_pick_chance": 0.1403,
+              "expected_multiplier_bonus": 0.5137,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Annie",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0984,
-              "estimated_pick_chance": 0.0984,
-              "expected_multiplier_bonus": 0.4205,
-              "availability": 0.9417,
-              "opponent_ban_rate": 0.0833,
-              "sample_games": 60
+              "ranking_share": 0.0974,
+              "estimated_pick_chance": 0.0974,
+              "expected_multiplier_bonus": 0.4162,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Orianna",
               "option_basis": "International meta",
-              "ranking_share": 0.0672,
-              "estimated_pick_chance": 0.0672,
-              "expected_multiplier_bonus": 0.3195,
-              "availability": 0.88,
-              "opponent_ban_rate": 0.15,
-              "sample_games": 60
+              "ranking_share": 0.0711,
+              "estimated_pick_chance": 0.0711,
+              "expected_multiplier_bonus": 0.3384,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -2329,43 +2329,43 @@
           "pick": {
             "champion": "Rell",
             "option_basis": "Overall",
-            "ranking_share": 0.1405,
-            "estimated_pick_chance": 0.1405,
-            "expected_multiplier_bonus": 0.7259,
-            "availability": 0.9517,
-            "opponent_ban_rate": 0.0333,
-            "sample_games": 60
+            "ranking_share": 0.1394,
+            "estimated_pick_chance": 0.1394,
+            "expected_multiplier_bonus": 0.7205,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Rell",
               "option_basis": "Overall",
-              "ranking_share": 0.1405,
-              "estimated_pick_chance": 0.1405,
-              "expected_multiplier_bonus": 0.7259,
-              "availability": 0.9517,
-              "opponent_ban_rate": 0.0333,
-              "sample_games": 60
+              "ranking_share": 0.1394,
+              "estimated_pick_chance": 0.1394,
+              "expected_multiplier_bonus": 0.7205,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Alistar",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0985,
-              "estimated_pick_chance": 0.0985,
-              "expected_multiplier_bonus": 0.5199,
-              "availability": 0.91,
-              "opponent_ban_rate": 0.1,
-              "sample_games": 60
+              "ranking_share": 0.1022,
+              "estimated_pick_chance": 0.1022,
+              "expected_multiplier_bonus": 0.5396,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Bard",
               "option_basis": "International meta",
-              "ranking_share": 0.0776,
-              "estimated_pick_chance": 0.0776,
-              "expected_multiplier_bonus": 0.4177,
-              "availability": 0.8967,
-              "opponent_ban_rate": 0.0833,
-              "sample_games": 60
+              "ranking_share": 0.0817,
+              "estimated_pick_chance": 0.0817,
+              "expected_multiplier_bonus": 0.4399,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -2399,43 +2399,43 @@
           "pick": {
             "champion": "Rumble",
             "option_basis": "Overall",
-            "ranking_share": 0.1902,
-            "estimated_pick_chance": 0.1902,
-            "expected_multiplier_bonus": 0.6546,
-            "availability": 0.84,
-            "opponent_ban_rate": 0.15,
-            "sample_games": 60
+            "ranking_share": 0.209,
+            "estimated_pick_chance": 0.209,
+            "expected_multiplier_bonus": 0.7195,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Rumble",
               "option_basis": "Overall",
-              "ranking_share": 0.1902,
-              "estimated_pick_chance": 0.1902,
-              "expected_multiplier_bonus": 0.6546,
-              "availability": 0.84,
-              "opponent_ban_rate": 0.15,
-              "sample_games": 60
+              "ranking_share": 0.209,
+              "estimated_pick_chance": 0.209,
+              "expected_multiplier_bonus": 0.7195,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Sion",
               "option_basis": "Player comfort",
-              "ranking_share": 0.1127,
-              "estimated_pick_chance": 0.1127,
-              "expected_multiplier_bonus": 0.3598,
-              "availability": 0.9367,
-              "opponent_ban_rate": 0.0333,
-              "sample_games": 60
+              "ranking_share": 0.1111,
+              "estimated_pick_chance": 0.1111,
+              "expected_multiplier_bonus": 0.3546,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Gnar",
               "option_basis": "International meta",
-              "ranking_share": 0.0978,
-              "estimated_pick_chance": 0.0978,
-              "expected_multiplier_bonus": 0.3222,
-              "availability": 0.96,
-              "opponent_ban_rate": 0.05,
-              "sample_games": 60
+              "ranking_share": 0.0941,
+              "estimated_pick_chance": 0.0941,
+              "expected_multiplier_bonus": 0.3099,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -2460,7 +2460,7 @@
       "role": "BOT",
       "team": "Team Liquid",
       "opponent": "Cloud9",
-      "projected_fantasy_points": 16.81,
+      "projected_fantasy_points": 16.69,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -2469,43 +2469,43 @@
           "pick": {
             "champion": "Ezreal",
             "option_basis": "Overall",
-            "ranking_share": 0.1317,
-            "estimated_pick_chance": 0.1317,
-            "expected_multiplier_bonus": 0.6564,
-            "availability": 0.9612,
-            "opponent_ban_rate": 0.0299,
-            "sample_games": 67
+            "ranking_share": 0.1288,
+            "estimated_pick_chance": 0.1288,
+            "expected_multiplier_bonus": 0.642,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Ezreal",
               "option_basis": "Overall",
-              "ranking_share": 0.1317,
-              "estimated_pick_chance": 0.1317,
-              "expected_multiplier_bonus": 0.6564,
-              "availability": 0.9612,
-              "opponent_ban_rate": 0.0299,
-              "sample_games": 67
+              "ranking_share": 0.1288,
+              "estimated_pick_chance": 0.1288,
+              "expected_multiplier_bonus": 0.642,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Xayah",
               "option_basis": "Player comfort",
-              "ranking_share": 0.089,
-              "estimated_pick_chance": 0.089,
-              "expected_multiplier_bonus": 0.473,
-              "availability": 0.9955,
+              "ranking_share": 0.084,
+              "estimated_pick_chance": 0.084,
+              "expected_multiplier_bonus": 0.4467,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 67
+              "sample_games": 0
             },
             {
               "champion": "Caitlyn",
               "option_basis": "International meta",
-              "ranking_share": 0.1262,
-              "estimated_pick_chance": 0.1262,
-              "expected_multiplier_bonus": 0.6018,
-              "availability": 0.9746,
-              "opponent_ban_rate": 0.0299,
-              "sample_games": 67
+              "ranking_share": 0.1217,
+              "estimated_pick_chance": 0.1217,
+              "expected_multiplier_bonus": 0.5805,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -2530,7 +2530,7 @@
       "role": "JGL",
       "team": "Team Liquid",
       "opponent": "Cloud9",
-      "projected_fantasy_points": 18.82,
+      "projected_fantasy_points": 18.96,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -2539,43 +2539,43 @@
           "pick": {
             "champion": "Jarvan IV",
             "option_basis": "Overall",
-            "ranking_share": 0.1454,
-            "estimated_pick_chance": 0.1454,
-            "expected_multiplier_bonus": 0.8567,
-            "availability": 0.9269,
-            "opponent_ban_rate": 0.0597,
-            "sample_games": 67
+            "ranking_share": 0.1462,
+            "estimated_pick_chance": 0.1462,
+            "expected_multiplier_bonus": 0.8617,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Jarvan IV",
               "option_basis": "Overall",
-              "ranking_share": 0.1454,
-              "estimated_pick_chance": 0.1454,
-              "expected_multiplier_bonus": 0.8567,
-              "availability": 0.9269,
-              "opponent_ban_rate": 0.0597,
-              "sample_games": 67
+              "ranking_share": 0.1462,
+              "estimated_pick_chance": 0.1462,
+              "expected_multiplier_bonus": 0.8617,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Nocturne",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0889,
-              "estimated_pick_chance": 0.0889,
-              "expected_multiplier_bonus": 0.4689,
-              "availability": 0.8642,
-              "opponent_ban_rate": 0.1493,
-              "sample_games": 67
+              "ranking_share": 0.0959,
+              "estimated_pick_chance": 0.0959,
+              "expected_multiplier_bonus": 0.5058,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Lee Sin",
               "option_basis": "International meta",
-              "ranking_share": 0.0966,
-              "estimated_pick_chance": 0.0966,
-              "expected_multiplier_bonus": 0.748,
-              "availability": 0.9642,
-              "opponent_ban_rate": 0.0448,
-              "sample_games": 67
+              "ranking_share": 0.0934,
+              "estimated_pick_chance": 0.0934,
+              "expected_multiplier_bonus": 0.7233,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -2600,7 +2600,7 @@
       "role": "MID",
       "team": "Team Liquid",
       "opponent": "Cloud9",
-      "projected_fantasy_points": 18.48,
+      "projected_fantasy_points": 18.28,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -2609,43 +2609,43 @@
           "pick": {
             "champion": "Ryze",
             "option_basis": "Overall",
-            "ranking_share": 0.1527,
-            "estimated_pick_chance": 0.1527,
-            "expected_multiplier_bonus": 0.9419,
-            "availability": 0.9134,
-            "opponent_ban_rate": 0.1045,
-            "sample_games": 67
+            "ranking_share": 0.1526,
+            "estimated_pick_chance": 0.1526,
+            "expected_multiplier_bonus": 0.9415,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Ryze",
               "option_basis": "Overall",
-              "ranking_share": 0.1527,
-              "estimated_pick_chance": 0.1527,
-              "expected_multiplier_bonus": 0.9419,
-              "availability": 0.9134,
-              "opponent_ban_rate": 0.1045,
-              "sample_games": 67
+              "ranking_share": 0.1526,
+              "estimated_pick_chance": 0.1526,
+              "expected_multiplier_bonus": 0.9415,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Akali",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0783,
-              "estimated_pick_chance": 0.0783,
-              "expected_multiplier_bonus": 0.5085,
-              "availability": 0.9015,
-              "opponent_ban_rate": 0.1343,
-              "sample_games": 67
+              "ranking_share": 0.0793,
+              "estimated_pick_chance": 0.0793,
+              "expected_multiplier_bonus": 0.515,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Orianna",
               "option_basis": "International meta",
-              "ranking_share": 0.0993,
-              "estimated_pick_chance": 0.0993,
-              "expected_multiplier_bonus": 0.6077,
-              "availability": 0.797,
-              "opponent_ban_rate": 0.2388,
-              "sample_games": 67
+              "ranking_share": 0.1137,
+              "estimated_pick_chance": 0.1137,
+              "expected_multiplier_bonus": 0.6963,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -2670,7 +2670,7 @@
       "role": "SUP",
       "team": "Team Liquid",
       "opponent": "Cloud9",
-      "projected_fantasy_points": 18.69,
+      "projected_fantasy_points": 18.79,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -2679,43 +2679,43 @@
           "pick": {
             "champion": "Bard",
             "option_basis": "Overall",
-            "ranking_share": 0.1363,
-            "estimated_pick_chance": 0.1363,
-            "expected_multiplier_bonus": 0.8218,
-            "availability": 0.9418,
-            "opponent_ban_rate": 0.0448,
-            "sample_games": 67
+            "ranking_share": 0.1352,
+            "estimated_pick_chance": 0.1352,
+            "expected_multiplier_bonus": 0.815,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Bard",
               "option_basis": "Overall",
-              "ranking_share": 0.1363,
-              "estimated_pick_chance": 0.1363,
-              "expected_multiplier_bonus": 0.8218,
-              "availability": 0.9418,
-              "opponent_ban_rate": 0.0448,
-              "sample_games": 67
+              "ranking_share": 0.1352,
+              "estimated_pick_chance": 0.1352,
+              "expected_multiplier_bonus": 0.815,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Rell",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0998,
-              "estimated_pick_chance": 0.0998,
-              "expected_multiplier_bonus": 0.5909,
-              "availability": 0.9955,
+              "ranking_share": 0.0937,
+              "estimated_pick_chance": 0.0937,
+              "expected_multiplier_bonus": 0.5544,
+              "availability": 1.0,
               "opponent_ban_rate": 0.0,
-              "sample_games": 67
+              "sample_games": 0
             },
             {
-              "champion": "Nautilus",
+              "champion": "Rakan",
               "option_basis": "International meta",
-              "ranking_share": 0.0875,
-              "estimated_pick_chance": 0.0875,
-              "expected_multiplier_bonus": 0.4404,
-              "availability": 0.9075,
-              "opponent_ban_rate": 0.0746,
-              "sample_games": 67
+              "ranking_share": 0.1009,
+              "estimated_pick_chance": 0.1009,
+              "expected_multiplier_bonus": 0.5762,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },
@@ -2740,7 +2740,7 @@
       "role": "TOP",
       "team": "Team Liquid",
       "opponent": "Cloud9",
-      "projected_fantasy_points": 12.33,
+      "projected_fantasy_points": 12.16,
       "picks": {
         "1.3x": {
           "label": "Opening baseline / Comfort",
@@ -2749,43 +2749,43 @@
           "pick": {
             "champion": "Rumble",
             "option_basis": "Overall",
-            "ranking_share": 0.1351,
-            "estimated_pick_chance": 0.1351,
-            "expected_multiplier_bonus": 0.5528,
-            "availability": 0.8896,
-            "opponent_ban_rate": 0.1194,
-            "sample_games": 67
+            "ranking_share": 0.1421,
+            "estimated_pick_chance": 0.1421,
+            "expected_multiplier_bonus": 0.5814,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 0
           },
           "options": [
             {
               "champion": "Rumble",
               "option_basis": "Overall",
-              "ranking_share": 0.1351,
-              "estimated_pick_chance": 0.1351,
-              "expected_multiplier_bonus": 0.5528,
-              "availability": 0.8896,
-              "opponent_ban_rate": 0.1194,
-              "sample_games": 67
+              "ranking_share": 0.1421,
+              "estimated_pick_chance": 0.1421,
+              "expected_multiplier_bonus": 0.5814,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Ornn",
               "option_basis": "Player comfort",
-              "ranking_share": 0.0818,
-              "estimated_pick_chance": 0.0818,
-              "expected_multiplier_bonus": 0.3637,
-              "availability": 0.9746,
-              "opponent_ban_rate": 0.0299,
-              "sample_games": 67
+              "ranking_share": 0.0785,
+              "estimated_pick_chance": 0.0785,
+              "expected_multiplier_bonus": 0.3491,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             },
             {
               "champion": "Gnar",
               "option_basis": "International meta",
-              "ranking_share": 0.1102,
-              "estimated_pick_chance": 0.1102,
-              "expected_multiplier_bonus": 0.3884,
-              "availability": 0.9075,
-              "opponent_ban_rate": 0.0746,
-              "sample_games": 67
+              "ranking_share": 0.1136,
+              "estimated_pick_chance": 0.1136,
+              "expected_multiplier_bonus": 0.4004,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 0
             }
           ]
         },

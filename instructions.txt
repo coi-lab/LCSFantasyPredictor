@@ -17,6 +17,7 @@ Every week we need to run this:
    - Set RIOT_API_KEY=RGAPI-... in .env (kept secure & git-ignored)
 
 3. Run market snapshot & champion predictor:
+Run the virtual enviroment: source .venv/bin/activate
    python data_pipeline/snapshot_official_market.py
    python -m champion_prediction.simple_predictor
    python data_pipeline/export_dashboard_data.py

@@ -2,6 +2,17 @@
 
 These instructions apply to the entire repository. They supplement the workspace-level instructions and should be followed by coding agents, review agents, and assistants discussing this project with the user.
 
+## Client compatibility
+
+- This is the shared instruction file for both Codex and AGY. Follow all
+  unqualified sections regardless of which client is running.
+- A section labeled for a specific client applies only when working through
+  that client.
+- If a client-specific rule conflicts with a shared project rule, preserve the
+  shared project requirement and adapt only the client workflow.
+- Do not assume the two clients expose identical slash commands, permission
+  modes, tools, sandbox behavior, or background-process controls.
+
 ## Project purpose
 
 Build an explainable, point-in-time LCS Fantasy prediction system for weekly player scoring, market prices, champion predictions, draft availability, and roster optimization.
@@ -25,6 +36,53 @@ Read `README.md` for current usage, `IDEAS.md` for the modeling roadmap, `analys
 3. Preserve unrelated user changes in the working tree.
 4. Confirm whether the request is diagnostic, explanatory, or asks for implementation.
 5. Prefer the smallest complete change that solves the underlying problem.
+
+## Terminal execution and hang prevention
+
+- Prefer commands that terminate on their own and do not require user input.
+- Determine non-interactive flags from the command's help or documentation; do
+  not guess that flags such as `--yes` or `--no-edit` work for every command.
+- Use `CI=1`, `GIT_TERMINAL_PROMPT=0`, or tool-specific non-interactive options
+  when they are appropriate to the exact command.
+- Do not start a development server, file watcher, REPL, pager, editor, or
+  other indefinite foreground process unless the user explicitly requests an
+  interactive session.
+- When a long-lived process is required, run it with the client's managed
+  process mechanism, retain its PID or session identifier, capture useful
+  logs, and stop it after verification.
+- Give potentially slow commands a reasonable timeout when the client supports
+  one. If output stalls, inspect the process before waiting again.
+- Use non-paged output for automation, for example `git --no-pager diff`.
+- Never bypass permission checks globally merely to avoid a prompt. Prefer
+  narrowly scoped permissions for known repository commands.
+
+## AGY-specific workflow
+
+When the active client is AGY:
+
+- Use planning mode for multi-file refactors, architecture changes, modeling
+  changes, data-schema changes, or work with significant regression risk.
+- Use fast mode only for small, self-contained, low-risk tasks.
+- Before implementation in planning mode, present the proposed file scope,
+  dependency impact, validation plan, assumptions, and unresolved risks.
+- Prefer sandboxed permission handling for routine repository work. Do not use
+  unrestricted or skip-permission modes unless the user explicitly authorizes
+  the additional risk.
+- If AGY is waiting on a hidden prompt or an indefinite process, stop and
+  diagnose it rather than repeatedly waiting.
+
+## Codex-specific workflow
+
+When the active client is Codex:
+
+- Follow the active collaboration mode and approval policy; repository
+  instructions do not override system-level sandbox or permission controls.
+- Use a written plan when the task is complex enough to benefit from one, and
+  keep its status synchronized with the actual work.
+- Provide concise progress updates during tool-heavy work and continue through
+  implementation and verification when the request authorizes changes.
+- Use managed command sessions for long-running processes and poll them with
+  bounded waits.
 
 ## Context and token efficiency
 

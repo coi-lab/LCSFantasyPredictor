@@ -1,0 +1,1021 @@
+{
+  "snapshot_metadata": {
+    "captured_at_utc": "2026-07-24T13:19:15.588988Z",
+    "source_endpoint": "https://api.lcsofficial.gg/market"
+  },
+  "response": {
+    "data": {
+      "round": {
+        "id": "cff54ad4-f3cf-4d4f-817d-a5f808bacb64",
+        "name": "Round 1 (Split 3)",
+        "marketOpensAt": "2026-07-21T20:00:00.000Z",
+        "marketClosesAt": "2026-07-25T20:00:00.000Z",
+        "indexInSplit": 0,
+        "isOpen": true
+      },
+      "upcomingRound": null,
+      "teams": [
+        {
+          "id": "cf32ee67-1ed0-483e-8c80-9a45a2406ec7",
+          "name": "Dignitas",
+          "imageUrl": "http://static.lolesports.com/teams/DIG-FullonDark.png",
+          "code": "DIG"
+        },
+        {
+          "id": "a7520418-4986-4870-8c86-7c5acd3f443c",
+          "name": "Disguised",
+          "imageUrl": "http://static.lolesports.com/teams/1731496922454_Disguised-Wordmark-Yellow-Main.png",
+          "code": "DSG"
+        },
+        {
+          "id": "3dbff4da-4675-4f41-847b-342815a72e39",
+          "name": "Sentinels",
+          "imageUrl": "http://static.lolesports.com/teams/1767769784669_Sentinels_2020_Icon.png",
+          "code": "SEN"
+        },
+        {
+          "id": "d45bf435-19e0-4e92-8120-dfcd6badfd8e",
+          "name": "Shopify Rebellion",
+          "imageUrl": "http://static.lolesports.com/teams/1701424227458_Teams204_Shopify_1632869404072.png",
+          "code": "SR"
+        },
+        {
+          "id": "848fdaaf-589a-4e94-b3dc-90299584db0b",
+          "name": "FlyQuest",
+          "imageUrl": "http://static.lolesports.com/teams/flyquest-new-on-dark.png",
+          "code": "FLY"
+        },
+        {
+          "id": "47a8978e-8e16-434c-ba6d-a9e7bb1956ef",
+          "name": "LYON",
+          "imageUrl": "http://static.lolesports.com/teams/1743717443673_isotypelyon-03.png",
+          "code": "LYON"
+        },
+        {
+          "id": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "name": "Cloud9 Kia",
+          "imageUrl": "http://static.lolesports.com/teams/1736924120254_C9Kia_IconBlue_Transparent_2000x2000.png",
+          "code": "C9"
+        },
+        {
+          "id": "40dbf5d2-24ba-4894-b90f-4397fe4a53ea",
+          "name": "Team Liquid Alienware",
+          "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+          "code": "TLAW"
+        }
+      ],
+      "roundPlayers": [
+        {
+          "proPlayerId": "eb1c7f89-eeb7-42aa-b224-41876f739288",
+          "id": "ccde65be-b0aa-4d9b-b27f-9738f1b05a89",
+          "summonerName": "eXyu",
+          "imageUrl": "http://static.lolesports.com/players/1739478623419_ggsdgs0.png",
+          "teamId": "cf32ee67-1ed0-483e-8c80-9a45a2406ec7",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 12.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "SEN",
+              "name": "Sentinels",
+              "imageUrl": "http://static.lolesports.com/teams/1767769784669_Sentinels_2020_Icon.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "81be3e3f-7ae8-4802-8b9b-5be817e59314",
+          "id": "689ccb5c-b119-4829-96e1-76c745dac0a7",
+          "summonerName": "Ignar",
+          "imageUrl": "http://static.lolesports.com/players/1705026333045_ignar.png",
+          "teamId": "cf32ee67-1ed0-483e-8c80-9a45a2406ec7",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 12.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "SEN",
+              "name": "Sentinels",
+              "imageUrl": "http://static.lolesports.com/teams/1767769784669_Sentinels_2020_Icon.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "5dfe05bf-d04f-4d10-baa0-abcc8c44916b",
+          "id": "2d68a13b-4d0a-444b-a74e-236ef5f71327",
+          "summonerName": "FBI",
+          "imageUrl": "http://static.lolesports.com/players/1753349110894_image6224.png",
+          "teamId": "cf32ee67-1ed0-483e-8c80-9a45a2406ec7",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 14,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "SEN",
+              "name": "Sentinels",
+              "imageUrl": "http://static.lolesports.com/teams/1767769784669_Sentinels_2020_Icon.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "3f0fbcc9-0ad5-41c1-af28-35aa47117f36",
+          "id": "b70ea17f-7060-437b-a1ff-e03a7dd75206",
+          "summonerName": "Palafox",
+          "imageUrl": "http://static.lolesports.com/players/1739479665255_ggsdgs21.png",
+          "teamId": "cf32ee67-1ed0-483e-8c80-9a45a2406ec7",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 13,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "SEN",
+              "name": "Sentinels",
+              "imageUrl": "http://static.lolesports.com/teams/1767769784669_Sentinels_2020_Icon.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "26c604a2-2864-4e48-97cf-803e4946db7c",
+          "id": "3486b08c-71a7-4988-8860-4f2dbb2fea00",
+          "summonerName": "Denathor",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "cf32ee67-1ed0-483e-8c80-9a45a2406ec7",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 15,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "SEN",
+              "name": "Sentinels",
+              "imageUrl": "http://static.lolesports.com/teams/1767769784669_Sentinels_2020_Icon.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "20e3b396-e689-4314-beff-b3d481b49cd0",
+          "id": "550ea828-0f6c-4f0a-916a-2cf5bf09fa62",
+          "summonerName": "Swiffer",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "cf32ee67-1ed0-483e-8c80-9a45a2406ec7",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 12,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "SEN",
+              "name": "Sentinels",
+              "imageUrl": "http://static.lolesports.com/teams/1767769784669_Sentinels_2020_Icon.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "f816aaa5-3310-4b52-9929-a8c94bcca72b",
+          "id": "7f178930-7726-4850-941f-4bee0c72b3e3",
+          "summonerName": "Lyonz",
+          "imageUrl": "http://static.lolesports.com/players/1739479327358_ggsdgs41.png",
+          "teamId": "a7520418-4986-4870-8c86-7c5acd3f443c",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 13,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "SR",
+              "name": "Shopify Rebellion",
+              "imageUrl": "http://static.lolesports.com/teams/1701424227458_Teams204_Shopify_1632869404072.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "f57e5f8c-a53e-4504-96fc-6062a0685cb5",
+          "id": "782ef9e3-d745-45c9-acbf-1526a3bc7222",
+          "summonerName": "KryRa",
+          "imageUrl": "http://static.lolesports.com/players/1675150271520_placeholder.png",
+          "teamId": "a7520418-4986-4870-8c86-7c5acd3f443c",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 13,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "SR",
+              "name": "Shopify Rebellion",
+              "imageUrl": "http://static.lolesports.com/teams/1701424227458_Teams204_Shopify_1632869404072.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "9c3659ab-6630-49f2-836b-e31b6da00ef1",
+          "id": "9655a979-64de-4d62-b275-3513b519e77c",
+          "summonerName": "ido",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "a7520418-4986-4870-8c86-7c5acd3f443c",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 12.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "SR",
+              "name": "Shopify Rebellion",
+              "imageUrl": "http://static.lolesports.com/teams/1701424227458_Teams204_Shopify_1632869404072.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "63313716-3689-4cc3-a097-8c1f2473efd0",
+          "id": "e1b07b12-8276-42f1-86dd-aa10912cfcca",
+          "summonerName": "Callme",
+          "imageUrl": "http://static.lolesports.com/players/1718362648003_NS_Callme_784.png",
+          "teamId": "a7520418-4986-4870-8c86-7c5acd3f443c",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 15,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "SR",
+              "name": "Shopify Rebellion",
+              "imageUrl": "http://static.lolesports.com/teams/1701424227458_Teams204_Shopify_1632869404072.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "23d8c015-60b5-45d1-83cb-7479e2687719",
+          "id": "1e1aa410-2059-425d-8247-8c9d96481309",
+          "summonerName": "sajed",
+          "imageUrl": "http://static.lolesports.com/players/1633033031951_silhouette.png",
+          "teamId": "a7520418-4986-4870-8c86-7c5acd3f443c",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 13,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "SR",
+              "name": "Shopify Rebellion",
+              "imageUrl": "http://static.lolesports.com/teams/1701424227458_Teams204_Shopify_1632869404072.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "0da01860-823a-43a5-9359-d76fa47792e6",
+          "id": "cc1b0270-da93-4720-a791-6ce71102348a",
+          "summonerName": "Srtty",
+          "imageUrl": "http://static.lolesports.com/players/1739516062006_ggsdgs4.png",
+          "teamId": "a7520418-4986-4870-8c86-7c5acd3f443c",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 15,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "SR",
+              "name": "Shopify Rebellion",
+              "imageUrl": "http://static.lolesports.com/teams/1701424227458_Teams204_Shopify_1632869404072.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "e53238fc-40b9-4add-95f5-0986f55e7e0b",
+          "id": "c2c72b87-1909-474a-8e00-aa31d6f13995",
+          "summonerName": "DARKWINGS",
+          "imageUrl": "http://static.lolesports.com/players/1753348536253_image6223.png",
+          "teamId": "3dbff4da-4675-4f41-847b-342815a72e39",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 17,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "DIG",
+              "name": "Dignitas",
+              "imageUrl": "http://static.lolesports.com/teams/DIG-FullonDark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "cddfc250-82c2-4a9c-ab3d-159f64ee29b0",
+          "id": "d67c6630-aff2-4e9b-bbef-94a89336264e",
+          "summonerName": "Rahel",
+          "imageUrl": "http://static.lolesports.com/players/1753348624075_image6422.png",
+          "teamId": "3dbff4da-4675-4f41-847b-342815a72e39",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 15,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "DIG",
+              "name": "Dignitas",
+              "imageUrl": "http://static.lolesports.com/teams/DIG-FullonDark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "7b168cdb-f74e-4353-9b35-3594d8fd40c0",
+          "id": "db8dfe8b-7d55-4560-93ee-66b6355dd6ba",
+          "summonerName": "HamBak",
+          "imageUrl": "http://static.lolesports.com/players/1758213278005_hambak.png",
+          "teamId": "3dbff4da-4675-4f41-847b-342815a72e39",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 14.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "DIG",
+              "name": "Dignitas",
+              "imageUrl": "http://static.lolesports.com/teams/DIG-FullonDark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "72bc17f3-6be0-406b-99d5-a81186829c51",
+          "id": "02887af3-3f65-4a55-adbc-21ece9d4a9b8",
+          "summonerName": "huhi",
+          "imageUrl": "http://static.lolesports.com/players/1739478876354_ggsdgs8.png",
+          "teamId": "3dbff4da-4675-4f41-847b-342815a72e39",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 14.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "DIG",
+              "name": "Dignitas",
+              "imageUrl": "http://static.lolesports.com/teams/DIG-FullonDark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "64124525-7371-441e-8d57-66d8563d9d29",
+          "id": "92408d66-1746-49a8-a607-61e6186f5e4a",
+          "summonerName": "Impact",
+          "imageUrl": "http://static.lolesports.com/players/1726214749557_TL_1500x1500_IMPACT_02.png",
+          "teamId": "3dbff4da-4675-4f41-847b-342815a72e39",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 13.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "DIG",
+              "name": "Dignitas",
+              "imageUrl": "http://static.lolesports.com/teams/DIG-FullonDark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "2a7d72fe-4a25-4617-a290-7e679a9f629c",
+          "id": "b646bf91-55b5-454d-80e4-27d42c2e7a63",
+          "summonerName": "Goldenglue",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "3dbff4da-4675-4f41-847b-342815a72e39",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 13.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T23:00:00.000Z",
+              "code": "DIG",
+              "name": "Dignitas",
+              "imageUrl": "http://static.lolesports.com/teams/DIG-FullonDark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "fa8a85a1-4205-4baf-9a9d-9b65eb46a177",
+          "id": "572d7d59-dcdb-4f78-a65d-8519a76ee588",
+          "summonerName": "Zeyzal",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "d45bf435-19e0-4e92-8120-dfcd6badfd8e",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 15,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "DSG",
+              "name": "Disguised",
+              "imageUrl": "http://static.lolesports.com/teams/1731496922454_Disguised-Wordmark-Yellow-Main.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "ef3066b1-6975-4cbb-a1a9-001fbca927b6",
+          "id": "1946544a-7520-4ac7-8883-e5c12719b6c7",
+          "summonerName": "Fudge",
+          "imageUrl": "http://static.lolesports.com/players/1739479418626_ggsdgs3.png",
+          "teamId": "d45bf435-19e0-4e92-8120-dfcd6badfd8e",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 13,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "DSG",
+              "name": "Disguised",
+              "imageUrl": "http://static.lolesports.com/teams/1731496922454_Disguised-Wordmark-Yellow-Main.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "d04c0d8f-c618-4536-a8c4-d80f822306cc",
+          "id": "4fa3298b-b0ee-47a4-a5eb-3efbcd98c486",
+          "summonerName": "Bvoy",
+          "imageUrl": "http://static.lolesports.com/players/1739479753154_ggsdgs2.png",
+          "teamId": "d45bf435-19e0-4e92-8120-dfcd6badfd8e",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 17,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "DSG",
+              "name": "Disguised",
+              "imageUrl": "http://static.lolesports.com/teams/1731496922454_Disguised-Wordmark-Yellow-Main.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "95c6d0e4-5447-49bf-a91d-a95c7e13ae24",
+          "id": "4cd6deb9-ba6c-4b61-a044-1708029379e2",
+          "summonerName": "Contractz",
+          "imageUrl": "http://static.lolesports.com/players/1739479571030_ggsdgs2.png",
+          "teamId": "d45bf435-19e0-4e92-8120-dfcd6badfd8e",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 16,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "DSG",
+              "name": "Disguised",
+              "imageUrl": "http://static.lolesports.com/teams/1731496922454_Disguised-Wordmark-Yellow-Main.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "0eb5ed88-c366-4ac1-8b6c-8423419c40ad",
+          "id": "a4d02be1-8a94-4016-81de-6b5eef24c75c",
+          "summonerName": "Zinie",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "d45bf435-19e0-4e92-8120-dfcd6badfd8e",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 14,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "DSG",
+              "name": "Disguised",
+              "imageUrl": "http://static.lolesports.com/teams/1731496922454_Disguised-Wordmark-Yellow-Main.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "062c2ce9-1367-408e-a4aa-d73546989588",
+          "id": "06e3834a-7ea5-46a2-bfae-0bf1d62fe731",
+          "summonerName": "Reven",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "d45bf435-19e0-4e92-8120-dfcd6badfd8e",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 13,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T23:00:00.000Z",
+              "code": "DSG",
+              "name": "Disguised",
+              "imageUrl": "http://static.lolesports.com/teams/1731496922454_Disguised-Wordmark-Yellow-Main.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "bdb4f785-38d6-428e-b6ea-f09924c43129",
+          "id": "3a5e98c0-b95b-4d2b-9a68-d3b00bbdb4d5",
+          "summonerName": "Massu",
+          "imageUrl": "http://static.lolesports.com/players/1726214536898_FLY_1500x1500_MASSU_01.png",
+          "teamId": "848fdaaf-589a-4e94-b3dc-90299584db0b",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 18,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "LYON",
+              "name": "LYON",
+              "imageUrl": "http://static.lolesports.com/teams/1743717443673_isotypelyon-03.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "6aada3b3-df5c-4ed9-b908-ad17e484a174",
+          "id": "dcf22001-2340-4d24-a3b5-c0c5e19a2f80",
+          "summonerName": "Gakgos",
+          "imageUrl": "http://static.lolesports.com/players/1753348399682_image6125.png",
+          "teamId": "848fdaaf-589a-4e94-b3dc-90299584db0b",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 17.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "LYON",
+              "name": "LYON",
+              "imageUrl": "http://static.lolesports.com/teams/1743717443673_isotypelyon-03.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "657c0b93-29f2-476d-ab23-4633592e62a1",
+          "id": "b70182f8-bd1e-48f4-b0f2-7b5e45230dcb",
+          "summonerName": "Cryogen",
+          "imageUrl": "http://static.lolesports.com/players/1686642979840_placeholder.png",
+          "teamId": "848fdaaf-589a-4e94-b3dc-90299584db0b",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 16,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "LYON",
+              "name": "LYON",
+              "imageUrl": "http://static.lolesports.com/teams/1743717443673_isotypelyon-03.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "5a830e34-4aa1-456c-a253-85e99f933611",
+          "id": "d849323d-3710-4006-8204-a85a1f0e7e0e",
+          "summonerName": "Gryffinn",
+          "imageUrl": "http://static.lolesports.com/players/1753429869537_image622.png",
+          "teamId": "848fdaaf-589a-4e94-b3dc-90299584db0b",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 19,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "LYON",
+              "name": "LYON",
+              "imageUrl": "http://static.lolesports.com/teams/1743717443673_isotypelyon-03.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "3d069aeb-9508-4c56-a390-b6dda95527c4",
+          "id": "0380b004-7c64-4419-8373-1842c6a2cdab",
+          "summonerName": "Quad",
+          "imageUrl": "http://static.lolesports.com/players/1726214531962_FLY_1500x1500_QUAD_01.png",
+          "teamId": "848fdaaf-589a-4e94-b3dc-90299584db0b",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 18.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "LYON",
+              "name": "LYON",
+              "imageUrl": "http://static.lolesports.com/teams/1743717443673_isotypelyon-03.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "01b0e738-0009-4c57-a16c-a943c69acea4",
+          "id": "17e8039f-c9cc-48ab-b6cc-bb814eaf7dbf",
+          "summonerName": "Thinkcard",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "848fdaaf-589a-4e94-b3dc-90299584db0b",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 14,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "LYON",
+              "name": "LYON",
+              "imageUrl": "http://static.lolesports.com/teams/1743717443673_isotypelyon-03.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "aa8db8ec-4e94-4cd5-9a91-275fbe122727",
+          "id": "a4af48d4-e4de-4b51-94dc-7cfe438e8c96",
+          "summonerName": "Inspired",
+          "imageUrl": "http://static.lolesports.com/players/1726214526028_FLY_1500x1500_INSPIRED_02.png",
+          "teamId": "47a8978e-8e16-434c-ba6d-a9e7bb1956ef",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 23,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "FLY",
+              "name": "FlyQuest",
+              "imageUrl": "http://static.lolesports.com/teams/flyquest-new-on-dark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "728578de-d384-40d7-9008-22dbb71806d3",
+          "id": "15d2a84e-122d-4b29-a4cc-2647e2f17836",
+          "summonerName": "Saint",
+          "imageUrl": "http://static.lolesports.com/players/1739479237170_ggsdgs4.png",
+          "teamId": "47a8978e-8e16-434c-ba6d-a9e7bb1956ef",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 21.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "FLY",
+              "name": "FlyQuest",
+              "imageUrl": "http://static.lolesports.com/teams/flyquest-new-on-dark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "5611f586-88b0-4431-8d57-edd4e69e94d4",
+          "id": "5e87a1f2-4200-4967-945c-81f136f0141f",
+          "summonerName": "Berserker",
+          "imageUrl": "http://static.lolesports.com/players/1758212268095_berserker.png",
+          "teamId": "47a8978e-8e16-434c-ba6d-a9e7bb1956ef",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 21,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "FLY",
+              "name": "FlyQuest",
+              "imageUrl": "http://static.lolesports.com/teams/flyquest-new-on-dark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "4cce3077-b9b4-45d7-9f12-4cb74b272196",
+          "id": "d6d30ec9-130a-4232-ba85-74b3e9b163a6",
+          "summonerName": "Isles",
+          "imageUrl": "http://static.lolesports.com/players/1739478353611_ggsdgs123.png",
+          "teamId": "47a8978e-8e16-434c-ba6d-a9e7bb1956ef",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 19,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "FLY",
+              "name": "FlyQuest",
+              "imageUrl": "http://static.lolesports.com/teams/flyquest-new-on-dark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "370a2030-9673-4b3e-b1bc-0ea9d9ba2df1",
+          "id": "5f1fb51e-2623-4771-96b4-2293d78f12ce",
+          "summonerName": "Dhokla",
+          "imageUrl": "http://static.lolesports.com/players/1687315758448_NRG_DHOKLA.png",
+          "teamId": "47a8978e-8e16-434c-ba6d-a9e7bb1956ef",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 19.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "FLY",
+              "name": "FlyQuest",
+              "imageUrl": "http://static.lolesports.com/teams/flyquest-new-on-dark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "02436a08-1587-442c-8d30-450821f54b91",
+          "id": "060a756e-fe3d-47cb-90f6-6cbee78bd1eb",
+          "summonerName": "Reignover",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "47a8978e-8e16-434c-ba6d-a9e7bb1956ef",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 16,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-25T20:00:00.000Z",
+              "code": "FLY",
+              "name": "FlyQuest",
+              "imageUrl": "http://static.lolesports.com/teams/flyquest-new-on-dark.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "e68f870e-28bb-4b94-b631-7e5414edd6f8",
+          "id": "f31dc394-490d-48e6-9f07-8506aaa5dc8e",
+          "summonerName": "IWDominate",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 14.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "83c0b8a2-3a42-4ff9-af93-45328f4e0d22",
+          "id": "d493337a-441c-4dc4-aa02-755900bc6355",
+          "summonerName": "Tactical",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 17,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "7cf2a890-7c07-46b1-af4f-5cfff67e4728",
+          "id": "e768ecff-c0c8-4331-a123-57c573f91a19",
+          "summonerName": "Thanatos",
+          "imageUrl": "http://static.lolesports.com/players/1739476937623_image13.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 20,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "5a2e6a51-614e-46d6-a6a9-9b56656bfa54",
+          "id": "1977341c-391f-4f49-852e-6a6c25fa9b7b",
+          "summonerName": "Vulcan",
+          "imageUrl": "http://static.lolesports.com/players/1739477742600_ggsdgs12.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 19.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "5051003b-a465-42b8-ab18-5765d5668348",
+          "id": "dd3dd4ff-7e89-4c3f-ba65-2a7b946e9dc7",
+          "summonerName": "APA",
+          "imageUrl": "http://static.lolesports.com/players/1726214761765_TL_1500x1500_APA_04.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 17.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "48c588fd-35f6-4f4b-a7aa-90d6b15a607f",
+          "id": "fdfd0e48-3919-4e48-b7da-1ec556e77a38",
+          "summonerName": "Loki ",
+          "imageUrl": "http://static.lolesports.com/players/1739477209687_headsshot.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 17,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "4422bc32-4b72-4eeb-afc0-76ce0946d4bb",
+          "id": "c7ad0cef-40db-4204-85b6-d61c52498875",
+          "summonerName": "Blaber",
+          "imageUrl": "http://static.lolesports.com/players/1739477380185_ggsdgsd.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 17.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "126a414a-52a9-4289-91f3-5370c312d825",
+          "id": "deb54bc9-64fc-4d74-b94d-0248d1a50e2e",
+          "summonerName": "Zven",
+          "imageUrl": "http://static.lolesports.com/players/1739477500671_ggsdgs1.png",
+          "teamId": "1155b4eb-b55e-4cf2-9d66-9476d31db16f",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 20,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "TLAW",
+              "name": "Team Liquid Alienware",
+              "imageUrl": "http://static.lolesports.com/teams/1631820014208_tl-2021-worlds.png",
+              "side": "red"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "fa1800bf-32f8-424a-9aa8-f78db37971e1",
+          "id": "d9425f56-5b25-4a72-82e0-a10347e9d00b",
+          "summonerName": "Morgan",
+          "imageUrl": "http://static.lolesports.com/players/1758213645297_morgan.png",
+          "teamId": "40dbf5d2-24ba-4894-b90f-4397fe4a53ea",
+          "role": "top",
+          "previousRoundPrice": null,
+          "price": 18,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "C9",
+              "name": "Cloud9 Kia",
+              "imageUrl": "http://static.lolesports.com/teams/1736924120254_C9Kia_IconBlue_Transparent_2000x2000.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "d133f390-cbca-4fc9-990a-1698add0efcb",
+          "id": "61c5e05b-af99-4648-aff8-d0aab051d3d2",
+          "summonerName": "Quid",
+          "imageUrl": "http://static.lolesports.com/players/1753349183025_image6322.png",
+          "teamId": "40dbf5d2-24ba-4894-b90f-4397fe4a53ea",
+          "role": "mid",
+          "previousRoundPrice": null,
+          "price": 20,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "C9",
+              "name": "Cloud9 Kia",
+              "imageUrl": "http://static.lolesports.com/teams/1736924120254_C9Kia_IconBlue_Transparent_2000x2000.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "cafdb5d6-31c1-431c-95ba-488bc87d60f1",
+          "id": "59bb857f-6e13-4718-b4e6-a98a542eac1a",
+          "summonerName": "CoreJJ",
+          "imageUrl": "http://static.lolesports.com/players/1726214772049_TL_1500x1500_COREJJ_03.png",
+          "teamId": "40dbf5d2-24ba-4894-b90f-4397fe4a53ea",
+          "role": "support",
+          "previousRoundPrice": null,
+          "price": 17.5,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "C9",
+              "name": "Cloud9 Kia",
+              "imageUrl": "http://static.lolesports.com/teams/1736924120254_C9Kia_IconBlue_Transparent_2000x2000.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "ad1d3cd7-b135-4063-9230-529d64631ffb",
+          "id": "74d9202c-dae8-4e72-8a0a-749f3a705313",
+          "summonerName": "Yeon",
+          "imageUrl": "http://static.lolesports.com/players/1726214767306_TL_1500x1500_YEON_03.png",
+          "teamId": "40dbf5d2-24ba-4894-b90f-4397fe4a53ea",
+          "role": "bottom",
+          "previousRoundPrice": null,
+          "price": 19,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "C9",
+              "name": "Cloud9 Kia",
+              "imageUrl": "http://static.lolesports.com/teams/1736924120254_C9Kia_IconBlue_Transparent_2000x2000.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "a5ba4d63-5d27-478d-a819-0467e5df39b2",
+          "id": "dc630ec3-2b34-485a-98b5-4ab0ef64b116",
+          "summonerName": "Spawn",
+          "imageUrl": "http://static.lolesports.com/players/default-headshot.png",
+          "teamId": "40dbf5d2-24ba-4894-b90f-4397fe4a53ea",
+          "role": "coach",
+          "previousRoundPrice": null,
+          "price": 15,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "C9",
+              "name": "Cloud9 Kia",
+              "imageUrl": "http://static.lolesports.com/teams/1736924120254_C9Kia_IconBlue_Transparent_2000x2000.png",
+              "side": "blue"
+            }
+          ]
+        },
+        {
+          "proPlayerId": "89cd186d-7ba4-44e4-9f69-caaa0b1c859a",
+          "id": "08e47bac-b2dd-4d28-bda6-f4e3d46410bf",
+          "summonerName": "Josedeodo",
+          "imageUrl": "http://static.lolesports.com/players/1753347194592_image6420.png",
+          "teamId": "40dbf5d2-24ba-4894-b90f-4397fe4a53ea",
+          "role": "jungle",
+          "previousRoundPrice": null,
+          "price": 20,
+          "roundOpponents": [
+            {
+              "matchTimestamp": "2026-07-26T20:00:00.000Z",
+              "code": "C9",
+              "name": "Cloud9 Kia",
+              "imageUrl": "http://static.lolesports.com/teams/1736924120254_C9Kia_IconBlue_Transparent_2000x2000.png",
+              "side": "blue"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
