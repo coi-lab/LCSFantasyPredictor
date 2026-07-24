@@ -14,16 +14,25 @@ DEFAULT_PLAYERS = PROJECT_ROOT / "data" / "predictions" / "current_player_projec
 DEFAULT_PORTFOLIO = PROJECT_ROOT / "data" / "predictions" / "current_champion_portfolio.csv"
 DEFAULT_OUTPUT = PROJECT_ROOT / "dashboard" / "weekly_champion_predictions.json"
 TIERS = (
-    ("already_played_by_player", "1.3x", "Comfort"),
-    ("unplayed_by_player", "1.5x", "League adoption"),
-    ("unplayed_in_role", "1.7x", "Novelty"),
+    (
+        ("opening_round_baseline", "already_played_by_player"),
+        "1.3x",
+        "Opening baseline / Comfort",
+    ),
+    (("unplayed_by_player",), "1.5x", "League adoption"),
+    (("unplayed_in_role",), "1.7x", "Novelty"),
 )
 
 
 def _pick_payload(row: pd.Series) -> dict[str, Any]:
+    estimated_chance = float(
+        row.get("estimated_pick_probability", row["ranking_share"])
+    )
     return {
         "champion": str(row["champion"]),
+        "option_basis": str(row.get("portfolio_basis", "")),
         "ranking_share": round(float(row["ranking_share"]), 4),
+        "estimated_pick_chance": round(estimated_chance, 4),
         "expected_multiplier_bonus": round(
             float(row["expected_multiplier_bonus"]), 4
         ),
@@ -48,8 +57,18 @@ def build_weekly_prediction_payload(
             & portfolio["team"].astype(str).eq(str(player.team))
         ]
         picks: dict[str, Any] = {}
-        for category, multiplier, label in TIERS:
-            matching = candidates.loc[candidates["novelty_category"].eq(category)]
+        for categories, multiplier, label in TIERS:
+            matching = candidates.loc[
+                candidates["novelty_category"].isin(categories)
+            ].sort_values(
+                ["portfolio_rank", "expected_multiplier_bonus"],
+                ascending=[True, False],
+                kind="stable",
+            ).head(3)
+            options = [
+                _pick_payload(row)
+                for _, row in matching.iterrows()
+            ]
             picks[multiplier] = {
                 "label": label,
                 "available": not matching.empty,
@@ -58,7 +77,8 @@ def build_weekly_prediction_payload(
                     if not matching.empty
                     else "Not available at this roster lock under the official split-history rule."
                 ),
-                "pick": _pick_payload(matching.iloc[0]) if not matching.empty else None,
+                "pick": options[0] if options else None,
+                "options": options,
             }
         records.append({
             "player": str(player.player),
@@ -79,7 +99,10 @@ def build_weekly_prediction_payload(
         "roster_lock": roster_lock,
         "patch": patch,
         "starter_method": "most recent historical participant by team and role",
-        "model_status": "heuristic ranking shares; not calibrated probabilities",
+        "model_status": (
+            "estimated pick chances are normalized heuristic ranking shares; "
+            "they are not calibrated probabilities"
+        ),
         "players": records,
     }
 

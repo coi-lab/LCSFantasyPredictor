@@ -34,7 +34,11 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   excludes 2026 so test-period outcomes cannot enter fitted player-style
   features.
 - Champion Lab's `ban lift` is the player-facing ban rate minus the same league/year/split team-side ban rate. Treat it as unusual opponent attention, not proof that a ban targeted the player.
-- Champion multipliers are candidate-specific and frozen at roster lock: x1.7 when unplayed in the role during the split, x1.5 when played in the role but not by the player, and x1.3 when already played by the player. Never replace these with one round-wide multiplier.
+- Champion multipliers are candidate-specific and frozen at roster lock from
+  Round 2 onward: x1.7 when unplayed in the role during the split, x1.5 when
+  played in the role but not by the player, and x1.3 when already played by
+  the player. Round 1 is the official exception: every champion begins at the
+  x1.3 opening baseline.
 
 ## Modeling conventions
 
@@ -60,6 +64,54 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 
 ### 2026-07-23
 
+- The Split 3 optimizer must select five role players plus one coach under the
+  live budget and evaluate the variety bonus inside the objective, not after
+  selecting a roster. Six unique organizations produce +25%. The coach counts
+  as the sixth organization by inference from the official six-slot market and
+  otherwise unreachable six-team tier.
+- Keep player-score prediction separate from exact lineup optimization. The
+  current exhaustive search evaluates every legal projected-starter/coach
+  combination and includes expected champion bonus. Do not optimize expected
+  price growth until a second official market round supplies observed changes.
+- The matchup optimizer exports self-contained weekly snapshots to
+  `dashboard/matchup_lineups.json`. Preserve prior week IDs when refreshing the
+  current week, and embed champion options in each snapshot so historical week
+  toggles never display recommendations from a later roster lock.
+- Estimated player-price paths must reset at product split boundaries; regular
+  season and playoffs share a path. The former exporter accumulated Lock-In,
+  Spring, and EWC phases, creating 15 false 30+ Spring prices. The conservative
+  proxy now damps positive changes above 22/26 gold and uses the observed
+  Berserker 32-gold peak only as a ceiling. Official market snapshots always
+  override the proxy.
+- International provenance must be preserved separately from dashboard league
+  mapping. MSI/EWC/FST rows inform player and leading-event features, while
+  `source_league` prevents NA EWC rows from contaminating domestic LCS meta or
+  split-maturity counts.
+- When an upcoming LCS patch is unavailable, use the latest observed tier-1
+  competitive patch as a conservative proxy. For 2026 Summer Round 1 this
+  advances the model from stale LCS patch 16.11 to nearby MSI/EWC patch 16.13.
+- A constrained Summer maturity schedule (opening player and international
+  weights decay while domestic weight grows) failed 2025 Split 3 validation:
+  40.09% Top-1 and 0.7843 bonus versus 41.98% and 0.8275 for the static Summer
+  control. Do not wire it without better unseen evidence. Round 1 instead uses
+  a diversified three-option portfolio: blended best, player comfort, and
+  international-meta best.
+- Corrected the official Round 1 champion rule after user verification: every
+  champion opens at x1.3, and candidate-specific x1.3/x1.5/x1.7 history begins
+  in Round 2. Weekly feature cache schema v4 invalidates pre-correction bonus
+  caches; rerun tuning before treating the recorded realized-bonus comparison
+  as final.
+- Replaced calendar half-life tuning for the production champion sources with
+  patch-distance decay. Historical targets now use a conservative weekly lock
+  proxy: the first observed game in each Monday-Sunday split week.
+- A chronological 2022-2023 development, 2024 confirmation, and frozen 2025
+  validation selected patch decay `0.30` and static player/LCS/leading weights
+  `0.355484/0.362419/0.282096`. Static beat dynamic on 2025 Top-1
+  (`33.97%` vs `33.38%`) and mean realized bonus (`0.8592` vs `0.8114`), so it
+  passed the production wiring gate.
+- The selected static design was then evaluated once on the previously exposed
+  2026 period: `37.70%` Top-1 and `0.7831` mean realized bonus across 557
+  player-weeks. Do not use this result for further parameter selection.
 - Added a memory-conscious champion-weight tuner that builds cutoff-safe
   player-series candidate features once, caches them locally, and searches
   source weights without repeatedly filtering the 119,335-row player history.
@@ -114,7 +166,7 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   its ban model reaches 0.89% Top-1 and 11.15% Top-5. Neither is ready for
   production.
 - The weekly champion dashboard joins the official market's projected starters
-  to one recommendation per multiplier tier. In Split 3 Round 1 all valid
-  candidates are x1.7 because no earlier round exists; x1.3 and x1.5 must be
-  displayed as unavailable rather than fabricated.
+  to up to three recommendations per available multiplier tier. In Round 1,
+  all candidates use the official x1.3 opening baseline. Beginning in Round 2,
+  candidate-specific split history determines x1.3, x1.5, or x1.7.
 - Replaced Categorical Naive Bayes for draft prediction with a Softmax / Conditional Logit Legal-Candidate Board-State Ranker. On the 2026 premier test, legal-candidate pick Top-1 accuracy improved from 2.68% to 11.02% (+8.34%) and Pick Top-5 accuracy improved from 10.13% to 36.62% (+26.49%).

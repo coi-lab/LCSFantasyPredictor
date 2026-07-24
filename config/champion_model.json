@@ -1,0 +1,23 @@
+{
+  "strategy": "static",
+  "parameters": {
+    "patch_decay_rate": 0.3,
+    "weights": {
+      "w_player": 0.35548433677705416,
+      "w_lcs": 0.3624191644460097,
+      "w_leading": 0.2820964987769362
+    }
+  },
+  "selection": {
+    "development_window": ["2022-01-01", "2024-01-01"],
+    "confirmation_window": ["2024-01-01", "2025-01-01"],
+    "final_validation_window": ["2025-01-01", "2026-01-01"],
+    "roster_lock_proxy": "first observed game in Monday-Sunday split week",
+    "static_wiring_gate": "beat dynamic weights on both Top-1 accuracy and mean realized fantasy bonus",
+    "gate_passed": true
+  },
+  "test_policy": {
+    "2026_exposure": "previously_exposed_not_pristine",
+    "never_fit_on_2026": true
+  }
+}

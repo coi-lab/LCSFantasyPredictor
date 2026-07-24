@@ -103,6 +103,9 @@
       <button class="view-tab-btn" data-view="view-weekly-champions">
         <span>Weekly Champion Picks</span>
       </button>
+      <button class="view-tab-btn" data-view="view-matchup-optimizer">
+        <span>Matchup Optimizer</span>
+      </button>
     </div>
 
     <!-- View 1: Leaderboard Grid (Table + Chart) -->
@@ -154,7 +157,7 @@
           <p id="weeklyChampionMeta"></p>
         </div>
         <div class="weekly-legend">
-          <span class="tier-chip tier-13">x1.3 Comfort</span>
+          <span class="tier-chip tier-13">x1.3 Opening / Comfort</span>
           <span class="tier-chip tier-15">x1.5 Adoption</span>
           <span class="tier-chip tier-17">x1.7 Novelty</span>
         </div>
@@ -163,7 +166,25 @@
       <div id="weeklyChampionMatchups"></div>
     </div>
 
-    <!-- View 4: Player champion tendencies and opponent ban context -->
+    <!-- View 4: Week-aware optimized roster and matchup detail -->
+    <div class="view-section" id="view-matchup-optimizer">
+      <div class="card matchup-optimizer-header">
+        <div>
+          <span class="weekly-eyebrow">Budget-aware roster search</span>
+          <h2>Matchup Optimizer</h2>
+          <p id="matchupOptimizerMeta"></p>
+        </div>
+        <div class="matchup-optimizer-controls">
+          <label for="matchupWeekSelect">Fantasy week</label>
+          <select id="matchupWeekSelect"></select>
+        </div>
+      </div>
+      <div id="matchupOptimizerNotice" class="weekly-champion-notice"></div>
+      <div id="matchupLineupTabs" class="matchup-lineup-tabs"></div>
+      <div id="matchupOptimizerContent"></div>
+    </div>
+
+    <!-- View 5: Player champion tendencies and opponent ban context -->
     <div class="view-section" id="view-champion-lab">
       <div class="champion-lab-toolbar card">
         <div>
@@ -475,6 +496,6 @@
     </div>
   </div>
 
-  <script src="./app.js?v=20260723-8"></script>
+  <script src="./app.js?v=20260723-9"></script>
 </body>
 </html>

@@ -24,6 +24,91 @@ except ImportError:
     HAS_PANDAS = False
 
 
+def _pricing_period(split: str) -> str:
+    """Return the market period whose price should carry across its playoffs."""
+    value = str(split).strip()
+    return value[:-9].strip() if value.endswith(" Playoffs") else value
+
+
+def build_estimated_price_history(
+    weekly_stats: Dict[str, dict],
+    market_model: Dict[str, Any],
+) -> tuple[float, float, List[dict]]:
+    """Build a conservative estimated price path for one player-season.
+
+    Official historical starting prices and the official update formula are
+    unavailable. This proxy resets at each split and damps positive changes at
+    already-high prices so repeated strong weeks do not compound without bound.
+    """
+    start_price = float(market_model.get("starting_price", 15.0))
+    neutral_score = float(market_model.get("neutral_weekly_score", 13.0))
+    adjustment_rate = float(market_model.get("adjustment_rate", 0.20))
+    rounding = int(market_model.get("rounding_decimals", 1))
+    price_floor = float(market_model.get("price_floor", 5.0))
+    price_ceiling = float(market_model.get("price_ceiling", 32.0))
+    reset_each_split = bool(market_model.get("reset_each_split", True))
+    damping_tiers = sorted(
+        market_model.get("positive_change_damping", []),
+        key=lambda tier: float(tier.get("at_or_above", 0.0)),
+    )
+
+    current_price = start_price
+    current_period = None
+    history: List[dict] = []
+    sorted_weeks = sorted(
+        weekly_stats.items(),
+        key=lambda item: (
+            item[1].get("week_start") or "",
+            item[1].get("week_num", 0),
+        ),
+    )
+    for week_key, week in sorted_weeks:
+        period = _pricing_period(week.get("split", ""))
+        period_reset = bool(
+            reset_each_split
+            and current_period is not None
+            and period != current_period
+        )
+        if current_period is None or period_reset:
+            current_price = start_price
+        current_period = period
+
+        points = float(week.get("fantasy_pts", 0.0))
+        raw_change = (points - neutral_score) * adjustment_rate
+        damped_change = raw_change
+        if raw_change > 0:
+            multiplier = 1.0
+            for tier in damping_tiers:
+                if current_price >= float(tier.get("at_or_above", 0.0)):
+                    multiplier = float(tier.get("multiplier", multiplier))
+            damped_change *= multiplier
+
+        previous_price = current_price
+        current_price = round(
+            min(
+                price_ceiling,
+                max(price_floor, current_price + damped_change),
+            ),
+            rounding,
+        )
+        actual_change = round(current_price - previous_price, rounding)
+        history.append({
+            "week": week_key,
+            "split": week.get("split"),
+            "week_num": int(week.get("week_num", 0)),
+            "week_start": week.get("week_start"),
+            "teamname": week.get("teamname"),
+            "patch": week.get("patch"),
+            "pts": points,
+            "change": actual_change,
+            "price": current_price,
+            "previous_price": previous_price,
+            "period_reset": period_reset,
+            "source": "estimated_split_reset_diminishing",
+        })
+    return start_price, current_price, history
+
+
 def export_dashboard_json(output_path: str = None) -> str:
     """
     Ingests match data, calculates weekly player totals, and exports to JSON.
@@ -37,10 +122,6 @@ def export_dashboard_json(output_path: str = None) -> str:
     ingestor = LCSDataIngestor()
     data = ingestor.run_pipeline(preview_rows=0)
     market_model = ingestor.scoring_rules.get("estimated_market_model", {})
-    estimated_start_price = float(market_model.get("starting_price", 15.0))
-    estimated_neutral_score = float(market_model.get("neutral_weekly_score", 13.0))
-    estimated_adjustment_rate = float(market_model.get("adjustment_rate", 0.20))
-    estimated_rounding = int(market_model.get("rounding_decimals", 1))
 
     if HAS_PANDAS and isinstance(data, pd.DataFrame):
         df = data.copy()
@@ -168,34 +249,10 @@ def export_dashboard_json(output_path: str = None) -> str:
             p["is_swapped"] = len(p["teams"]) > 1
 
             # Compute market price history and price changes
-            base_price = estimated_start_price
-            curr_price = base_price
-            price_history = []
-            sorted_weeks = sorted(
-                p["weekly_stats"].items(),
-                key=lambda x: (x[1].get("week_start") or "", x[1]["week_num"]),
+            base_price, curr_price, price_history = build_estimated_price_history(
+                p["weekly_stats"],
+                market_model,
             )
-
-            for w_key, w_val in sorted_weeks:
-                pts = w_val["fantasy_pts"]
-                # Screenshot-derived hypothesis: Castle's 7.05 score produced
-                # a -1.2 change, exactly matching a 13-point neutral baseline.
-                change = round(
-                    (pts - estimated_neutral_score) * estimated_adjustment_rate,
-                    estimated_rounding,
-                )
-                curr_price = round(curr_price + change, estimated_rounding)
-                price_history.append({
-                    "week": w_key,
-                    "split": w_val["split"],
-                    "week_num": w_val["week_num"],
-                    "week_start": w_val.get("week_start"),
-                    "patch": w_val.get("patch"),
-                    "pts": pts,
-                    "change": change,
-                    "price": curr_price,
-                    "source": "estimated_baseline_13",
-                })
 
             p["start_price"] = base_price
             p["current_price"] = curr_price
@@ -349,28 +406,10 @@ def export_dashboard_json(output_path: str = None) -> str:
             p["is_swapped"] = len(p["teams"]) > 1
 
             # Compute market price history and price changes
-            base_price = estimated_start_price
-            curr_price = base_price
-            price_history = []
-            sorted_weeks = sorted(p["weekly_stats"].items(), key=lambda x: (x[1]["split"], x[1]["week_num"]))
-
-            for w_key, w_val in sorted_weeks:
-                pts = w_val["fantasy_pts"]
-                change = round(
-                    (pts - estimated_neutral_score) * estimated_adjustment_rate,
-                    estimated_rounding,
-                )
-                curr_price = round(curr_price + change, estimated_rounding)
-                price_history.append({
-                    "week": w_key,
-                    "split": w_val["split"],
-                    "week_num": w_val["week_num"],
-                    "teamname": w_val["teamname"],
-                    "patch": w_val.get("patch"),
-                    "pts": pts,
-                    "change": change,
-                    "price": curr_price
-                })
+            base_price, curr_price, price_history = build_estimated_price_history(
+                p["weekly_stats"],
+                market_model,
+            )
 
             p["start_price"] = base_price
             p["current_price"] = curr_price

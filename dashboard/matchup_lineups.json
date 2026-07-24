@@ -1,0 +1,1875 @@
+{
+  "schema_version": 1,
+  "weeks": [
+    {
+      "week_id": "Round 1 (Split 3)|2026-07-25T20:00:00+00:00",
+      "round_name": "Round 1 (Split 3)",
+      "roster_lock": "2026-07-25T20:00:00+00:00",
+      "budget": 100.0,
+      "objective": "maximize expected player + champion + coach points after official variety buff",
+      "coach_counts_toward_variety": true,
+      "lineups": [
+        {
+          "total_cost": 99.5,
+          "remaining_gold": 0.5,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 86.86,
+          "projected_champion_bonus": 4.37,
+          "projected_coach_points": 16.44,
+          "projected_base_points": 107.67,
+          "projected_total_points": 134.59,
+          "players": [
+            {
+              "role": "top",
+              "player": "Srtty",
+              "team": "Disguised",
+              "opponent": "Shopify Rebellion",
+              "price": 15.0,
+              "projected_points": 13.29,
+              "champion": "Jayce",
+              "champion_expected_bonus": 0.6928,
+              "champion_options": [
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1776,
+                  "expected_multiplier_bonus": 0.6928
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.5033
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1662,
+                  "expected_multiplier_bonus": 0.6361
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "HamBak",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 14.5,
+              "projected_points": 19.02,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9392,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1946,
+                  "expected_multiplier_bonus": 0.9392
+                },
+                {
+                  "champion": "Skarner",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0921,
+                  "expected_multiplier_bonus": 0.561
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1152,
+                  "expected_multiplier_bonus": 0.6349
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "FlyQuest",
+              "price": 21.0,
+              "projected_points": 18.72,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0744,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1639,
+                  "expected_multiplier_bonus": 1.0744
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0751,
+                  "expected_multiplier_bonus": 0.4294
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0789,
+                  "expected_multiplier_bonus": 0.3757
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Zeyzal",
+              "team": "Shopify Rebellion",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 17.35,
+              "champion": "Rell",
+              "champion_expected_bonus": 0.7259,
+              "champion_options": [
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.7259
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0985,
+                  "expected_multiplier_bonus": 0.5199
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0776,
+                  "expected_multiplier_bonus": 0.4177
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Thinkcard",
+            "team": "FlyQuest",
+            "opponent": "LYON",
+            "price": 14.0,
+            "projected_points": 16.44
+          },
+          "rank": 1
+        },
+        {
+          "total_cost": 99.5,
+          "remaining_gold": 0.5,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 86.64,
+          "projected_champion_bonus": 4.26,
+          "projected_coach_points": 16.69,
+          "projected_base_points": 107.59,
+          "projected_total_points": 134.48,
+          "players": [
+            {
+              "role": "top",
+              "player": "Srtty",
+              "team": "Disguised",
+              "opponent": "Shopify Rebellion",
+              "price": 15.0,
+              "projected_points": 13.29,
+              "champion": "Jayce",
+              "champion_expected_bonus": 0.6928,
+              "champion_options": [
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1776,
+                  "expected_multiplier_bonus": 0.6928
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.5033
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1662,
+                  "expected_multiplier_bonus": 0.6361
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Blaber",
+              "team": "Cloud9",
+              "opponent": "Team Liquid",
+              "price": 17.5,
+              "projected_points": 17.46,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.7399,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1535,
+                  "expected_multiplier_bonus": 0.7399
+                },
+                {
+                  "champion": "Nocturne",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.104,
+                  "expected_multiplier_bonus": 0.5394
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4166
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Rahel",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 15.0,
+              "projected_points": 18.9,
+              "champion": "Caitlyn",
+              "champion_expected_bonus": 1.0548,
+              "champion_options": [
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1642,
+                  "expected_multiplier_bonus": 1.0548
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1419,
+                  "expected_multiplier_bonus": 0.7086
+                },
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1059,
+                  "expected_multiplier_bonus": 0.566
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Cryogen",
+              "team": "FlyQuest",
+              "opponent": "LYON",
+              "price": 16.0,
+              "projected_points": 18.51,
+              "champion": "Bard",
+              "champion_expected_bonus": 0.8272,
+              "champion_options": [
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1278,
+                  "expected_multiplier_bonus": 0.8272
+                },
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1064,
+                  "expected_multiplier_bonus": 0.605
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0912,
+                  "expected_multiplier_bonus": 0.5416
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "FlyQuest",
+            "price": 16.0,
+            "projected_points": 16.69
+          },
+          "rank": 2
+        },
+        {
+          "total_cost": 100.0,
+          "remaining_gold": 0.0,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 86.86,
+          "projected_champion_bonus": 4.37,
+          "projected_coach_points": 16.3,
+          "projected_base_points": 107.53,
+          "projected_total_points": 134.42,
+          "players": [
+            {
+              "role": "top",
+              "player": "Srtty",
+              "team": "Disguised",
+              "opponent": "Shopify Rebellion",
+              "price": 15.0,
+              "projected_points": 13.29,
+              "champion": "Jayce",
+              "champion_expected_bonus": 0.6928,
+              "champion_options": [
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1776,
+                  "expected_multiplier_bonus": 0.6928
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.5033
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1662,
+                  "expected_multiplier_bonus": 0.6361
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "HamBak",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 14.5,
+              "projected_points": 19.02,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9392,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1946,
+                  "expected_multiplier_bonus": 0.9392
+                },
+                {
+                  "champion": "Skarner",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0921,
+                  "expected_multiplier_bonus": 0.561
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1152,
+                  "expected_multiplier_bonus": 0.6349
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "FlyQuest",
+              "price": 21.0,
+              "projected_points": 18.72,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0744,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1639,
+                  "expected_multiplier_bonus": 1.0744
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0751,
+                  "expected_multiplier_bonus": 0.4294
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0789,
+                  "expected_multiplier_bonus": 0.3757
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Zeyzal",
+              "team": "Shopify Rebellion",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 17.35,
+              "champion": "Rell",
+              "champion_expected_bonus": 0.7259,
+              "champion_options": [
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.7259
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0985,
+                  "expected_multiplier_bonus": 0.5199
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0776,
+                  "expected_multiplier_bonus": 0.4177
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "IWDominate",
+            "team": "Cloud9",
+            "opponent": "Team Liquid",
+            "price": 14.5,
+            "projected_points": 16.3
+          },
+          "rank": 3
+        },
+        {
+          "total_cost": 99.5,
+          "remaining_gold": 0.5,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 86.36,
+          "projected_champion_bonus": 4.21,
+          "projected_coach_points": 16.44,
+          "projected_base_points": 107.01,
+          "projected_total_points": 133.77,
+          "players": [
+            {
+              "role": "top",
+              "player": "Denathor",
+              "team": "Dignitas",
+              "opponent": "Sentinels",
+              "price": 15.0,
+              "projected_points": 12.79,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.5315,
+              "champion_options": [
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1411,
+                  "expected_multiplier_bonus": 0.5315
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1095,
+                  "expected_multiplier_bonus": 0.4123
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0869,
+                  "expected_multiplier_bonus": 0.3274
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "HamBak",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 14.5,
+              "projected_points": 19.02,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9392,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1946,
+                  "expected_multiplier_bonus": 0.9392
+                },
+                {
+                  "champion": "Skarner",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0921,
+                  "expected_multiplier_bonus": 0.561
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1152,
+                  "expected_multiplier_bonus": 0.6349
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "FlyQuest",
+              "price": 21.0,
+              "projected_points": 18.72,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0744,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1639,
+                  "expected_multiplier_bonus": 1.0744
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0751,
+                  "expected_multiplier_bonus": 0.4294
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0789,
+                  "expected_multiplier_bonus": 0.3757
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Zeyzal",
+              "team": "Shopify Rebellion",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 17.35,
+              "champion": "Rell",
+              "champion_expected_bonus": 0.7259,
+              "champion_options": [
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.7259
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0985,
+                  "expected_multiplier_bonus": 0.5199
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0776,
+                  "expected_multiplier_bonus": 0.4177
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Thinkcard",
+            "team": "FlyQuest",
+            "opponent": "LYON",
+            "price": 14.0,
+            "projected_points": 16.44
+          },
+          "rank": 4
+        },
+        {
+          "total_cost": 99.5,
+          "remaining_gold": 0.5,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 86.14,
+          "projected_champion_bonus": 4.1,
+          "projected_coach_points": 16.69,
+          "projected_base_points": 106.93,
+          "projected_total_points": 133.66,
+          "players": [
+            {
+              "role": "top",
+              "player": "Denathor",
+              "team": "Dignitas",
+              "opponent": "Sentinels",
+              "price": 15.0,
+              "projected_points": 12.79,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.5315,
+              "champion_options": [
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1411,
+                  "expected_multiplier_bonus": 0.5315
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1095,
+                  "expected_multiplier_bonus": 0.4123
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0869,
+                  "expected_multiplier_bonus": 0.3274
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Blaber",
+              "team": "Cloud9",
+              "opponent": "Team Liquid",
+              "price": 17.5,
+              "projected_points": 17.46,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.7399,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1535,
+                  "expected_multiplier_bonus": 0.7399
+                },
+                {
+                  "champion": "Nocturne",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.104,
+                  "expected_multiplier_bonus": 0.5394
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4166
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Rahel",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 15.0,
+              "projected_points": 18.9,
+              "champion": "Caitlyn",
+              "champion_expected_bonus": 1.0548,
+              "champion_options": [
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1642,
+                  "expected_multiplier_bonus": 1.0548
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1419,
+                  "expected_multiplier_bonus": 0.7086
+                },
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1059,
+                  "expected_multiplier_bonus": 0.566
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Cryogen",
+              "team": "FlyQuest",
+              "opponent": "LYON",
+              "price": 16.0,
+              "projected_points": 18.51,
+              "champion": "Bard",
+              "champion_expected_bonus": 0.8272,
+              "champion_options": [
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1278,
+                  "expected_multiplier_bonus": 0.8272
+                },
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1064,
+                  "expected_multiplier_bonus": 0.605
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0912,
+                  "expected_multiplier_bonus": 0.5416
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "FlyQuest",
+            "price": 16.0,
+            "projected_points": 16.69
+          },
+          "rank": 5
+        },
+        {
+          "total_cost": 100.0,
+          "remaining_gold": 0.0,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 86.36,
+          "projected_champion_bonus": 4.21,
+          "projected_coach_points": 16.3,
+          "projected_base_points": 106.87,
+          "projected_total_points": 133.59,
+          "players": [
+            {
+              "role": "top",
+              "player": "Denathor",
+              "team": "Dignitas",
+              "opponent": "Sentinels",
+              "price": 15.0,
+              "projected_points": 12.79,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.5315,
+              "champion_options": [
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1411,
+                  "expected_multiplier_bonus": 0.5315
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1095,
+                  "expected_multiplier_bonus": 0.4123
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0869,
+                  "expected_multiplier_bonus": 0.3274
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "HamBak",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 14.5,
+              "projected_points": 19.02,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9392,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1946,
+                  "expected_multiplier_bonus": 0.9392
+                },
+                {
+                  "champion": "Skarner",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0921,
+                  "expected_multiplier_bonus": 0.561
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1152,
+                  "expected_multiplier_bonus": 0.6349
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "FlyQuest",
+              "price": 21.0,
+              "projected_points": 18.72,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0744,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1639,
+                  "expected_multiplier_bonus": 1.0744
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0751,
+                  "expected_multiplier_bonus": 0.4294
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0789,
+                  "expected_multiplier_bonus": 0.3757
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Zeyzal",
+              "team": "Shopify Rebellion",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 17.35,
+              "champion": "Rell",
+              "champion_expected_bonus": 0.7259,
+              "champion_options": [
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.7259
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0985,
+                  "expected_multiplier_bonus": 0.5199
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0776,
+                  "expected_multiplier_bonus": 0.4177
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "IWDominate",
+            "team": "Cloud9",
+            "opponent": "Team Liquid",
+            "price": 14.5,
+            "projected_points": 16.3
+          },
+          "rank": 6
+        },
+        {
+          "total_cost": 98.5,
+          "remaining_gold": 1.5,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 85.17,
+          "projected_champion_bonus": 4.54,
+          "projected_coach_points": 16.69,
+          "projected_base_points": 106.4,
+          "projected_total_points": 133.0,
+          "players": [
+            {
+              "role": "top",
+              "player": "Srtty",
+              "team": "Disguised",
+              "opponent": "Shopify Rebellion",
+              "price": 15.0,
+              "projected_points": 13.29,
+              "champion": "Jayce",
+              "champion_expected_bonus": 0.6928,
+              "champion_options": [
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1776,
+                  "expected_multiplier_bonus": 0.6928
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.5033
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1662,
+                  "expected_multiplier_bonus": 0.6361
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "HamBak",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 14.5,
+              "projected_points": 19.02,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9392,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1946,
+                  "expected_multiplier_bonus": 0.9392
+                },
+                {
+                  "champion": "Skarner",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0921,
+                  "expected_multiplier_bonus": 0.561
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1152,
+                  "expected_multiplier_bonus": 0.6349
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Bvoy",
+              "team": "Shopify Rebellion",
+              "opponent": "Disguised",
+              "price": 17.0,
+              "projected_points": 15.87,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.1371,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.2292,
+                  "expected_multiplier_bonus": 1.1371
+                },
+                {
+                  "champion": "Corki",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0837,
+                  "expected_multiplier_bonus": 0.3812
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.121,
+                  "expected_multiplier_bonus": 0.6138
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Cryogen",
+              "team": "FlyQuest",
+              "opponent": "LYON",
+              "price": 16.0,
+              "projected_points": 18.51,
+              "champion": "Bard",
+              "champion_expected_bonus": 0.8272,
+              "champion_options": [
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1278,
+                  "expected_multiplier_bonus": 0.8272
+                },
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1064,
+                  "expected_multiplier_bonus": 0.605
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0912,
+                  "expected_multiplier_bonus": 0.5416
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "FlyQuest",
+            "price": 16.0,
+            "projected_points": 16.69
+          },
+          "rank": 7
+        },
+        {
+          "total_cost": 99.0,
+          "remaining_gold": 1.0,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 87.52,
+          "projected_champion_bonus": 4.31,
+          "projected_coach_points": 14.53,
+          "projected_base_points": 106.36,
+          "projected_total_points": 132.96,
+          "players": [
+            {
+              "role": "top",
+              "player": "Denathor",
+              "team": "Dignitas",
+              "opponent": "Sentinels",
+              "price": 15.0,
+              "projected_points": 12.79,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.5315,
+              "champion_options": [
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1411,
+                  "expected_multiplier_bonus": 0.5315
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1095,
+                  "expected_multiplier_bonus": 0.4123
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0869,
+                  "expected_multiplier_bonus": 0.3274
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "HamBak",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 14.5,
+              "projected_points": 19.02,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9392,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1946,
+                  "expected_multiplier_bonus": 0.9392
+                },
+                {
+                  "champion": "Skarner",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0921,
+                  "expected_multiplier_bonus": 0.561
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1152,
+                  "expected_multiplier_bonus": 0.6349
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "FlyQuest",
+              "price": 21.0,
+              "projected_points": 18.72,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0744,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1639,
+                  "expected_multiplier_bonus": 1.0744
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0751,
+                  "expected_multiplier_bonus": 0.4294
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0789,
+                  "expected_multiplier_bonus": 0.3757
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Cryogen",
+              "team": "FlyQuest",
+              "opponent": "LYON",
+              "price": 16.0,
+              "projected_points": 18.51,
+              "champion": "Bard",
+              "champion_expected_bonus": 0.8272,
+              "champion_options": [
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1278,
+                  "expected_multiplier_bonus": 0.8272
+                },
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1064,
+                  "expected_multiplier_bonus": 0.605
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0912,
+                  "expected_multiplier_bonus": 0.5416
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "ido",
+            "team": "Disguised",
+            "opponent": "Shopify Rebellion",
+            "price": 12.5,
+            "projected_points": 14.53
+          },
+          "rank": 8
+        },
+        {
+          "total_cost": 98.5,
+          "remaining_gold": 1.5,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 85.48,
+          "projected_champion_bonus": 4.16,
+          "projected_coach_points": 16.69,
+          "projected_base_points": 106.33,
+          "projected_total_points": 132.91,
+          "players": [
+            {
+              "role": "top",
+              "player": "Srtty",
+              "team": "Disguised",
+              "opponent": "Shopify Rebellion",
+              "price": 15.0,
+              "projected_points": 13.29,
+              "champion": "Jayce",
+              "champion_expected_bonus": 0.6928,
+              "champion_options": [
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1776,
+                  "expected_multiplier_bonus": 0.6928
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.5033
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1662,
+                  "expected_multiplier_bonus": 0.6361
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Blaber",
+              "team": "Cloud9",
+              "opponent": "Team Liquid",
+              "price": 17.5,
+              "projected_points": 17.46,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.7399,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1535,
+                  "expected_multiplier_bonus": 0.7399
+                },
+                {
+                  "champion": "Nocturne",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.104,
+                  "expected_multiplier_bonus": 0.5394
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4166
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Rahel",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 15.0,
+              "projected_points": 18.9,
+              "champion": "Caitlyn",
+              "champion_expected_bonus": 1.0548,
+              "champion_options": [
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1642,
+                  "expected_multiplier_bonus": 1.0548
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1419,
+                  "expected_multiplier_bonus": 0.7086
+                },
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1059,
+                  "expected_multiplier_bonus": 0.566
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Zeyzal",
+              "team": "Shopify Rebellion",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 17.35,
+              "champion": "Rell",
+              "champion_expected_bonus": 0.7259,
+              "champion_options": [
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.7259
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0985,
+                  "expected_multiplier_bonus": 0.5199
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0776,
+                  "expected_multiplier_bonus": 0.4177
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "FlyQuest",
+            "price": 16.0,
+            "projected_points": 16.69
+          },
+          "rank": 9
+        },
+        {
+          "total_cost": 100.0,
+          "remaining_gold": 0.0,
+          "unique_teams": 6,
+          "variety_bonus": 0.25,
+          "projected_player_points": 85.5,
+          "projected_champion_bonus": 4.13,
+          "projected_coach_points": 16.69,
+          "projected_base_points": 106.32,
+          "projected_total_points": 132.9,
+          "players": [
+            {
+              "role": "top",
+              "player": "Srtty",
+              "team": "Disguised",
+              "opponent": "Shopify Rebellion",
+              "price": 15.0,
+              "projected_points": 13.29,
+              "champion": "Jayce",
+              "champion_expected_bonus": 0.6928,
+              "champion_options": [
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1776,
+                  "expected_multiplier_bonus": 0.6928
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.5033
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1662,
+                  "expected_multiplier_bonus": 0.6361
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "LYON",
+              "price": 19.0,
+              "projected_points": 17.48,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.7171,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1364,
+                  "expected_multiplier_bonus": 0.7171
+                },
+                {
+                  "champion": "Nocturne",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0841,
+                  "expected_multiplier_bonus": 0.449
+                },
+                {
+                  "champion": "Naafiri",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0757,
+                  "expected_multiplier_bonus": 0.3991
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Cloud9",
+              "price": 20.0,
+              "projected_points": 18.48,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9419,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1527,
+                  "expected_multiplier_bonus": 0.9419
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0783,
+                  "expected_multiplier_bonus": 0.5085
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0993,
+                  "expected_multiplier_bonus": 0.6077
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Rahel",
+              "team": "Sentinels",
+              "opponent": "Dignitas",
+              "price": 15.0,
+              "projected_points": 18.9,
+              "champion": "Caitlyn",
+              "champion_expected_bonus": 1.0548,
+              "champion_options": [
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1642,
+                  "expected_multiplier_bonus": 1.0548
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1419,
+                  "expected_multiplier_bonus": 0.7086
+                },
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1059,
+                  "expected_multiplier_bonus": 0.566
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Zeyzal",
+              "team": "Shopify Rebellion",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 17.35,
+              "champion": "Rell",
+              "champion_expected_bonus": 0.7259,
+              "champion_options": [
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1405,
+                  "expected_multiplier_bonus": 0.7259
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0985,
+                  "expected_multiplier_bonus": 0.5199
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0776,
+                  "expected_multiplier_bonus": 0.4177
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "FlyQuest",
+            "price": 16.0,
+            "projected_points": 16.69
+          },
+          "rank": 10
+        }
+      ]
+    }
+  ]
+}

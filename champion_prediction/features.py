@@ -11,9 +11,15 @@ import pandas as pd
 class PatchDistanceDecayEngine:
     """Calculates patch distance and recency decay weights across patch transitions."""
 
-    def __init__(self, minor_decay_rate: float = 0.15, major_reset_penalty: float = 2.0) -> None:
+    def __init__(
+        self,
+        minor_decay_rate: float = 0.15,
+        major_reset_penalty: float = 2.0,
+        patches_per_season: int = 24,
+    ) -> None:
         self.minor_decay_rate = minor_decay_rate
         self.major_reset_penalty = major_reset_penalty
+        self.patches_per_season = patches_per_season
 
     @staticmethod
     def parse_patch(patch_str: Any) -> Tuple[int, int]:
@@ -30,11 +36,23 @@ class PatchDistanceDecayEngine:
         t_major, t_minor = self.parse_patch(target_patch)
         h_major, h_minor = self.parse_patch(historical_patch)
 
+        if (h_major, h_minor) >= (t_major, t_minor):
+            return 0.0 if (h_major, h_minor) == (t_major, t_minor) else float(
+                abs(t_major - h_major) * self.major_reset_penalty
+                + abs(t_minor - h_minor)
+            )
         if t_major == h_major:
-            return float(abs(t_minor - h_minor))
-        else:
-            major_diff = abs(t_major - h_major)
-            return float(abs(t_minor - h_minor) + major_diff * self.major_reset_penalty)
+            return float(t_minor - h_minor)
+
+        completed_historical_season = max(0, self.patches_per_season - h_minor)
+        complete_middle_seasons = max(0, t_major - h_major - 1)
+        transition_count = (
+            completed_historical_season
+            + complete_middle_seasons * self.patches_per_season
+            + t_minor
+        )
+        reset_cost = (t_major - h_major) * self.major_reset_penalty
+        return float(transition_count + reset_cost)
 
     def calculate_decay_weight(self, target_patch: str, historical_patch: str) -> float:
         """Calculate recency decay weight between 0.0 and 1.0."""
@@ -106,6 +124,57 @@ class LanePriorityMatrix:
     def __init__(self) -> None:
         self.cache: Dict[Tuple[str, str], Dict[str, float]] = {}
 
+    def fit(self, df: pd.DataFrame, position: str | None = None) -> None:
+        """Precompute champion-role lane statistics in one grouped pass."""
+        if df.empty or "champion" not in df.columns:
+            return
+        pos_col = (
+            "position" if "position" in df.columns
+            else "role" if "role" in df.columns
+            else None
+        )
+        rows = df
+        if position is not None and pos_col is not None:
+            rows = rows.loc[
+                rows[pos_col].astype(str).str.lower().eq(position.lower())
+            ]
+        group_columns = ["champion"] + ([pos_col] if pos_col else [])
+        for key, group in rows.groupby(group_columns, dropna=False):
+            if isinstance(key, tuple) and len(key) > 1:
+                champion = str(key[0])
+                role = str(key[1]).lower()
+            else:
+                champion = str(key[0] if isinstance(key, tuple) else key)
+                role = str(position or "all").lower()
+            cs_diff = self._mean(group, "csdiffat15")
+            gold_diff = self._mean(group, "golddiffat15")
+            cspm = self._mean(group, "cspm")
+            self.cache[(champion.casefold(), role)] = self._result(
+                cs_diff, gold_diff, cspm
+            )
+
+    @staticmethod
+    def _mean(df: pd.DataFrame, column: str) -> float:
+        if column not in df.columns:
+            return 0.0
+        return float(pd.to_numeric(df[column], errors="coerce").fillna(0).mean())
+
+    @staticmethod
+    def _result(
+        cs_diff: float,
+        gold_diff: float,
+        cspm: float,
+    ) -> Dict[str, float]:
+        push_rate = min(1.0, max(0.0, 0.5 + (cs_diff / 40.0)))
+        prio_index = round(1.0 + (cs_diff / 50.0) + (gold_diff / 1000.0), 2)
+        return {
+            "push_rate": round(push_rate, 2),
+            "csdiff15": round(cs_diff, 1),
+            "golddiff15": round(gold_diff, 1),
+            "cspm": round(cspm, 1),
+            "prio_index": max(0.5, prio_index),
+        }
+
     def calculate_lane_prio(self, df: pd.DataFrame, champion: str, position: str) -> Dict[str, float]:
         """Return early lane prio stats for champion and position."""
         cache_key = (champion.casefold(), position.lower())
@@ -123,19 +192,10 @@ class LanePriorityMatrix:
         if subset.empty:
             return {"push_rate": 0.5, "csdiff15": 0.0, "golddiff15": 0.0, "prio_index": 1.0}
 
-        cs_diff = float(pd.to_numeric(subset["csdiffat15"], errors="coerce").fillna(0).mean()) if "csdiffat15" in subset.columns else 0.0
-        gold_diff = float(pd.to_numeric(subset["golddiffat15"], errors="coerce").fillna(0).mean()) if "golddiffat15" in subset.columns else 0.0
-        cspm = float(pd.to_numeric(subset["cspm"], errors="coerce").fillna(0).mean()) if "cspm" in subset.columns else 0.0
-
-        push_rate = min(1.0, max(0.0, 0.5 + (cs_diff / 40.0)))
-        prio_index = round(1.0 + (cs_diff / 50.0) + (gold_diff / 1000.0), 2)
-
-        res = {
-            "push_rate": round(push_rate, 2),
-            "csdiff15": round(cs_diff, 1),
-            "golddiff15": round(gold_diff, 1),
-            "cspm": round(cspm, 1),
-            "prio_index": max(0.5, prio_index),
-        }
+        res = self._result(
+            self._mean(subset, "csdiffat15"),
+            self._mean(subset, "golddiffat15"),
+            self._mean(subset, "cspm"),
+        )
         self.cache[cache_key] = res
         return res

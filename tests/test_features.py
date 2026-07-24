@@ -28,6 +28,11 @@ class FeaturesModuleTests(unittest.TestCase):
         weight_distant = self.decay_engine.calculate_decay_weight("16.14", "16.01")
         self.assertGreater(weight_recent, weight_distant)
 
+    def test_adjacent_season_patches_are_not_treated_as_twenty_patches_apart(self) -> None:
+        distance = self.decay_engine.calculate_patch_distance("15.1", "14.24")
+
+        self.assertEqual(distance, 3.0)
+
     def test_patch_tier_fitting(self) -> None:
         df = pd.DataFrame([
             {"gameid": "g1", "patch": "16.1", "position": "top", "champion": "Rumble", "result": 1},

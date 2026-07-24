@@ -2,11 +2,20 @@
 
 from __future__ import annotations
 
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 import pandas as pd
 
-from champion_prediction.simple_predictor import champion_multiplier, rank_champions
+from champion_prediction.simple_predictor import (
+    champion_multiplier,
+    latest_observed_competitive_patch,
+    load_production_hyperparameters,
+    maturity_blended_feature_weights,
+    rank_champions,
+)
 
 
 class SimpleChampionPredictorTests(unittest.TestCase):
@@ -24,6 +33,50 @@ class SimpleChampionPredictorTests(unittest.TestCase):
              "role": "mid", "player": "One", "team": "A", "opponent": "B",
              "champion": "FutureLeak", "fantasy_pts": 1000.0},
         ])
+
+    def test_loads_frozen_static_production_parameters(self) -> None:
+        payload = {
+            "strategy": "static",
+            "parameters": {
+                "patch_decay_rate": 0.3,
+                "weights": {
+                    "w_player": 0.35,
+                    "w_lcs": 0.36,
+                    "w_leading": 0.29,
+                },
+            },
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "champion_model.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+
+            parameters = load_production_hyperparameters(path)
+
+        self.assertEqual(parameters["patch_decay_rate"], 0.3)
+        self.assertEqual(parameters["w_lcs"], 0.36)
+
+    def test_loads_maturity_blend_production_parameters(self) -> None:
+        payload = {
+            "strategy": "maturity_blend",
+            "parameters": {
+                "patch_decay_rate": 0.3,
+                "early_weights": {
+                    "w_player": 0.45, "w_lcs": 0.10, "w_leading": 0.45,
+                },
+                "mature_weights": {
+                    "w_player": 0.35, "w_lcs": 0.40, "w_leading": 0.25,
+                },
+                "games_to_mature": 40,
+            },
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "champion_model.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            parameters = load_production_hyperparameters(path)
+
+        self.assertEqual(parameters["early_w_leading"], 0.45)
+        self.assertEqual(parameters["mature_w_lcs"], 0.40)
+        self.assertEqual(parameters["games_to_mature"], 40.0)
 
     def test_future_champion_is_excluded_and_probabilities_sum_to_one(self) -> None:
         result = rank_champions(
@@ -73,6 +126,31 @@ class SimpleChampionPredictorTests(unittest.TestCase):
             ("already_played_by_player", 1.3),
         )
 
+    def test_opening_round_forces_every_candidate_to_x13(self) -> None:
+        rules = {
+            "unplayed_in_role": 1.7,
+            "unplayed_by_player": 1.5,
+            "already_played_by_player": 1.3,
+        }
+        result = rank_champions(
+            self.history(),
+            pd.DataFrame(columns=[
+                "as_of_timestamp", "acting_team", "patch", "gameid",
+                "action_type", "champion",
+            ]),
+            "One", "mid", "A", "B",
+            pd.Timestamp("2026-01-01", tz="UTC"), "25.24", None, top_n=10,
+            split_history=pd.DataFrame(columns=["champion", "role", "player"]),
+            champion_bonus_rules=rules,
+            hyperparameters={"opening_round_baseline": 1.0},
+        )
+
+        self.assertEqual(
+            set(result["novelty_category"]),
+            {"opening_round_baseline"},
+        )
+        self.assertEqual(set(result["novelty_multiplier"]), {1.3})
+
     def test_dynamic_feature_weights(self) -> None:
         from champion_prediction.simple_predictor import dynamic_feature_weights
         w_p1, w_l1, w_e1 = dynamic_feature_weights(2)
@@ -82,6 +160,78 @@ class SimpleChampionPredictorTests(unittest.TestCase):
         self.assertEqual(w_e1, 0.50)
         # Mature patch should favor player history
         self.assertEqual(w_p2, 0.55)
+
+    def test_maturity_weights_blend_with_domestic_split_games(self) -> None:
+        parameters = {
+            "early_w_player": 0.45, "early_w_lcs": 0.10,
+            "early_w_leading": 0.45, "mature_w_player": 0.35,
+            "mature_w_lcs": 0.40, "mature_w_leading": 0.25,
+            "games_to_mature": 40.0,
+        }
+
+        self.assertEqual(
+            maturity_blended_feature_weights(0, parameters),
+            (0.45, 0.10, 0.45),
+        )
+        self.assertEqual(
+            maturity_blended_feature_weights(40, parameters),
+            (0.35, 0.40, 0.25),
+        )
+        halfway = maturity_blended_feature_weights(20, parameters)
+        self.assertAlmostEqual(halfway[1], 0.25)
+
+    def test_latest_competitive_patch_can_come_from_nearby_international(self) -> None:
+        history = pd.DataFrame([
+            {
+                "date": pd.Timestamp("2026-06-14", tz="UTC"),
+                "league": "LCS", "source_league": "LCS", "patch": "16.11",
+            },
+            {
+                "date": pd.Timestamp("2026-07-19", tz="UTC"),
+                "league": "EWC", "source_league": "EWC", "patch": "16.13",
+            },
+        ])
+
+        self.assertEqual(
+            latest_observed_competitive_patch(
+                history, pd.Timestamp("2026-07-25", tz="UTC")
+            ),
+            "16.13",
+        )
+
+    def test_international_games_inform_player_and_leading_not_lcs_meta(self) -> None:
+        history = pd.DataFrame([
+            {
+                "date": pd.Timestamp("2026-06-20", tz="UTC"),
+                "league": "LCS", "source_league": "LCS", "patch": "16.13",
+                "role": "mid", "player": "Other", "team": "A", "opponent": "B",
+                "champion": "Orianna", "fantasy_pts": 15.0, "gameid": "lcs1",
+            },
+            {
+                "date": pd.Timestamp("2026-07-01", tz="UTC"),
+                # NA EWC rows keep their dashboard league label, but must
+                # remain international evidence inside the model.
+                "league": "LCS", "source_league": "EWC", "patch": "16.13",
+                "role": "mid", "player": "One", "team": "A", "opponent": "C",
+                "champion": "Yone", "fantasy_pts": 20.0, "gameid": "ewc1",
+            },
+        ])
+        result = rank_champions(
+            history,
+            pd.DataFrame(columns=[
+                "as_of_timestamp", "acting_team", "patch", "gameid",
+                "action_type", "champion",
+            ]),
+            "One", "mid", "A", "B",
+            pd.Timestamp("2026-07-10", tz="UTC"), "16.13", 1.3, top_n=10,
+        )
+        yone = result.loc[result["champion"].eq("Yone")].iloc[0]
+        orianna = result.loc[result["champion"].eq("Orianna")].iloc[0]
+
+        self.assertGreater(yone["player_recent_share"], 0.0)
+        self.assertGreater(yone["leading_region_role_share"], 0.0)
+        self.assertEqual(yone["lcs_patch_role_share"], 0.0)
+        self.assertGreater(orianna["lcs_patch_role_share"], 0.0)
 
     def test_unusual_ban_interest_does_not_increase_availability(self) -> None:
         # The opponent's public ban is attention evidence, not private scrim evidence.
@@ -124,8 +274,46 @@ class SimpleChampionPredictorTests(unittest.TestCase):
         portfolio = select_tiered_portfolio(result)
 
         self.assertIn("portfolio_tier", portfolio.columns)
+        self.assertIn("portfolio_rank", portfolio.columns)
+        self.assertLessEqual(int(portfolio["portfolio_rank"].max()), 3)
         tiers = set(portfolio["portfolio_tier"])
         self.assertTrue(any("1.3x" in t for t in tiers))
+
+    def test_opening_portfolio_includes_player_and_international_options(self) -> None:
+        from champion_prediction.simple_predictor import select_tiered_portfolio
+        ranking = pd.DataFrame([
+            {
+                "round_name": "Round 1 (Split 3)", "player": "One",
+                "role": "mid", "champion": "Generic", "novelty_category":
+                "opening_round_baseline", "expected_multiplier_bonus": 9.0,
+                "estimated_pick_probability": 0.30,
+                "player_recent_share": 0.05,
+                "leading_region_role_share": 0.20,
+            },
+            {
+                "round_name": "Round 1 (Split 3)", "player": "One",
+                "role": "mid", "champion": "Comfort", "novelty_category":
+                "opening_round_baseline", "expected_multiplier_bonus": 5.0,
+                "estimated_pick_probability": 0.18,
+                "player_recent_share": 0.70,
+                "leading_region_role_share": 0.05,
+            },
+            {
+                "round_name": "Round 1 (Split 3)", "player": "One",
+                "role": "mid", "champion": "International", "novelty_category":
+                "opening_round_baseline", "expected_multiplier_bonus": 4.0,
+                "estimated_pick_probability": 0.17,
+                "player_recent_share": 0.05,
+                "leading_region_role_share": 0.60,
+            },
+        ])
+
+        portfolio = select_tiered_portfolio(ranking)
+
+        self.assertEqual(
+            set(portfolio["champion"]),
+            {"Generic", "Comfort", "International"},
+        )
 
 
 if __name__ == "__main__":

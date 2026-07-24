@@ -3,7 +3,7 @@
   "roster_lock": "2026-07-25T20:00:00+00:00",
   "patch": "16.13",
   "starter_method": "most recent historical participant by team and role",
-  "model_status": "heuristic ranking shares; not calibrated probabilities",
+  "model_status": "estimated pick chances are normalized heuristic ranking shares; they are not calibrated probabilities",
   "players": [
     {
       "player": "Zven",
@@ -13,29 +13,65 @@
       "projected_fantasy_points": 17.44,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ezreal",
+            "option_basis": "Overall",
+            "ranking_share": 0.141,
+            "estimated_pick_chance": 0.141,
+            "expected_multiplier_bonus": 0.739,
+            "availability": 0.873,
+            "opponent_ban_rate": 0.127,
+            "sample_games": 63
+          },
+          "options": [
+            {
+              "champion": "Ezreal",
+              "option_basis": "Overall",
+              "ranking_share": 0.141,
+              "estimated_pick_chance": 0.141,
+              "expected_multiplier_bonus": 0.739,
+              "availability": 0.873,
+              "opponent_ban_rate": 0.127,
+              "sample_games": 63
+            },
+            {
+              "champion": "Ashe",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1044,
+              "estimated_pick_chance": 0.1044,
+              "expected_multiplier_bonus": 0.5318,
+              "availability": 0.9603,
+              "opponent_ban_rate": 0.0159,
+              "sample_games": 63
+            },
+            {
+              "champion": "Jhin",
+              "option_basis": "International meta",
+              "ranking_share": 0.1033,
+              "estimated_pick_chance": 0.1033,
+              "expected_multiplier_bonus": 0.581,
+              "availability": 0.9746,
+              "opponent_ban_rate": 0.0159,
+              "sample_games": 63
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jhin",
-            "ranking_share": 0.2284,
-            "expected_multiplier_bonus": 3.0028,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 12
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -47,29 +83,65 @@
       "projected_fantasy_points": 17.46,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "option_basis": "Overall",
+            "ranking_share": 0.1535,
+            "estimated_pick_chance": 0.1535,
+            "expected_multiplier_bonus": 0.7399,
+            "availability": 0.8238,
+            "opponent_ban_rate": 0.1905,
+            "sample_games": 63
+          },
+          "options": [
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Overall",
+              "ranking_share": 0.1535,
+              "estimated_pick_chance": 0.1535,
+              "expected_multiplier_bonus": 0.7399,
+              "availability": 0.8238,
+              "opponent_ban_rate": 0.1905,
+              "sample_games": 63
+            },
+            {
+              "champion": "Nocturne",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.104,
+              "estimated_pick_chance": 0.104,
+              "expected_multiplier_bonus": 0.5394,
+              "availability": 0.9016,
+              "opponent_ban_rate": 0.127,
+              "sample_games": 63
+            },
+            {
+              "champion": "Lee Sin",
+              "option_basis": "International meta",
+              "ranking_share": 0.0768,
+              "estimated_pick_chance": 0.0768,
+              "expected_multiplier_bonus": 0.4166,
+              "availability": 0.9762,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 63
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.2209,
-            "expected_multiplier_bonus": 2.4913,
-            "availability": 0.975,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 12
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -81,29 +153,65 @@
       "projected_fantasy_points": 15.0,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Cassiopeia",
+            "option_basis": "Overall",
+            "ranking_share": 0.1312,
+            "estimated_pick_chance": 0.1312,
+            "expected_multiplier_bonus": 0.5974,
+            "availability": 0.8794,
+            "opponent_ban_rate": 0.1587,
+            "sample_games": 63
+          },
+          "options": [
+            {
+              "champion": "Cassiopeia",
+              "option_basis": "Overall",
+              "ranking_share": 0.1312,
+              "estimated_pick_chance": 0.1312,
+              "expected_multiplier_bonus": 0.5974,
+              "availability": 0.8794,
+              "opponent_ban_rate": 0.1587,
+              "sample_games": 63
+            },
+            {
+              "champion": "Annie",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.121,
+              "estimated_pick_chance": 0.121,
+              "expected_multiplier_bonus": 0.525,
+              "availability": 0.8952,
+              "opponent_ban_rate": 0.0952,
+              "sample_games": 63
+            },
+            {
+              "champion": "Ryze",
+              "option_basis": "International meta",
+              "ranking_share": 0.1026,
+              "estimated_pick_chance": 0.1026,
+              "expected_multiplier_bonus": 0.4002,
+              "availability": 0.9143,
+              "opponent_ban_rate": 0.0476,
+              "sample_games": 63
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Viktor",
-            "ranking_share": 0.1349,
-            "expected_multiplier_bonus": 1.7849,
-            "availability": 0.9167,
-            "opponent_ban_rate": 0.0833,
-            "sample_games": 12
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -115,29 +223,65 @@
       "projected_fantasy_points": 18.55,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Seraphine",
+            "option_basis": "Overall",
+            "ranking_share": 0.1244,
+            "estimated_pick_chance": 0.1244,
+            "expected_multiplier_bonus": 0.7868,
+            "availability": 0.9492,
+            "opponent_ban_rate": 0.0317,
+            "sample_games": 63
+          },
+          "options": [
+            {
+              "champion": "Seraphine",
+              "option_basis": "Overall",
+              "ranking_share": 0.1244,
+              "estimated_pick_chance": 0.1244,
+              "expected_multiplier_bonus": 0.7868,
+              "availability": 0.9492,
+              "opponent_ban_rate": 0.0317,
+              "sample_games": 63
+            },
+            {
+              "champion": "Nautilus",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1119,
+              "estimated_pick_chance": 0.1119,
+              "expected_multiplier_bonus": 0.536,
+              "availability": 0.8571,
+              "opponent_ban_rate": 0.1905,
+              "sample_games": 63
+            },
+            {
+              "champion": "Bard",
+              "option_basis": "International meta",
+              "ranking_share": 0.0923,
+              "estimated_pick_chance": 0.0923,
+              "expected_multiplier_bonus": 0.576,
+              "availability": 0.8206,
+              "opponent_ban_rate": 0.2222,
+              "sample_games": 63
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Bard",
-            "ranking_share": 0.1777,
-            "expected_multiplier_bonus": 2.5842,
-            "availability": 0.8917,
-            "opponent_ban_rate": 0.0833,
-            "sample_games": 12
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -149,29 +293,65 @@
       "projected_fantasy_points": 13.18,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Gnar",
+            "option_basis": "Overall",
+            "ranking_share": 0.1369,
+            "estimated_pick_chance": 0.1369,
+            "expected_multiplier_bonus": 0.6119,
+            "availability": 0.9476,
+            "opponent_ban_rate": 0.0476,
+            "sample_games": 63
+          },
+          "options": [
+            {
+              "champion": "Gnar",
+              "option_basis": "Overall",
+              "ranking_share": 0.1369,
+              "estimated_pick_chance": 0.1369,
+              "expected_multiplier_bonus": 0.6119,
+              "availability": 0.9476,
+              "opponent_ban_rate": 0.0476,
+              "sample_games": 63
+            },
+            {
+              "champion": "Sion",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0908,
+              "estimated_pick_chance": 0.0908,
+              "expected_multiplier_bonus": 0.3928,
+              "availability": 0.9175,
+              "opponent_ban_rate": 0.0635,
+              "sample_games": 63
+            },
+            {
+              "champion": "Rumble",
+              "option_basis": "International meta",
+              "ranking_share": 0.1118,
+              "estimated_pick_chance": 0.1118,
+              "expected_multiplier_bonus": 0.4507,
+              "availability": 0.8794,
+              "opponent_ban_rate": 0.1111,
+              "sample_games": 63
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Gnar",
-            "ranking_share": 0.1662,
-            "expected_multiplier_bonus": 1.7312,
-            "availability": 0.95,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 12
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -183,29 +363,65 @@
       "projected_fantasy_points": 15.78,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ezreal",
+            "option_basis": "Overall",
+            "ranking_share": 0.1632,
+            "estimated_pick_chance": 0.1632,
+            "expected_multiplier_bonus": 0.7681,
+            "availability": 0.9,
+            "opponent_ban_rate": 0.122,
+            "sample_games": 41
+          },
+          "options": [
+            {
+              "champion": "Ezreal",
+              "option_basis": "Overall",
+              "ranking_share": 0.1632,
+              "estimated_pick_chance": 0.1632,
+              "expected_multiplier_bonus": 0.7681,
+              "availability": 0.9,
+              "opponent_ban_rate": 0.122,
+              "sample_games": 41
+            },
+            {
+              "champion": "Ashe",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1539,
+              "estimated_pick_chance": 0.1539,
+              "expected_multiplier_bonus": 0.554,
+              "availability": 0.9561,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 41
+            },
+            {
+              "champion": "Jhin",
+              "option_basis": "International meta",
+              "ranking_share": 0.0803,
+              "estimated_pick_chance": 0.0803,
+              "expected_multiplier_bonus": 0.4518,
+              "availability": 0.9537,
+              "opponent_ban_rate": 0.0244,
+              "sample_games": 41
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jhin",
-            "ranking_share": 0.2263,
-            "expected_multiplier_bonus": 2.9764,
-            "availability": 0.85,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 4
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -217,29 +433,65 @@
       "projected_fantasy_points": 12.28,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Xin Zhao",
+            "option_basis": "Overall",
+            "ranking_share": 0.206,
+            "estimated_pick_chance": 0.206,
+            "expected_multiplier_bonus": 0.9555,
+            "availability": 0.961,
+            "opponent_ban_rate": 0.0244,
+            "sample_games": 41
+          },
+          "options": [
+            {
+              "champion": "Xin Zhao",
+              "option_basis": "Overall",
+              "ranking_share": 0.206,
+              "estimated_pick_chance": 0.206,
+              "expected_multiplier_bonus": 0.9555,
+              "availability": 0.961,
+              "opponent_ban_rate": 0.0244,
+              "sample_games": 41
+            },
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1474,
+              "estimated_pick_chance": 0.1474,
+              "expected_multiplier_bonus": 0.6948,
+              "availability": 0.8732,
+              "opponent_ban_rate": 0.0976,
+              "sample_games": 41
+            },
+            {
+              "champion": "Lee Sin",
+              "option_basis": "International meta",
+              "ranking_share": 0.0779,
+              "estimated_pick_chance": 0.0779,
+              "expected_multiplier_bonus": 0.3614,
+              "availability": 0.9756,
+              "opponent_ban_rate": 0.0244,
+              "sample_games": 41
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.1964,
-            "expected_multiplier_bonus": 2.168,
-            "availability": 0.75,
-            "opponent_ban_rate": 0.25,
-            "sample_games": 4
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -251,29 +503,65 @@
       "projected_fantasy_points": 11.11,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Orianna",
+            "option_basis": "Overall",
+            "ranking_share": 0.1367,
+            "estimated_pick_chance": 0.1367,
+            "expected_multiplier_bonus": 0.5854,
+            "availability": 0.8195,
+            "opponent_ban_rate": 0.1951,
+            "sample_games": 41
+          },
+          "options": [
+            {
+              "champion": "Orianna",
+              "option_basis": "Overall",
+              "ranking_share": 0.1367,
+              "estimated_pick_chance": 0.1367,
+              "expected_multiplier_bonus": 0.5854,
+              "availability": 0.8195,
+              "opponent_ban_rate": 0.1951,
+              "sample_games": 41
+            },
+            {
+              "champion": "Taliyah",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.076,
+              "estimated_pick_chance": 0.076,
+              "expected_multiplier_bonus": 0.3296,
+              "availability": 0.9171,
+              "opponent_ban_rate": 0.0976,
+              "sample_games": 41
+            },
+            {
+              "champion": "Ryze",
+              "option_basis": "International meta",
+              "ranking_share": 0.1218,
+              "estimated_pick_chance": 0.1218,
+              "expected_multiplier_bonus": 0.5203,
+              "availability": 0.922,
+              "opponent_ban_rate": 0.0488,
+              "sample_games": 41
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Orianna",
-            "ranking_share": 0.1749,
-            "expected_multiplier_bonus": 1.7391,
-            "availability": 0.925,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 4
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -285,29 +573,65 @@
       "projected_fantasy_points": 14.08,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Seraphine",
+            "option_basis": "Overall",
+            "ranking_share": 0.1208,
+            "estimated_pick_chance": 0.1208,
+            "expected_multiplier_bonus": 0.538,
+            "availability": 0.939,
+            "opponent_ban_rate": 0.0244,
+            "sample_games": 41
+          },
+          "options": [
+            {
+              "champion": "Seraphine",
+              "option_basis": "Overall",
+              "ranking_share": 0.1208,
+              "estimated_pick_chance": 0.1208,
+              "expected_multiplier_bonus": 0.538,
+              "availability": 0.939,
+              "opponent_ban_rate": 0.0244,
+              "sample_games": 41
+            },
+            {
+              "champion": "Lulu",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1054,
+              "estimated_pick_chance": 0.1054,
+              "expected_multiplier_bonus": 0.5285,
+              "availability": 0.9585,
+              "opponent_ban_rate": 0.0488,
+              "sample_games": 41
+            },
+            {
+              "champion": "Bard",
+              "option_basis": "International meta",
+              "ranking_share": 0.0953,
+              "estimated_pick_chance": 0.0953,
+              "expected_multiplier_bonus": 0.4622,
+              "availability": 0.9049,
+              "opponent_ban_rate": 0.0732,
+              "sample_games": 41
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Bard",
-            "ranking_share": 0.1571,
-            "expected_multiplier_bonus": 1.7713,
-            "availability": 0.925,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 4
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -319,29 +643,65 @@
       "projected_fantasy_points": 12.79,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "option_basis": "Overall",
+            "ranking_share": 0.1411,
+            "estimated_pick_chance": 0.1411,
+            "expected_multiplier_bonus": 0.5315,
+            "availability": 0.9195,
+            "opponent_ban_rate": 0.0732,
+            "sample_games": 41
+          },
+          "options": [
+            {
+              "champion": "Rumble",
+              "option_basis": "Overall",
+              "ranking_share": 0.1411,
+              "estimated_pick_chance": 0.1411,
+              "expected_multiplier_bonus": 0.5315,
+              "availability": 0.9195,
+              "opponent_ban_rate": 0.0732,
+              "sample_games": 41
+            },
+            {
+              "champion": "Gnar",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1095,
+              "estimated_pick_chance": 0.1095,
+              "expected_multiplier_bonus": 0.4123,
+              "availability": 0.9683,
+              "opponent_ban_rate": 0.0244,
+              "sample_games": 41
+            },
+            {
+              "champion": "Jayce",
+              "option_basis": "International meta",
+              "ranking_share": 0.0869,
+              "estimated_pick_chance": 0.0869,
+              "expected_multiplier_bonus": 0.3274,
+              "availability": 0.8463,
+              "opponent_ban_rate": 0.2195,
+              "sample_games": 41
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Rumble",
-            "ranking_share": 0.1554,
-            "expected_multiplier_bonus": 1.3616,
-            "availability": 0.925,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 4
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -353,29 +713,65 @@
       "projected_fantasy_points": 13.37,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ezreal",
+            "option_basis": "Overall",
+            "ranking_share": 0.1489,
+            "estimated_pick_chance": 0.1489,
+            "expected_multiplier_bonus": 0.6749,
+            "availability": 0.9159,
+            "opponent_ban_rate": 0.0227,
+            "sample_games": 44
+          },
+          "options": [
+            {
+              "champion": "Ezreal",
+              "option_basis": "Overall",
+              "ranking_share": 0.1489,
+              "estimated_pick_chance": 0.1489,
+              "expected_multiplier_bonus": 0.6749,
+              "availability": 0.9159,
+              "opponent_ban_rate": 0.0227,
+              "sample_games": 44
+            },
+            {
+              "champion": "Caitlyn",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.141,
+              "estimated_pick_chance": 0.141,
+              "expected_multiplier_bonus": 0.628,
+              "availability": 0.9795,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 44
+            },
+            {
+              "champion": "Lucian",
+              "option_basis": "International meta",
+              "ranking_share": 0.0681,
+              "estimated_pick_chance": 0.0681,
+              "expected_multiplier_bonus": 0.3259,
+              "availability": 0.9455,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 44
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jhin",
-            "ranking_share": 0.1703,
-            "expected_multiplier_bonus": 2.0311,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -387,29 +783,65 @@
       "projected_fantasy_points": 15.29,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "option_basis": "Overall",
+            "ranking_share": 0.1242,
+            "estimated_pick_chance": 0.1242,
+            "expected_multiplier_bonus": 0.6824,
+            "availability": 0.8932,
+            "opponent_ban_rate": 0.1136,
+            "sample_games": 44
+          },
+          "options": [
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Overall",
+              "ranking_share": 0.1242,
+              "estimated_pick_chance": 0.1242,
+              "expected_multiplier_bonus": 0.6824,
+              "availability": 0.8932,
+              "opponent_ban_rate": 0.1136,
+              "sample_games": 44
+            },
+            {
+              "champion": "Pantheon",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0918,
+              "estimated_pick_chance": 0.0918,
+              "expected_multiplier_bonus": 0.4078,
+              "availability": 0.7023,
+              "opponent_ban_rate": 0.3864,
+              "sample_games": 44
+            },
+            {
+              "champion": "Vi",
+              "option_basis": "International meta",
+              "ranking_share": 0.1067,
+              "estimated_pick_chance": 0.1067,
+              "expected_multiplier_bonus": 0.4721,
+              "availability": 0.8227,
+              "opponent_ban_rate": 0.2045,
+              "sample_games": 44
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.1623,
-            "expected_multiplier_bonus": 2.0913,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -421,29 +853,65 @@
       "projected_fantasy_points": 14.21,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "option_basis": "Overall",
+            "ranking_share": 0.1537,
+            "estimated_pick_chance": 0.1537,
+            "expected_multiplier_bonus": 0.5692,
+            "availability": 0.8636,
+            "opponent_ban_rate": 0.1364,
+            "sample_games": 44
+          },
+          "options": [
+            {
+              "champion": "Ryze",
+              "option_basis": "Overall",
+              "ranking_share": 0.1537,
+              "estimated_pick_chance": 0.1537,
+              "expected_multiplier_bonus": 0.5692,
+              "availability": 0.8636,
+              "opponent_ban_rate": 0.1364,
+              "sample_games": 44
+            },
+            {
+              "champion": "Akali",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.107,
+              "estimated_pick_chance": 0.107,
+              "expected_multiplier_bonus": 0.4527,
+              "availability": 0.9227,
+              "opponent_ban_rate": 0.0909,
+              "sample_games": 44
+            },
+            {
+              "champion": "Cassiopeia",
+              "option_basis": "International meta",
+              "ranking_share": 0.1044,
+              "estimated_pick_chance": 0.1044,
+              "expected_multiplier_bonus": 0.5453,
+              "availability": 0.8977,
+              "opponent_ban_rate": 0.1364,
+              "sample_games": 44
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Ryze",
-            "ranking_share": 0.1728,
-            "expected_multiplier_bonus": 1.4832,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -455,29 +923,65 @@
       "projected_fantasy_points": 16.51,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "option_basis": "Overall",
+            "ranking_share": 0.1515,
+            "estimated_pick_chance": 0.1515,
+            "expected_multiplier_bonus": 0.7856,
+            "availability": 0.925,
+            "opponent_ban_rate": 0.0682,
+            "sample_games": 44
+          },
+          "options": [
+            {
+              "champion": "Bard",
+              "option_basis": "Overall",
+              "ranking_share": 0.1515,
+              "estimated_pick_chance": 0.1515,
+              "expected_multiplier_bonus": 0.7856,
+              "availability": 0.925,
+              "opponent_ban_rate": 0.0682,
+              "sample_games": 44
+            },
+            {
+              "champion": "Nami",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1026,
+              "estimated_pick_chance": 0.1026,
+              "expected_multiplier_bonus": 0.5,
+              "availability": 0.9455,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 44
+            },
+            {
+              "champion": "Lulu",
+              "option_basis": "International meta",
+              "ranking_share": 0.0753,
+              "estimated_pick_chance": 0.0753,
+              "expected_multiplier_bonus": 0.4027,
+              "availability": 0.9841,
+              "opponent_ban_rate": 0.0227,
+              "sample_games": 44
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Bard",
-            "ranking_share": 0.2204,
-            "expected_multiplier_bonus": 2.6612,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -489,29 +993,65 @@
       "projected_fantasy_points": 13.29,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jayce",
+            "option_basis": "Overall",
+            "ranking_share": 0.1776,
+            "estimated_pick_chance": 0.1776,
+            "expected_multiplier_bonus": 0.6928,
+            "availability": 0.8977,
+            "opponent_ban_rate": 0.1364,
+            "sample_games": 44
+          },
+          "options": [
+            {
+              "champion": "Jayce",
+              "option_basis": "Overall",
+              "ranking_share": 0.1776,
+              "estimated_pick_chance": 0.1776,
+              "expected_multiplier_bonus": 0.6928,
+              "availability": 0.8977,
+              "opponent_ban_rate": 0.1364,
+              "sample_games": 44
+            },
+            {
+              "champion": "K'Sante",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1405,
+              "estimated_pick_chance": 0.1405,
+              "expected_multiplier_bonus": 0.5033,
+              "availability": 0.9659,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 44
+            },
+            {
+              "champion": "Rumble",
+              "option_basis": "International meta",
+              "ranking_share": 0.1662,
+              "estimated_pick_chance": 0.1662,
+              "expected_multiplier_bonus": 0.6361,
+              "availability": 0.8568,
+              "opponent_ban_rate": 0.1364,
+              "sample_games": 44
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Rumble",
-            "ranking_share": 0.1827,
-            "expected_multiplier_bonus": 1.6277,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -523,29 +1063,65 @@
       "projected_fantasy_points": 17.08,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ezreal",
+            "option_basis": "Overall",
+            "ranking_share": 0.1673,
+            "estimated_pick_chance": 0.1673,
+            "expected_multiplier_bonus": 0.8898,
+            "availability": 0.9131,
+            "opponent_ban_rate": 0.082,
+            "sample_games": 61
+          },
+          "options": [
+            {
+              "champion": "Ezreal",
+              "option_basis": "Overall",
+              "ranking_share": 0.1673,
+              "estimated_pick_chance": 0.1673,
+              "expected_multiplier_bonus": 0.8898,
+              "availability": 0.9131,
+              "opponent_ban_rate": 0.082,
+              "sample_games": 61
+            },
+            {
+              "champion": "Lucian",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.098,
+              "estimated_pick_chance": 0.098,
+              "expected_multiplier_bonus": 0.5634,
+              "availability": 0.9623,
+              "opponent_ban_rate": 0.0328,
+              "sample_games": 61
+            },
+            {
+              "champion": "Jhin",
+              "option_basis": "International meta",
+              "ranking_share": 0.071,
+              "estimated_pick_chance": 0.071,
+              "expected_multiplier_bonus": 0.3465,
+              "availability": 0.9115,
+              "opponent_ban_rate": 0.0984,
+              "sample_games": 61
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jhin",
-            "ranking_share": 0.2248,
-            "expected_multiplier_bonus": 2.5292,
-            "availability": 0.97,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 20
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -557,29 +1133,65 @@
       "projected_fantasy_points": 17.48,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "option_basis": "Overall",
+            "ranking_share": 0.1364,
+            "estimated_pick_chance": 0.1364,
+            "expected_multiplier_bonus": 0.7171,
+            "availability": 0.8607,
+            "opponent_ban_rate": 0.1639,
+            "sample_games": 61
+          },
+          "options": [
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Overall",
+              "ranking_share": 0.1364,
+              "estimated_pick_chance": 0.1364,
+              "expected_multiplier_bonus": 0.7171,
+              "availability": 0.8607,
+              "opponent_ban_rate": 0.1639,
+              "sample_games": 61
+            },
+            {
+              "champion": "Nocturne",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0841,
+              "estimated_pick_chance": 0.0841,
+              "expected_multiplier_bonus": 0.449,
+              "availability": 0.8508,
+              "opponent_ban_rate": 0.1639,
+              "sample_games": 61
+            },
+            {
+              "champion": "Naafiri",
+              "option_basis": "International meta",
+              "ranking_share": 0.0757,
+              "estimated_pick_chance": 0.0757,
+              "expected_multiplier_bonus": 0.3991,
+              "availability": 0.9607,
+              "opponent_ban_rate": 0.0492,
+              "sample_games": 61
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.188,
-            "expected_multiplier_bonus": 2.3149,
-            "availability": 0.955,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 20
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -591,29 +1203,65 @@
       "projected_fantasy_points": 16.62,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "option_basis": "Overall",
+            "ranking_share": 0.1111,
+            "estimated_pick_chance": 0.1111,
+            "expected_multiplier_bonus": 0.5549,
+            "availability": 0.9033,
+            "opponent_ban_rate": 0.082,
+            "sample_games": 61
+          },
+          "options": [
+            {
+              "champion": "Ryze",
+              "option_basis": "Overall",
+              "ranking_share": 0.1111,
+              "estimated_pick_chance": 0.1111,
+              "expected_multiplier_bonus": 0.5549,
+              "availability": 0.9033,
+              "opponent_ban_rate": 0.082,
+              "sample_games": 61
+            },
+            {
+              "champion": "Annie",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0891,
+              "estimated_pick_chance": 0.0891,
+              "expected_multiplier_bonus": 0.4356,
+              "availability": 0.9148,
+              "opponent_ban_rate": 0.1148,
+              "sample_games": 61
+            },
+            {
+              "champion": "Cassiopeia",
+              "option_basis": "International meta",
+              "ranking_share": 0.1107,
+              "estimated_pick_chance": 0.1107,
+              "expected_multiplier_bonus": 0.5252,
+              "availability": 0.8934,
+              "opponent_ban_rate": 0.1311,
+              "sample_games": 61
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Viktor",
-            "ranking_share": 0.1813,
-            "expected_multiplier_bonus": 1.9287,
-            "availability": 0.91,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 20
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -625,29 +1273,65 @@
       "projected_fantasy_points": 18.51,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "option_basis": "Overall",
+            "ranking_share": 0.1278,
+            "estimated_pick_chance": 0.1278,
+            "expected_multiplier_bonus": 0.8272,
+            "availability": 0.8492,
+            "opponent_ban_rate": 0.1803,
+            "sample_games": 61
+          },
+          "options": [
+            {
+              "champion": "Bard",
+              "option_basis": "Overall",
+              "ranking_share": 0.1278,
+              "estimated_pick_chance": 0.1278,
+              "expected_multiplier_bonus": 0.8272,
+              "availability": 0.8492,
+              "opponent_ban_rate": 0.1803,
+              "sample_games": 61
+            },
+            {
+              "champion": "Lulu",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1064,
+              "estimated_pick_chance": 0.1064,
+              "expected_multiplier_bonus": 0.605,
+              "availability": 0.9213,
+              "opponent_ban_rate": 0.0492,
+              "sample_games": 61
+            },
+            {
+              "champion": "Nautilus",
+              "option_basis": "International meta",
+              "ranking_share": 0.0912,
+              "estimated_pick_chance": 0.0912,
+              "expected_multiplier_bonus": 0.5416,
+              "availability": 0.9016,
+              "opponent_ban_rate": 0.0984,
+              "sample_games": 61
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Bard",
-            "ranking_share": 0.1783,
-            "expected_multiplier_bonus": 2.689,
-            "availability": 0.76,
-            "opponent_ban_rate": 0.3,
-            "sample_games": 20
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -659,29 +1343,65 @@
       "projected_fantasy_points": 12.66,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "option_basis": "Overall",
+            "ranking_share": 0.1423,
+            "estimated_pick_chance": 0.1423,
+            "expected_multiplier_bonus": 0.5885,
+            "availability": 0.841,
+            "opponent_ban_rate": 0.1639,
+            "sample_games": 61
+          },
+          "options": [
+            {
+              "champion": "Rumble",
+              "option_basis": "Overall",
+              "ranking_share": 0.1423,
+              "estimated_pick_chance": 0.1423,
+              "expected_multiplier_bonus": 0.5885,
+              "availability": 0.841,
+              "opponent_ban_rate": 0.1639,
+              "sample_games": 61
+            },
+            {
+              "champion": "Jayce",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1415,
+              "estimated_pick_chance": 0.1415,
+              "expected_multiplier_bonus": 0.495,
+              "availability": 0.9459,
+              "opponent_ban_rate": 0.0492,
+              "sample_games": 61
+            },
+            {
+              "champion": "Gnar",
+              "option_basis": "International meta",
+              "ranking_share": 0.0942,
+              "estimated_pick_chance": 0.0942,
+              "expected_multiplier_bonus": 0.3731,
+              "availability": 0.918,
+              "opponent_ban_rate": 0.082,
+              "sample_games": 61
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Rumble",
-            "ranking_share": 0.1861,
-            "expected_multiplier_bonus": 1.7939,
-            "availability": 0.965,
-            "opponent_ban_rate": 0.05,
-            "sample_games": 20
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -693,29 +1413,65 @@
       "projected_fantasy_points": 19.01,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ezreal",
+            "option_basis": "Overall",
+            "ranking_share": 0.1639,
+            "estimated_pick_chance": 0.1639,
+            "expected_multiplier_bonus": 1.0744,
+            "availability": 0.9129,
+            "opponent_ban_rate": 0.0484,
+            "sample_games": 62
+          },
+          "options": [
+            {
+              "champion": "Ezreal",
+              "option_basis": "Overall",
+              "ranking_share": 0.1639,
+              "estimated_pick_chance": 0.1639,
+              "expected_multiplier_bonus": 1.0744,
+              "availability": 0.9129,
+              "opponent_ban_rate": 0.0484,
+              "sample_games": 62
+            },
+            {
+              "champion": "Ziggs",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0751,
+              "estimated_pick_chance": 0.0751,
+              "expected_multiplier_bonus": 0.4294,
+              "availability": 0.8194,
+              "opponent_ban_rate": 0.2581,
+              "sample_games": 62
+            },
+            {
+              "champion": "Jhin",
+              "option_basis": "International meta",
+              "ranking_share": 0.0789,
+              "estimated_pick_chance": 0.0789,
+              "expected_multiplier_bonus": 0.3757,
+              "availability": 0.9387,
+              "opponent_ban_rate": 0.0323,
+              "sample_games": 62
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jhin",
-            "ranking_share": 0.2091,
-            "expected_multiplier_bonus": 2.4495,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -727,29 +1483,65 @@
       "projected_fantasy_points": 17.74,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "option_basis": "Overall",
+            "ranking_share": 0.1304,
+            "estimated_pick_chance": 0.1304,
+            "expected_multiplier_bonus": 0.6625,
+            "availability": 0.8113,
+            "opponent_ban_rate": 0.2419,
+            "sample_games": 62
+          },
+          "options": [
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Overall",
+              "ranking_share": 0.1304,
+              "estimated_pick_chance": 0.1304,
+              "expected_multiplier_bonus": 0.6625,
+              "availability": 0.8113,
+              "opponent_ban_rate": 0.2419,
+              "sample_games": 62
+            },
+            {
+              "champion": "Nocturne",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.099,
+              "estimated_pick_chance": 0.099,
+              "expected_multiplier_bonus": 0.5058,
+              "availability": 0.9355,
+              "opponent_ban_rate": 0.0645,
+              "sample_games": 62
+            },
+            {
+              "champion": "Lee Sin",
+              "option_basis": "International meta",
+              "ranking_share": 0.1107,
+              "estimated_pick_chance": 0.1107,
+              "expected_multiplier_bonus": 0.5931,
+              "availability": 0.9661,
+              "opponent_ban_rate": 0.0484,
+              "sample_games": 62
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.1933,
-            "expected_multiplier_bonus": 2.1392,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -761,29 +1553,65 @@
       "projected_fantasy_points": 17.56,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Viktor",
+            "option_basis": "Overall",
+            "ranking_share": 0.1326,
+            "estimated_pick_chance": 0.1326,
+            "expected_multiplier_bonus": 0.7543,
+            "availability": 0.9387,
+            "opponent_ban_rate": 0.0323,
+            "sample_games": 62
+          },
+          "options": [
+            {
+              "champion": "Viktor",
+              "option_basis": "Overall",
+              "ranking_share": 0.1326,
+              "estimated_pick_chance": 0.1326,
+              "expected_multiplier_bonus": 0.7543,
+              "availability": 0.9387,
+              "opponent_ban_rate": 0.0323,
+              "sample_games": 62
+            },
+            {
+              "champion": "Ryze",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.137,
+              "estimated_pick_chance": 0.137,
+              "expected_multiplier_bonus": 0.6867,
+              "availability": 0.9419,
+              "opponent_ban_rate": 0.0484,
+              "sample_games": 62
+            },
+            {
+              "champion": "Cassiopeia",
+              "option_basis": "International meta",
+              "ranking_share": 0.0852,
+              "estimated_pick_chance": 0.0852,
+              "expected_multiplier_bonus": 0.3394,
+              "availability": 0.9532,
+              "opponent_ban_rate": 0.0323,
+              "sample_games": 62
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Ryze",
-            "ranking_share": 0.136,
-            "expected_multiplier_bonus": 1.602,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -795,29 +1623,65 @@
       "projected_fantasy_points": 18.29,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "option_basis": "Overall",
+            "ranking_share": 0.1072,
+            "estimated_pick_chance": 0.1072,
+            "expected_multiplier_bonus": 0.6346,
+            "availability": 0.8258,
+            "opponent_ban_rate": 0.1935,
+            "sample_games": 62
+          },
+          "options": [
+            {
+              "champion": "Bard",
+              "option_basis": "Overall",
+              "ranking_share": 0.1072,
+              "estimated_pick_chance": 0.1072,
+              "expected_multiplier_bonus": 0.6346,
+              "availability": 0.8258,
+              "opponent_ban_rate": 0.1935,
+              "sample_games": 62
+            },
+            {
+              "champion": "Nautilus",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.094,
+              "estimated_pick_chance": 0.094,
+              "expected_multiplier_bonus": 0.509,
+              "availability": 0.8677,
+              "opponent_ban_rate": 0.1613,
+              "sample_games": 62
+            },
+            {
+              "champion": "Camille",
+              "option_basis": "International meta",
+              "ranking_share": 0.0771,
+              "estimated_pick_chance": 0.0771,
+              "expected_multiplier_bonus": 0.4286,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 62
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Bard",
-            "ranking_share": 0.2008,
-            "expected_multiplier_bonus": 2.6182,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -829,29 +1693,65 @@
       "projected_fantasy_points": 13.59,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "option_basis": "Overall",
+            "ranking_share": 0.1221,
+            "estimated_pick_chance": 0.1221,
+            "expected_multiplier_bonus": 0.5517,
+            "availability": 0.8919,
+            "opponent_ban_rate": 0.0645,
+            "sample_games": 62
+          },
+          "options": [
+            {
+              "champion": "Rumble",
+              "option_basis": "Overall",
+              "ranking_share": 0.1221,
+              "estimated_pick_chance": 0.1221,
+              "expected_multiplier_bonus": 0.5517,
+              "availability": 0.8919,
+              "opponent_ban_rate": 0.0645,
+              "sample_games": 62
+            },
+            {
+              "champion": "Gnar",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1404,
+              "estimated_pick_chance": 0.1404,
+              "expected_multiplier_bonus": 0.5509,
+              "availability": 0.9855,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 62
+            },
+            {
+              "champion": "Ambessa",
+              "option_basis": "International meta",
+              "ranking_share": 0.07,
+              "estimated_pick_chance": 0.07,
+              "expected_multiplier_bonus": 0.2626,
+              "availability": 0.9387,
+              "opponent_ban_rate": 0.0323,
+              "sample_games": 62
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Rumble",
-            "ranking_share": 0.2111,
-            "expected_multiplier_bonus": 2.2666,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -863,29 +1763,65 @@
       "projected_fantasy_points": 18.9,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Caitlyn",
+            "option_basis": "Overall",
+            "ranking_share": 0.1642,
+            "estimated_pick_chance": 0.1642,
+            "expected_multiplier_bonus": 1.0548,
+            "availability": 1.0,
+            "opponent_ban_rate": 0.0,
+            "sample_games": 35
+          },
+          "options": [
+            {
+              "champion": "Caitlyn",
+              "option_basis": "Overall",
+              "ranking_share": 0.1642,
+              "estimated_pick_chance": 0.1642,
+              "expected_multiplier_bonus": 1.0548,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 35
+            },
+            {
+              "champion": "Jhin",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1419,
+              "estimated_pick_chance": 0.1419,
+              "expected_multiplier_bonus": 0.7086,
+              "availability": 0.9657,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 35
+            },
+            {
+              "champion": "Ezreal",
+              "option_basis": "International meta",
+              "ranking_share": 0.1059,
+              "estimated_pick_chance": 0.1059,
+              "expected_multiplier_bonus": 0.566,
+              "availability": 0.9143,
+              "opponent_ban_rate": 0.0857,
+              "sample_games": 35
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Caitlyn",
-            "ranking_share": 0.1995,
-            "expected_multiplier_bonus": 2.9948,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -897,29 +1833,65 @@
       "projected_fantasy_points": 19.02,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "option_basis": "Overall",
+            "ranking_share": 0.1946,
+            "estimated_pick_chance": 0.1946,
+            "expected_multiplier_bonus": 0.9392,
+            "availability": 0.8857,
+            "opponent_ban_rate": 0.1143,
+            "sample_games": 35
+          },
+          "options": [
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Overall",
+              "ranking_share": 0.1946,
+              "estimated_pick_chance": 0.1946,
+              "expected_multiplier_bonus": 0.9392,
+              "availability": 0.8857,
+              "opponent_ban_rate": 0.1143,
+              "sample_games": 35
+            },
+            {
+              "champion": "Skarner",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0921,
+              "estimated_pick_chance": 0.0921,
+              "expected_multiplier_bonus": 0.561,
+              "availability": 0.9629,
+              "opponent_ban_rate": 0.0286,
+              "sample_games": 35
+            },
+            {
+              "champion": "Lee Sin",
+              "option_basis": "International meta",
+              "ranking_share": 0.1152,
+              "estimated_pick_chance": 0.1152,
+              "expected_multiplier_bonus": 0.6349,
+              "availability": 0.9914,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 35
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.2589,
-            "expected_multiplier_bonus": 2.9221,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -931,29 +1903,65 @@
       "projected_fantasy_points": 16.16,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Viktor",
+            "option_basis": "Overall",
+            "ranking_share": 0.1271,
+            "estimated_pick_chance": 0.1271,
+            "expected_multiplier_bonus": 0.6608,
+            "availability": 0.9629,
+            "opponent_ban_rate": 0.0286,
+            "sample_games": 35
+          },
+          "options": [
+            {
+              "champion": "Viktor",
+              "option_basis": "Overall",
+              "ranking_share": 0.1271,
+              "estimated_pick_chance": 0.1271,
+              "expected_multiplier_bonus": 0.6608,
+              "availability": 0.9629,
+              "opponent_ban_rate": 0.0286,
+              "sample_games": 35
+            },
+            {
+              "champion": "Orianna",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1218,
+              "estimated_pick_chance": 0.1218,
+              "expected_multiplier_bonus": 0.6479,
+              "availability": 0.7257,
+              "opponent_ban_rate": 0.3429,
+              "sample_games": 35
+            },
+            {
+              "champion": "Ryze",
+              "option_basis": "International meta",
+              "ranking_share": 0.121,
+              "estimated_pick_chance": 0.121,
+              "expected_multiplier_bonus": 0.5478,
+              "availability": 0.8171,
+              "opponent_ban_rate": 0.2,
+              "sample_games": 35
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Viktor",
-            "ranking_share": 0.183,
-            "expected_multiplier_bonus": 2.2104,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -965,29 +1973,65 @@
       "projected_fantasy_points": 19.32,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "option_basis": "Overall",
+            "ranking_share": 0.1512,
+            "estimated_pick_chance": 0.1512,
+            "expected_multiplier_bonus": 0.987,
+            "availability": 0.7543,
+            "opponent_ban_rate": 0.3143,
+            "sample_games": 35
+          },
+          "options": [
+            {
+              "champion": "Bard",
+              "option_basis": "Overall",
+              "ranking_share": 0.1512,
+              "estimated_pick_chance": 0.1512,
+              "expected_multiplier_bonus": 0.987,
+              "availability": 0.7543,
+              "opponent_ban_rate": 0.3143,
+              "sample_games": 35
+            },
+            {
+              "champion": "Blitzcrank",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0647,
+              "estimated_pick_chance": 0.0647,
+              "expected_multiplier_bonus": 0.3564,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 35
+            },
+            {
+              "champion": "Camille",
+              "option_basis": "International meta",
+              "ranking_share": 0.0875,
+              "estimated_pick_chance": 0.0875,
+              "expected_multiplier_bonus": 0.4698,
+              "availability": 1.0,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 35
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Bard",
-            "ranking_share": 0.2319,
-            "expected_multiplier_bonus": 3.5285,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -999,29 +2043,65 @@
       "projected_fantasy_points": 12.83,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "option_basis": "Overall",
+            "ranking_share": 0.1466,
+            "estimated_pick_chance": 0.1466,
+            "expected_multiplier_bonus": 0.5854,
+            "availability": 0.8457,
+            "opponent_ban_rate": 0.1714,
+            "sample_games": 35
+          },
+          "options": [
+            {
+              "champion": "Rumble",
+              "option_basis": "Overall",
+              "ranking_share": 0.1466,
+              "estimated_pick_chance": 0.1466,
+              "expected_multiplier_bonus": 0.5854,
+              "availability": 0.8457,
+              "opponent_ban_rate": 0.1714,
+              "sample_games": 35
+            },
+            {
+              "champion": "Renekton",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1458,
+              "estimated_pick_chance": 0.1458,
+              "expected_multiplier_bonus": 0.5537,
+              "availability": 0.9457,
+              "opponent_ban_rate": 0.0286,
+              "sample_games": 35
+            },
+            {
+              "champion": "Gnar",
+              "option_basis": "International meta",
+              "ranking_share": 0.0845,
+              "estimated_pick_chance": 0.0845,
+              "expected_multiplier_bonus": 0.3501,
+              "availability": 0.9829,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 35
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Rumble",
-            "ranking_share": 0.1718,
-            "expected_multiplier_bonus": 1.5992,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1033,29 +2113,65 @@
       "projected_fantasy_points": 15.87,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ezreal",
+            "option_basis": "Overall",
+            "ranking_share": 0.2292,
+            "estimated_pick_chance": 0.2292,
+            "expected_multiplier_bonus": 1.1371,
+            "availability": 0.9283,
+            "opponent_ban_rate": 0.0667,
+            "sample_games": 60
+          },
+          "options": [
+            {
+              "champion": "Ezreal",
+              "option_basis": "Overall",
+              "ranking_share": 0.2292,
+              "estimated_pick_chance": 0.2292,
+              "expected_multiplier_bonus": 1.1371,
+              "availability": 0.9283,
+              "opponent_ban_rate": 0.0667,
+              "sample_games": 60
+            },
+            {
+              "champion": "Corki",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0837,
+              "estimated_pick_chance": 0.0837,
+              "expected_multiplier_bonus": 0.3812,
+              "availability": 0.97,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 60
+            },
+            {
+              "champion": "Caitlyn",
+              "option_basis": "International meta",
+              "ranking_share": 0.121,
+              "estimated_pick_chance": 0.121,
+              "expected_multiplier_bonus": 0.6138,
+              "availability": 0.99,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 60
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Caitlyn",
-            "ranking_share": 0.1732,
-            "expected_multiplier_bonus": 2.0569,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1067,29 +2183,65 @@
       "projected_fantasy_points": 14.12,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "option_basis": "Overall",
+            "ranking_share": 0.1113,
+            "estimated_pick_chance": 0.1113,
+            "expected_multiplier_bonus": 0.5998,
+            "availability": 0.7933,
+            "opponent_ban_rate": 0.2667,
+            "sample_games": 60
+          },
+          "options": [
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Overall",
+              "ranking_share": 0.1113,
+              "estimated_pick_chance": 0.1113,
+              "expected_multiplier_bonus": 0.5998,
+              "availability": 0.7933,
+              "opponent_ban_rate": 0.2667,
+              "sample_games": 60
+            },
+            {
+              "champion": "Wukong",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0992,
+              "estimated_pick_chance": 0.0992,
+              "expected_multiplier_bonus": 0.4578,
+              "availability": 0.8967,
+              "opponent_ban_rate": 0.0833,
+              "sample_games": 60
+            },
+            {
+              "champion": "Naafiri",
+              "option_basis": "International meta",
+              "ranking_share": 0.0705,
+              "estimated_pick_chance": 0.0705,
+              "expected_multiplier_bonus": 0.3612,
+              "availability": 0.995,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 60
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.1819,
-            "expected_multiplier_bonus": 2.2962,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1101,29 +2253,65 @@
       "projected_fantasy_points": 10.89,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "option_basis": "Overall",
+            "ranking_share": 0.142,
+            "estimated_pick_chance": 0.142,
+            "expected_multiplier_bonus": 0.52,
+            "availability": 0.9433,
+            "opponent_ban_rate": 0.0167,
+            "sample_games": 60
+          },
+          "options": [
+            {
+              "champion": "Ryze",
+              "option_basis": "Overall",
+              "ranking_share": 0.142,
+              "estimated_pick_chance": 0.142,
+              "expected_multiplier_bonus": 0.52,
+              "availability": 0.9433,
+              "opponent_ban_rate": 0.0167,
+              "sample_games": 60
+            },
+            {
+              "champion": "Annie",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0984,
+              "estimated_pick_chance": 0.0984,
+              "expected_multiplier_bonus": 0.4205,
+              "availability": 0.9417,
+              "opponent_ban_rate": 0.0833,
+              "sample_games": 60
+            },
+            {
+              "champion": "Orianna",
+              "option_basis": "International meta",
+              "ranking_share": 0.0672,
+              "estimated_pick_chance": 0.0672,
+              "expected_multiplier_bonus": 0.3195,
+              "availability": 0.88,
+              "opponent_ban_rate": 0.15,
+              "sample_games": 60
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Ryze",
-            "ranking_share": 0.1609,
-            "expected_multiplier_bonus": 1.3637,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1135,29 +2323,65 @@
       "projected_fantasy_points": 17.35,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rell",
+            "option_basis": "Overall",
+            "ranking_share": 0.1405,
+            "estimated_pick_chance": 0.1405,
+            "expected_multiplier_bonus": 0.7259,
+            "availability": 0.9517,
+            "opponent_ban_rate": 0.0333,
+            "sample_games": 60
+          },
+          "options": [
+            {
+              "champion": "Rell",
+              "option_basis": "Overall",
+              "ranking_share": 0.1405,
+              "estimated_pick_chance": 0.1405,
+              "expected_multiplier_bonus": 0.7259,
+              "availability": 0.9517,
+              "opponent_ban_rate": 0.0333,
+              "sample_games": 60
+            },
+            {
+              "champion": "Alistar",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0985,
+              "estimated_pick_chance": 0.0985,
+              "expected_multiplier_bonus": 0.5199,
+              "availability": 0.91,
+              "opponent_ban_rate": 0.1,
+              "sample_games": 60
+            },
+            {
+              "champion": "Bard",
+              "option_basis": "International meta",
+              "ranking_share": 0.0776,
+              "estimated_pick_chance": 0.0776,
+              "expected_multiplier_bonus": 0.4177,
+              "availability": 0.8967,
+              "opponent_ban_rate": 0.0833,
+              "sample_games": 60
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Nautilus",
-            "ranking_share": 0.1681,
-            "expected_multiplier_bonus": 2.0586,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1169,29 +2393,65 @@
       "projected_fantasy_points": 10.53,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "option_basis": "Overall",
+            "ranking_share": 0.1902,
+            "estimated_pick_chance": 0.1902,
+            "expected_multiplier_bonus": 0.6546,
+            "availability": 0.84,
+            "opponent_ban_rate": 0.15,
+            "sample_games": 60
+          },
+          "options": [
+            {
+              "champion": "Rumble",
+              "option_basis": "Overall",
+              "ranking_share": 0.1902,
+              "estimated_pick_chance": 0.1902,
+              "expected_multiplier_bonus": 0.6546,
+              "availability": 0.84,
+              "opponent_ban_rate": 0.15,
+              "sample_games": 60
+            },
+            {
+              "champion": "Sion",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.1127,
+              "estimated_pick_chance": 0.1127,
+              "expected_multiplier_bonus": 0.3598,
+              "availability": 0.9367,
+              "opponent_ban_rate": 0.0333,
+              "sample_games": 60
+            },
+            {
+              "champion": "Gnar",
+              "option_basis": "International meta",
+              "ranking_share": 0.0978,
+              "estimated_pick_chance": 0.0978,
+              "expected_multiplier_bonus": 0.3222,
+              "availability": 0.96,
+              "opponent_ban_rate": 0.05,
+              "sample_games": 60
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Rumble",
-            "ranking_share": 0.2133,
-            "expected_multiplier_bonus": 1.7107,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1203,29 +2463,65 @@
       "projected_fantasy_points": 16.69,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ezreal",
+            "option_basis": "Overall",
+            "ranking_share": 0.1317,
+            "estimated_pick_chance": 0.1317,
+            "expected_multiplier_bonus": 0.6564,
+            "availability": 0.9612,
+            "opponent_ban_rate": 0.0299,
+            "sample_games": 67
+          },
+          "options": [
+            {
+              "champion": "Ezreal",
+              "option_basis": "Overall",
+              "ranking_share": 0.1317,
+              "estimated_pick_chance": 0.1317,
+              "expected_multiplier_bonus": 0.6564,
+              "availability": 0.9612,
+              "opponent_ban_rate": 0.0299,
+              "sample_games": 67
+            },
+            {
+              "champion": "Xayah",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.089,
+              "estimated_pick_chance": 0.089,
+              "expected_multiplier_bonus": 0.473,
+              "availability": 0.9955,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 67
+            },
+            {
+              "champion": "Caitlyn",
+              "option_basis": "International meta",
+              "ranking_share": 0.1262,
+              "estimated_pick_chance": 0.1262,
+              "expected_multiplier_bonus": 0.6018,
+              "availability": 0.9746,
+              "opponent_ban_rate": 0.0299,
+              "sample_games": 67
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Caitlyn",
-            "ranking_share": 0.1802,
-            "expected_multiplier_bonus": 2.1999,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1237,29 +2533,65 @@
       "projected_fantasy_points": 18.96,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Jarvan IV",
+            "option_basis": "Overall",
+            "ranking_share": 0.1454,
+            "estimated_pick_chance": 0.1454,
+            "expected_multiplier_bonus": 0.8567,
+            "availability": 0.9269,
+            "opponent_ban_rate": 0.0597,
+            "sample_games": 67
+          },
+          "options": [
+            {
+              "champion": "Jarvan IV",
+              "option_basis": "Overall",
+              "ranking_share": 0.1454,
+              "estimated_pick_chance": 0.1454,
+              "expected_multiplier_bonus": 0.8567,
+              "availability": 0.9269,
+              "opponent_ban_rate": 0.0597,
+              "sample_games": 67
+            },
+            {
+              "champion": "Nocturne",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0889,
+              "estimated_pick_chance": 0.0889,
+              "expected_multiplier_bonus": 0.4689,
+              "availability": 0.8642,
+              "opponent_ban_rate": 0.1493,
+              "sample_games": 67
+            },
+            {
+              "champion": "Lee Sin",
+              "option_basis": "International meta",
+              "ranking_share": 0.0966,
+              "estimated_pick_chance": 0.0966,
+              "expected_multiplier_bonus": 0.748,
+              "availability": 0.9642,
+              "opponent_ban_rate": 0.0448,
+              "sample_games": 67
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Jarvan IV",
-            "ranking_share": 0.2187,
-            "expected_multiplier_bonus": 3.1434,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1271,29 +2603,65 @@
       "projected_fantasy_points": 18.28,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Ryze",
+            "option_basis": "Overall",
+            "ranking_share": 0.1527,
+            "estimated_pick_chance": 0.1527,
+            "expected_multiplier_bonus": 0.9419,
+            "availability": 0.9134,
+            "opponent_ban_rate": 0.1045,
+            "sample_games": 67
+          },
+          "options": [
+            {
+              "champion": "Ryze",
+              "option_basis": "Overall",
+              "ranking_share": 0.1527,
+              "estimated_pick_chance": 0.1527,
+              "expected_multiplier_bonus": 0.9419,
+              "availability": 0.9134,
+              "opponent_ban_rate": 0.1045,
+              "sample_games": 67
+            },
+            {
+              "champion": "Akali",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0783,
+              "estimated_pick_chance": 0.0783,
+              "expected_multiplier_bonus": 0.5085,
+              "availability": 0.9015,
+              "opponent_ban_rate": 0.1343,
+              "sample_games": 67
+            },
+            {
+              "champion": "Orianna",
+              "option_basis": "International meta",
+              "ranking_share": 0.0993,
+              "estimated_pick_chance": 0.0993,
+              "expected_multiplier_bonus": 0.6077,
+              "availability": 0.797,
+              "opponent_ban_rate": 0.2388,
+              "sample_games": 67
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Ryze",
-            "ranking_share": 0.1673,
-            "expected_multiplier_bonus": 2.3789,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1305,29 +2673,65 @@
       "projected_fantasy_points": 18.79,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Bard",
+            "option_basis": "Overall",
+            "ranking_share": 0.1363,
+            "estimated_pick_chance": 0.1363,
+            "expected_multiplier_bonus": 0.8218,
+            "availability": 0.9418,
+            "opponent_ban_rate": 0.0448,
+            "sample_games": 67
+          },
+          "options": [
+            {
+              "champion": "Bard",
+              "option_basis": "Overall",
+              "ranking_share": 0.1363,
+              "estimated_pick_chance": 0.1363,
+              "expected_multiplier_bonus": 0.8218,
+              "availability": 0.9418,
+              "opponent_ban_rate": 0.0448,
+              "sample_games": 67
+            },
+            {
+              "champion": "Rell",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0998,
+              "estimated_pick_chance": 0.0998,
+              "expected_multiplier_bonus": 0.5909,
+              "availability": 0.9955,
+              "opponent_ban_rate": 0.0,
+              "sample_games": 67
+            },
+            {
+              "champion": "Nautilus",
+              "option_basis": "International meta",
+              "ranking_share": 0.0875,
+              "estimated_pick_chance": 0.0875,
+              "expected_multiplier_bonus": 0.4404,
+              "availability": 0.9075,
+              "opponent_ban_rate": 0.0746,
+              "sample_games": 67
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Bard",
-            "ranking_share": 0.1859,
-            "expected_multiplier_bonus": 2.6024,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     },
@@ -1339,29 +2743,65 @@
       "projected_fantasy_points": 12.16,
       "picks": {
         "1.3x": {
-          "label": "Comfort",
-          "available": false,
-          "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "label": "Opening baseline / Comfort",
+          "available": true,
+          "reason": null,
+          "pick": {
+            "champion": "Rumble",
+            "option_basis": "Overall",
+            "ranking_share": 0.1351,
+            "estimated_pick_chance": 0.1351,
+            "expected_multiplier_bonus": 0.5528,
+            "availability": 0.8896,
+            "opponent_ban_rate": 0.1194,
+            "sample_games": 67
+          },
+          "options": [
+            {
+              "champion": "Rumble",
+              "option_basis": "Overall",
+              "ranking_share": 0.1351,
+              "estimated_pick_chance": 0.1351,
+              "expected_multiplier_bonus": 0.5528,
+              "availability": 0.8896,
+              "opponent_ban_rate": 0.1194,
+              "sample_games": 67
+            },
+            {
+              "champion": "Ornn",
+              "option_basis": "Player comfort",
+              "ranking_share": 0.0818,
+              "estimated_pick_chance": 0.0818,
+              "expected_multiplier_bonus": 0.3637,
+              "availability": 0.9746,
+              "opponent_ban_rate": 0.0299,
+              "sample_games": 67
+            },
+            {
+              "champion": "Gnar",
+              "option_basis": "International meta",
+              "ranking_share": 0.1102,
+              "estimated_pick_chance": 0.1102,
+              "expected_multiplier_bonus": 0.3884,
+              "availability": 0.9075,
+              "opponent_ban_rate": 0.0746,
+              "sample_games": 67
+            }
+          ]
         },
         "1.5x": {
           "label": "League adoption",
           "available": false,
           "reason": "Not available at this roster lock under the official split-history rule.",
-          "pick": null
+          "pick": null,
+          "options": []
         },
         "1.7x": {
           "label": "Novelty",
-          "available": true,
-          "reason": null,
-          "pick": {
-            "champion": "Rumble",
-            "ranking_share": 0.1631,
-            "expected_multiplier_bonus": 1.5454,
-            "availability": 1.0,
-            "opponent_ban_rate": 0.0,
-            "sample_games": 0
-          }
+          "available": false,
+          "reason": "Not available at this roster lock under the official split-history rule.",
+          "pick": null,
+          "options": []
         }
       }
     }

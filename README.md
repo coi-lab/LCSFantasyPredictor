@@ -40,8 +40,39 @@ Generates two files under `data/predictions/`:
 It also exports `dashboard/weekly_champion_predictions.json`, containing the
 three multiplier columns for every projected starter in the current official
 market. A tier is explicitly marked unavailable when current-split history
-cannot produce that official multiplier, as happens for x1.3 and x1.5 in the
-first round of a split.
+cannot produce that official multiplier. Round 1 is the exception: every
+champion starts at the official x1.3 opening baseline. From Round 2 onward,
+normal split-history eligibility produces x1.3, x1.5, and x1.7 candidates.
+When the scheduled patch is not recorded in the market snapshot, the current
+predictor uses the latest observed tier-1 patch before roster lock; nearby
+MSI/EWC evidence can therefore advance the patch proxy without being counted
+as domestic LCS split maturity.
+
+### Optimize the current six-slot roster
+
+Generate current player and coach projections, then search every legal lineup:
+
+```bash
+python -m fantasy_prediction.player_baseline --skip-backtest
+python -m fantasy_prediction.lineup_optimizer --budget 100 --top-n 10
+```
+
+The optimizer uses one TOP, JGL, MID, BOT, SUP, and coach; official market
+prices; expected champion bonus; and the full +0% through +25% variety ladder.
+It writes `data/predictions/current_lineup_recommendations.json` and archives
+the dashboard-ready week in `dashboard/matchup_lineups.json`. Open
+`http://localhost:8050/#matchup-optimizer` to switch between saved fantasy
+weeks, compare the top ten legal lineups, inspect each matchup, and see the
+recommended champion choices with estimated pick chances. Re-running a saved
+week replaces that week while retaining the other weeks. See
+[`analysis/player_matchup_and_lineup_training.md`](analysis/player_matchup_and_lineup_training.md)
+for the chronological training and validation design.
+
+Production champion-source parameters are frozen in
+`config/champion_model.json`. They were selected with weekly chronological
+targets and patch-distance decay rather than calendar-day half-lives. See
+[`analysis/weekly_patch_weight_tuning.md`](analysis/weekly_patch_weight_tuning.md)
+for the validation windows, roster-lock proxy, metrics, and limitations.
 
 ---
 
@@ -51,12 +82,14 @@ player-game rows contain the champion played, and team-game rows contain ordered
 table before filtering down to player positions for fantasy scoring.
 
 The official LCS Fantasy rules say player values change weekly, but do not
-publish the pricing formula. For uncaptured history, the dashboard currently
-tests the screenshot-derived hypothesis `round((weekly_score - 13) * 0.20, 1)`
-from Castle's 7.05 score and official -1.2 price change. The assumed 15-gold
-historical starting price is still unverified, so this remains an experimental
-estimate rather than an official reconstruction. Captured API prices always
-override the estimate.
+publish the pricing formula. For uncaptured history, the dashboard starts with
+the screenshot-derived raw change
+`round((weekly_score - 13) * 0.20, 1)` from Castle's 7.05 score and official
+-1.2 price change. Estimated paths reset at each split, carry into that split's
+playoffs, and damp positive compounding above 22 and 26 gold. The observed
+32-gold Berserker peak is used as a conservative ceiling, not asserted as an
+official cap. Historical starting prices remain unknown, so these values are
+clearly labeled estimates. Captured API prices always override them.
 
 Champion novelty must be computed using only rounds before the prediction
 round, within the same split and across all LCS teams. Do not update novelty

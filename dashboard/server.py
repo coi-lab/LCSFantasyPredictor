@@ -26,11 +26,18 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 
+class DashboardServer(socketserver.ThreadingTCPServer):
+    """Serve parallel browser asset requests without one keep-alive blocking."""
+
+    allow_reuse_address = True
+    daemon_threads = True
+
+
 def run_server():
-    print(f"🚀 Starting LCS Fantasy Weekly Dashboard at http://localhost:{PORT}")
+    print(f"Starting LCS Fantasy Weekly Dashboard at http://localhost:{PORT}")
     print("Press Ctrl+C to stop the server.\n")
 
-    with socketserver.TCPServer(("", PORT), DashboardHandler) as httpd:
+    with DashboardServer(("", PORT), DashboardHandler) as httpd:
         try:
             # Auto-open browser
             webbrowser.open(f"http://localhost:{PORT}")

@@ -123,7 +123,7 @@ def apply_official_prices(players: Iterable[dict], snapshot_dir: str = DEFAULT_S
         year = str(player.get("year", "")).strip()
         rows = official.get(_player_key(year, player.get("playername", "")))
         if not rows or player.get("league") != "LCS" or year != "2026":
-            player["pricing_source"] = "estimated_baseline_13"
+            player["pricing_source"] = "estimated_split_reset_diminishing"
             continue
 
         history = []
@@ -153,7 +153,7 @@ def apply_official_prices(players: Iterable[dict], snapshot_dir: str = DEFAULT_S
             })
 
         if not history:
-            player["pricing_source"] = "estimated_baseline_13"
+            player["pricing_source"] = "estimated_split_reset_diminishing"
             continue
 
         # Retain modeled history for every other split. An official point only

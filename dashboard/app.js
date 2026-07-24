@@ -3,6 +3,8 @@
 let rawData = null;
 let championLabData = null;
 let weeklyChampionData = null;
+let matchupOptimizerData = null;
+let selectedMatchupLineupRank = 1;
 let filteredPlayers = [];
 let currentPositionFilter = 'ALL';
 let currentSortCol = 'total_pts';
@@ -121,6 +123,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   addChampionLabTab();
   await loadDashboardData();
   setupEventListeners();
+  if (window.location.hash === '#weekly-champions') {
+    document.querySelector(
+      '[data-view="view-weekly-champions"]'
+    )?.click();
+  } else if (window.location.hash === '#matchup-optimizer') {
+    document.querySelector(
+      '[data-view="view-matchup-optimizer"]'
+    )?.click();
+  }
 });
 
 function addChampionLabTab() {
@@ -135,10 +146,16 @@ function addChampionLabTab() {
 
 async function loadDashboardData() {
   try {
-    const [resp, championResp, weeklyChampionResp] = await Promise.all([
+    const [
+      resp,
+      championResp,
+      weeklyChampionResp,
+      matchupOptimizerResp
+    ] = await Promise.all([
       fetch('./dashboard_data.json'),
       fetch('./champion_lab_data.json'),
-      fetch('./weekly_champion_predictions.json')
+      fetch('./weekly_champion_predictions.json'),
+      fetch('./matchup_lineups.json')
     ]);
     if (!resp.ok) throw new Error('Could not load dashboard_data.json');
     rawData = await resp.json();
@@ -148,10 +165,15 @@ async function loadDashboardData() {
     weeklyChampionData = weeklyChampionResp.ok
       ? await weeklyChampionResp.json()
       : { players: [] };
+    matchupOptimizerData = matchupOptimizerResp.ok
+      ? await matchupOptimizerResp.json()
+      : { weeks: [] };
 
     populateFilterDropdowns();
     applyFilters();
     renderWeeklyChampionPicks();
+    populateMatchupWeekSelect();
+    renderMatchupOptimizer();
   } catch (err) {
     console.error('Error loading dashboard data:', err);
     document.getElementById('tableContainer').innerHTML = `
@@ -265,6 +287,8 @@ function setupEventListeners() {
         }
       } else if (targetViewId === 'view-weekly-champions') {
         renderWeeklyChampionPicks();
+      } else if (targetViewId === 'view-matchup-optimizer') {
+        renderMatchupOptimizer();
       }
     });
   });
@@ -314,6 +338,10 @@ function setupEventListeners() {
     if (e.target.id === 'modalOverlay') closeModal();
   });
   document.getElementById('championPlayerSelect').addEventListener('change', renderChampionLab);
+  document.getElementById('matchupWeekSelect')?.addEventListener('change', () => {
+    selectedMatchupLineupRank = 1;
+    renderMatchupOptimizer();
+  });
 }
 
 function renderWeeklyChampionPicks() {
@@ -338,8 +366,8 @@ function renderWeeklyChampionPicks() {
     players.some(player => player.picks && player.picks[tier] && player.picks[tier].available)
   );
   notice.textContent = tierAvailability[0] || tierAvailability[1]
-    ? 'Each column shows the best candidate currently eligible for that official multiplier.'
-    : 'Round 1 note: no champion has prior Split 3 usage, so every eligible prediction is x1.7. The x1.3 and x1.5 tiers will populate after earlier rounds create split history.';
+    ? 'Each column shows up to three candidates eligible for that official multiplier. Pick chance is a normalized model estimate, not a calibrated probability.'
+    : 'No eligible champion predictions are available for this round.';
 
   const matchupGroups = new Map();
   players.forEach(player => {
@@ -354,12 +382,23 @@ function renderWeeklyChampionPicks() {
     if (!entry || !entry.available || !entry.pick) {
       return `<td class="weekly-pick unavailable"><span>Not available</span><small>Current split history</small></td>`;
     }
-    const pick = entry.pick;
+    const options = Array.isArray(entry.options) && entry.options.length
+      ? entry.options
+      : [entry.pick];
     return `
       <td class="weekly-pick ${cssClass}">
-        <strong>${escapeHtml(pick.champion)}</strong>
-        <span>${(Number(pick.ranking_share) * 100).toFixed(1)}% ranking share</span>
-        <small>Availability ${(Number(pick.availability) * 100).toFixed(0)}% · Bonus ${Number(pick.expected_multiplier_bonus).toFixed(2)}</small>
+        <div class="weekly-pick-options">
+          ${options.map((pick, index) => `
+            <div class="weekly-pick-option">
+              <span class="weekly-pick-rank">${escapeHtml(pick.option_basis || `#${index + 1}`)}</span>
+              <div>
+                <strong>${escapeHtml(pick.champion)}</strong>
+                <span>${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}% estimated pick chance</span>
+                <small>Available ${(Number(pick.availability) * 100).toFixed(0)}% · Bonus ${Number(pick.expected_multiplier_bonus).toFixed(2)}</small>
+              </div>
+            </div>
+          `).join('')}
+        </div>
       </td>
     `;
   };
@@ -373,7 +412,7 @@ function renderWeeklyChampionPicks() {
       <div class="table-responsive">
         <table class="weekly-picks-table">
           <thead>
-            <tr><th>Player</th><th>Team / Role</th><th>x1.3 Comfort</th><th>x1.5 Adoption</th><th>x1.7 Novelty</th></tr>
+            <tr><th>Player</th><th>Team / Role</th><th>x1.3 Opening / Comfort</th><th>x1.5 Adoption</th><th>x1.7 Novelty</th></tr>
           </thead>
           <tbody>
             ${group.sort((a, b) =>
@@ -393,6 +432,164 @@ function renderWeeklyChampionPicks() {
       </div>
     </section>
   `).join('');
+}
+
+function populateMatchupWeekSelect() {
+  const select = document.getElementById('matchupWeekSelect');
+  if (!select) return;
+  const weeks = matchupOptimizerData && Array.isArray(matchupOptimizerData.weeks)
+    ? matchupOptimizerData.weeks
+    : [];
+  select.innerHTML = weeks.slice().reverse().map(week => `
+    <option value="${escapeHtml(week.week_id)}">${escapeHtml(week.round_name)}</option>
+  `).join('');
+}
+
+function selectMatchupLineup(rank) {
+  selectedMatchupLineupRank = Number(rank) || 1;
+  renderMatchupOptimizer();
+}
+
+function matchupChampionOptions(player) {
+  if (Array.isArray(player.champion_options) && player.champion_options.length) {
+    return player.champion_options;
+  }
+  const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
+    ? weeklyChampionData.players
+    : [];
+  const match = weeklyPlayers.find(candidate =>
+    String(candidate.player).toLowerCase() === String(player.player).toLowerCase() &&
+    String(candidate.team).toLowerCase() === String(player.team).toLowerCase()
+  );
+  if (!match || !match.picks) return [];
+
+  const options = [];
+  ['1.3x', '1.5x', '1.7x'].forEach(multiplier => {
+    const tier = match.picks[multiplier];
+    if (!tier || !tier.available) return;
+    const tierOptions = Array.isArray(tier.options) ? tier.options : [];
+    tierOptions.forEach(pick => options.push({ ...pick, multiplier }));
+  });
+  return options;
+}
+
+function renderMatchupOptimizer() {
+  const content = document.getElementById('matchupOptimizerContent');
+  const notice = document.getElementById('matchupOptimizerNotice');
+  const tabs = document.getElementById('matchupLineupTabs');
+  const meta = document.getElementById('matchupOptimizerMeta');
+  const weekSelect = document.getElementById('matchupWeekSelect');
+  if (!content || !notice || !tabs || !meta || !weekSelect) return;
+
+  const weeks = matchupOptimizerData && Array.isArray(matchupOptimizerData.weeks)
+    ? matchupOptimizerData.weeks
+    : [];
+  if (!weeks.length) {
+    notice.textContent = 'No optimized matchup lineups are available.';
+    tabs.innerHTML = '';
+    content.innerHTML = '';
+    return;
+  }
+
+  const selectedWeek = weeks.find(week => week.week_id === weekSelect.value)
+    || weeks[weeks.length - 1];
+  if (!weekSelect.value) weekSelect.value = selectedWeek.week_id;
+  const lineups = Array.isArray(selectedWeek.lineups) ? selectedWeek.lineups : [];
+  const lineup = lineups.find(item => Number(item.rank) === selectedMatchupLineupRank)
+    || lineups[0];
+  if (!lineup) {
+    notice.textContent = 'No legal lineup was found for this week and budget.';
+    tabs.innerHTML = '';
+    content.innerHTML = '';
+    return;
+  }
+
+  selectedMatchupLineupRank = Number(lineup.rank);
+  meta.textContent = `${selectedWeek.round_name} | Roster lock ${selectedWeek.roster_lock} | ${Number(selectedWeek.budget).toFixed(1)} gold budget`;
+  notice.textContent =
+    'Projected totals include player matchup projections, expected champion bonus, coach projection, and the official variety buff. Champion chances are normalized model estimates.';
+  tabs.innerHTML = lineups.map(item => `
+    <button
+      class="matchup-lineup-tab ${Number(item.rank) === selectedMatchupLineupRank ? 'active' : ''}"
+      onclick="selectMatchupLineup(${Number(item.rank)})"
+    >
+      Lineup ${Number(item.rank)}
+      <small>${Number(item.projected_total_points).toFixed(1)} pts</small>
+    </button>
+  `).join('');
+
+  const renderChampionPicks = player => {
+    const options = matchupChampionOptions(player);
+    if (!options.length) {
+      return '<div class="optimizer-no-picks">No champion recommendations available</div>';
+    }
+    return `
+      <div class="optimizer-champion-list">
+        ${options.map(pick => `
+          <div class="optimizer-champion-pick">
+            <span class="tier-chip tier-${String(pick.multiplier).replace('.', '').replace('x', '')}">${escapeHtml(pick.multiplier)}</span>
+            <div>
+              <strong>${escapeHtml(pick.champion)}</strong>
+              <small>${escapeHtml(pick.option_basis || '')} ${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}%</small>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  };
+
+  const rosterCards = lineup.players.map(player => `
+    <article class="card optimizer-roster-card">
+      <div class="optimizer-card-head">
+        <span class="optimizer-role">${escapeHtml(String(player.role).toUpperCase())}</span>
+        <span class="optimizer-price">${Number(player.price).toFixed(1)}g</span>
+      </div>
+      <h3>${escapeHtml(player.player)}</h3>
+      <p class="optimizer-matchup">
+        <span style="--team-color:${getTeamColor(player.team)}">${escapeHtml(player.team)}</span>
+        vs ${escapeHtml(player.opponent || 'TBD')}
+      </p>
+      <div class="optimizer-point-line">
+        <span>Player projection</span>
+        <strong>${Number(player.projected_points).toFixed(2)}</strong>
+      </div>
+      <div class="optimizer-point-line">
+        <span>Champion upside</span>
+        <strong>+${Number(player.champion_expected_bonus || 0).toFixed(2)}</strong>
+      </div>
+      <div class="optimizer-pick-title">Recommended champion picks</div>
+      ${renderChampionPicks(player)}
+    </article>
+  `).join('');
+
+  const coach = lineup.coach;
+  content.innerHTML = `
+    <div class="optimizer-summary-grid">
+      <div class="optimizer-summary-card"><span>Projected total</span><strong>${Number(lineup.projected_total_points).toFixed(2)}</strong></div>
+      <div class="optimizer-summary-card"><span>Roster cost</span><strong>${Number(lineup.total_cost).toFixed(1)}g</strong><small>${Number(lineup.remaining_gold).toFixed(1)}g left</small></div>
+      <div class="optimizer-summary-card"><span>Variety buff</span><strong>+${(Number(lineup.variety_bonus) * 100).toFixed(0)}%</strong><small>${Number(lineup.unique_teams)} teams</small></div>
+      <div class="optimizer-summary-card"><span>Before variety</span><strong>${Number(lineup.projected_base_points).toFixed(2)}</strong><small>Players + champions + coach</small></div>
+    </div>
+    <div class="optimizer-roster-grid">
+      ${rosterCards}
+      <article class="card optimizer-roster-card optimizer-coach-card">
+        <div class="optimizer-card-head">
+          <span class="optimizer-role">COACH</span>
+          <span class="optimizer-price">${Number(coach.price).toFixed(1)}g</span>
+        </div>
+        <h3>${escapeHtml(coach.coach)}</h3>
+        <p class="optimizer-matchup">
+          <span style="--team-color:${getTeamColor(coach.team)}">${escapeHtml(coach.team)}</span>
+          vs ${escapeHtml(coach.opponent || 'TBD')}
+        </p>
+        <div class="optimizer-point-line">
+          <span>Team-average projection</span>
+          <strong>${Number(coach.projected_points).toFixed(2)}</strong>
+        </div>
+        <p class="optimizer-coach-note">Coach score is projected from the average of the team's five starters. The coach's organization counts toward variety.</p>
+      </article>
+    </div>
+  `;
 }
 
 function getActivePriceHistory(player, selectedSplit) {
@@ -416,7 +613,7 @@ function getActivePriceMetrics(player, selectedSplit) {
       current: Number(player.current_price || 15.0),
       latestChange: Number(player.latest_weekly_change || 0.0),
       totalChange: Number(player.total_price_change || 0.0),
-      source: player.pricing_source || 'estimated_baseline_13'
+      source: player.pricing_source || 'estimated_split_reset_diminishing'
     };
   }
 
@@ -435,7 +632,7 @@ function getActivePriceMetrics(player, selectedSplit) {
     current,
     latestChange: Number(latest.change || 0),
     totalChange: current - start,
-    source: latest.source || 'estimated_baseline_13'
+    source: latest.source || 'estimated_split_reset_diminishing'
   };
 }
 

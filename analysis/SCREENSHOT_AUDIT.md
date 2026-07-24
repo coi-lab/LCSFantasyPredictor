@@ -103,6 +103,22 @@ This may be coincidence, so the dashboard formula should not be changed globally
 
 The observation is not enough by itself to identify the hidden formula. It is one equation that every candidate formula must satisfy.
 
+### 2026-07-23 pricing correction
+
+The dashboard exporter was incorrectly carrying estimated price gains across
+split boundaries. In 2026 this compounded Lock-In, Spring, and EWC qualifier
+performance into one price path, producing 15 Spring player estimates at 30+
+gold. Each product split must instead begin a new estimated path; playoffs
+continue their parent split.
+
+A user-confirmed scale anchor says Berserker was the exceptional player able to
+reach 32 gold in the prior split. Because the exact round and prior price are
+not captured, the estimator does not fabricate a 32-gold point. It now uses 32
+only as a conservative estimated ceiling and damps positive changes once a
+player is already above 22 and 26 gold. After rebuilding, no estimated Spring
+player exceeds 30, and Berserker is the highest player after Spring playoffs at
+27.2. Official API snapshots remain authoritative and bypass this proxy.
+
 ## Budget accounting hypothesis
 
 Every user starts a split with 100 gold, but does not need to spend all of it. The likely accounting identity is:

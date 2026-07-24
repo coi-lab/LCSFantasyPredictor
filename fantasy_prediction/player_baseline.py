@@ -282,6 +282,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--market", type=Path)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument(
+        "--skip-backtest",
+        action="store_true",
+        help="Generate current projections without rerunning the slow 2026 audit.",
+    )
     return parser.parse_args()
 
 
@@ -297,7 +302,7 @@ def main() -> None:
     market_path = args.market or latest_market_snapshot()
     market = pd.read_csv(market_path)
     player_projections, coach_projections = project_market(history, market)
-    backtest = backtest_2026(history)
+    backtest = None if args.skip_backtest else backtest_2026(history)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     player_path = args.output_dir / "current_player_projections.csv"
@@ -306,7 +311,8 @@ def main() -> None:
     coach_projections.to_csv(coach_path, index=False)
     print(f"Wrote player projections: {player_path}")
     print(f"Wrote coach projections: {coach_path}")
-    print(f"2026 chronological test: {backtest}")
+    if backtest is not None:
+        print(f"2026 chronological test: {backtest}")
 
 
 if __name__ == "__main__":

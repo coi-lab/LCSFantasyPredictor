@@ -158,10 +158,15 @@ class LCSDataIngestor:
 
     def filter_player_positions(self, data: Union[Any, List[Dict[str, Any]]]) -> Union[Any, List[Dict[str, Any]]]:
         """
-        Filter rows to major tier-1 leagues (LCS, LEC, LCK, LPL) and player positions ('top', 'jgl', 'mid', 'bot', 'sup').
-        Normalizes 2025 'LTA N' (LTA North) to 'LCS' and 'jng' to 'jgl'. Handles EWC as 'NA EWC Qualifiers'. Excludes CD and showmatches.
+        Filter rows to major tier-1 leagues and international events.
+
+        Normalizes 2025 'LTA N' to 'LCS' and 'jng' to 'jgl'. NA EWC
+        qualifier rows retain their dashboard mapping while ``source_league``
+        preserves EWC for model features. MSI, EWC, and First Stand rows are
+        retained as international evidence. CD and showmatches are excluded.
         """
         lta_mapping = {"LTA N": "LCS"}
+        international_leagues = {"MSI", "EWC", "FST"}
 
         lcs_primary_2026 = {"Cloud9", "Team Liquid", "FlyQuest", "Sentinels", "LYON", "Disguised", "Dignitas", "Shopify Rebellion"}
         lcs_primary_2025 = {"100 Thieves", "Cloud9", "Dignitas", "Disguised", "FlyQuest", "LYON", "Shopify Rebellion", "Team Liquid"}
@@ -193,6 +198,7 @@ class LCSDataIngestor:
             
             # If league is EWC and team is NA LCS primary team, set league_norm='LCS' and split='NA EWC Qualifiers'
             df["raw_league"] = df["league"].astype(str).str.strip()
+            df["source_league"] = df["raw_league"]
             df["year_norm"] = df["year"].astype(str).str.strip()
             df["team_norm"] = df["teamname"].astype(str).str.strip()
 
@@ -211,13 +217,18 @@ class LCSDataIngestor:
 
             valid_rows = df[
                 df["position_norm"].isin(["top", "jgl", "mid", "bot", "sup"]) &
-                df["league_norm"].isin(["LCS", "LEC", "LCK", "LPL"])
+                (
+                    df["league_norm"].isin(["LCS", "LEC", "LCK", "LPL"])
+                    | df["source_league"].isin(international_leagues)
+                )
             ].copy()
 
             team_counts = valid_rows.groupby(["league_norm", "year_norm", "team_norm"]).size()
             dynamic_primary_teams = set(team_counts[team_counts >= 18].index)
 
             def is_primary(row):
+                if row["source_league"] in international_leagues:
+                    return True
                 key = (row["league_norm"], row["year_norm"])
                 if key in primary_teams_map:
                     return row["team_norm"] in primary_teams_map[key]
@@ -226,8 +237,17 @@ class LCSDataIngestor:
             filtered_df = valid_rows[valid_rows.apply(is_primary, axis=1)].copy()
             filtered_df["position"] = filtered_df["position_norm"]
             filtered_df["league"] = filtered_df["league_norm"]
-            filtered_df.drop(columns=["position_norm", "league_norm", "raw_league", "year_norm", "team_norm"], inplace=True)
-            print(f"Filtered tier-1 primary league player rows (LCS, LEC, LCK, LPL): {len(filtered_df)}")
+            filtered_df.drop(
+                columns=[
+                    "position_norm", "league_norm", "raw_league",
+                    "year_norm", "team_norm",
+                ],
+                inplace=True,
+            )
+            print(
+                "Filtered tier-1 league and international player rows "
+                f"(LCS, LEC, LCK, LPL, MSI, EWC, FST): {len(filtered_df)}"
+            )
             return filtered_df
         else:
             pre_filtered = []
@@ -252,18 +272,27 @@ class LCSDataIngestor:
                 if pos == "jng":
                     pos = "jgl"
 
-                if pos in {"top", "jgl", "mid", "bot", "sup"} and lg in {"LCS", "LEC", "LCK", "LPL"}:
+                if (
+                    pos in {"top", "jgl", "mid", "bot", "sup"}
+                    and (
+                        lg in {"LCS", "LEC", "LCK", "LPL"}
+                        or raw_lg in international_leagues
+                    )
+                ):
                     key = (lg, yr, tm)
                     team_counts[key] = team_counts.get(key, 0) + 1
                     row_copy = dict(row)
                     row_copy["position"] = pos
                     row_copy["league"] = lg
+                    row_copy["source_league"] = raw_lg
                     row_copy["split"] = sp
                     pre_filtered.append(row_copy)
 
             dynamic_primary_teams = {k for k, count in team_counts.items() if count >= 18}
 
             def is_primary_dict(r):
+                if r.get("source_league") in international_leagues:
+                    return True
                 lg = r["league"]
                 yr = str(r.get("year", "")).strip()
                 tm = str(r.get("teamname", "")).strip()

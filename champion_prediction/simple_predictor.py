@@ -14,7 +14,11 @@ import numpy as np
 import pandas as pd
 
 from champion_prediction.draft_actions import DEFAULT_OUTPUT_PATH as DEFAULT_DRAFT_DATABASE
-from champion_prediction.features import LanePriorityMatrix, PatchTierMatrix
+from champion_prediction.features import (
+    LanePriorityMatrix,
+    PatchDistanceDecayEngine,
+    PatchTierMatrix,
+)
 from data_pipeline.ingest import LCSDataIngestor
 from fantasy_prediction.player_baseline import (
     DEFAULT_MARKET_DIR,
@@ -29,7 +33,9 @@ from fantasy_prediction.player_baseline import (
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "predictions" / "current_champion_rankings.csv"
 SCORING_RULES_PATH = PROJECT_ROOT / "config" / "scoring_rules.json"
+CHAMPION_MODEL_CONFIG_PATH = PROJECT_ROOT / "config" / "champion_model.json"
 LEADING_LEAGUES = {"LCK", "LPL", "LEC", "EWC", "FST", "MSI"}
+INTERNATIONAL_LEAGUES = {"EWC", "FST", "MSI"}
 MARKET_SPLIT_NAMES = {1: "Lock-In", 2: "Spring", 3: "Summer"}
 
 
@@ -41,6 +47,44 @@ def load_champion_bonus_rules() -> dict[str, float]:
         str(key): float(value)
         for key, value in rules["champion_bonus"].items()
     }
+
+
+def load_production_hyperparameters(
+    path: Path = CHAMPION_MODEL_CONFIG_PATH,
+) -> dict[str, float]:
+    """Load the frozen pre-2026 champion-ranking parameters."""
+    if not path.exists():
+        return {"patch_decay_rate": 0.30}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    parameters = payload.get("parameters", {})
+    result = {
+        "patch_decay_rate": float(parameters.get("patch_decay_rate", 0.30))
+    }
+    weights = parameters.get("weights")
+    if payload.get("strategy") == "static" and isinstance(weights, dict):
+        result.update({
+            key: float(weights[key])
+            for key in ("w_player", "w_lcs", "w_leading")
+        })
+    early_weights = parameters.get("early_weights")
+    mature_weights = parameters.get("mature_weights")
+    if (
+        payload.get("strategy") == "maturity_blend"
+        and isinstance(early_weights, dict)
+        and isinstance(mature_weights, dict)
+    ):
+        for prefix, source in (
+            ("early", early_weights),
+            ("mature", mature_weights),
+        ):
+            result.update({
+                f"{prefix}_{key}": float(source[key])
+                for key in ("w_player", "w_lcs", "w_leading")
+            })
+        result["games_to_mature"] = float(
+            parameters.get("games_to_mature", 40.0)
+        )
+    return result
 
 
 def market_split_name(round_name: str) -> str:
@@ -77,13 +121,20 @@ def champion_multiplier(
 def weighted_champion_shares(
     rows: pd.DataFrame,
     cutoff: pd.Timestamp,
-    half_life_days: float = 120.0,
+    target_patch: str | None = None,
+    patch_decay_rate: float = 0.30,
 ) -> dict[str, float]:
-    """Return recency-weighted champion shares that sum to one."""
+    """Return patch-distance-weighted champion shares that sum to one."""
     if rows.empty:
         return {}
-    ages = (cutoff - rows["date"]).dt.total_seconds().clip(lower=0) / 86400.0
-    weighted = rows.assign(_weight=np.power(0.5, ages / half_life_days))
+    del cutoff
+    if target_patch is None:
+        target_patch = str(rows.sort_values("date", kind="stable")["patch"].iloc[-1])
+    decay = PatchDistanceDecayEngine(minor_decay_rate=patch_decay_rate)
+    weights = rows["patch"].astype(str).map(
+        lambda patch: decay.calculate_decay_weight(str(target_patch), patch)
+    )
+    weighted = rows.assign(_weight=weights)
     totals = weighted.groupby("champion")["_weight"].sum()
     denominator = float(totals.sum())
     if denominator <= 0:
@@ -93,7 +144,34 @@ def weighted_champion_shares(
 
 def latest_observed_lcs_patch(history: pd.DataFrame, cutoff: pd.Timestamp) -> str:
     """Return the patch on the latest recorded LCS game before the cutoff."""
-    observed = history.loc[history["league"].eq("LCS") & history["date"].lt(cutoff)]
+    source_league = (
+        history["source_league"].astype(str)
+        if "source_league" in history.columns
+        else history["league"].astype(str)
+    )
+    observed = history.loc[
+        history["league"].eq("LCS")
+        & ~source_league.isin(INTERNATIONAL_LEAGUES)
+        & history["date"].lt(cutoff)
+    ]
+    if observed.empty:
+        return ""
+    latest_date = observed["date"].max()
+    values = observed.loc[observed["date"].eq(latest_date), "patch"].dropna()
+    return str(values.iloc[0]).strip() if not values.empty else ""
+
+
+def latest_observed_competitive_patch(
+    history: pd.DataFrame,
+    cutoff: pd.Timestamp,
+) -> str:
+    """Return the newest tier-1 patch observed before an upcoming lock.
+
+    This is a conservative proxy when the scheduled LCS patch is unavailable:
+    nearby MSI/EWC games can advance the patch basis without being counted as
+    domestic LCS maturity.
+    """
+    observed = history.loc[history["date"].lt(cutoff)]
     if observed.empty:
         return ""
     latest_date = observed["date"].max()
@@ -108,21 +186,23 @@ def opponent_draft_rates(
     target_patch: str,
 ) -> tuple[dict[str, float], dict[str, float], dict[str, float], int]:
     """Calculate opponent rates and a same-patch public-meta ban baseline."""
-    rows = actions.copy()
-    rows["date"] = pd.to_datetime(rows["as_of_timestamp"], errors="coerce", utc=True)
-    rows["acting_team_norm"] = rows["acting_team"].map(canonical_team)
-    rows["patch_text"] = rows["patch"].astype(str).str.strip()
-    public_prior = rows.loc[
-        rows["date"].lt(cutoff)
-        & rows["date"].ge(cutoff - pd.Timedelta(days=365))
+    dates = actions["as_of_timestamp"]
+    if not isinstance(dates.dtype, pd.DatetimeTZDtype):
+        dates = pd.to_datetime(dates, errors="coerce", utc=True)
+    acting_teams = actions["acting_team"]
+    patch_text = actions["patch"]
+    public_prior = actions.loc[
+        dates.lt(cutoff)
+        & dates.ge(cutoff - pd.Timedelta(days=365))
     ]
+    public_patches = patch_text.loc[public_prior.index]
     same_patch_public = public_prior.loc[
-        public_prior["patch_text"].eq(str(target_patch))
+        public_patches.astype(str).str.strip().eq(str(target_patch))
     ]
     if not same_patch_public.empty:
         public_prior = same_patch_public
     rows = public_prior.loc[
-        public_prior["acting_team_norm"].eq(canonical_team(opponent))
+        acting_teams.loc[public_prior.index].eq(canonical_team(opponent))
     ]
     games = int(rows["gameid"].nunique())
     if games == 0:
@@ -149,12 +229,27 @@ def dynamic_feature_weights(lcs_patch_games: int) -> tuple[float, float, float]:
         return 0.55, 0.30, 0.15
 
 
+def maturity_blended_feature_weights(
+    lcs_split_games: int,
+    hyperparameters: dict[str, float],
+) -> tuple[float, float, float]:
+    """Blend opening and mature weights as domestic split games accumulate."""
+    games_to_mature = max(1.0, float(hyperparameters["games_to_mature"]))
+    maturity = min(1.0, max(0.0, float(lcs_split_games) / games_to_mature))
+    return tuple(
+        (1.0 - maturity) * float(hyperparameters[f"early_{key}"])
+        + maturity * float(hyperparameters[f"mature_{key}"])
+        for key in ("w_player", "w_lcs", "w_leading")
+    )
+
+
 def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
-    """Select the top candidate for each multiplier tier (1.3x floor, 1.5x adoption, 1.7x scrim wildcard)."""
+    """Select up to three candidates for each official multiplier tier."""
     if ranking_df.empty or "novelty_category" not in ranking_df.columns:
         return pd.DataFrame()
 
     tier_map = {
+        "opening_round_baseline": "1.3x_opening_baseline",
         "already_played_by_player": "1.3x_comfort_floor",
         "unplayed_by_player": "1.5x_league_adoption",
         "unplayed_in_role": "1.7x_novelty_wildcard",
@@ -163,28 +258,94 @@ def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
     selected: list[pd.Series] = []
     group_cols = [c for c in ["round_name", "player", "role"] if c in ranking_df.columns]
 
+    def choose_category_rows(
+        cat_rows: pd.DataFrame,
+        category: str,
+    ) -> pd.DataFrame:
+        """Choose a useful three-option board for one multiplier category."""
+        ordered = cat_rows.sort_values(
+            ["expected_multiplier_bonus", "estimated_pick_probability"],
+            ascending=False,
+            kind="stable",
+        )
+        if category != "opening_round_baseline":
+            return ordered.head(3)
+
+        # Round 1 has one multiplier for every champion. Use the three slots
+        # as a portfolio rather than repeating nearly identical league-meta
+        # choices: blended best, player comfort, and international-meta best.
+        choices: list[pd.Series] = []
+        for column in (
+            "expected_multiplier_bonus",
+            "player_recent_share",
+            "leading_region_role_share",
+        ):
+            candidates = cat_rows.sort_values(
+                [column, "estimated_pick_probability"],
+                ascending=False,
+                kind="stable",
+            )
+            unused = candidates.loc[
+                ~candidates["champion"].isin(
+                    [str(choice["champion"]) for choice in choices]
+                )
+            ]
+            if not unused.empty:
+                choices.append(unused.iloc[0])
+        if len(choices) < 3:
+            for _, choice in ordered.iterrows():
+                if str(choice["champion"]) not in {
+                    str(existing["champion"]) for existing in choices
+                }:
+                    choices.append(choice)
+                if len(choices) == 3:
+                    break
+        return pd.DataFrame(choices)
+
     if group_cols:
         grouped = ranking_df.groupby(group_cols, dropna=False)
         for _, group in grouped:
             for category, tier_label in tier_map.items():
                 cat_rows = group.loc[group["novelty_category"].eq(category)]
                 if not cat_rows.empty:
-                    top_pick = cat_rows.sort_values(
-                        ["expected_multiplier_bonus", "estimated_pick_probability"],
-                        ascending=False,
-                    ).iloc[0].copy()
-                    top_pick["portfolio_tier"] = tier_label
-                    selected.append(top_pick)
+                    top_picks = choose_category_rows(cat_rows, category)
+                    for rank, (_, top_pick) in enumerate(
+                        top_picks.iterrows(), start=1
+                    ):
+                        choice = top_pick.copy()
+                        choice["portfolio_tier"] = tier_label
+                        choice["portfolio_rank"] = rank
+                        choice["portfolio_basis"] = (
+                            {
+                                1: "Overall",
+                                2: "Player comfort",
+                                3: "International meta",
+                            }[rank]
+                            if category == "opening_round_baseline"
+                            else f"Rank {rank}"
+                        )
+                        selected.append(choice)
     else:
         for category, tier_label in tier_map.items():
             cat_rows = ranking_df.loc[ranking_df["novelty_category"].eq(category)]
             if not cat_rows.empty:
-                top_pick = cat_rows.sort_values(
-                    ["expected_multiplier_bonus", "estimated_pick_probability"],
-                    ascending=False,
-                ).iloc[0].copy()
-                top_pick["portfolio_tier"] = tier_label
-                selected.append(top_pick)
+                top_picks = choose_category_rows(cat_rows, category)
+                for rank, (_, top_pick) in enumerate(
+                    top_picks.iterrows(), start=1
+                ):
+                    choice = top_pick.copy()
+                    choice["portfolio_tier"] = tier_label
+                    choice["portfolio_rank"] = rank
+                    choice["portfolio_basis"] = (
+                        {
+                            1: "Overall",
+                            2: "Player comfort",
+                            3: "International meta",
+                        }[rank]
+                        if category == "opening_round_baseline"
+                        else f"Rank {rank}"
+                    )
+                    selected.append(choice)
 
     return pd.DataFrame(selected).reset_index(drop=True) if selected else pd.DataFrame()
 
@@ -208,33 +369,49 @@ def rank_champions(
 ) -> pd.DataFrame:
     """Rank champion candidates using dynamic cross-region weights and scrim-leak signals."""
     hp = hyperparameters or {}
-    hl = hp.get("half_life_days", 120.0)
+    patch_decay_rate = hp.get("patch_decay_rate", 0.30)
     prior = history.loc[
         history["date"].lt(cutoff)
         & history["date"].ge(cutoff - pd.Timedelta(days=730))
         & history["role"].eq(role)
     ].copy()
     prior["patch_text"] = prior["patch"].astype(str).str.strip()
+    prior["model_source_league"] = (
+        prior["source_league"].astype(str)
+        if "source_league" in prior.columns
+        else prior["league"].astype(str)
+    )
     player_rows = prior.loc[prior["player"].str.casefold().eq(player.casefold())]
-    player_shares = weighted_champion_shares(player_rows, cutoff, half_life_days=hl)
+    player_shares = weighted_champion_shares(
+        player_rows, cutoff, target_patch, patch_decay_rate
+    )
 
-    lcs_rows = prior.loc[prior["league"].eq("LCS") & prior["patch_text"].eq(target_patch)]
+    domestic_lcs = (
+        prior["league"].eq("LCS")
+        & ~prior["model_source_league"].isin(INTERNATIONAL_LEAGUES)
+    )
+    lcs_rows = prior.loc[domestic_lcs & prior["patch_text"].eq(target_patch)]
     if lcs_rows.empty:
         lcs_rows = prior.loc[
-            prior["league"].eq("LCS")
+            domestic_lcs
             & prior["date"].ge(cutoff - pd.Timedelta(days=180))
         ]
-    lcs_shares = weighted_champion_shares(lcs_rows, cutoff, half_life_days=hl)
+    lcs_shares = weighted_champion_shares(
+        lcs_rows, cutoff, target_patch, patch_decay_rate
+    )
 
     leading_rows = prior.loc[
-        prior["league"].isin(LEADING_LEAGUES) & prior["patch_text"].eq(target_patch)
+        prior["model_source_league"].isin(LEADING_LEAGUES)
+        & prior["patch_text"].eq(target_patch)
     ]
     if leading_rows.empty:
         leading_rows = prior.loc[
-            prior["league"].isin(LEADING_LEAGUES)
+            prior["model_source_league"].isin(LEADING_LEAGUES)
             & prior["date"].ge(cutoff - pd.Timedelta(days=180))
         ]
-    leading_shares = weighted_champion_shares(leading_rows, cutoff, half_life_days=hl)
+    leading_shares = weighted_champion_shares(
+        leading_rows, cutoff, target_patch, patch_decay_rate
+    )
     ban_rates, denial_rates, public_ban_rates, opponent_games = opponent_draft_rates(
         actions, opponent, cutoff, target_patch
     )
@@ -242,12 +419,28 @@ def rank_champions(
     candidates = set(player_shares) | set(lcs_shares) | set(leading_shares)
     if not candidates:
         return pd.DataFrame()
-    role_mean, _, _ = recency_mean(prior.loc[prior["league"].eq("LCS")], cutoff)
+    role_mean, _, _ = recency_mean(prior.loc[domestic_lcs], cutoff)
     if not math.isfinite(role_mean):
         role_mean, _, _ = recency_mean(prior, cutoff)
 
     lcs_patch_games = int(lcs_rows["gameid"].nunique()) if "gameid" in lcs_rows.columns else len(lcs_rows)
-    if "w_player" in hp and "w_lcs" in hp and "w_leading" in hp:
+    lcs_split_games = (
+        int(split_history["gameid"].nunique())
+        if split_history is not None
+        and not split_history.empty
+        and "gameid" in split_history.columns
+        else 0
+    )
+    maturity_keys = {
+        f"{period}_{key}"
+        for period in ("early", "mature")
+        for key in ("w_player", "w_lcs", "w_leading")
+    } | {"games_to_mature"}
+    if maturity_keys.issubset(hp):
+        w_player, w_lcs, w_leading = maturity_blended_feature_weights(
+            lcs_split_games, hp
+        )
+    elif "w_player" in hp and "w_lcs" in hp and "w_leading" in hp:
         w_player = hp["w_player"]
         w_lcs = hp["w_lcs"]
         w_leading = hp["w_leading"]
@@ -256,14 +449,24 @@ def rank_champions(
 
     if tier_matrix is None:
         tier_matrix = PatchTierMatrix()
-        tier_matrix.fit(prior)
+        tier_matrix.fit(prior.loc[prior["patch_text"].eq(target_patch)])
 
     if prio_matrix is None:
         prio_matrix = LanePriorityMatrix()
+        prio_matrix.fit(prior, role)
 
     records: list[dict[str, Any]] = []
     for champion in candidates:
-        if split_history is not None and champion_bonus_rules is not None:
+        if (
+            hp.get("opening_round_baseline", 0.0)
+            and champion_bonus_rules is not None
+        ):
+            novelty_category = "opening_round_baseline"
+            candidate_multiplier = champion_bonus_rules.get(
+                "opening_round_baseline",
+                champion_bonus_rules["already_played_by_player"],
+            )
+        elif split_history is not None and champion_bonus_rules is not None:
             novelty_category, candidate_multiplier = champion_multiplier(
                 split_history, player, role, champion, champion_bonus_rules
             )
@@ -306,6 +509,9 @@ def rank_champions(
             "opponent": canonical_team(opponent),
             "role": role,
             "target_patch": target_patch,
+            "patch_decay_rate": patch_decay_rate,
+            "lcs_patch_games": lcs_patch_games,
+            "lcs_split_games": lcs_split_games,
             "champion": champion,
             "player_recent_share": player_share,
             "lcs_patch_role_share": lcs_share,
@@ -367,9 +573,20 @@ def rank_weekly_opponents(
     split_history: pd.DataFrame,
     champion_bonus_rules: dict[str, float],
     top_n: int = 5,
+    hyperparameters: dict[str, float] | None = None,
 ) -> pd.DataFrame:
     """Combine independently ranked scheduled matchups into one weekly choice."""
     matchup_rankings: list[pd.DataFrame] = []
+    prior = history.loc[
+        history["date"].lt(cutoff)
+        & history["date"].ge(cutoff - pd.Timedelta(days=730))
+        & history["role"].eq(role)
+    ].copy()
+    prior["patch_text"] = prior["patch"].astype(str).str.strip()
+    tier_matrix = PatchTierMatrix()
+    tier_matrix.fit(prior.loc[prior["patch_text"].eq(target_patch)])
+    prio_matrix = LanePriorityMatrix()
+    prio_matrix.fit(prior, role)
     for opponent in opponents or [""]:
         ranked = rank_champions(
             history,
@@ -384,6 +601,9 @@ def rank_weekly_opponents(
             top_n=250,
             split_history=split_history,
             champion_bonus_rules=champion_bonus_rules,
+            tier_matrix=tier_matrix,
+            prio_matrix=prio_matrix,
+            hyperparameters=hyperparameters,
         )
         if not ranked.empty:
             matchup_rankings.append(ranked)
@@ -400,6 +620,8 @@ def rank_weekly_opponents(
         "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
         "unusual_opponent_ban_interest", "availability_factor",
         "expected_points_if_picked", "ranking_share", "estimated_pick_probability",
+        "patch_tier_multiplier", "lane_priority_multiplier",
+        "patch_decay_rate", "lcs_patch_games", "lcs_split_games",
     ]
     weekly = combined.groupby(identity_columns, as_index=False, dropna=False).agg(
         **{column: (column, "mean") for column in mean_columns},
@@ -418,7 +640,7 @@ def rank_weekly_opponents(
     # displays populate all tiers as a split develops.
     tier_leaders = ordered.groupby(
         "novelty_category", as_index=False, sort=False
-    ).head(1)
+    ).head(3)
     return (
         pd.concat([ordered.head(top_n), tier_leaders], ignore_index=True)
         .drop_duplicates("champion")
@@ -449,10 +671,11 @@ def build_current_rankings(
     actions: pd.DataFrame,
     market: pd.DataFrame,
     target_patch: str | None = None,
+    hyperparameters: dict[str, float] | None = None,
 ) -> pd.DataFrame:
     """Rank champions for every non-coach player in an official market snapshot."""
     cutoff = pd.to_datetime(market["market_closes_at"].iloc[0], utc=True)
-    patch = target_patch or latest_observed_lcs_patch(history, cutoff)
+    patch = target_patch or latest_observed_competitive_patch(history, cutoff)
     code_to_team = {
         str(row.team_code): canonical_team(row.team_name)
         for row in market[["team_code", "team_name"]].drop_duplicates().itertuples()
@@ -460,13 +683,30 @@ def build_current_rankings(
     split_name = market_split_name(str(market["round_name"].iloc[0]))
     target_year = cutoff.year
     history_year = pd.to_numeric(history["year"], errors="coerce")
+    source_league = (
+        history["source_league"].astype(str)
+        if "source_league" in history.columns
+        else history["league"].astype(str)
+    )
     split_history = history.loc[
         history["date"].lt(cutoff)
         & history["league"].eq("LCS")
+        & ~source_league.isin(INTERNATIONAL_LEAGUES)
         & history_year.eq(target_year)
         & history["split"].astype(str).str.casefold().eq(split_name.casefold())
     ].copy()
     bonus_rules = load_champion_bonus_rules()
+    model_hyperparameters = (
+        dict(hyperparameters)
+        if hyperparameters is not None
+        else dict(load_production_hyperparameters())
+    )
+    if re.search(
+        r"\bRound\s*1\b",
+        str(market["round_name"].iloc[0]),
+        flags=re.IGNORECASE,
+    ):
+        model_hyperparameters["opening_round_baseline"] = 1.0
     outputs: list[pd.DataFrame] = []
     for row in market.loc[~market["role"].astype(str).str.casefold().eq("coach")].itertuples():
         opponent_codes = [
@@ -477,11 +717,20 @@ def build_current_rankings(
         ranked = rank_weekly_opponents(
             history, actions, str(row.summoner_name), role, str(row.team_name),
             opponents, cutoff, patch, split_history, bonus_rules,
+            hyperparameters=model_hyperparameters,
         )
         if not ranked.empty:
             ranked.insert(0, "round_name", row.round_name)
             ranked.insert(1, "roster_lock", cutoff.isoformat())
-            ranked.insert(2, "patch_basis", "latest_observed_lcs_patch" if target_patch is None else "explicit")
+            ranked.insert(
+                2,
+                "patch_basis",
+                (
+                    "latest_observed_tier1_patch"
+                    if target_patch is None
+                    else "explicit"
+                ),
+            )
             outputs.append(ranked)
     return pd.concat(outputs, ignore_index=True) if outputs else pd.DataFrame()
 
