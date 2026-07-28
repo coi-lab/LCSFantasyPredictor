@@ -1,189 +1,273 @@
 # LCS Fantasy Predictor
 
-An experimental pipeline and dashboard for calculating LCS Fantasy scores from
-Oracle's Elixir match data and developing weekly player and champion-pick
-predictions.
+An experimental Python pipeline and local dashboard for predicting weekly LCS Fantasy scores, champion choices, and legal six-slot rosters.
 
-See [IDEAS.md](IDEAS.md) for the modeling backlog, including cross-region meta
-adoption scores for teams and coaches.
+## Status
 
-## Weekly Operating Guide (Step-by-Step)
+Active development
 
-Follow these simple steps every week before fantasy roster lock:
+## Overview
 
-### Step 1: Update Current Match Data
-Re-download the current year's Oracle's Elixir match file `2026_LoL_esports_match_data_from_OraclesElixir.csv` into `LCS_stats/`.
-* **Important**: Do **NOT** delete historical files (`2020` through `2025`). The system auto-detects and loads all years together.
+LCS Fantasy Predictor turns professional League of Legends match data and official fantasy-market snapshots into weekly player projections, champion recommendations, and budget-valid lineup options.
 
-### Step 2: Refresh Your 24-Hour Riot API Key
-1. Go to [https://developer.riotgames.com/](https://developer.riotgames.com/) and log in with your Riot account.
-2. Click **"Generate Personal API Key"** and copy the `RGAPI-xxxx-xxxx...` string.
-3. Create or open `.env` in the project root and add your key:
-   ```env
-   RIOT_API_KEY=RGAPI-your-key-here
-   ```
-* **Security Note**: `.env` is listed in `.gitignore` and is **never** committed to Git. Keeps your API key safe in public repos.
+The project began as a fantasy scoring calculator. It has grown into a point-in-time prediction system that keeps every feature behind the weekly roster lock, models champion draft availability under Fearless rules, and searches every legal combination of one TOP, JGL, MID, BOT, SUP, and coach.
 
-### Step 3: Strict Riot API Rate Limits
-Riot Games enforces strict API rate limits that our data scripts automatically obey:
-* **20 requests per 1 second**
-* **100 requests per 2 minutes (120 seconds)**
+The dashboard is designed to keep the predictions inspectable. It shows the historical data, market prices, champion multiplier choices, matchup context, and the assumptions behind each recommendation instead of returning only one unexplained roster.
 
-### Step 4: Run Champion Predictor & Generate Portfolio
+## Features
+
+- LCS Fantasy scoring from Oracle's Elixir player and team statistics
+- Weekly player and coach projections
+- Six-slot lineup optimization under a configurable gold budget
+- Full +0% through +25% organization-variety bonus support
+- Champion recommendations for the x1.3, x1.5, and x1.7 multiplier tiers
+- Sequential pick-and-ban modeling with Fearless draft state
+- Official market snapshots with immutable raw JSON and flat CSV copies
+- Estimated historical prices that are clearly separated from official prices
+- Saved weekly matchup and lineup snapshots for later comparison
+- Local dashboard for player trends, champion analysis, and roster review
+- Chronological backtests, ablations, and audit reports
+- Unit tests for ingestion, scoring, prediction, legality, and optimization
+
+## Research Question
+
+Can public, point-in-time match history and market data produce useful weekly LCS Fantasy recommendations without using results that occurred after roster lock?
+
+The project breaks that question into three connected problems:
+
+1. How many fantasy points should each player and coach be expected to score?
+2. Which champions are both likely to be selected and eligible for the best fantasy multiplier?
+3. Which legal six-slot roster offers the best projected value after budget, team-variety, matchup, and opposing-player risk are considered?
+
+## Methodology
+
+The pipeline uses chronological evaluation instead of random train/test splits. In plain language, every simulated prediction is allowed to learn only from games that occurred before that fantasy week.
+
+Champion-model fitting and tuning use 2020-2025 data. The 2026 season is reserved as the current chronological test period and is never used to fit champion-source weights. Because some 2026 outcomes were visible during earlier development, the repository labels this period as previously exposed rather than claiming it is a pristine blind holdout.
+
+The weekly workflow:
+
+1. Ingest professional match and draft rows from Oracle's Elixir.
+2. Reconstruct games, series, and ordered pick/ban actions.
+3. Apply the configured standard or Full Fearless draft rules.
+4. Build player, team, matchup, patch, and champion features using only pre-lock data.
+5. Generate player and coach scoring projections.
+6. Rank champion options for each projected starter.
+7. Search every legal roster under the current budget.
+8. Export the predictions to versioned JSON files for the dashboard.
+9. Compare completed-week predictions with actual fantasy results.
+
+## Data
+
+- Oracle's Elixir CSV files in `LCS_stats/` provide professional player-game and team-game statistics.
+- Player-game rows contain the champion played and fantasy scoring inputs.
+- Team-game rows contain ordered `pick1`-`pick5` and `ban1`-`ban5` fields.
+- Official LCS Fantasy market captures live in `data/official_market_snapshots/`.
+- Completed-round fantasy outcomes live in `data/actuals/`.
+- Generated databases and prediction files live under `data/` and can be rebuilt from source data and configuration.
+
+The official market endpoint exposes the current market rather than a documented historical archive. Each captured snapshot is therefore kept immutable. Official prices override estimates whenever the league, season, split, and participant match.
+
+## Models
+
+### Player and coach scoring
+
+The player baseline combines historical fantasy scoring, current form, known opponents, team win probability, and role-specific behavior. Coach projections use the configured average LCS roster score.
+
+### Champion prediction
+
+The champion system combines three evidence sources:
+
+- Player comfort: champions associated with the individual player's history
+- LCS meta: champions currently appearing in the domestic league
+- Leading-event meta: nearby international evidence that may reach LCS next
+
+Patch-distance decay gives more weight to evidence from nearby patches. Recommendations also respect role, split history, public bans, draft order, and the champion pool already removed by Fearless rules.
+
+### Lineup optimization
+
+The optimizer evaluates legal combinations of one player in each role plus one coach. It includes official prices, projected fantasy points, expected champion bonus, the organization-variety ladder, and a documented penalty for opposing roster slots.
+
+This is exhaustive search: every eligible roster combination is checked rather than relying on a greedy choice that could miss a better combination of price, variety, and projected points.
+
+## Tech Stack
+
+- Language: Python
+- Libraries: pandas, NumPy
+- Storage: CSV, JSON, SQLite
+- Dashboard: HTML, CSS, JavaScript, Chart.js, Python `http.server`
+- Data sources: Oracle's Elixir and official LCS Fantasy market snapshots
+- Tools: `unittest`, configuration-driven JSON rules, chronological backtests
+
+## Folder Structure
+
+```txt
+LCSFantasyPredictor/
+|-- analysis/                  # Audits, ablations, and evaluation notes
+|-- champion_prediction/       # Draft state and champion recommendation models
+|-- config/                    # Scoring, draft, taxonomy, and model parameters
+|-- dashboard/                 # Local dashboard and exported browser data
+|-- data/
+|   |-- actuals/               # Completed-round fantasy results
+|   `-- official_market_snapshots/
+|-- data_pipeline/             # Ingestion, market capture, and dashboard exports
+|-- fantasy_prediction/        # Player models and lineup optimizer
+|-- learning/                  # Feedback-loop records
+|-- LCS_stats/                 # Oracle's Elixir source CSV files
+|-- rag/                       # Experimental retrieval components
+|-- reports/                   # Model reviews and reports
+|-- tests/                     # Unit and integration tests
+|-- IDEAS.md                   # Modeling backlog
+|-- requirements.txt
+`-- README.md
+```
+
+## Setup
+
+Create and activate a Python virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+On Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Install the current dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Place the required Oracle's Elixir yearly CSV files in `LCS_stats/`. Keep the historical files when updating the current season because the pipeline loads the available years together.
+
+Some Riot-backed data tasks require a temporary development API key. Store it in a local `.env` file:
+
+```env
+RIOT_API_KEY=RGAPI-your-key-here
+```
+
+The `.env` file is ignored by Git. Riot API scripts must remain within 20 requests per second and 100 requests per two minutes.
+
+## Usage
+
+Build the reproducible champion draft database:
+
+```bash
+python -m champion_prediction.draft_actions
+```
+
+Build the human-auditable professional champion summaries:
+
+```bash
+python -m champion_prediction.pro_profiles
+```
+
+Generate the current champion rankings and multiplier portfolio:
+
 ```bash
 python -m champion_prediction.simple_predictor
 ```
-Generates two files under `data/predictions/`:
-* `current_champion_rankings.csv` (All ranked candidates)
-* `current_champion_portfolio.csv` (Top 1.3x Comfort Floor, 1.5x League Adoption, and 1.7x Novelty Wildcard picks)
 
-It also exports `dashboard/weekly_champion_predictions.json`, containing the
-three multiplier columns for every projected starter in the current official
-market. A tier is explicitly marked unavailable when current-split history
-cannot produce that official multiplier. Round 1 is the exception: every
-champion starts at the official x1.3 opening baseline. From Round 2 onward,
-normal split-history eligibility produces x1.3, x1.5, and x1.7 candidates.
-When the scheduled patch is not recorded in the market snapshot, the current
-predictor uses the latest observed tier-1 patch before roster lock; nearby
-MSI/EWC evidence can therefore advance the patch proxy without being counted
-as domestic LCS split maturity.
-
-### Optimize the current six-slot roster
-
-Generate current player and coach projections, then search every legal lineup:
+Generate player and coach projections, then optimize the current roster:
 
 ```bash
 python -m fantasy_prediction.player_baseline --skip-backtest
 python -m fantasy_prediction.lineup_optimizer --budget 100 --top-n 10
 ```
 
-The optimizer uses one TOP, JGL, MID, BOT, SUP, and coach; official market
-prices; expected champion bonus; and the full +0% through +25% variety ladder.
-It writes `data/predictions/current_lineup_recommendations.json` and archives
-the dashboard-ready week in `dashboard/matchup_lineups.json`. Open
-`http://localhost:8050/#matchup-optimizer` to switch between saved fantasy
-weeks, compare the top ten legal lineups, inspect each matchup, and see the
-recommended champion choices with estimated pick chances. Re-running a saved
-week replaces that week while retaining the other weeks. Lineups are ranked
-with a documented five-point penalty for opposing roster slots; conflicts
-involving TOP receive half weight because TOP has shown lower historical score
-variation. Raw projected points remain visible beside the risk-adjusted rank
-score. See
-[`analysis/player_matchup_and_lineup_training.md`](analysis/player_matchup_and_lineup_training.md)
-for the chronological training and validation design.
-
-Production champion-source parameters are frozen in
-`config/champion_model.json`. They were selected with weekly chronological
-targets and patch-distance decay rather than calendar-day half-lives. See
-[`analysis/weekly_patch_weight_tuning.md`](analysis/weekly_patch_weight_tuning.md)
-for both the accepted source-weight run and the rejected current-team
-comfort-persistence experiment. The latter remains disabled because it reduced
-both 2025 Summer Top-1 accuracy and realized fantasy bonus.
-for the validation windows, roster-lock proxy, metrics, and limitations.
-
----
-
-Oracle's Elixir already supplies the core draft fields used by this project:
-player-game rows contain the champion played, and team-game rows contain ordered
-`pick1`-`pick5` and `ban1`-`ban5` fields. Keep the team rows in a separate draft
-table before filtering down to player positions for fantasy scoring.
-
-The official LCS Fantasy rules say player values change weekly, but do not
-publish the pricing formula. For uncaptured history, the dashboard starts with
-the screenshot-derived raw change
-`round((weekly_score - 13) * 0.20, 1)` from Castle's 7.05 score and official
--1.2 price change. Estimated paths reset at each split, carry into that split's
-playoffs, and damp positive compounding above 22 and 26 gold. The observed
-32-gold Berserker peak is used as a conservative ceiling, not asserted as an
-official cap. Historical starting prices remain unknown, so these values are
-clearly labeled estimates. Captured API prices always override them.
-
-Champion novelty must be computed using only rounds before the prediction
-round, within the same split and across all LCS teams. Do not update novelty
-categories with games played earlier in the same fantasy weekend.
-
-## Champion draft database
-
-Build the first champion-prediction dataset with:
-
-```bash
-python -m champion_prediction.draft_actions
-```
-
-This creates the reproducible SQLite database
-`data/champion_prediction/champion_drafts.sqlite`. SQLite is a small database
-stored in one local file; Python supports it without another database server.
-The generated file is intentionally ignored by Git because it can be rebuilt
-from the Oracle's Elixir CSVs and `config/draft_rules.json`.
-
-The database contains two tables:
-
-- `games` is the **canonical game table**: one row represents one game, with
-  both teams' draft fields brought together. “Canonical” means this is the
-  project's single standard representation of a game.
-- `draft_actions` is the **action-level table**: one row represents one pick or
-  ban in its actual sequence. Each row includes only draft information known
-  before that action, including earlier actions and the prior-game Fearless
-  pool. This is the point-in-time state a prediction model is allowed to see.
-
-Map side and draft order are deliberately separate. `map_side` records where a
-team plays on Summoner's Rift (`Blue` or `Red`), while `draft_position` records
-whether it drafts `first` or `second`. The builder reads the per-game
-`firstPick` source flag and does not assume Blue always drafts first. For
-example, a 2026 Red-side team can have `draft_position = first`; its first ban
-and pick are correctly emitted before Blue's.
-
-Oracle's Elixir does not include a series identifier in these files, so the
-builder conservatively reconstructs one from league, split, matchup, game
-number, and time gap. Complete drafts produce 20 actions; partial drafts remain
-in `games` but are excluded from `draft_actions` unless `--include-partial` is
-passed. The recorded game time is an observation timestamp, not proof of the
-earlier roster-lock or draft-start time.
-
-`chosen_was_legal` and `legality_conflict_type` make source anomalies visible
-instead of deleting them. These fields are quality checks, not replacement
-labels for what actually happened. The configured 2025+ Tier-1 rule uses Full
-(Hard) Fearless: a champion picked earlier in a series is unavailable to both
-teams. Riot's [2025 season overview](https://lolesports.com/en-GB/news/lol-esports-in-2025)
-and [Fearless Draft update](https://www.leagueoflegends.com/en-us/news/esports/fearless-draft-takes-over-2025/)
-are the rule references.
-
-Build the first human-auditable professional champion summaries after building
-the draft database:
-
-```bash
-python -m champion_prediction.pro_profiles
-```
-
-This writes `champion_role_pro_profiles.csv` and
-`champion_pro_presence.csv` under `data/champion_prediction/audit/`. These are
-generated review files rather than model inputs. See
-[`analysis/champion-data-audit.md`](analysis/champion-data-audit.md) for the
-field definitions, limitations, and suggested audit order.
-
-## Official market-price snapshots
-
-The LCS Fantasy web application loads the current market from the public
-`https://api.lcsofficial.gg/market` endpoint. Capture it whenever a market opens:
+Capture the official market whenever a new round opens:
 
 ```bash
 python data_pipeline/snapshot_official_market.py
 ```
 
-The command writes an immutable raw JSON response and a flat CSV to
-`data/official_market_snapshots/`. A null `previousRoundPrice` identifies the
-first price of a split; later rounds provide both the current and previous price.
-Keeping these snapshots is necessary because the public endpoint exposes the
-current market rather than a documented historical-price database.
+Refresh the main dashboard data:
 
-When `data_pipeline/export_dashboard_data.py` runs, captured official prices
-override the experimental dashboard price model for matching LCS player-season
-profiles. Current market participants without an Oracle's Elixir match row are
-added as market-only profiles, including coaches. The dashboard labels every
-price as either `OFFICIAL API` or `ESTIMATED`.
+```bash
+python data_pipeline/export_dashboard_data.py
+```
 
-The current official product began as the LTA Fantasy open beta on April 2,
-2025, for LTA Split 2. It used a 50-gold budget. LCS Fantasy continued the same
-product lineage in 2026, but its current six-slot format uses a 100-gold budget.
-Treat the 2025 and 2026 pricing regimes separately unless analysis demonstrates
-that their hidden price-update formulas are comparable.
+Start the local dashboard:
+
+```bash
+python dashboard/server.py
+```
+
+Open:
+
+```txt
+http://localhost:8050
+```
+
+Run the complete test suite:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+## Results or Current Progress
+
+The project currently includes working paths for:
+
+- Converting source matches into a canonical game table and ordered draft actions
+- Keeping observed draft actions while exposing source or rules conflicts for review
+- Modeling standard and Full Fearless champion availability
+- Generating weekly champion portfolios for projected starters
+- Projecting all five player roles and coaches
+- Searching budget-valid six-slot lineups with variety bonuses
+- Saving matchup-aware weekly recommendations for the dashboard
+- Separating captured official prices from experimental historical estimates
+- Auditing completed-round scoring and prediction behavior
+- Testing the major ingestion, feature, model, and optimizer components
+
+The system is still experimental. A recommendation is a model estimate, not a guarantee, and the value of the system depends on timely source data, accurate starters, correct schedule information, and snapshots captured before roster lock.
+
+## Roadmap
+
+- [ ] Capture every official market round so estimated price histories can be replaced with observed data
+- [ ] Continue completed-week scoring and calibration audits
+- [ ] Improve player uncertainty estimates and matchup simulation
+- [ ] Strengthen projected-starter and coach coverage
+- [ ] Expand champion prediction evaluation on unseen chronological weeks
+- [ ] Add safer, versioned roster-lock and schedule inputs
+- [ ] Improve dashboard explanations for projection confidence and feature provenance
+- [ ] Keep experimental model changes disabled until they beat the documented baseline
+
+See [IDEAS.md](IDEAS.md) for the larger modeling backlog and `analysis/` for completed evaluations.
+
+## Lessons Learned
+
+This project shows that the hardest part of fantasy prediction is not producing a score. It is proving that the score was built from information that was actually available at the time.
+
+Important lessons include:
+
+- Random train/test splits can leak future esports metas into past predictions.
+- Patch identifiers must remain strings because versions such as `15.1` and `15.10` are different.
+- Map side and draft order are separate concepts; Blue side does not always draft first.
+- Public bans reduce availability but do not prove private scrim strategy or player targeting.
+- A lineup optimizer must evaluate variety bonuses inside the objective, not add them after selecting players.
+- Official prices and modeled historical estimates need visibly different labels.
+- More complex features should remain experimental unless chronological evaluation shows a real benefit.
+- Saved weekly snapshots make recommendations reproducible after the live market changes.
+
+## Limitations
+
+- The current 2026 test period was previously exposed during development, so it is not a pristine blind holdout.
+- Oracle's Elixir does not provide a direct series identifier; the draft builder reconstructs series conservatively.
+- Recorded game timestamps are observations, not proof of the exact earlier roster-lock time.
+- Historical LCS Fantasy prices are incomplete because the live endpoint does not publish a documented archive.
+- The experimental price formula is a proxy and must not be described as the official pricing formula.
+- Sparse champion, player, coach, and matchup histories can create uncertain estimates.
+- Late substitutions, schedule changes, patches, and market updates can make a saved recommendation stale.
+
+## Notes
+
+- Generated prediction databases, caches, and exports are intentionally ignored when they can be reproduced.
+- Do not delete historical source CSV files when adding a new season.
+- Do not fit model weights on 2026 outcomes.
+- Treat every recommendation as decision support, not certainty.
+- Review the reports in `analysis/` before changing production model parameters.
