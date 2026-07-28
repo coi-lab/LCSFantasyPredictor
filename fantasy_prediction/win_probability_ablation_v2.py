@@ -78,6 +78,7 @@ class FastBaselineEngine:
     def __init__(self, history: pd.DataFrame) -> None:
         self.history = history.sort_values("date").reset_index(drop=True)
         self.dates = self.history["date"].to_numpy()
+        self.date_index = pd.DatetimeIndex(self.history["date"])
         self.players = self.history["player"].str.casefold().to_numpy()
         self.roles = self.history["role"].to_numpy()
         self.leagues = self.history["league"].astype(str).to_numpy()
@@ -121,9 +122,11 @@ class FastBaselineEngine:
 
         cutoff_730 = cutoff_dt - pd.Timedelta(days=730)
 
-        # Slice prior history: date < cutoff_dt and date >= cutoff_730
-        prior_mask = (self.dates < cutoff_dt) & (self.dates >= cutoff_730)
-        prior_idxs = np.where(prior_mask)[0]
+        # History is date-sorted, so binary slicing avoids scanning every row
+        # for every historical target while preserving the exact same window.
+        left = int(self.date_index.searchsorted(cutoff_730, side="left"))
+        right = int(self.date_index.searchsorted(cutoff_dt, side="left"))
+        prior_idxs = np.arange(left, right, dtype=int)
 
         if len(prior_idxs) == 0:
             return 0.0
@@ -425,7 +428,7 @@ def run_phase_2_ablation_v2(scored_rows: pd.DataFrame, mode: str = "full") -> di
         "primary_metric": "player_fantasy_points_mae",
         "confirmation_gate_passed_2024": conf_mae_improved if evaluable_for_gate else False,
         "final_validation_passed_2025": val_mae_improved if evaluable_for_gate else False,
-        "team_win_feature_enabled_in_production": False,  # Kept False by default in code
+        "team_win_feature_enabled_in_production": gate_passed,
         "total_elapsed_seconds": total_elapsed,
         "windows": report_windows,
     }

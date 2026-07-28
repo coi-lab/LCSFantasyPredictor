@@ -90,6 +90,15 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   opposing slot pairs, and give TOP conflicts half weight because current
   cutoff-safe histories show lower TOP score deviation. The five-point base
   penalty is a documented heuristic pending chronological tuning.
+- Player carry concentration must be evaluated as cutoff-safe fantasy
+  production conditional on team wins and losses, not as raw damage share or a
+  subjective carry label. The full 2022-2025 evaluation selected the
+  conditional model; keep its win/loss scores, current-team fantasy share, and
+  effective samples visible.
+- Coach evaluation must use complete five-role team-game slates. Compare a
+  conditional team win/loss model against the average of the same five
+  Elo-adjusted player projections; a player-only Elo coach ablation does not
+  validate the conditional coach implementation.
 - Estimated player-price paths must reset at product split boundaries; regular
   season and playoffs share a path. The former exporter accumulated Lock-In,
   Spring, and EWC phases, creating 15 false 30+ Spring prices. The 32-gold

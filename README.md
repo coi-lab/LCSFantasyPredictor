@@ -81,7 +81,16 @@ separate axes because they use different units.
 
 ### Player and coach scoring
 
-The player baseline combines historical fantasy scoring, current form, known opponents, team win probability, and role-specific behavior. Coach projections use the configured average LCS roster score.
+The player baseline combines historical fantasy scoring, current form, known
+opponents, cutoff-safe sequential Elo win probability, and a validated
+win/loss-conditional carry estimate. Carry concentration is defined in fantasy
+terms: the score and share of team fantasy production a player captures when
+the team wins, with role and current-roster shrinkage.
+
+Coach projections model the official five-player team average separately in
+wins and losses, then combine those states using the estimated team win
+probability. Projection exports retain the win-state, loss-state, probability,
+sample-size, and adjustment fields for inspection.
 
 ### Champion prediction
 

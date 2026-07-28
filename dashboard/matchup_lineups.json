@@ -2182,18 +2182,18 @@
       "top_conflict_weight": 0.5,
       "lineups": [
         {
-          "total_cost": 106.4,
-          "remaining_gold": 2.7,
+          "total_cost": 108.0,
+          "remaining_gold": 1.1,
           "unique_teams": 4,
           "variety_bonus": 0.15,
-          "projected_player_points": 95.54,
-          "projected_champion_bonus": 4.25,
-          "projected_coach_points": 18.78,
-          "projected_base_points": 118.57,
-          "projected_total_points": 136.36,
+          "projected_player_points": 108.74,
+          "projected_champion_bonus": 4.08,
+          "projected_coach_points": 20.31,
+          "projected_base_points": 133.13,
+          "projected_total_points": 153.1,
           "matchup_conflicts": [],
           "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 136.36,
+          "risk_adjusted_points": 153.1,
           "players": [
             {
               "role": "top",
@@ -2201,67 +2201,89 @@
               "team": "LYON",
               "opponent": "Shopify Rebellion",
               "price": 19.8,
-              "projected_points": 14.58,
-              "champion": "Gnar",
-              "champion_expected_bonus": 0.8191,
+              "projected_points": 17.29,
+              "projected_points_before_win_adjustment": 14.58,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 16.06,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.01,
+              "carry_score_if_loss": 5.64,
+              "carry_win_uplift": 13.37,
+              "carry_win_fantasy_share": 0.1624,
+              "carry_adjustment_vs_elo": 1.23,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.5305,
               "floor_pts": 3.15,
               "ceiling_pts": 25.16,
               "champion_options": [
                 {
-                  "champion": "Gnar",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1945,
-                  "expected_multiplier_bonus": 0.8191
-                },
-                {
-                  "champion": "Jayce",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1195,
-                  "expected_multiplier_bonus": 0.4175
-                },
-                {
                   "champion": "Rumble",
                   "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1174,
+                  "expected_multiplier_bonus": 0.5305
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1294,
+                  "expected_multiplier_bonus": 0.5078
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1187,
-                  "expected_multiplier_bonus": 0.5366
+                  "estimated_pick_chance": 0.0706,
+                  "expected_multiplier_bonus": 0.2648
                 }
               ]
             },
             {
               "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 16.5,
+              "projected_points": 23.62,
+              "projected_points_before_win_adjustment": 19.3,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 20.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.94,
+              "carry_score_if_loss": 9.32,
+              "carry_win_uplift": 17.63,
+              "carry_win_fantasy_share": 0.2246,
+              "carry_adjustment_vs_elo": 3.08,
               "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
+              "champion_expected_bonus": 0.8329,
+              "floor_pts": 2.09,
+              "ceiling_pts": 33.53,
               "champion_options": [
                 {
                   "champion": "Jarvan IV",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
+                  "estimated_pick_chance": 0.1584,
+                  "expected_multiplier_bonus": 0.8329
                 },
                 {
-                  "champion": "Lee Sin",
+                  "champion": "Shyvana",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
+                  "estimated_pick_chance": 0.0779,
+                  "expected_multiplier_bonus": 0.3947
                 },
                 {
                   "champion": "Naafiri",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4052
                 }
               ]
             },
@@ -2271,9 +2293,20 @@
               "team": "Team Liquid",
               "opponent": "Sentinels",
               "price": 21.4,
-              "projected_points": 18.9,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
               "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
+              "champion_expected_bonus": 0.9214,
               "floor_pts": 4.17,
               "ceiling_pts": 33.92,
               "champion_options": [
@@ -2281,22 +2314,22 @@
                   "champion": "Ryze",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
                 },
                 {
                   "champion": "Akali",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
                 },
                 {
                   "champion": "Orianna",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
                 }
               ]
             },
@@ -2306,9 +2339,20 @@
               "team": "LYON",
               "opponent": "Shopify Rebellion",
               "price": 21.9,
-              "projected_points": 20.88,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
               "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
+              "champion_expected_bonus": 1.1016,
               "floor_pts": 4.61,
               "ceiling_pts": 32.19,
               "champion_options": [
@@ -2316,22 +2360,22 @@
                   "champion": "Ezreal",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
                 },
                 {
                   "champion": "Ziggs",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
                 },
                 {
-                  "champion": "Lucian",
+                  "champion": "Jhin",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
                 }
               ]
             },
@@ -2341,473 +2385,77 @@
               "team": "FlyQuest",
               "opponent": "Disguised",
               "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
+              "projected_points": 23.6,
+              "projected_points_before_win_adjustment": 21.6,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 22.85,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.18,
+              "carry_score_if_loss": 12.46,
+              "carry_win_uplift": 13.73,
+              "carry_win_fantasy_share": 0.2175,
+              "carry_adjustment_vs_elo": 0.75,
+              "champion": "Lulu",
+              "champion_expected_bonus": 0.6959,
               "floor_pts": 5.87,
               "ceiling_pts": 32.58,
               "champion_options": [
                 {
-                  "champion": "Leona",
+                  "champion": "Lulu",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
+                  "estimated_pick_chance": 0.1224,
+                  "expected_multiplier_bonus": 0.6959
+                },
+                {
+                  "champion": "Karma",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0922,
+                  "expected_multiplier_bonus": 0.5426
                 },
                 {
                   "champion": "Bard",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
+                  "estimated_pick_chance": 0.1019,
+                  "expected_multiplier_bonus": 0.6594
                 }
               ]
             }
           ],
           "coach": {
-            "coach": "Thinkcard",
-            "team": "FlyQuest",
-            "opponent": "Disguised",
-            "price": 12.7,
-            "projected_points": 18.78
+            "coach": "IWDominate",
+            "team": "Cloud9",
+            "opponent": "Dignitas",
+            "price": 13.4,
+            "projected_points": 20.31,
+            "projected_points_before_win_conditioning": 15.73,
+            "team_win_probability": 0.8105,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 4.58,
+            "projected_score_if_win": 23.1,
+            "projected_score_if_loss": 8.36,
+            "win_sample_games": 288,
+            "loss_sample_games": 155
           },
           "rank": 1
         },
         {
-          "total_cost": 103.2,
-          "remaining_gold": 5.9,
-          "unique_teams": 5,
-          "variety_bonus": 0.2,
-          "projected_player_points": 92.04,
-          "projected_champion_bonus": 4.36,
-          "projected_coach_points": 18.71,
-          "projected_base_points": 115.11,
-          "projected_total_points": 138.13,
-          "matchup_conflicts": [
-            {
-              "first": {
-                "name": "Srtty",
-                "role": "top",
-                "team": "Disguised",
-                "opponent": "FlyQuest"
-              },
-              "second": {
-                "name": "Cryogen",
-                "role": "sup",
-                "team": "FlyQuest",
-                "opponent": "Disguised"
-              },
-              "risk_weight": 0.5,
-              "penalty": 2.5
-            }
-          ],
-          "matchup_conflict_penalty": 2.5,
-          "risk_adjusted_points": 135.63,
-          "players": [
-            {
-              "role": "top",
-              "player": "Srtty",
-              "team": "Disguised",
-              "opponent": "FlyQuest",
-              "price": 13.3,
-              "projected_points": 11.08,
-              "champion": "Ambessa",
-              "champion_expected_bonus": 0.9253,
-              "floor_pts": 2.32,
-              "ceiling_pts": 23.32,
-              "champion_options": [
-                {
-                  "champion": "Ambessa",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.2317,
-                  "expected_multiplier_bonus": 0.9253
-                },
-                {
-                  "champion": "Rumble",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.2335,
-                  "expected_multiplier_bonus": 0.7835
-                },
-                {
-                  "champion": "K'Sante",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.0962,
-                  "expected_multiplier_bonus": 0.3464
-                }
-              ]
-            },
-            {
-              "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
-              "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
-              "champion_options": [
-                {
-                  "champion": "Jarvan IV",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
-                },
-                {
-                  "champion": "Lee Sin",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
-                },
-                {
-                  "champion": "Naafiri",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
-                }
-              ]
-            },
-            {
-              "role": "mid",
-              "player": "Quid",
-              "team": "Team Liquid",
-              "opponent": "Sentinels",
-              "price": 21.4,
-              "projected_points": 18.9,
-              "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
-              "floor_pts": 4.17,
-              "ceiling_pts": 33.92,
-              "champion_options": [
-                {
-                  "champion": "Ryze",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
-                },
-                {
-                  "champion": "Akali",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
-                },
-                {
-                  "champion": "Orianna",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
-                }
-              ]
-            },
-            {
-              "role": "bot",
-              "player": "Berserker",
-              "team": "LYON",
-              "opponent": "Shopify Rebellion",
-              "price": 21.9,
-              "projected_points": 20.88,
-              "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
-              "floor_pts": 4.61,
-              "ceiling_pts": 32.19,
-              "champion_options": [
-                {
-                  "champion": "Ezreal",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
-                },
-                {
-                  "champion": "Ziggs",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
-                },
-                {
-                  "champion": "Lucian",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
-                }
-              ]
-            },
-            {
-              "role": "sup",
-              "player": "Cryogen",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
-              "floor_pts": 5.87,
-              "ceiling_pts": 32.58,
-              "champion_options": [
-                {
-                  "champion": "Leona",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
-                },
-                {
-                  "champion": "Bard",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
-                }
-              ]
-            }
-          ],
-          "coach": {
-            "coach": "Reignover",
-            "team": "LYON",
-            "opponent": "Shopify Rebellion",
-            "price": 16.0,
-            "projected_points": 18.71
-          },
-          "rank": 2
-        },
-        {
-          "total_cost": 104.6,
-          "remaining_gold": 4.5,
+          "total_cost": 108.2,
+          "remaining_gold": 0.9,
           "unique_teams": 4,
           "variety_bonus": 0.15,
-          "projected_player_points": 94.81,
-          "projected_champion_bonus": 4.19,
-          "projected_coach_points": 18.78,
-          "projected_base_points": 117.78,
-          "projected_total_points": 135.45,
+          "projected_player_points": 107.05,
+          "projected_champion_bonus": 4.43,
+          "projected_coach_points": 21.62,
+          "projected_base_points": 133.1,
+          "projected_total_points": 153.07,
           "matchup_conflicts": [],
           "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 135.45,
-          "players": [
-            {
-              "role": "top",
-              "player": "Thanatos",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 18.0,
-              "projected_points": 13.85,
-              "champion": "Gnar",
-              "champion_expected_bonus": 0.7553,
-              "floor_pts": 5.1,
-              "ceiling_pts": 24.89,
-              "champion_options": [
-                {
-                  "champion": "Gnar",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1689,
-                  "expected_multiplier_bonus": 0.7553
-                },
-                {
-                  "champion": "Rumble",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1438,
-                  "expected_multiplier_bonus": 0.6157
-                },
-                {
-                  "champion": "K'Sante",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.096,
-                  "expected_multiplier_bonus": 0.3362
-                }
-              ]
-            },
-            {
-              "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
-              "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
-              "champion_options": [
-                {
-                  "champion": "Jarvan IV",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
-                },
-                {
-                  "champion": "Lee Sin",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
-                },
-                {
-                  "champion": "Naafiri",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
-                }
-              ]
-            },
-            {
-              "role": "mid",
-              "player": "Quid",
-              "team": "Team Liquid",
-              "opponent": "Sentinels",
-              "price": 21.4,
-              "projected_points": 18.9,
-              "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
-              "floor_pts": 4.17,
-              "ceiling_pts": 33.92,
-              "champion_options": [
-                {
-                  "champion": "Ryze",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
-                },
-                {
-                  "champion": "Akali",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
-                },
-                {
-                  "champion": "Orianna",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
-                }
-              ]
-            },
-            {
-              "role": "bot",
-              "player": "Berserker",
-              "team": "LYON",
-              "opponent": "Shopify Rebellion",
-              "price": 21.9,
-              "projected_points": 20.88,
-              "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
-              "floor_pts": 4.61,
-              "ceiling_pts": 32.19,
-              "champion_options": [
-                {
-                  "champion": "Ezreal",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
-                },
-                {
-                  "champion": "Ziggs",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
-                },
-                {
-                  "champion": "Lucian",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
-                }
-              ]
-            },
-            {
-              "role": "sup",
-              "player": "Cryogen",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
-              "floor_pts": 5.87,
-              "ceiling_pts": 32.58,
-              "champion_options": [
-                {
-                  "champion": "Leona",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
-                },
-                {
-                  "champion": "Bard",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
-                }
-              ]
-            }
-          ],
-          "coach": {
-            "coach": "Thinkcard",
-            "team": "FlyQuest",
-            "opponent": "Disguised",
-            "price": 12.7,
-            "projected_points": 18.78
-          },
-          "rank": 3
-        },
-        {
-          "total_cost": 101.6,
-          "remaining_gold": 7.5,
-          "unique_teams": 4,
-          "variety_bonus": 0.15,
-          "projected_player_points": 94.95,
-          "projected_champion_bonus": 4.04,
-          "projected_coach_points": 18.78,
-          "projected_base_points": 117.77,
-          "projected_total_points": 135.44,
-          "matchup_conflicts": [],
-          "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 135.44,
+          "risk_adjusted_points": 153.07,
           "players": [
             {
               "role": "top",
@@ -2815,67 +2463,89 @@
               "team": "FlyQuest",
               "opponent": "Disguised",
               "price": 15.0,
-              "projected_points": 13.99,
-              "champion": "Ambessa",
-              "champion_expected_bonus": 0.6096,
+              "projected_points": 16.14,
+              "projected_points_before_win_adjustment": 13.99,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 15.23,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 18.08,
+              "carry_score_if_loss": 7.76,
+              "carry_win_uplift": 10.33,
+              "carry_win_fantasy_share": 0.1507,
+              "carry_adjustment_vs_elo": 0.91,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.7191,
               "floor_pts": 4.24,
               "ceiling_pts": 24.61,
               "champion_options": [
                 {
-                  "champion": "Ambessa",
+                  "champion": "Rumble",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.163,
-                  "expected_multiplier_bonus": 0.6096
+                  "estimated_pick_chance": 0.1739,
+                  "expected_multiplier_bonus": 0.7191
                 },
                 {
                   "champion": "Jayce",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1314,
-                  "expected_multiplier_bonus": 0.4613
+                  "estimated_pick_chance": 0.1453,
+                  "expected_multiplier_bonus": 0.5083
                 },
                 {
-                  "champion": "Rumble",
+                  "champion": "Gnar",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.139,
-                  "expected_multiplier_bonus": 0.5753
+                  "estimated_pick_chance": 0.0735,
+                  "expected_multiplier_bonus": 0.2911
                 }
               ]
             },
             {
               "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 16.5,
+              "projected_points": 23.62,
+              "projected_points_before_win_adjustment": 19.3,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 20.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.94,
+              "carry_score_if_loss": 9.32,
+              "carry_win_uplift": 17.63,
+              "carry_win_fantasy_share": 0.2246,
+              "carry_adjustment_vs_elo": 3.08,
               "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
+              "champion_expected_bonus": 0.8329,
+              "floor_pts": 2.09,
+              "ceiling_pts": 33.53,
               "champion_options": [
                 {
                   "champion": "Jarvan IV",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
+                  "estimated_pick_chance": 0.1584,
+                  "expected_multiplier_bonus": 0.8329
                 },
                 {
-                  "champion": "Lee Sin",
+                  "champion": "Shyvana",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
+                  "estimated_pick_chance": 0.0779,
+                  "expected_multiplier_bonus": 0.3947
                 },
                 {
                   "champion": "Naafiri",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4052
                 }
               ]
             },
@@ -2885,9 +2555,20 @@
               "team": "Team Liquid",
               "opponent": "Sentinels",
               "price": 21.4,
-              "projected_points": 18.9,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
               "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
+              "champion_expected_bonus": 0.9214,
               "floor_pts": 4.17,
               "ceiling_pts": 33.92,
               "champion_options": [
@@ -2895,22 +2576,22 @@
                   "champion": "Ryze",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
                 },
                 {
                   "champion": "Akali",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
                 },
                 {
                   "champion": "Orianna",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
                 }
               ]
             },
@@ -2920,9 +2601,20 @@
               "team": "LYON",
               "opponent": "Shopify Rebellion",
               "price": 21.9,
-              "projected_points": 20.88,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
               "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
+              "champion_expected_bonus": 1.1016,
               "floor_pts": 4.61,
               "ceiling_pts": 32.19,
               "champion_options": [
@@ -2930,455 +2622,68 @@
                   "champion": "Ezreal",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
                 },
                 {
                   "champion": "Ziggs",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
                 },
                 {
-                  "champion": "Lucian",
+                  "champion": "Jhin",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
                 }
               ]
             },
             {
               "role": "sup",
-              "player": "Cryogen",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
-              "floor_pts": 5.87,
-              "ceiling_pts": 32.58,
+              "player": "Vulcan",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 17.4,
+              "projected_points": 23.06,
+              "projected_points_before_win_adjustment": 19.9,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 21.14,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.17,
+              "carry_score_if_loss": 9.74,
+              "carry_win_uplift": 16.43,
+              "carry_win_fantasy_share": 0.2239,
+              "carry_adjustment_vs_elo": 1.92,
+              "champion": "Seraphine",
+              "champion_expected_bonus": 0.8553,
+              "floor_pts": 5.8,
+              "ceiling_pts": 32.72,
               "champion_options": [
                 {
-                  "champion": "Leona",
+                  "champion": "Seraphine",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
+                  "estimated_pick_chance": 0.1352,
+                  "expected_multiplier_bonus": 0.8553
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1308,
+                  "expected_multiplier_bonus": 0.6267
                 },
                 {
                   "champion": "Bard",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
-                }
-              ]
-            }
-          ],
-          "coach": {
-            "coach": "Thinkcard",
-            "team": "FlyQuest",
-            "opponent": "Disguised",
-            "price": 12.7,
-            "projected_points": 18.78
-          },
-          "rank": 4
-        },
-        {
-          "total_cost": 99.8,
-          "remaining_gold": 9.3,
-          "unique_teams": 4,
-          "variety_bonus": 0.15,
-          "projected_player_points": 94.89,
-          "projected_champion_bonus": 4.06,
-          "projected_coach_points": 18.78,
-          "projected_base_points": 117.73,
-          "projected_total_points": 135.39,
-          "matchup_conflicts": [],
-          "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 135.39,
-          "players": [
-            {
-              "role": "top",
-              "player": "Dhokla",
-              "team": "LYON",
-              "opponent": "Shopify Rebellion",
-              "price": 19.8,
-              "projected_points": 14.58,
-              "champion": "Gnar",
-              "champion_expected_bonus": 0.8191,
-              "floor_pts": 3.15,
-              "ceiling_pts": 25.16,
-              "champion_options": [
-                {
-                  "champion": "Gnar",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1945,
-                  "expected_multiplier_bonus": 0.8191
-                },
-                {
-                  "champion": "Jayce",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1195,
-                  "expected_multiplier_bonus": 0.4175
-                },
-                {
-                  "champion": "Rumble",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1187,
-                  "expected_multiplier_bonus": 0.5366
-                }
-              ]
-            },
-            {
-              "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
-              "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
-              "champion_options": [
-                {
-                  "champion": "Jarvan IV",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
-                },
-                {
-                  "champion": "Lee Sin",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
-                },
-                {
-                  "champion": "Naafiri",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
-                }
-              ]
-            },
-            {
-              "role": "mid",
-              "player": "Quid",
-              "team": "Team Liquid",
-              "opponent": "Sentinels",
-              "price": 21.4,
-              "projected_points": 18.9,
-              "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
-              "floor_pts": 4.17,
-              "ceiling_pts": 33.92,
-              "champion_options": [
-                {
-                  "champion": "Ryze",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
-                },
-                {
-                  "champion": "Akali",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
-                },
-                {
-                  "champion": "Orianna",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
-                }
-              ]
-            },
-            {
-              "role": "bot",
-              "player": "Massu",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.3,
-              "projected_points": 20.23,
-              "champion": "Ezreal",
-              "champion_expected_bonus": 0.8147,
-              "floor_pts": 4.27,
-              "ceiling_pts": 32.48,
-              "champion_options": [
-                {
-                  "champion": "Ezreal",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1529,
-                  "expected_multiplier_bonus": 0.8147
-                },
-                {
-                  "champion": "Ziggs",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1519,
-                  "expected_multiplier_bonus": 0.6643
-                },
-                {
-                  "champion": "Lucian",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.119,
-                  "expected_multiplier_bonus": 0.6853
-                }
-              ]
-            },
-            {
-              "role": "sup",
-              "player": "Cryogen",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
-              "floor_pts": 5.87,
-              "ceiling_pts": 32.58,
-              "champion_options": [
-                {
-                  "champion": "Leona",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
-                },
-                {
-                  "champion": "Bard",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
-                }
-              ]
-            }
-          ],
-          "coach": {
-            "coach": "Thinkcard",
-            "team": "FlyQuest",
-            "opponent": "Disguised",
-            "price": 12.7,
-            "projected_points": 18.78
-          },
-          "rank": 5
-        },
-        {
-          "total_cost": 107.9,
-          "remaining_gold": 1.2,
-          "unique_teams": 4,
-          "variety_bonus": 0.15,
-          "projected_player_points": 94.81,
-          "projected_champion_bonus": 4.19,
-          "projected_coach_points": 18.71,
-          "projected_base_points": 117.71,
-          "projected_total_points": 135.36,
-          "matchup_conflicts": [],
-          "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 135.36,
-          "players": [
-            {
-              "role": "top",
-              "player": "Thanatos",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 18.0,
-              "projected_points": 13.85,
-              "champion": "Gnar",
-              "champion_expected_bonus": 0.7553,
-              "floor_pts": 5.1,
-              "ceiling_pts": 24.89,
-              "champion_options": [
-                {
-                  "champion": "Gnar",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1689,
-                  "expected_multiplier_bonus": 0.7553
-                },
-                {
-                  "champion": "Rumble",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1438,
-                  "expected_multiplier_bonus": 0.6157
-                },
-                {
-                  "champion": "K'Sante",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.096,
-                  "expected_multiplier_bonus": 0.3362
-                }
-              ]
-            },
-            {
-              "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
-              "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
-              "champion_options": [
-                {
-                  "champion": "Jarvan IV",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
-                },
-                {
-                  "champion": "Lee Sin",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
-                },
-                {
-                  "champion": "Naafiri",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
-                }
-              ]
-            },
-            {
-              "role": "mid",
-              "player": "Quid",
-              "team": "Team Liquid",
-              "opponent": "Sentinels",
-              "price": 21.4,
-              "projected_points": 18.9,
-              "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
-              "floor_pts": 4.17,
-              "ceiling_pts": 33.92,
-              "champion_options": [
-                {
-                  "champion": "Ryze",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
-                },
-                {
-                  "champion": "Akali",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
-                },
-                {
-                  "champion": "Orianna",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
-                }
-              ]
-            },
-            {
-              "role": "bot",
-              "player": "Berserker",
-              "team": "LYON",
-              "opponent": "Shopify Rebellion",
-              "price": 21.9,
-              "projected_points": 20.88,
-              "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
-              "floor_pts": 4.61,
-              "ceiling_pts": 32.19,
-              "champion_options": [
-                {
-                  "champion": "Ezreal",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
-                },
-                {
-                  "champion": "Ziggs",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
-                },
-                {
-                  "champion": "Lucian",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
-                }
-              ]
-            },
-            {
-              "role": "sup",
-              "player": "Cryogen",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
-              "floor_pts": 5.87,
-              "ceiling_pts": 32.58,
-              "champion_options": [
-                {
-                  "champion": "Leona",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
-                },
-                {
-                  "champion": "Bard",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
-                  "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
+                  "estimated_pick_chance": 0.0833,
+                  "expected_multiplier_bonus": 0.5197
                 }
               ]
             }
@@ -3388,23 +2693,293 @@
             "team": "LYON",
             "opponent": "Shopify Rebellion",
             "price": 16.0,
-            "projected_points": 18.71
+            "projected_points": 21.62,
+            "projected_points_before_win_conditioning": 16.01,
+            "team_win_probability": 0.8713,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 5.61,
+            "projected_score_if_win": 23.56,
+            "projected_score_if_loss": 8.45,
+            "win_sample_games": 53,
+            "loss_sample_games": 44
           },
-          "rank": 6
+          "rank": 2
+        },
+        {
+          "total_cost": 108.8,
+          "remaining_gold": 0.3,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 107.24,
+          "projected_champion_bonus": 4.06,
+          "projected_coach_points": 21.62,
+          "projected_base_points": 132.92,
+          "projected_total_points": 152.85,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 152.85,
+          "players": [
+            {
+              "role": "top",
+              "player": "Thanatos",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 18.0,
+              "projected_points": 15.79,
+              "projected_points_before_win_adjustment": 13.85,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 15.09,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 17.57,
+              "carry_score_if_loss": 8.2,
+              "carry_win_uplift": 9.36,
+              "carry_win_fantasy_share": 0.1514,
+              "carry_adjustment_vs_elo": 0.7,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5033,
+              "floor_pts": 5.1,
+              "ceiling_pts": 24.89,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1126,
+                  "expected_multiplier_bonus": 0.5033
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1139,
+                  "expected_multiplier_bonus": 0.4928
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0764,
+                  "expected_multiplier_bonus": 0.2996
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 16.5,
+              "projected_points": 23.62,
+              "projected_points_before_win_adjustment": 19.3,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 20.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.94,
+              "carry_score_if_loss": 9.32,
+              "carry_win_uplift": 17.63,
+              "carry_win_fantasy_share": 0.2246,
+              "carry_adjustment_vs_elo": 3.08,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.8329,
+              "floor_pts": 2.09,
+              "ceiling_pts": 33.53,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1584,
+                  "expected_multiplier_bonus": 0.8329
+                },
+                {
+                  "champion": "Shyvana",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0779,
+                  "expected_multiplier_bonus": 0.3947
+                },
+                {
+                  "champion": "Naafiri",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4052
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Sentinels",
+              "price": 21.4,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9214,
+              "floor_pts": 4.17,
+              "ceiling_pts": 33.92,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "Shopify Rebellion",
+              "price": 21.9,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.1016,
+              "floor_pts": 4.61,
+              "ceiling_pts": 32.19,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Cryogen",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 23.6,
+              "projected_points_before_win_adjustment": 21.6,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 22.85,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.18,
+              "carry_score_if_loss": 12.46,
+              "carry_win_uplift": 13.73,
+              "carry_win_fantasy_share": 0.2175,
+              "carry_adjustment_vs_elo": 0.75,
+              "champion": "Lulu",
+              "champion_expected_bonus": 0.6959,
+              "floor_pts": 5.87,
+              "ceiling_pts": 32.58,
+              "champion_options": [
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1224,
+                  "expected_multiplier_bonus": 0.6959
+                },
+                {
+                  "champion": "Karma",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0922,
+                  "expected_multiplier_bonus": 0.5426
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1019,
+                  "expected_multiplier_bonus": 0.6594
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Shopify Rebellion",
+            "price": 16.0,
+            "projected_points": 21.62,
+            "projected_points_before_win_conditioning": 16.01,
+            "team_win_probability": 0.8713,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 5.61,
+            "projected_score_if_win": 23.56,
+            "projected_score_if_loss": 8.45,
+            "win_sample_games": 53,
+            "loss_sample_games": 44
+          },
+          "rank": 3
         },
         {
           "total_cost": 104.9,
           "remaining_gold": 4.2,
           "unique_teams": 4,
           "variety_bonus": 0.15,
-          "projected_player_points": 94.95,
-          "projected_champion_bonus": 4.04,
-          "projected_coach_points": 18.71,
-          "projected_base_points": 117.7,
-          "projected_total_points": 135.36,
+          "projected_player_points": 107.05,
+          "projected_champion_bonus": 4.43,
+          "projected_coach_points": 20.82,
+          "projected_base_points": 132.3,
+          "projected_total_points": 152.15,
           "matchup_conflicts": [],
           "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 135.36,
+          "risk_adjusted_points": 152.15,
           "players": [
             {
               "role": "top",
@@ -3412,67 +2987,89 @@
               "team": "FlyQuest",
               "opponent": "Disguised",
               "price": 15.0,
-              "projected_points": 13.99,
-              "champion": "Ambessa",
-              "champion_expected_bonus": 0.6096,
+              "projected_points": 16.14,
+              "projected_points_before_win_adjustment": 13.99,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 15.23,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 18.08,
+              "carry_score_if_loss": 7.76,
+              "carry_win_uplift": 10.33,
+              "carry_win_fantasy_share": 0.1507,
+              "carry_adjustment_vs_elo": 0.91,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.7191,
               "floor_pts": 4.24,
               "ceiling_pts": 24.61,
               "champion_options": [
                 {
-                  "champion": "Ambessa",
+                  "champion": "Rumble",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.163,
-                  "expected_multiplier_bonus": 0.6096
+                  "estimated_pick_chance": 0.1739,
+                  "expected_multiplier_bonus": 0.7191
                 },
                 {
                   "champion": "Jayce",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1314,
-                  "expected_multiplier_bonus": 0.4613
+                  "estimated_pick_chance": 0.1453,
+                  "expected_multiplier_bonus": 0.5083
                 },
                 {
-                  "champion": "Rumble",
+                  "champion": "Gnar",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.139,
-                  "expected_multiplier_bonus": 0.5753
+                  "estimated_pick_chance": 0.0735,
+                  "expected_multiplier_bonus": 0.2911
                 }
               ]
             },
             {
               "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 16.5,
+              "projected_points": 23.62,
+              "projected_points_before_win_adjustment": 19.3,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 20.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.94,
+              "carry_score_if_loss": 9.32,
+              "carry_win_uplift": 17.63,
+              "carry_win_fantasy_share": 0.2246,
+              "carry_adjustment_vs_elo": 3.08,
               "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
+              "champion_expected_bonus": 0.8329,
+              "floor_pts": 2.09,
+              "ceiling_pts": 33.53,
               "champion_options": [
                 {
                   "champion": "Jarvan IV",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
+                  "estimated_pick_chance": 0.1584,
+                  "expected_multiplier_bonus": 0.8329
                 },
                 {
-                  "champion": "Lee Sin",
+                  "champion": "Shyvana",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
+                  "estimated_pick_chance": 0.0779,
+                  "expected_multiplier_bonus": 0.3947
                 },
                 {
                   "champion": "Naafiri",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4052
                 }
               ]
             },
@@ -3482,9 +3079,20 @@
               "team": "Team Liquid",
               "opponent": "Sentinels",
               "price": 21.4,
-              "projected_points": 18.9,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
               "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
+              "champion_expected_bonus": 0.9214,
               "floor_pts": 4.17,
               "ceiling_pts": 33.92,
               "champion_options": [
@@ -3492,22 +3100,22 @@
                   "champion": "Ryze",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
                 },
                 {
                   "champion": "Akali",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
                 },
                 {
                   "champion": "Orianna",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
                 }
               ]
             },
@@ -3517,9 +3125,20 @@
               "team": "LYON",
               "opponent": "Shopify Rebellion",
               "price": 21.9,
-              "projected_points": 20.88,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
               "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
+              "champion_expected_bonus": 1.1016,
               "floor_pts": 4.61,
               "ceiling_pts": 32.19,
               "champion_options": [
@@ -3527,22 +3146,284 @@
                   "champion": "Ezreal",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
                 },
                 {
                   "champion": "Ziggs",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
                 },
                 {
-                  "champion": "Lucian",
+                  "champion": "Jhin",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Vulcan",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 17.4,
+              "projected_points": 23.06,
+              "projected_points_before_win_adjustment": 19.9,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 21.14,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.17,
+              "carry_score_if_loss": 9.74,
+              "carry_win_uplift": 16.43,
+              "carry_win_fantasy_share": 0.2239,
+              "carry_adjustment_vs_elo": 1.92,
+              "champion": "Seraphine",
+              "champion_expected_bonus": 0.8553,
+              "floor_pts": 5.8,
+              "ceiling_pts": 32.72,
+              "champion_options": [
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1352,
+                  "expected_multiplier_bonus": 0.8553
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1308,
+                  "expected_multiplier_bonus": 0.6267
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0833,
+                  "expected_multiplier_bonus": 0.5197
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Thinkcard",
+            "team": "FlyQuest",
+            "opponent": "Disguised",
+            "price": 12.7,
+            "projected_points": 20.82,
+            "projected_points_before_win_conditioning": 16.41,
+            "team_win_probability": 0.8116,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 4.41,
+            "projected_score_if_win": 23.49,
+            "projected_score_if_loss": 9.32,
+            "win_sample_games": 229,
+            "loss_sample_games": 191
+          },
+          "rank": 4
+        },
+        {
+          "total_cost": 103.2,
+          "remaining_gold": 5.9,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 107.59,
+          "projected_champion_bonus": 4.27,
+          "projected_coach_points": 20.31,
+          "projected_base_points": 132.17,
+          "projected_total_points": 152.0,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 152.0,
+          "players": [
+            {
+              "role": "top",
+              "player": "Gakgos",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 16.14,
+              "projected_points_before_win_adjustment": 13.99,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 15.23,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 18.08,
+              "carry_score_if_loss": 7.76,
+              "carry_win_uplift": 10.33,
+              "carry_win_fantasy_share": 0.1507,
+              "carry_adjustment_vs_elo": 0.91,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.7191,
+              "floor_pts": 4.24,
+              "ceiling_pts": 24.61,
+              "champion_options": [
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1739,
+                  "expected_multiplier_bonus": 0.7191
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1453,
+                  "expected_multiplier_bonus": 0.5083
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0735,
+                  "expected_multiplier_bonus": 0.2911
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 16.5,
+              "projected_points": 23.62,
+              "projected_points_before_win_adjustment": 19.3,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 20.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.94,
+              "carry_score_if_loss": 9.32,
+              "carry_win_uplift": 17.63,
+              "carry_win_fantasy_share": 0.2246,
+              "carry_adjustment_vs_elo": 3.08,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.8329,
+              "floor_pts": 2.09,
+              "ceiling_pts": 33.53,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1584,
+                  "expected_multiplier_bonus": 0.8329
+                },
+                {
+                  "champion": "Shyvana",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0779,
+                  "expected_multiplier_bonus": 0.3947
+                },
+                {
+                  "champion": "Naafiri",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4052
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Sentinels",
+              "price": 21.4,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9214,
+              "floor_pts": 4.17,
+              "ceiling_pts": 33.92,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "Shopify Rebellion",
+              "price": 21.9,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.1016,
+              "floor_pts": 4.61,
+              "ceiling_pts": 32.19,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
                 }
               ]
             },
@@ -3552,58 +3433,77 @@
               "team": "FlyQuest",
               "opponent": "Disguised",
               "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
+              "projected_points": 23.6,
+              "projected_points_before_win_adjustment": 21.6,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 22.85,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.18,
+              "carry_score_if_loss": 12.46,
+              "carry_win_uplift": 13.73,
+              "carry_win_fantasy_share": 0.2175,
+              "carry_adjustment_vs_elo": 0.75,
+              "champion": "Lulu",
+              "champion_expected_bonus": 0.6959,
               "floor_pts": 5.87,
               "ceiling_pts": 32.58,
               "champion_options": [
                 {
-                  "champion": "Leona",
+                  "champion": "Lulu",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
+                  "estimated_pick_chance": 0.1224,
+                  "expected_multiplier_bonus": 0.6959
+                },
+                {
+                  "champion": "Karma",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0922,
+                  "expected_multiplier_bonus": 0.5426
                 },
                 {
                   "champion": "Bard",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
+                  "estimated_pick_chance": 0.1019,
+                  "expected_multiplier_bonus": 0.6594
                 }
               ]
             }
           ],
           "coach": {
-            "coach": "Reignover",
-            "team": "LYON",
-            "opponent": "Shopify Rebellion",
-            "price": 16.0,
-            "projected_points": 18.71
+            "coach": "IWDominate",
+            "team": "Cloud9",
+            "opponent": "Dignitas",
+            "price": 13.4,
+            "projected_points": 20.31,
+            "projected_points_before_win_conditioning": 15.73,
+            "team_win_probability": 0.8105,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 4.58,
+            "projected_score_if_win": 23.1,
+            "projected_score_if_loss": 8.36,
+            "win_sample_games": 288,
+            "loss_sample_games": 155
           },
-          "rank": 7
+          "rank": 5
         },
         {
-          "total_cost": 103.1,
-          "remaining_gold": 6.0,
+          "total_cost": 106.4,
+          "remaining_gold": 2.7,
           "unique_teams": 4,
           "variety_bonus": 0.15,
-          "projected_player_points": 94.89,
-          "projected_champion_bonus": 4.06,
-          "projected_coach_points": 18.71,
-          "projected_base_points": 117.66,
-          "projected_total_points": 135.31,
+          "projected_player_points": 107.13,
+          "projected_champion_bonus": 4.21,
+          "projected_coach_points": 20.82,
+          "projected_base_points": 132.16,
+          "projected_total_points": 151.99,
           "matchup_conflicts": [],
           "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 135.31,
+          "risk_adjusted_points": 151.99,
           "players": [
             {
               "role": "top",
@@ -3611,32 +3511,43 @@
               "team": "LYON",
               "opponent": "Shopify Rebellion",
               "price": 19.8,
-              "projected_points": 14.58,
-              "champion": "Gnar",
-              "champion_expected_bonus": 0.8191,
+              "projected_points": 17.29,
+              "projected_points_before_win_adjustment": 14.58,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 16.06,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.01,
+              "carry_score_if_loss": 5.64,
+              "carry_win_uplift": 13.37,
+              "carry_win_fantasy_share": 0.1624,
+              "carry_adjustment_vs_elo": 1.23,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.5305,
               "floor_pts": 3.15,
               "ceiling_pts": 25.16,
               "champion_options": [
                 {
-                  "champion": "Gnar",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1945,
-                  "expected_multiplier_bonus": 0.8191
-                },
-                {
-                  "champion": "Jayce",
-                  "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1195,
-                  "expected_multiplier_bonus": 0.4175
-                },
-                {
                   "champion": "Rumble",
                   "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1174,
+                  "expected_multiplier_bonus": 0.5305
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1294,
+                  "expected_multiplier_bonus": 0.5078
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1187,
-                  "expected_multiplier_bonus": 0.5366
+                  "estimated_pick_chance": 0.0706,
+                  "expected_multiplier_bonus": 0.2648
                 }
               ]
             },
@@ -3646,9 +3557,20 @@
               "team": "Cloud9",
               "opponent": "Dignitas",
               "price": 15.6,
-              "projected_points": 19.58,
+              "projected_points": 22.01,
+              "projected_points_before_win_adjustment": 19.58,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 20.82,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.34,
+              "carry_score_if_loss": 7.78,
+              "carry_win_uplift": 17.55,
+              "carry_win_fantasy_share": 0.2191,
+              "carry_adjustment_vs_elo": 1.19,
               "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
+              "champion_expected_bonus": 0.9642,
               "floor_pts": 2.73,
               "ceiling_pts": 32.1,
               "champion_options": [
@@ -3656,22 +3578,22 @@
                   "champion": "Jarvan IV",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
+                  "estimated_pick_chance": 0.2001,
+                  "expected_multiplier_bonus": 0.9642
+                },
+                {
+                  "champion": "Nocturne",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1032,
+                  "expected_multiplier_bonus": 0.5352
                 },
                 {
                   "champion": "Lee Sin",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
-                },
-                {
-                  "champion": "Naafiri",
-                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
+                  "estimated_pick_chance": 0.0772,
+                  "expected_multiplier_bonus": 0.4189
                 }
               ]
             },
@@ -3681,9 +3603,20 @@
               "team": "Team Liquid",
               "opponent": "Sentinels",
               "price": 21.4,
-              "projected_points": 18.9,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
               "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
+              "champion_expected_bonus": 0.9214,
               "floor_pts": 4.17,
               "ceiling_pts": 33.92,
               "champion_options": [
@@ -3691,57 +3624,68 @@
                   "champion": "Ryze",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
                 },
                 {
                   "champion": "Akali",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
                 },
                 {
                   "champion": "Orianna",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
                 }
               ]
             },
             {
               "role": "bot",
-              "player": "Massu",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.3,
-              "projected_points": 20.23,
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "Shopify Rebellion",
+              "price": 21.9,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
               "champion": "Ezreal",
-              "champion_expected_bonus": 0.8147,
-              "floor_pts": 4.27,
-              "ceiling_pts": 32.48,
+              "champion_expected_bonus": 1.1016,
+              "floor_pts": 4.61,
+              "ceiling_pts": 32.19,
               "champion_options": [
                 {
                   "champion": "Ezreal",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1529,
-                  "expected_multiplier_bonus": 0.8147
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
                 },
                 {
                   "champion": "Ziggs",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1519,
-                  "expected_multiplier_bonus": 0.6643
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
                 },
                 {
-                  "champion": "Lucian",
+                  "champion": "Jhin",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.119,
-                  "expected_multiplier_bonus": 0.6853
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
                 }
               ]
             },
@@ -3751,32 +3695,567 @@
               "team": "FlyQuest",
               "opponent": "Disguised",
               "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
+              "projected_points": 23.6,
+              "projected_points_before_win_adjustment": 21.6,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 22.85,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.18,
+              "carry_score_if_loss": 12.46,
+              "carry_win_uplift": 13.73,
+              "carry_win_fantasy_share": 0.2175,
+              "carry_adjustment_vs_elo": 0.75,
+              "champion": "Lulu",
+              "champion_expected_bonus": 0.6959,
               "floor_pts": 5.87,
               "ceiling_pts": 32.58,
               "champion_options": [
                 {
-                  "champion": "Leona",
+                  "champion": "Lulu",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
+                  "estimated_pick_chance": 0.1224,
+                  "expected_multiplier_bonus": 0.6959
+                },
+                {
+                  "champion": "Karma",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0922,
+                  "expected_multiplier_bonus": 0.5426
                 },
                 {
                   "champion": "Bard",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1019,
+                  "expected_multiplier_bonus": 0.6594
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Thinkcard",
+            "team": "FlyQuest",
+            "opponent": "Disguised",
+            "price": 12.7,
+            "projected_points": 20.82,
+            "projected_points_before_win_conditioning": 16.41,
+            "team_win_probability": 0.8116,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 4.41,
+            "projected_score_if_win": 23.49,
+            "projected_score_if_loss": 9.32,
+            "win_sample_games": 229,
+            "loss_sample_games": 191
+          },
+          "rank": 6
+        },
+        {
+          "total_cost": 105.5,
+          "remaining_gold": 3.6,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 107.24,
+          "projected_champion_bonus": 4.06,
+          "projected_coach_points": 20.82,
+          "projected_base_points": 132.12,
+          "projected_total_points": 151.93,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 151.93,
+          "players": [
+            {
+              "role": "top",
+              "player": "Thanatos",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 18.0,
+              "projected_points": 15.79,
+              "projected_points_before_win_adjustment": 13.85,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 15.09,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 17.57,
+              "carry_score_if_loss": 8.2,
+              "carry_win_uplift": 9.36,
+              "carry_win_fantasy_share": 0.1514,
+              "carry_adjustment_vs_elo": 0.7,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5033,
+              "floor_pts": 5.1,
+              "ceiling_pts": 24.89,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1126,
+                  "expected_multiplier_bonus": 0.5033
                 },
                 {
-                  "champion": "Camille",
+                  "champion": "Sion",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1139,
+                  "expected_multiplier_bonus": 0.4928
+                },
+                {
+                  "champion": "Ambessa",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
+                  "estimated_pick_chance": 0.0764,
+                  "expected_multiplier_bonus": 0.2996
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 16.5,
+              "projected_points": 23.62,
+              "projected_points_before_win_adjustment": 19.3,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 20.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.94,
+              "carry_score_if_loss": 9.32,
+              "carry_win_uplift": 17.63,
+              "carry_win_fantasy_share": 0.2246,
+              "carry_adjustment_vs_elo": 3.08,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.8329,
+              "floor_pts": 2.09,
+              "ceiling_pts": 33.53,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1584,
+                  "expected_multiplier_bonus": 0.8329
+                },
+                {
+                  "champion": "Shyvana",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0779,
+                  "expected_multiplier_bonus": 0.3947
+                },
+                {
+                  "champion": "Naafiri",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4052
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Sentinels",
+              "price": 21.4,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9214,
+              "floor_pts": 4.17,
+              "ceiling_pts": 33.92,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "Shopify Rebellion",
+              "price": 21.9,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.1016,
+              "floor_pts": 4.61,
+              "ceiling_pts": 32.19,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Cryogen",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 23.6,
+              "projected_points_before_win_adjustment": 21.6,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 22.85,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.18,
+              "carry_score_if_loss": 12.46,
+              "carry_win_uplift": 13.73,
+              "carry_win_fantasy_share": 0.2175,
+              "carry_adjustment_vs_elo": 0.75,
+              "champion": "Lulu",
+              "champion_expected_bonus": 0.6959,
+              "floor_pts": 5.87,
+              "ceiling_pts": 32.58,
+              "champion_options": [
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1224,
+                  "expected_multiplier_bonus": 0.6959
+                },
+                {
+                  "champion": "Karma",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0922,
+                  "expected_multiplier_bonus": 0.5426
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1019,
+                  "expected_multiplier_bonus": 0.6594
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Thinkcard",
+            "team": "FlyQuest",
+            "opponent": "Disguised",
+            "price": 12.7,
+            "projected_points": 20.82,
+            "projected_points_before_win_conditioning": 16.41,
+            "team_win_probability": 0.8116,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 4.41,
+            "projected_score_if_win": 23.49,
+            "projected_score_if_loss": 9.32,
+            "win_sample_games": 229,
+            "loss_sample_games": 191
+          },
+          "rank": 7
+        },
+        {
+          "total_cost": 104.9,
+          "remaining_gold": 4.2,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 105.98,
+          "projected_champion_bonus": 4.4,
+          "projected_coach_points": 21.62,
+          "projected_base_points": 132.0,
+          "projected_total_points": 151.8,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 151.8,
+          "players": [
+            {
+              "role": "top",
+              "player": "Gakgos",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 16.14,
+              "projected_points_before_win_adjustment": 13.99,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 15.23,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 18.08,
+              "carry_score_if_loss": 7.76,
+              "carry_win_uplift": 10.33,
+              "carry_win_fantasy_share": 0.1507,
+              "carry_adjustment_vs_elo": 0.91,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.7191,
+              "floor_pts": 4.24,
+              "ceiling_pts": 24.61,
+              "champion_options": [
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1739,
+                  "expected_multiplier_bonus": 0.7191
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1453,
+                  "expected_multiplier_bonus": 0.5083
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0735,
+                  "expected_multiplier_bonus": 0.2911
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Blaber",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 15.6,
+              "projected_points": 22.01,
+              "projected_points_before_win_adjustment": 19.58,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 20.82,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.34,
+              "carry_score_if_loss": 7.78,
+              "carry_win_uplift": 17.55,
+              "carry_win_fantasy_share": 0.2191,
+              "carry_adjustment_vs_elo": 1.19,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9642,
+              "floor_pts": 2.73,
+              "ceiling_pts": 32.1,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.2001,
+                  "expected_multiplier_bonus": 0.9642
+                },
+                {
+                  "champion": "Nocturne",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1032,
+                  "expected_multiplier_bonus": 0.5352
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0772,
+                  "expected_multiplier_bonus": 0.4189
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Sentinels",
+              "price": 21.4,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9214,
+              "floor_pts": 4.17,
+              "ceiling_pts": 33.92,
+              "champion_options": [
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
+                },
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Berserker",
+              "team": "LYON",
+              "opponent": "Shopify Rebellion",
+              "price": 21.9,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.1016,
+              "floor_pts": 4.61,
+              "ceiling_pts": 32.19,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
+                },
+                {
+                  "champion": "Ziggs",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Cryogen",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 23.6,
+              "projected_points_before_win_adjustment": 21.6,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 22.85,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.18,
+              "carry_score_if_loss": 12.46,
+              "carry_win_uplift": 13.73,
+              "carry_win_fantasy_share": 0.2175,
+              "carry_adjustment_vs_elo": 0.75,
+              "champion": "Lulu",
+              "champion_expected_bonus": 0.6959,
+              "floor_pts": 5.87,
+              "ceiling_pts": 32.58,
+              "champion_options": [
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1224,
+                  "expected_multiplier_bonus": 0.6959
+                },
+                {
+                  "champion": "Karma",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.0922,
+                  "expected_multiplier_bonus": 0.5426
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "International meta",
+                  "estimated_pick_chance": 0.1019,
+                  "expected_multiplier_bonus": 0.6594
                 }
               ]
             }
@@ -3786,108 +4265,121 @@
             "team": "LYON",
             "opponent": "Shopify Rebellion",
             "price": 16.0,
-            "projected_points": 18.71
+            "projected_points": 21.62,
+            "projected_points_before_win_conditioning": 16.01,
+            "team_win_probability": 0.8713,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 5.61,
+            "projected_score_if_win": 23.56,
+            "projected_score_if_loss": 8.45,
+            "win_sample_games": 53,
+            "loss_sample_games": 44
           },
           "rank": 8
         },
         {
-          "total_cost": 100.8,
-          "remaining_gold": 8.3,
-          "unique_teams": 5,
-          "variety_bonus": 0.2,
-          "projected_player_points": 92.02,
-          "projected_champion_bonus": 4.0,
-          "projected_coach_points": 18.78,
-          "projected_base_points": 114.8,
-          "projected_total_points": 137.76,
-          "matchup_conflicts": [
-            {
-              "first": {
-                "name": "Impact",
-                "role": "top",
-                "team": "Sentinels",
-                "opponent": "Team Liquid"
-              },
-              "second": {
-                "name": "Quid",
-                "role": "mid",
-                "team": "Team Liquid",
-                "opponent": "Sentinels"
-              },
-              "risk_weight": 0.5,
-              "penalty": 2.5
-            }
-          ],
-          "matchup_conflict_penalty": 2.5,
-          "risk_adjusted_points": 135.26,
+          "total_cost": 105.6,
+          "remaining_gold": 3.5,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 107.05,
+          "projected_champion_bonus": 4.43,
+          "projected_coach_points": 20.31,
+          "projected_base_points": 131.79,
+          "projected_total_points": 151.56,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 151.56,
           "players": [
             {
               "role": "top",
-              "player": "Impact",
-              "team": "Sentinels",
-              "opponent": "Team Liquid",
-              "price": 14.2,
-              "projected_points": 11.06,
+              "player": "Gakgos",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 15.0,
+              "projected_points": 16.14,
+              "projected_points_before_win_adjustment": 13.99,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 15.23,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 18.08,
+              "carry_score_if_loss": 7.76,
+              "carry_win_uplift": 10.33,
+              "carry_win_fantasy_share": 0.1507,
+              "carry_adjustment_vs_elo": 0.91,
               "champion": "Rumble",
-              "champion_expected_bonus": 0.5678,
-              "floor_pts": 3.06,
-              "ceiling_pts": 23.18,
+              "champion_expected_bonus": 0.7191,
+              "floor_pts": 4.24,
+              "ceiling_pts": 24.61,
               "champion_options": [
                 {
                   "champion": "Rumble",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1428,
-                  "expected_multiplier_bonus": 0.5678
+                  "estimated_pick_chance": 0.1739,
+                  "expected_multiplier_bonus": 0.7191
                 },
                 {
-                  "champion": "Renekton",
+                  "champion": "Jayce",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1125,
-                  "expected_multiplier_bonus": 0.428
+                  "estimated_pick_chance": 0.1453,
+                  "expected_multiplier_bonus": 0.5083
                 },
                 {
-                  "champion": "K'Sante",
+                  "champion": "Gnar",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1029,
-                  "expected_multiplier_bonus": 0.3524
+                  "estimated_pick_chance": 0.0735,
+                  "expected_multiplier_bonus": 0.2911
                 }
               ]
             },
             {
               "role": "jgl",
-              "player": "Blaber",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 15.6,
-              "projected_points": 19.58,
+              "player": "Gryffinn",
+              "team": "FlyQuest",
+              "opponent": "Disguised",
+              "price": 16.5,
+              "projected_points": 23.62,
+              "projected_points_before_win_adjustment": 19.3,
+              "team_win_probability": 0.8116,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.25,
+              "elo_adjusted_fantasy_pts": 20.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.94,
+              "carry_score_if_loss": 9.32,
+              "carry_win_uplift": 17.63,
+              "carry_win_fantasy_share": 0.2246,
+              "carry_adjustment_vs_elo": 3.08,
               "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.8356,
-              "floor_pts": 2.73,
-              "ceiling_pts": 32.1,
+              "champion_expected_bonus": 0.8329,
+              "floor_pts": 2.09,
+              "ceiling_pts": 33.53,
               "champion_options": [
                 {
                   "champion": "Jarvan IV",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1728,
-                  "expected_multiplier_bonus": 0.8356
+                  "estimated_pick_chance": 0.1584,
+                  "expected_multiplier_bonus": 0.8329
                 },
                 {
-                  "champion": "Lee Sin",
+                  "champion": "Shyvana",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1254,
-                  "expected_multiplier_bonus": 0.6257
+                  "estimated_pick_chance": 0.0779,
+                  "expected_multiplier_bonus": 0.3947
                 },
                 {
                   "champion": "Naafiri",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1083,
-                  "expected_multiplier_bonus": 0.5749
+                  "estimated_pick_chance": 0.0768,
+                  "expected_multiplier_bonus": 0.4052
                 }
               ]
             },
@@ -3897,9 +4389,20 @@
               "team": "Team Liquid",
               "opponent": "Sentinels",
               "price": 21.4,
-              "projected_points": 18.9,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
               "champion": "Ryze",
-              "champion_expected_bonus": 0.8746,
+              "champion_expected_bonus": 0.9214,
               "floor_pts": 4.17,
               "ceiling_pts": 33.92,
               "champion_options": [
@@ -3907,22 +4410,22 @@
                   "champion": "Ryze",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.142,
-                  "expected_multiplier_bonus": 0.8746
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
                 },
                 {
                   "champion": "Akali",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1049,
-                  "expected_multiplier_bonus": 0.6793
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
                 },
                 {
                   "champion": "Orianna",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1171,
-                  "expected_multiplier_bonus": 0.7153
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
                 }
               ]
             },
@@ -3932,9 +4435,20 @@
               "team": "LYON",
               "opponent": "Shopify Rebellion",
               "price": 21.9,
-              "projected_points": 20.88,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
               "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
+              "champion_expected_bonus": 1.1016,
               "floor_pts": 4.61,
               "ceiling_pts": 32.19,
               "champion_options": [
@@ -3942,186 +4456,238 @@
                   "champion": "Ezreal",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
                 },
                 {
                   "champion": "Ziggs",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
                 },
                 {
-                  "champion": "Lucian",
+                  "champion": "Jhin",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
                 }
               ]
             },
             {
               "role": "sup",
-              "player": "Cryogen",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
-              "floor_pts": 5.87,
-              "ceiling_pts": 32.58,
+              "player": "Vulcan",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 17.4,
+              "projected_points": 23.06,
+              "projected_points_before_win_adjustment": 19.9,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 21.14,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.17,
+              "carry_score_if_loss": 9.74,
+              "carry_win_uplift": 16.43,
+              "carry_win_fantasy_share": 0.2239,
+              "carry_adjustment_vs_elo": 1.92,
+              "champion": "Seraphine",
+              "champion_expected_bonus": 0.8553,
+              "floor_pts": 5.8,
+              "ceiling_pts": 32.72,
               "champion_options": [
                 {
-                  "champion": "Leona",
+                  "champion": "Seraphine",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
+                  "estimated_pick_chance": 0.1352,
+                  "expected_multiplier_bonus": 0.8553
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1308,
+                  "expected_multiplier_bonus": 0.6267
                 },
                 {
                   "champion": "Bard",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
+                  "estimated_pick_chance": 0.0833,
+                  "expected_multiplier_bonus": 0.5197
                 }
               ]
             }
           ],
           "coach": {
-            "coach": "Thinkcard",
-            "team": "FlyQuest",
-            "opponent": "Disguised",
-            "price": 12.7,
-            "projected_points": 18.78
+            "coach": "IWDominate",
+            "team": "Cloud9",
+            "opponent": "Dignitas",
+            "price": 13.4,
+            "projected_points": 20.31,
+            "projected_points_before_win_conditioning": 15.73,
+            "team_win_probability": 0.8105,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 4.58,
+            "projected_score_if_win": 23.1,
+            "projected_score_if_loss": 8.36,
+            "win_sample_games": 288,
+            "loss_sample_games": 155
           },
           "rank": 9
         },
         {
-          "total_cost": 107.8,
-          "remaining_gold": 1.3,
+          "total_cost": 108.8,
+          "remaining_gold": 0.3,
           "unique_teams": 4,
           "variety_bonus": 0.15,
-          "projected_player_points": 94.58,
-          "projected_champion_bonus": 4.26,
-          "projected_coach_points": 18.78,
-          "projected_base_points": 117.62,
-          "projected_total_points": 135.26,
+          "projected_player_points": 106.59,
+          "projected_champion_bonus": 4.37,
+          "projected_coach_points": 20.82,
+          "projected_base_points": 131.78,
+          "projected_total_points": 151.55,
           "matchup_conflicts": [],
           "matchup_conflict_penalty": 0,
-          "risk_adjusted_points": 135.26,
+          "risk_adjusted_points": 151.55,
           "players": [
             {
               "role": "top",
-              "player": "Thanatos",
-              "team": "Cloud9",
-              "opponent": "Dignitas",
-              "price": 18.0,
-              "projected_points": 13.85,
-              "champion": "Gnar",
-              "champion_expected_bonus": 0.7553,
-              "floor_pts": 5.1,
-              "ceiling_pts": 24.89,
+              "player": "Dhokla",
+              "team": "LYON",
+              "opponent": "Shopify Rebellion",
+              "price": 19.8,
+              "projected_points": 17.29,
+              "projected_points_before_win_adjustment": 14.58,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 16.06,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.01,
+              "carry_score_if_loss": 5.64,
+              "carry_win_uplift": 13.37,
+              "carry_win_fantasy_share": 0.1624,
+              "carry_adjustment_vs_elo": 1.23,
+              "champion": "Rumble",
+              "champion_expected_bonus": 0.5305,
+              "floor_pts": 3.15,
+              "ceiling_pts": 25.16,
               "champion_options": [
-                {
-                  "champion": "Gnar",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1689,
-                  "expected_multiplier_bonus": 0.7553
-                },
                 {
                   "champion": "Rumble",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1438,
-                  "expected_multiplier_bonus": 0.6157
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1174,
+                  "expected_multiplier_bonus": 0.5305
                 },
                 {
-                  "champion": "K'Sante",
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1294,
+                  "expected_multiplier_bonus": 0.5078
+                },
+                {
+                  "champion": "Ambessa",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.096,
-                  "expected_multiplier_bonus": 0.3362
+                  "estimated_pick_chance": 0.0706,
+                  "expected_multiplier_bonus": 0.2648
                 }
               ]
             },
             {
               "role": "jgl",
-              "player": "Josedeodo",
-              "team": "Team Liquid",
-              "opponent": "Sentinels",
-              "price": 19.6,
-              "projected_points": 19.23,
+              "player": "Blaber",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 15.6,
+              "projected_points": 22.01,
+              "projected_points_before_win_adjustment": 19.58,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 20.82,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.34,
+              "carry_score_if_loss": 7.78,
+              "carry_win_uplift": 17.55,
+              "carry_win_fantasy_share": 0.2191,
+              "carry_adjustment_vs_elo": 1.19,
               "champion": "Jarvan IV",
-              "champion_expected_bonus": 0.9138,
-              "floor_pts": 6.52,
-              "ceiling_pts": 33.08,
+              "champion_expected_bonus": 0.9642,
+              "floor_pts": 2.73,
+              "ceiling_pts": 32.1,
               "champion_options": [
                 {
                   "champion": "Jarvan IV",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.155,
-                  "expected_multiplier_bonus": 0.9138
+                  "estimated_pick_chance": 0.2001,
+                  "expected_multiplier_bonus": 0.9642
                 },
                 {
-                  "champion": "Naafiri",
+                  "champion": "Nocturne",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1529,
-                  "expected_multiplier_bonus": 0.8355
+                  "estimated_pick_chance": 0.1032,
+                  "expected_multiplier_bonus": 0.5352
                 },
                 {
-                  "champion": "Wukong",
+                  "champion": "Lee Sin",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1021,
-                  "expected_multiplier_bonus": 0.5272
+                  "estimated_pick_chance": 0.0772,
+                  "expected_multiplier_bonus": 0.4189
                 }
               ]
             },
             {
               "role": "mid",
-              "player": "Saint",
-              "team": "LYON",
-              "opponent": "Shopify Rebellion",
-              "price": 20.6,
-              "projected_points": 19.02,
-              "champion": "Viktor",
-              "champion_expected_bonus": 0.8659,
-              "floor_pts": 3.85,
-              "ceiling_pts": 32.33,
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "Sentinels",
+              "price": 21.4,
+              "projected_points": 19.52,
+              "projected_points_before_win_adjustment": 18.9,
+              "team_win_probability": 0.6516,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 0.61,
+              "elo_adjusted_fantasy_pts": 19.5,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.47,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.23,
+              "carry_win_fantasy_share": 0.2064,
+              "carry_adjustment_vs_elo": 0.02,
+              "champion": "Ryze",
+              "champion_expected_bonus": 0.9214,
+              "floor_pts": 4.17,
+              "ceiling_pts": 33.92,
               "champion_options": [
-                {
-                  "champion": "Viktor",
-                  "multiplier": "1.3x",
-                  "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1514,
-                  "expected_multiplier_bonus": 0.8659
-                },
                 {
                   "champion": "Ryze",
                   "multiplier": "1.3x",
+                  "option_basis": "Overall",
+                  "estimated_pick_chance": 0.1494,
+                  "expected_multiplier_bonus": 0.9214
+                },
+                {
+                  "champion": "Akali",
+                  "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1293,
-                  "expected_multiplier_bonus": 0.6484
+                  "estimated_pick_chance": 0.0846,
+                  "expected_multiplier_bonus": 0.5498
                 },
                 {
                   "champion": "Orianna",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.088,
-                  "expected_multiplier_bonus": 0.4179
+                  "estimated_pick_chance": 0.1204,
+                  "expected_multiplier_bonus": 0.7372
                 }
               ]
             },
@@ -4131,9 +4697,20 @@
               "team": "LYON",
               "opponent": "Shopify Rebellion",
               "price": 21.9,
-              "projected_points": 20.88,
+              "projected_points": 24.71,
+              "projected_points_before_win_adjustment": 20.88,
+              "team_win_probability": 0.8713,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 22.37,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.81,
+              "carry_score_if_loss": 10.5,
+              "carry_win_uplift": 16.31,
+              "carry_win_fantasy_share": 0.2278,
+              "carry_adjustment_vs_elo": 2.34,
               "champion": "Ezreal",
-              "champion_expected_bonus": 1.0074,
+              "champion_expected_bonus": 1.1016,
               "floor_pts": 4.61,
               "ceiling_pts": 32.19,
               "champion_options": [
@@ -4141,57 +4718,68 @@
                   "champion": "Ezreal",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.154,
-                  "expected_multiplier_bonus": 1.0074
+                  "estimated_pick_chance": 0.1681,
+                  "expected_multiplier_bonus": 1.1016
                 },
                 {
                   "champion": "Ziggs",
                   "multiplier": "1.3x",
                   "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.1624,
-                  "expected_multiplier_bonus": 0.9303
+                  "estimated_pick_chance": 0.0924,
+                  "expected_multiplier_bonus": 0.5286
                 },
                 {
-                  "champion": "Lucian",
+                  "champion": "Jhin",
                   "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.1182,
-                  "expected_multiplier_bonus": 0.6219
+                  "estimated_pick_chance": 0.0786,
+                  "expected_multiplier_bonus": 0.3745
                 }
               ]
             },
             {
               "role": "sup",
-              "player": "Cryogen",
-              "team": "FlyQuest",
-              "opponent": "Disguised",
-              "price": 15.0,
-              "projected_points": 21.6,
-              "champion": "Leona",
-              "champion_expected_bonus": 0.7157,
-              "floor_pts": 5.87,
-              "ceiling_pts": 32.58,
+              "player": "Vulcan",
+              "team": "Cloud9",
+              "opponent": "Dignitas",
+              "price": 17.4,
+              "projected_points": 23.06,
+              "projected_points_before_win_adjustment": 19.9,
+              "team_win_probability": 0.8105,
+              "win_probability_source": "sequential_elo_tracker",
+              "win_probability_adjustment": 1.24,
+              "elo_adjusted_fantasy_pts": 21.14,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.17,
+              "carry_score_if_loss": 9.74,
+              "carry_win_uplift": 16.43,
+              "carry_win_fantasy_share": 0.2239,
+              "carry_adjustment_vs_elo": 1.92,
+              "champion": "Seraphine",
+              "champion_expected_bonus": 0.8553,
+              "floor_pts": 5.8,
+              "ceiling_pts": 32.72,
               "champion_options": [
                 {
-                  "champion": "Leona",
+                  "champion": "Seraphine",
                   "multiplier": "1.3x",
                   "option_basis": "Overall",
-                  "estimated_pick_chance": 0.1525,
-                  "expected_multiplier_bonus": 0.7157
+                  "estimated_pick_chance": 0.1352,
+                  "expected_multiplier_bonus": 0.8553
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Player comfort",
+                  "estimated_pick_chance": 0.1308,
+                  "expected_multiplier_bonus": 0.6267
                 },
                 {
                   "champion": "Bard",
                   "multiplier": "1.3x",
-                  "option_basis": "Player comfort",
-                  "estimated_pick_chance": 0.0866,
-                  "expected_multiplier_bonus": 0.56
-                },
-                {
-                  "champion": "Camille",
-                  "multiplier": "1.3x",
                   "option_basis": "International meta",
-                  "estimated_pick_chance": 0.128,
-                  "expected_multiplier_bonus": 0.691
+                  "estimated_pick_chance": 0.0833,
+                  "expected_multiplier_bonus": 0.5197
                 }
               ]
             }
@@ -4201,7 +4789,15 @@
             "team": "FlyQuest",
             "opponent": "Disguised",
             "price": 12.7,
-            "projected_points": 18.78
+            "projected_points": 20.82,
+            "projected_points_before_win_conditioning": 16.41,
+            "team_win_probability": 0.8116,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 4.41,
+            "projected_score_if_win": 23.49,
+            "projected_score_if_loss": 9.32,
+            "win_sample_games": 229,
+            "loss_sample_games": 191
           },
           "rank": 10
         }

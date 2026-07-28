@@ -39,6 +39,13 @@ MATCHUP_CONFLICT_ROLE_WEIGHTS = {
 }
 
 
+def _as_bool(value: Any) -> bool:
+    """Parse CSV booleans without treating the string ``False`` as true."""
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().casefold() in {"1", "true", "yes"}
+
+
 def load_variety_buffs(path: Path = DEFAULT_RULES_PATH) -> dict[int, float]:
     """Load the official unique-team percentage ladder."""
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -233,6 +240,51 @@ def optimize_lineups(
                         "projected_points": float(
                             player["projected_fantasy_pts"]
                         ),
+                        "projected_points_before_win_adjustment": float(
+                            player.get(
+                                "projected_points_before_win_adjustment",
+                                player["projected_fantasy_pts"],
+                            )
+                        ),
+                        "team_win_probability": float(
+                            player.get("team_win_probability", 0.5)
+                        ),
+                        "win_probability_source": str(
+                            player.get("win_probability_source", "none")
+                        ),
+                        "win_probability_adjustment": float(
+                            player.get("win_probability_adjustment", 0.0)
+                        ),
+                        "elo_adjusted_fantasy_pts": float(
+                            player.get(
+                                "elo_adjusted_fantasy_pts",
+                                player["projected_fantasy_pts"],
+                            )
+                        ),
+                        "carry_concentration_enabled": _as_bool(
+                            player.get("carry_concentration_enabled", False)
+                        ),
+                        "carry_score_if_win": float(
+                            player.get(
+                                "carry_score_if_win",
+                                player["projected_fantasy_pts"],
+                            )
+                        ),
+                        "carry_score_if_loss": float(
+                            player.get(
+                                "carry_score_if_loss",
+                                player["projected_fantasy_pts"],
+                            )
+                        ),
+                        "carry_win_uplift": float(
+                            player.get("carry_win_uplift", 0.0)
+                        ),
+                        "carry_win_fantasy_share": float(
+                            player.get("carry_win_fantasy_share", 0.2)
+                        ),
+                        "carry_adjustment_vs_elo": float(
+                            player.get("carry_adjustment_vs_elo", 0.0)
+                        ),
                         "champion": str(player.get("champion", "")),
                         "champion_expected_bonus": float(
                             player.get("champion_expected_bonus", 0.0)
@@ -248,6 +300,29 @@ def optimize_lineups(
                     "opponent": str(coach.get("opponent", "")),
                     "price": float(coach["price"]),
                     "projected_points": coach_points,
+                    "projected_points_before_win_conditioning": float(
+                        coach.get(
+                            "projected_points_before_win_conditioning",
+                            coach_points,
+                        )
+                    ),
+                    "team_win_probability": float(
+                        coach.get("team_win_probability", 0.5)
+                    ),
+                    "win_probability_source": str(
+                        coach.get("win_probability_source", "none")
+                    ),
+                    "win_probability_adjustment": float(
+                        coach.get("win_probability_adjustment", 0.0)
+                    ),
+                    "projected_score_if_win": float(
+                        coach.get("projected_score_if_win", coach_points)
+                    ),
+                    "projected_score_if_loss": float(
+                        coach.get("projected_score_if_loss", coach_points)
+                    ),
+                    "win_sample_games": int(coach.get("win_sample_games", 0)),
+                    "loss_sample_games": int(coach.get("loss_sample_games", 0)),
                 },
             })
 

@@ -158,7 +158,8 @@ def project_one(
     if team_win_feature_enabled:
         win_prob_effect = (team_win_prob - 0.5) * 4.0  # Centered pre-game win prob scale
 
-    projection = shrunk_player + 0.35 * opponent_effect + 0.25 * h2h_effect + shrunk_player * playoff_boost + win_prob_effect
+    projected_before_win = shrunk_player + 0.35 * opponent_effect + 0.25 * h2h_effect + shrunk_player * playoff_boost
+    projection = projected_before_win + win_prob_effect
 
     deviation = player_deviation if math.isfinite(player_deviation) else role_deviation
 
@@ -176,6 +177,10 @@ def project_one(
 
     return {
         "projected_fantasy_pts": float(projection) if return_unrounded else round(float(projection), 2),
+        "projected_points_before_win_adjustment": round(float(projected_before_win), 2),
+        "team_win_probability": round(float(team_win_prob), 4),
+        "win_probability_source": "sequential_elo_tracker" if team_win_feature_enabled else "none",
+        "win_probability_adjustment": round(float(win_prob_effect), 2),
         "player_recent_mean": round(float(player_mean), 2),
         "short_term_5g_mean": round(float(short_term_5g_mean), 2),
         "role_baseline": round(float(role_mean), 2),
@@ -198,19 +203,31 @@ def project_weekly_opponents(
     role: str,
     opponents: list[str],
     cutoff: pd.Timestamp,
+    team_win_feature_enabled: bool = True,
+    team_win_probs: list[float] | None = None,
 ) -> dict[str, float | int | str | None]:
     """Average per-game projections across every scheduled weekly opponent."""
+    if not team_win_probs or len(team_win_probs) != len(opponents or [""]):
+        probs = [0.5] * len(opponents or [""])
+    else:
+        probs = team_win_probs
+
     projections = [
-        project_one(history, player, role, opponent, cutoff)
-        for opponent in (opponents or [""])
+        project_one(
+            history, player, role, opponent, cutoff,
+            team_win_feature_enabled=team_win_feature_enabled,
+            team_win_prob=prob,
+        )
+        for opponent, prob in zip(opponents or [""], probs)
     ]
     result = dict(projections[0])
     for field in (
-        "projected_fantasy_pts", "player_recent_mean", "short_term_5g_mean", "role_baseline",
+        "projected_fantasy_pts", "projected_points_before_win_adjustment", "team_win_probability",
+        "win_probability_adjustment", "player_recent_mean", "short_term_5g_mean", "role_baseline",
         "opponent_adjustment", "h2h_adjustment", "effective_recent_games", "floor_pts", "ceiling_pts",
     ):
-        values = [float(item[field]) for item in projections if item[field] is not None]
-        result[field] = round(float(np.mean(values)), 2) if values else None
+        values = [float(item[field]) for item in projections if item.get(field) is not None]
+        result[field] = round(float(np.mean(values)), 4 if field == "team_win_probability" else 2) if values else None
     result["scheduled_matchups"] = len(opponents)
     return result
 
@@ -226,14 +243,31 @@ def latest_market_snapshot(market_dir: Path = DEFAULT_MARKET_DIR) -> Path:
 def project_market(
     history: pd.DataFrame,
     market: pd.DataFrame,
+    scored_rows: pd.DataFrame | None = None,
+    team_win_feature_enabled: bool = True,
+    conditional_coach_enabled: bool = True,
+    carry_concentration_enabled: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Project current market players and coaches from the roster-lock snapshot."""
+    from fantasy_prediction.team_win_model import EloTracker, extract_canonical_matches
     rows = market.copy()
     cutoff = pd.to_datetime(rows["market_closes_at"].iloc[0], utc=True)
     code_to_team = {
         str(row.team_code): canonical_team(row.team_name)
         for row in rows[["team_code", "team_name"]].drop_duplicates().itertuples()
     }
+
+    # Cutoff-safe sequential Elo rating tracker
+    elo_tracker = EloTracker(k_factor=32.0, base_rating=1500.0)
+    if scored_rows is not None and not scored_rows.empty:
+        matches = extract_canonical_matches(scored_rows)
+        prior_matches = matches.loc[pd.to_datetime(matches["date"], utc=True).lt(cutoff)]
+        for row in prior_matches.itertuples():
+            elo_tracker.update(str(row.team_a), str(row.team_b), int(row.a_win) == 1)
+
+    from fantasy_prediction.carry_concentration import CarryProfileEngine
+
+    carry_engine = CarryProfileEngine(history)
     player_rows = rows.loc[~rows["role"].astype(str).str.casefold().eq("coach")].copy()
     records: list[dict[str, Any]] = []
     for row in player_rows.itertuples():
@@ -242,23 +276,62 @@ def project_market(
             code.strip() for code in str(row.opponent_codes).split("|") if code.strip()
         ]
         opponents = [code_to_team.get(code, code) for code in opponent_codes]
-        projection = project_weekly_opponents(
-            history, str(row.summoner_name), role, opponents, cutoff
+        team_name = canonical_team(row.team_name)
+
+        team_win_probs = (
+            [elo_tracker.predict_win_prob(team_name, opp) for opp in opponents]
+            if team_win_feature_enabled
+            else [0.5 for _ in opponents]
         )
+
+        projection = project_weekly_opponents(
+            history, str(row.summoner_name), role, opponents, cutoff,
+            team_win_feature_enabled=team_win_feature_enabled,
+            team_win_probs=team_win_probs,
+        )
+        elo_adjusted_points = float(projection["projected_fantasy_pts"])
+        carry_profiles = [
+            carry_engine.profile(
+                str(row.summoner_name), role, team_name, cutoff
+            )
+            for _ in (opponents or [""])
+        ]
+        carry_matchup_points = [
+            probability * profile["score_if_win"]
+            + (1.0 - probability) * profile["score_if_loss"]
+            for probability, profile in zip(
+                team_win_probs or [0.5], carry_profiles
+            )
+        ]
+        carry_points = float(np.mean(carry_matchup_points))
+        carry_profile = carry_profiles[0]
+        projection.update({
+            "elo_adjusted_fantasy_pts": round(elo_adjusted_points, 2),
+            "carry_concentration_enabled": carry_concentration_enabled,
+            "carry_score_if_win": round(float(carry_profile["score_if_win"]), 2),
+            "carry_score_if_loss": round(float(carry_profile["score_if_loss"]), 2),
+            "carry_win_uplift": round(float(carry_profile["win_uplift"]), 2),
+            "carry_win_fantasy_share": round(float(carry_profile["win_fantasy_share"]), 4),
+            "carry_win_sample_effective": round(float(carry_profile["win_sample_effective"]), 2),
+            "carry_loss_sample_effective": round(float(carry_profile["loss_sample_effective"]), 2),
+            "carry_current_team_win_sample_effective": round(float(carry_profile["current_team_win_sample_effective"]), 2),
+            "carry_current_team_loss_sample_effective": round(float(carry_profile["current_team_loss_sample_effective"]), 2),
+            "carry_adjustment_vs_elo": round(carry_points - elo_adjusted_points, 2),
+        })
+        if carry_concentration_enabled:
+            projection["projected_fantasy_pts"] = round(carry_points, 2)
         records.append({
             "round_name": row.round_name,
             "roster_lock": cutoff.isoformat(),
             "player": row.summoner_name,
             "role": role,
-            "team": canonical_team(row.team_name),
+            "team": team_name,
             "opponent": "|".join(opponents),
             "price": float(row.price),
             **projection,
         })
     players = pd.DataFrame.from_records(records)
 
-    # When the market lists alternatives at one position, the player with the
-    # most recent game is the transparent baseline starter assumption.
     players["last_game_sort"] = pd.to_datetime(players["last_historical_game"], utc=True)
     players["projected_starter"] = False
     for _, indexes in players.groupby(["team", "role"]).groups.items():
@@ -268,6 +341,18 @@ def project_market(
         players.loc[candidates.index[0], "projected_starter"] = True
     players = players.drop(columns=["last_game_sort"])
 
+    from fantasy_prediction.coach_conditional import (
+        ConditionalCoachEngine,
+        build_complete_team_slates,
+        fit_development_baselines,
+    )
+
+    coach_slates = build_complete_team_slates(history.loc[history["date"].lt(cutoff)])
+    coach_development_baselines = fit_development_baselines(coach_slates)
+    coach_engine = ConditionalCoachEngine(
+        coach_slates, coach_development_baselines
+    )
+
     coach_records: list[dict[str, Any]] = []
     for row in rows.loc[rows["role"].astype(str).str.casefold().eq("coach")].itertuples():
         team = canonical_team(row.team_name)
@@ -276,13 +361,58 @@ def project_market(
         ]
         opponents = [code_to_team.get(code, code) for code in opponent_codes]
         starters = players.loc[players["team"].eq(team) & players["projected_starter"]]
+
+        coach_matchup_projs: list[dict[str, float | int]] = []
+        for opp in opponents:
+            p_win = (
+                elo_tracker.predict_win_prob(team, opp)
+                if team_win_feature_enabled
+                else 0.5
+            )
+            matchup_projection = coach_engine.project(team, cutoff, p_win)
+            matchup_projection["p_win"] = p_win
+            coach_matchup_projs.append(matchup_projection)
+
+        avg_p_win = round(float(np.mean([m["p_win"] for m in coach_matchup_projs])), 4)
+        avg_score_win = round(float(np.mean([m["projected_score_if_win"] for m in coach_matchup_projs])), 2)
+        avg_score_loss = round(float(np.mean([m["projected_score_if_loss"] for m in coach_matchup_projs])), 2)
+        avg_cond_exp = round(float(np.mean([m["projected_fantasy_pts"] for m in coach_matchup_projs])), 2)
+        avg_uncond_base = round(float(np.mean([m["projected_points_before_win_conditioning"] for m in coach_matchup_projs])), 2)
+        avg_win_adj = round(float(np.mean([m["win_probability_adjustment"] for m in coach_matchup_projs])), 2)
+        starter_average = round(
+            float(starters["projected_fantasy_pts"].mean()), 2
+        )
+        production_coach_points = (
+            avg_cond_exp if conditional_coach_enabled else starter_average
+        )
+
         coach_records.append({
             "round_name": row.round_name,
             "coach": row.summoner_name,
             "team": team,
             "opponent": "|".join(opponents),
             "price": float(row.price),
-            "projected_fantasy_pts": round(float(starters["projected_fantasy_pts"].mean()), 2),
+            "team_win_probability": avg_p_win,
+            "win_probability_source": (
+                "sequential_elo_tracker"
+                if team_win_feature_enabled
+                else "none"
+            ),
+            "conditional_coach_model_enabled": conditional_coach_enabled,
+            "projected_score_if_win": avg_score_win,
+            "projected_score_if_loss": avg_score_loss,
+            "win_sample_games": int(coach_matchup_projs[0]["win_sample_games"]),
+            "loss_sample_games": int(coach_matchup_projs[0]["loss_sample_games"]),
+            "effective_win_sample": round(float(coach_matchup_projs[0]["effective_win_sample"]), 2),
+            "effective_loss_sample": round(float(coach_matchup_projs[0]["effective_loss_sample"]), 2),
+            "win_reliability": round(float(coach_matchup_projs[0]["win_reliability"]), 2),
+            "loss_reliability": round(float(coach_matchup_projs[0]["loss_reliability"]), 2),
+            "development_win_baseline": round(coach_development_baselines["win"], 2),
+            "development_loss_baseline": round(coach_development_baselines["loss"], 2),
+            "projected_points_before_win_conditioning": avg_uncond_base,
+            "win_probability_adjustment": avg_win_adj,
+            "conditional_candidate_fantasy_pts": avg_cond_exp,
+            "projected_fantasy_pts": production_coach_points,
             "projected_player_count": int(len(starters)),
             "starter_assumption": "|".join(starters.sort_values("role")["player"]),
         })
@@ -334,6 +464,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Generate current projections without rerunning the slow 2026 audit.",
     )
+    parser.add_argument(
+        "--export-controlled-baseline",
+        action="store_true",
+        help="Also export the same market with win, carry, and conditional coach features disabled.",
+    )
     return parser.parse_args()
 
 
@@ -348,7 +483,17 @@ def main() -> None:
     history = prepare_history(scored)
     market_path = args.market or latest_market_snapshot()
     market = pd.read_csv(market_path)
-    player_projections, coach_projections = project_market(history, market)
+    player_projections, coach_projections = project_market(history, market, scored)
+    baseline_players = baseline_coaches = None
+    if args.export_controlled_baseline:
+        baseline_players, baseline_coaches = project_market(
+            history,
+            market,
+            scored,
+            team_win_feature_enabled=False,
+            conditional_coach_enabled=False,
+            carry_concentration_enabled=False,
+        )
     backtest = None if args.skip_backtest else backtest_2026(history)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -356,6 +501,13 @@ def main() -> None:
     coach_path = args.output_dir / "current_coach_projections.csv"
     player_projections.to_csv(player_path, index=False)
     coach_projections.to_csv(coach_path, index=False)
+    if baseline_players is not None and baseline_coaches is not None:
+        baseline_players.to_csv(
+            args.output_dir / "week2_control_player_projections.csv", index=False
+        )
+        baseline_coaches.to_csv(
+            args.output_dir / "week2_control_coach_projections.csv", index=False
+        )
     print(f"Wrote player projections: {player_path}")
     print(f"Wrote coach projections: {coach_path}")
     if backtest is not None:

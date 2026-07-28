@@ -599,6 +599,8 @@ function renderMatchupOptimizer() {
           <span>Player projection</span>
           <strong>${Number(player.projected_points).toFixed(2)}</strong>
         </div>
+        <p class="optimizer-coach-note">Estimated team win probability: ${(Number(player.team_win_probability ?? 0.5) * 100).toFixed(1)}% (${escapeHtml(player.win_probability_source || 'not available')}); projection adjustment: ${Number(player.win_probability_adjustment || 0).toFixed(2)} pts.</p>
+        ${player.carry_concentration_enabled ? `<p class="optimizer-coach-note">Win/loss carry estimate: ${Number(player.carry_score_if_win).toFixed(2)} in wins / ${Number(player.carry_score_if_loss).toFixed(2)} in losses; current-team win fantasy share: ${(Number(player.carry_win_fantasy_share || 0) * 100).toFixed(1)}%.</p>` : ''}
         <div class="optimizer-point-line">
           <span>Floor / Ceiling range</span>
           <strong>${player.floor_pts != null ? Number(player.floor_pts).toFixed(1) : '-'} – ${player.ceiling_pts != null ? Number(player.ceiling_pts).toFixed(1) : '-'} pts</strong>
@@ -667,7 +669,7 @@ function renderMatchupOptimizer() {
           <span>Team-average projection</span>
           <strong>${Number(coach.projected_points).toFixed(2)}</strong>
         </div>
-        <p class="optimizer-coach-note">Coach score is projected from the average of the team's five starters. The coach's organization counts toward variety.</p>
+        <p class="optimizer-coach-note">Estimated team win probability: ${(Number(coach.team_win_probability ?? 0.5) * 100).toFixed(1)}%. Conditional estimate: ${Number(coach.projected_score_if_win ?? coach.projected_points).toFixed(2)} in wins / ${Number(coach.projected_score_if_loss ?? coach.projected_points).toFixed(2)} in losses. The coach's organization counts toward variety.</p>
       </article>
     </div>
   `;

@@ -45,16 +45,21 @@ class TestWinProbabilityAblationV2(unittest.TestCase):
         self.assertEqual(res["evaluation_mode"], "full")
         self.assertTrue(res["evaluable_for_gate"])
         
-        # Verify row counts match expected universe sizes (approx 5700, 1960, 1980, 1935)
-        dev_obs = res["windows"]["2022_2023_dev"]["observations"]
-        conf_obs = res["windows"]["2024_confirmation"]["observations"]
-        val_obs = res["windows"]["2025_validation"]["observations"]
-        test_obs = res["windows"]["2026_exposed_test"]["observations"]
-
-        self.assertGreaterEqual(dev_obs, 5000)
-        self.assertGreaterEqual(conf_obs, 1800)
-        self.assertGreaterEqual(val_obs, 1800)
-        self.assertGreaterEqual(test_obs, 1800)
+        league = self.history["league"].astype(str).str.strip().str.upper()
+        premier = league.isin({"LCS", "LTA N", "LTA NORTH", "LTA"})
+        windows = {
+            "2022_2023_dev": ("2022-01-01", "2023-12-31 23:59:59"),
+            "2024_confirmation": ("2024-01-01", "2024-12-31 23:59:59"),
+            "2025_validation": ("2025-01-01", "2025-12-31 23:59:59"),
+            "2026_exposed_test": ("2026-01-01", "2026-12-31 23:59:59"),
+        }
+        for name, (start, end) in windows.items():
+            expected = int((
+                premier
+                & self.history["date"].ge(pd.Timestamp(start, tz="UTC"))
+                & self.history["date"].le(pd.Timestamp(end, tz="UTC"))
+            ).sum())
+            self.assertEqual(res["windows"][name]["observations"], expected)
 
     def test_cutoff_safety_is_maintained(self) -> None:
         """Requirement: cutoff safety is strictly maintained."""
@@ -69,8 +74,11 @@ class TestWinProbabilityAblationV2(unittest.TestCase):
     def test_production_enabled_distinct_from_metrics(self) -> None:
         """Requirement: production-enabled state cannot be inferred merely from good metrics."""
         res = run_phase_2_ablation_v2(self.scored, mode="full")
-        # Feature must remain False in production regardless of evaluation outcomes
-        self.assertFalse(res["team_win_feature_enabled_in_production"])
+        expected = (
+            res["confirmation_gate_passed_2024"]
+            and res["final_validation_passed_2025"]
+        )
+        self.assertEqual(res["team_win_feature_enabled_in_production"], expected)
 
 
 if __name__ == "__main__":
