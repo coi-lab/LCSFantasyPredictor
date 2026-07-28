@@ -694,7 +694,7 @@ function getActivePriceMetrics(player, selectedSplit) {
       current: Number(player.current_price || 15.0),
       latestChange: Number(player.latest_weekly_change || 0.0),
       totalChange: Number(player.total_price_change || 0.0),
-      source: player.pricing_source || 'estimated_split_reset_diminishing'
+      source: player.pricing_source || 'estimated_score_price_mean_reversion'
     };
   }
 
@@ -713,7 +713,7 @@ function getActivePriceMetrics(player, selectedSplit) {
     current,
     latestChange: Number(latest.change || 0),
     totalChange: current - start,
-    source: latest.source || 'estimated_split_reset_diminishing'
+    source: latest.source || 'estimated_score_price_mean_reversion'
   };
 }
 
@@ -1043,7 +1043,7 @@ function openPriceModal(pname, year, league) {
 
   const pricingNotice = metrics.source === 'official_market_api'
     ? '<div style="color: #00e676; font-size: 12px; margin-top: 3px;">Official LCS Fantasy market API price</div>'
-    : '<div style="color: var(--text-muted); font-size: 12px; margin-top: 3px;">Experimental estimated price; no official snapshot captured</div>';
+    : '<div style="color: var(--text-muted); font-size: 12px; margin-top: 3px;">Experimental score + previous-price estimate; official snapshots override it</div>';
 
   detailsEl.innerHTML = `
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
@@ -1062,7 +1062,7 @@ function openPriceModal(pname, year, league) {
 
     ${swapNotice}
 
-    <div style="background: rgba(10, 14, 23, 0.6); padding: 16px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 20px; height: 260px;">
+    <div style="background: rgba(10, 14, 23, 0.6); padding: 16px; border-radius: 14px; border: 1px solid var(--border-color); margin-bottom: 20px; height: 300px;">
       <canvas id="priceTrajectoryChart"></canvas>
     </div>
 
@@ -1094,6 +1094,8 @@ function openPriceModal(pname, year, league) {
     const ctx = canvas.getContext('2d');
     const labels = historyToUse.map(h => selectedSplit !== 'ALL' ? h.week.replace(selectedSplit, '').trim() : h.week);
     const prices = historyToUse.map(h => h.price);
+    const points = historyToUse.map(h => h.pts == null ? null : Number(h.pts));
+    const hasPoints = points.some(value => Number.isFinite(value));
     const teamColors = historyToUse.map(h => getTeamColor(h.teamname || player.teamname));
     const primaryTeamColor = teamColors[teamColors.length - 1] || getTeamColor(player.teamname);
     const patchMarkers = buildPatchMarkers(historyToUse);
@@ -1102,28 +1104,50 @@ function openPriceModal(pname, year, league) {
       type: 'line',
       data: {
         labels: labels,
-        datasets: [{
-          label: 'Market Price (Gold)',
-          data: prices,
-          borderColor: primaryTeamColor,
-          backgroundColor: colorWithAlpha(primaryTeamColor),
-          pointBackgroundColor: teamColors,
-          pointBorderColor: teamColors,
-          segment: {
-            borderColor: context => teamColors[context.p1DataIndex] || primaryTeamColor
+        datasets: [
+          {
+            label: 'Market Price (Gold)',
+            data: prices,
+            yAxisID: 'gold',
+            borderColor: primaryTeamColor,
+            backgroundColor: colorWithAlpha(primaryTeamColor),
+            pointBackgroundColor: teamColors,
+            pointBorderColor: teamColors,
+            segment: {
+              borderColor: context => teamColors[context.p1DataIndex] || primaryTeamColor
+            },
+            fill: true,
+            tension: 0.3,
+            pointRadius: 5,
+            pointHoverRadius: 8
           },
-          fill: true,
-          tension: 0.3,
-          pointRadius: 5,
-          pointHoverRadius: 8
-        }]
+          {
+            label: 'Fantasy Points',
+            data: points,
+            yAxisID: 'points',
+            borderColor: '#f7b955',
+            backgroundColor: 'rgba(247, 185, 85, 0.12)',
+            pointBackgroundColor: '#f7b955',
+            pointBorderColor: '#f7b955',
+            borderDash: [6, 4],
+            spanGaps: true,
+            fill: false,
+            tension: 0.25,
+            pointRadius: 4,
+            pointHoverRadius: 7,
+            hidden: !hasPoints
+          }
+        ]
       },
       plugins: [patchBoundaryPlugin],
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
+          legend: {
+            display: hasPoints,
+            labels: { color: '#c7d0dc', usePointStyle: true }
+          },
           patchBoundaries: { markers: patchMarkers },
           tooltip: {
             callbacks: {
@@ -1131,13 +1155,29 @@ function openPriceModal(pname, year, league) {
                 const entry = historyToUse[items[0].dataIndex];
                 return entry && entry.patch ? `Patch ${entry.patch}` : '';
               },
-              label: (ctx) => `Price: ${ctx.raw.toFixed(2)} Gold`
+              label: (ctx) => ctx.dataset.yAxisID === 'points'
+                ? `Fantasy Points: ${Number(ctx.raw).toFixed(2)}`
+                : `Price: ${Number(ctx.raw).toFixed(2)} Gold`
             }
           }
         },
         scales: {
           x: { ticks: { color: '#8a99ad' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-          y: { ticks: { color: '#8a99ad' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          gold: {
+            type: 'linear',
+            position: 'left',
+            title: { display: true, text: 'Gold', color: '#8a99ad' },
+            ticks: { color: '#8a99ad' },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          },
+          points: {
+            type: 'linear',
+            position: 'right',
+            display: hasPoints,
+            title: { display: true, text: 'Fantasy Points', color: '#f7b955' },
+            ticks: { color: '#f7b955' },
+            grid: { drawOnChartArea: false }
+          }
         }
       }
     });

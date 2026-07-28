@@ -17,7 +17,7 @@ TIERS = (
     (
         ("opening_round_baseline", "already_played_by_player"),
         "1.3x",
-        "Opening baseline / Comfort",
+        "Official x1.3 baseline / Comfort",
     ),
     (("unplayed_by_player",), "1.5x", "League adoption"),
     (("unplayed_in_role",), "1.7x", "Novelty"),

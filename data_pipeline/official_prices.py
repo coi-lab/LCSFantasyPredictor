@@ -12,6 +12,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_SNAPSHOT_DIR = os.path.join(BASE_DIR, "data", "official_market_snapshots")
+ESTIMATED_PRICING_SOURCE = "estimated_score_price_mean_reversion"
 
 
 def _number(value: Any, default: float = 0.0) -> float:
@@ -21,6 +22,15 @@ def _number(value: Any, default: float = 0.0) -> float:
         return float(value)
     except (TypeError, ValueError):
         return default
+
+
+def _optional_number(value: Any) -> float | None:
+    if value in (None, "", "None", "null"):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def _player_key(year: str, name: str) -> Tuple[str, str]:
@@ -123,7 +133,7 @@ def apply_official_prices(players: Iterable[dict], snapshot_dir: str = DEFAULT_S
         year = str(player.get("year", "")).strip()
         rows = official.get(_player_key(year, player.get("playername", "")))
         if not rows or player.get("league") != "LCS" or year != "2026":
-            player["pricing_source"] = "estimated_split_reset_diminishing"
+            player["pricing_source"] = ESTIMATED_PRICING_SOURCE
             continue
 
         history = []
@@ -135,30 +145,56 @@ def apply_official_prices(players: Iterable[dict], snapshot_dir: str = DEFAULT_S
             previous_raw = row.get("previous_round_price")
             previous = None if previous_raw in (None, "", "None", "null") else _number(previous_raw)
             change = round(price - previous, 2) if previous is not None else 0.0
-            week_num = int(_number(row.get("round_index_in_split"))) + 1
+            market_week_num = int(_number(row.get("round_index_in_split"))) + 1
+            is_opening_price = previous is None
+            score_week_num = None if is_opening_price else max(1, market_week_num - 1)
+            week_num = 0 if is_opening_price else score_week_num
+            official_score = (
+                None
+                if is_opening_price
+                else _optional_number(row.get("last_round_score"))
+            )
+            week_label = (
+                f"{split_name} Opening"
+                if is_opening_price
+                else f"{split_name} W{score_week_num}"
+            )
             history.append({
-                "week": f"{split_name} W{week_num}",
-                "round_name": row.get("round_name") or f"Round {week_num}",
+                "week": week_label,
+                "round_name": row.get("round_name") or f"Round {market_week_num}",
+                "market_week_num": market_week_num,
                 "split": split_name,
                 "week_num": week_num,
-                "week_start": row.get("market_closes_at"),
+                "week_start": (
+                    row.get("market_opens_at")
+                    or row.get("captured_at_utc")
+                ),
                 "patch": None,
                 "teamname": row.get("team_name"),
-                "pts": None,
+                "pts": official_score,
                 "change": change,
                 "price": price,
                 "previous_price": previous,
                 "captured_at_utc": row.get("captured_at_utc"),
+                "score_source": (
+                    "official_player_stats_api"
+                    if official_score is not None
+                    else None
+                ),
                 "source": "official_market_api",
             })
 
         if not history:
-            player["pricing_source"] = "estimated_split_reset_diminishing"
+            player["pricing_source"] = ESTIMATED_PRICING_SOURCE
             continue
 
         # Retain modeled history for every other split. An official point only
         # replaces the corresponding week inside the live Summer split.
-        official_keys = {(entry["split"], entry["week_num"]) for entry in history}
+        official_keys = {
+            (entry["split"], entry["week_num"])
+            for entry in history
+            if entry["week_num"] > 0
+        }
         modeled_history = [
             entry for entry in player.get("price_history", [])
             if (entry.get("split"), entry.get("week_num")) not in official_keys

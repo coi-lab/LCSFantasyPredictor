@@ -34,26 +34,25 @@ def build_estimated_price_history(
     weekly_stats: Dict[str, dict],
     market_model: Dict[str, Any],
 ) -> tuple[float, float, List[dict]]:
-    """Build a conservative estimated price path for one player-season.
+    """Build an experimental estimated price path for one player-season.
 
     Official historical starting prices and the official update formula are
-    unavailable. This proxy resets at each split and damps positive changes at
-    already-high prices so repeated strong weeks do not compound without bound.
+    unavailable. This experimental proxy resets at each split and estimates
+    the next price from both the weekly score and the previous price.
     """
     start_price = float(market_model.get("starting_price", 15.0))
-    neutral_score = float(market_model.get("neutral_weekly_score", 13.0))
-    adjustment_rate = float(market_model.get("adjustment_rate", 0.20))
+    previous_price_weight = float(
+        market_model.get("previous_price_weight", 0.747528)
+    )
+    score_weight = float(market_model.get("score_weight", 0.239998))
+    intercept = float(market_model.get("intercept", 0.015874))
     rounding = int(market_model.get("rounding_decimals", 1))
     price_floor = float(market_model.get("price_floor", 5.0))
     price_ceiling = float(market_model.get("price_ceiling", 32.0))
     reset_each_split = bool(market_model.get("reset_each_split", True))
-    damping_tiers = sorted(
-        market_model.get("positive_change_damping", []),
-        key=lambda tier: float(tier.get("at_or_above", 0.0)),
-    )
 
     current_price = start_price
-    current_period = None
+    period_prices: Dict[str, float] = {}
     history: List[dict] = []
     sorted_weeks = sorted(
         weekly_stats.items(),
@@ -64,33 +63,27 @@ def build_estimated_price_history(
     )
     for week_key, week in sorted_weeks:
         period = _pricing_period(week.get("split", ""))
-        period_reset = bool(
-            reset_each_split
-            and current_period is not None
-            and period != current_period
-        )
-        if current_period is None or period_reset:
-            current_price = start_price
-        current_period = period
+        price_key = period if reset_each_split else "__continuous__"
+        is_new_period = price_key not in period_prices
+        period_reset = bool(reset_each_split and period_prices and is_new_period)
 
         points = float(week.get("fantasy_pts", 0.0))
-        raw_change = (points - neutral_score) * adjustment_rate
-        damped_change = raw_change
-        if raw_change > 0:
-            multiplier = 1.0
-            for tier in damping_tiers:
-                if current_price >= float(tier.get("at_or_above", 0.0)):
-                    multiplier = float(tier.get("multiplier", multiplier))
-            damped_change *= multiplier
-
-        previous_price = current_price
+        previous_price = period_prices.get(price_key, start_price)
         current_price = round(
             min(
                 price_ceiling,
-                max(price_floor, current_price + damped_change),
+                max(
+                    price_floor,
+                    (
+                        previous_price_weight * previous_price
+                        + score_weight * points
+                        + intercept
+                    ),
+                ),
             ),
             rounding,
         )
+        period_prices[price_key] = current_price
         actual_change = round(current_price - previous_price, rounding)
         history.append({
             "week": week_key,
@@ -104,7 +97,7 @@ def build_estimated_price_history(
             "price": current_price,
             "previous_price": previous_price,
             "period_reset": period_reset,
-            "source": "estimated_split_reset_diminishing",
+            "source": "estimated_score_price_mean_reversion",
         })
     return start_price, current_price, history
 

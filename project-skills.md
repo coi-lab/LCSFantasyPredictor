@@ -16,6 +16,14 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 - Oracle's Elixir player-game rows contain the played `champion`; team-game rows contain ordered `pick1`-`pick5` and `ban1`-`ban5` fields.
 - Oracle's Elixir supplies the recorded game `patch` and `date`; dashboard patch boundaries are derived from those fields rather than inferred from a release calendar.
 - Official LCS Fantasy market snapshots live in `data/official_market_snapshots/` and must remain immutable.
+- The public `/market` endpoint supplies current and previous prices but no
+  player scores. `/player-stats` supplies `averageRoundScore`,
+  `lastRoundScore`, score range, and `lastRoundPrice`. Join the two responses
+  by `proPlayerId`, and validate that `lastRoundPrice` matches the current
+  market price.
+- On 2026-07-28, the Round 2 Split 3 market response paired with a
+  `/player-stats` payload labeled `2026 - Split 2`. Treat that stats split name
+  as an upstream inconsistency; do not use it alone to map the product split.
 - As of 2026-07-22, only one official snapshot is present: 2026 Split 3 Round 1, mapped to LCS 2026 Summer. A one-point official Summer price graph is therefore truthful until later snapshots are captured.
 
 ## Compatibility learnings
@@ -84,10 +92,9 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   penalty is a documented heuristic pending chronological tuning.
 - Estimated player-price paths must reset at product split boundaries; regular
   season and playoffs share a path. The former exporter accumulated Lock-In,
-  Spring, and EWC phases, creating 15 false 30+ Spring prices. The conservative
-  proxy now damps positive changes above 22/26 gold and uses the observed
-  Berserker 32-gold peak only as a ceiling. Official market snapshots always
-  override the proxy.
+  Spring, and EWC phases, creating 15 false 30+ Spring prices. The 32-gold
+  Berserker observation remains only an estimated ceiling. Official market
+  snapshots always override estimates.
 - International provenance must be preserved separately from dashboard league
   mapping. MSI/EWC/FST rows inform player and leading-event features, while
   `source_league` prevents NA EWC rows from contaminating domestic LCS meta or
@@ -208,3 +215,31 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   64.78% to 65.01%, but reduced mean realized per-game multiplier bonus from
   0.8554 to 0.8344. Keep `predraft_pair_synergy_enabled` off in production and
   do not update weekly recommendations from the sequential-draft result.
+
+### 2026-07-28
+
+- The official Round 2 market and player-stat responses expose 47 usable
+  `(previous price, last-round score, current price)` observations. A
+  descriptive linear fit gives
+  `next_price = 0.747528 * previous_price + 0.239998 * score + 0.015874`.
+  Leave-one-out error is 0.0258 gold with official scores; feeding the
+  repository scorer gives 0.1256 gold MAE on the 39 non-coach rows it can
+  reproduce. This is one exposed transition, not an official formula or
+  forward validation, so keep the estimator labeled experimental and retain
+  official snapshots as authoritative.
+- Align market updates with the performance that caused them. The Round 1
+  market capture is the `Summer Opening` price at display week 0; the Round 2
+  capture is `Summer W1`, paired with `lastRoundScore`. Do not display a Round
+  2 score as though it caused the price entering Round 3.
+- Player history uses a dual-axis chart: gold price on the left and fantasy
+  points on the right. Keep split resets discontinuous; prices from separate
+  product markets are not one continuous cross-season asset history.
+- The user's 2026 Split 3 Round 1 roster confirms the budget accounting
+  identity exactly. Its six assets moved from 99.0 to 108.1 gold (+9.1), while
+  1.0 gold remained unspent, so the Round 2 budget is 109.1. Treat budget as
+  chronological portfolio state and an optimizer constraint, not as a feature
+  that requires retraining the score or champion models.
+- The official Round 2 champion-multiplier endpoint and selector exposed x1.3
+  for every champion. Use `--force-all-champions-x1-3` only as a round-scoped
+  export override; do not change the permanent x1.3/x1.5/x1.7 split-history
+  rules, and remove the override as soon as differentiated tiers appear.

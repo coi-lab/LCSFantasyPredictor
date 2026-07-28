@@ -942,6 +942,7 @@ def build_current_rankings(
     market: pd.DataFrame,
     target_patch: str | None = None,
     hyperparameters: dict[str, float] | None = None,
+    force_all_champions_x1_3: bool = False,
 ) -> pd.DataFrame:
     """Rank champions for every non-coach player in an official market snapshot."""
     cutoff = pd.to_datetime(market["market_closes_at"].iloc[0], utc=True)
@@ -975,7 +976,7 @@ def build_current_rankings(
         r"\bRound\s*1\b",
         str(market["round_name"].iloc[0]),
         flags=re.IGNORECASE,
-    ):
+    ) or force_all_champions_x1_3:
         model_hyperparameters["opening_round_baseline"] = 1.0
     outputs: list[pd.DataFrame] = []
     for row in market.loc[~market["role"].astype(str).str.casefold().eq("coach")].itertuples():
@@ -1027,6 +1028,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--market", type=Path)
     parser.add_argument("--draft-database", type=Path, default=DEFAULT_DRAFT_DATABASE)
     parser.add_argument("--target-patch")
+    parser.add_argument(
+        "--force-all-champions-x1-3",
+        action="store_true",
+        help=(
+            "Treat every champion as x1.3 for this generated round only. "
+            "Use when the official selector/API still exposes the baseline."
+        ),
+    )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH)
     return parser.parse_args()
 
@@ -1043,7 +1052,11 @@ def main() -> None:
     market_path = args.market or latest_market_snapshot(DEFAULT_MARKET_DIR)
     market = pd.read_csv(market_path)
     rankings = build_current_rankings(
-        history, load_actions(args.draft_database), market, args.target_patch
+        history,
+        load_actions(args.draft_database),
+        market,
+        args.target_patch,
+        force_all_champions_x1_3=args.force_all_champions_x1_3,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     rankings.to_csv(args.output, index=False)

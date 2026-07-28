@@ -119,6 +119,20 @@ player is already above 22 and 26 gold. After rebuilding, no estimated Spring
 player exceeds 30, and Berserker is the highest player after Spring playoffs at
 27.2. Official API snapshots remain authoritative and bypass this proxy.
 
+### 2026-07-28 pricing update
+
+The first combined official market/player-stat capture provides 47 usable
+Round 1 to Round 2 transitions. A descriptive fit to those observations is:
+
+`next_price = 0.747528 * previous_price + 0.239998 * score + 0.015874`
+
+Leave-one-out error is 0.0258 gold when the exposed official scores are used.
+Replacing them with repository-computed scores produces 0.1256 gold MAE on 39
+non-coach rows. This supersedes the fixed 13-point baseline proxy for
+historical visualization, but it is still only a single exposed transition.
+It must remain labeled experimental until later rounds provide forward
+validation. Captured official prices continue to override every estimate.
+
 ## Budget accounting hypothesis
 
 Every user starts a split with 100 gold, but does not need to spend all of it. The likely accounting identity is:

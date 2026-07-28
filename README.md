@@ -23,7 +23,7 @@ The dashboard is designed to keep the predictions inspectable. It shows the hist
 - Champion recommendations for the x1.3, x1.5, and x1.7 multiplier tiers
 - Sequential pick-and-ban modeling with Fearless draft state
 - Official market snapshots with immutable raw JSON and flat CSV copies
-- Estimated historical prices that are clearly separated from official prices
+- Player history charts that compare weekly fantasy points with official or estimated gold prices
 - Saved weekly matchup and lineup snapshots for later comparison
 - Local dashboard for player trends, champion analysis, and roster review
 - Chronological backtests, ablations, and audit reports
@@ -62,11 +62,20 @@ The weekly workflow:
 - Oracle's Elixir CSV files in `LCS_stats/` provide professional player-game and team-game statistics.
 - Player-game rows contain the champion played and fantasy scoring inputs.
 - Team-game rows contain ordered `pick1`-`pick5` and `ban1`-`ban5` fields.
-- Official LCS Fantasy market captures live in `data/official_market_snapshots/`.
+- Official LCS Fantasy market and player-score captures live in
+  `data/official_market_snapshots/`.
 - Completed-round fantasy outcomes live in `data/actuals/`.
 - Generated databases and prediction files live under `data/` and can be rebuilt from source data and configuration.
 
 The official market endpoint exposes the current market rather than a documented historical archive. Each captured snapshot is therefore kept immutable. Official prices override estimates whenever the league, season, split, and participant match.
+
+For weeks without an official market capture, the dashboard labels prices as
+experimental estimates. The current estimator combines that week's fantasy
+score with the preceding gold price, resets to 15 gold at each product split,
+and clamps the result to the configured 5-32 gold range. It was inferred from
+one exposed 2026 Split 3 transition, so it is a visualization aid rather than a
+recovered official formula. The player modal plots fantasy points and gold on
+separate axes because they use different units.
 
 ## Models
 
@@ -172,6 +181,16 @@ Generate the current champion rankings and multiplier portfolio:
 python -m champion_prediction.simple_predictor
 ```
 
+If the official selector explicitly keeps every champion at x1.3 for a later
+round, scope that temporary state to the current export:
+
+```bash
+python -m champion_prediction.simple_predictor --force-all-champions-x1-3
+```
+
+Do not use this flag after the official selector begins exposing differentiated
+x1.3/x1.5/x1.7 tiers.
+
 Generate player and coach projections, then optimize the current roster:
 
 ```bash
@@ -179,17 +198,33 @@ python -m fantasy_prediction.player_baseline --skip-backtest
 python -m fantasy_prediction.lineup_optimizer --budget 100 --top-n 10
 ```
 
+The optimizer budget is account state, not a model-training parameter. After a
+completed round, carry forward the prior budget plus the net official price
+change of the six held assets. The confirmed 2026 Split 3 Round 1 roster moved
+from 99.0 to 108.1 gold while retaining 1.0 unspent, producing a Round 2 budget
+of 109.1 gold.
+
 Capture the official market whenever a new round opens:
 
 ```bash
 python data_pipeline/snapshot_official_market.py
 ```
 
+The snapshot command preserves both the market response and the official
+player-stat response. Its flat CSV joins `averageRoundScore`,
+`lastRoundScore`, score range, current price, previous price, and price change
+by stable professional-player ID.
+
 Refresh the main dashboard data:
 
 ```bash
 python data_pipeline/export_dashboard_data.py
 ```
+
+Open a player card and use the year and split controls to review prior scores
+and gold prices. An `Official` badge marks captured league prices; other points
+remain explicitly labeled as estimates. Price paths reset between product
+splits instead of drawing a misleading continuous line across market resets.
 
 Start the local dashboard:
 
