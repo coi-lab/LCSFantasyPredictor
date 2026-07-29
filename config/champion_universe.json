@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "captured_at": "2026-07-28T00:00:00Z",
+  "description": "Public release ledger for champions that may be legal before appearing in the point-in-time professional history. competitive_from_patch is the first patch used by the model's selected professional competitions.",
+  "champions": [
+    {
+      "champion": "Mel",
+      "released_at": "2025-01-23T19:00:00Z",
+      "competitive_from_patch": "15.03",
+      "role_hints": ["mid", "sup"]
+    },
+    {
+      "champion": "Yunara",
+      "released_at": "2025-07-16T19:00:00Z",
+      "competitive_from_patch": "15.15",
+      "role_hints": ["bot"]
+    },
+    {
+      "champion": "Zaahen",
+      "released_at": "2025-11-19T19:00:00Z",
+      "competitive_from_patch": "15.24",
+      "role_hints": ["top"]
+    },
+    {
+      "champion": "Locke",
+      "released_at": "2026-06-24T19:00:00Z",
+      "competitive_from_patch": "16.14",
+      "role_hints": ["mid"]
+    }
+  ]
+}

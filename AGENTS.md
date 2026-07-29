@@ -118,6 +118,24 @@ When the active client is Codex:
 
 ## Context and token efficiency
 
+- Treat context tokens as a constrained project resource. Before reading or
+  generating large content, use targeted searches, fields, ranges, counts, or
+  summaries; load only the evidence needed for the current decision. Apply this
+  rule equally in Codex and AGY workflows.
+- Prefer the smallest complete diff. Do not rewrite a whole file when a
+  localized patch, helper, or targeted replacement expresses the change.
+- Narrow the file set before inspection or edits. Use search results and callers
+  to identify the production path, tests, and direct consumers; do not load
+  adjacent files without a concrete dependency reason.
+- Do not reread unchanged files or repeat command output already established in
+  the current task. Keep a short working summary and fetch only newly needed
+  ranges.
+- Bound command output at the source with `rg` filters, selected columns,
+  targeted line ranges, or concise test reporters. Never rely on client-side
+  truncation as a context-management strategy.
+- Ban full-file rewrites for routine changes. They are justified only for a
+  deliberate mechanical migration or when the existing file structure makes a
+  safe localized edit impossible; state that reason before doing one.
 - Use `rg` and targeted file ranges before reading entire large files.
 - Never dump full Oracle's Elixir CSVs or `dashboard/dashboard_data.json` into context. Query columns, counts, representative records, or computed summaries.
 - Avoid repeating previously established context. Link to `IDEAS.md`, `analysis/`, or `project-skills.md` instead.

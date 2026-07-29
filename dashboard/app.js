@@ -347,6 +347,7 @@ function setupEventListeners() {
 function renderWeeklyChampionPicks() {
   const container = document.getElementById('weeklyChampionMatchups');
   const notice = document.getElementById('weeklyChampionNotice');
+  const validationContainer = document.getElementById('weeklyChampionValidation');
   if (!container || !notice) return;
   const players = weeklyChampionData && Array.isArray(weeklyChampionData.players)
     ? weeklyChampionData.players
@@ -366,8 +367,32 @@ function renderWeeklyChampionPicks() {
     players.some(player => player.picks && player.picks[tier] && player.picks[tier].available)
   );
   notice.textContent = tierAvailability[0] || tierAvailability[1]
-    ? 'Each column shows up to three candidates eligible for that official multiplier. Pick chance is a normalized model estimate, not a calibrated probability.'
+    ? 'The first option is the highest-ranked choice. Percentages are relative ranking strength, not calibrated odds; use the measured backtest and evidence labels below.'
     : 'No eligible champion predictions are available for this round.';
+  const validation = weeklyChampionData.validation || {};
+  if (validationContainer) {
+    validationContainer.innerHTML = validation.sample_size ? `
+      <div class="weekly-validation-card">
+        <span>Measured Hit@1</span>
+        <strong>${(Number(validation.hit_at_1) * 100).toFixed(1)}%</strong>
+        <small>${escapeHtml(validation.label || 'Held-out backtest')}</small>
+      </div>
+      <div class="weekly-validation-card">
+        <span>Measured Hit@3</span>
+        <strong>${(Number(validation.hit_at_3) * 100).toFixed(1)}%</strong>
+        <small>${Number(validation.sample_size)} player-weeks</small>
+      </div>
+      <div class="weekly-validation-card warning">
+        <span>Interpretation</span>
+        <strong>Pool &gt; ordering</strong>
+        <small>${escapeHtml(
+          (validation.by_split_week || []).length === 1
+            ? `Only Split Week ${validation.by_split_week[0].split_week} is represented; no improving trend can be inferred.`
+            : validation.warning || ''
+        )}</small>
+      </div>
+    ` : '';
+  }
 
   const matchupGroups = new Map();
   players.forEach(player => {
@@ -387,14 +412,26 @@ function renderWeeklyChampionPicks() {
       : [entry.pick];
     return `
       <td class="weekly-pick ${cssClass}">
+        <div class="weekly-ordering-note">
+          ${escapeHtml(entry.ordering_confidence || 'low')} ordering confidence
+          · ${((Number(entry.ordering_margin) || 0) * 100).toFixed(1)} point lead
+        </div>
         <div class="weekly-pick-options">
           ${options.map((pick, index) => `
             <div class="weekly-pick-option">
               <span class="weekly-pick-rank">${escapeHtml(pick.option_basis || `#${index + 1}`)}</span>
               <div>
                 <strong>${escapeHtml(pick.champion)}</strong>
-                <span>${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}% estimated pick chance</span>
+                <span>${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}% relative ranking strength</span>
+                <div class="weekly-context-flags">
+                  <span class="confidence-${escapeHtml(pick.confidence || 'low')}">${escapeHtml(pick.confidence || 'low')} evidence</span>
+                  ${(pick.flags || []).map(flag => `<span>${escapeHtml(flag)}</span>`).join('')}
+                </div>
                 <small>Available ${(Number(pick.availability) * 100).toFixed(0)}% · Bonus ${Number(pick.expected_multiplier_bonus).toFixed(2)}</small>
+                <details class="weekly-pick-explanation">
+                  <summary>Why this candidate?</summary>
+                  ${(pick.explanations || []).map(line => `<p>${escapeHtml(line)}</p>`).join('')}
+                </details>
               </div>
             </div>
           `).join('')}
@@ -450,11 +487,9 @@ function selectMatchupLineup(rank) {
   renderMatchupOptimizer();
 }
 
-function matchupChampionOptions(player) {
+function matchupChampionOptions(player, preferWeekly = false) {
   let rawOptions = [];
-  if (Array.isArray(player.champion_options) && player.champion_options.length) {
-    rawOptions = player.champion_options;
-  } else {
+  if (preferWeekly) {
     const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
       ? weeklyChampionData.players
       : [];
@@ -470,6 +505,9 @@ function matchupChampionOptions(player) {
         tierOptions.forEach(pick => rawOptions.push({ ...pick, multiplier }));
       });
     }
+  }
+  if (!rawOptions.length && Array.isArray(player.champion_options)) {
+    rawOptions = player.champion_options;
   }
 
   if (!rawOptions.length) return [];
@@ -521,9 +559,13 @@ function renderMatchupOptimizer() {
   }
 
   selectedMatchupLineupRank = Number(lineup.rank);
+  const currentRecommendationWeek = (
+    String(selectedWeek.round_name) === String(weeklyChampionData?.round_name)
+    && String(selectedWeek.roster_lock) === String(weeklyChampionData?.roster_lock)
+  );
   meta.textContent = `${selectedWeek.round_name} | Roster lock ${selectedWeek.roster_lock} | ${Number(selectedWeek.budget).toFixed(1)} gold budget`;
   notice.textContent =
-    'Lineups are ranked by projected points after matchup-conflict risk. Opposing TOP exposure receives half the normal penalty because TOP scores have been more stable. Champion chances are normalized model estimates.';
+    'Lineups are ranked by projected points after matchup-conflict risk. Current-week champions use the exact Weekly Champion Picks ordering; archived weeks retain their frozen recommendations. Percentages are relative ranking strength, not calibrated odds.';
   tabs.innerHTML = lineups.map(item => `
     <button
       class="matchup-lineup-tab ${Number(item.rank) === selectedMatchupLineupRank ? 'active' : ''}"
@@ -535,11 +577,13 @@ function renderMatchupOptimizer() {
   `).join('');
 
   const renderChampionPicks = (player, opponentPlayer, isOpponentColumn = false) => {
-    const options = matchupChampionOptions(player);
+    const options = matchupChampionOptions(player, currentRecommendationWeek);
     if (!options.length) {
       return '<div class="optimizer-no-picks">No champion recommendations available</div>';
     }
-    const oppOptions = opponentPlayer ? matchupChampionOptions(opponentPlayer) : [];
+    const oppOptions = opponentPlayer
+      ? matchupChampionOptions(opponentPlayer, currentRecommendationWeek)
+      : [];
     const oppChamps = new Set(oppOptions.map(o => String(o.champion).toLowerCase()));
 
     return `
@@ -558,7 +602,17 @@ function renderMatchupOptimizer() {
                   <strong>${escapeHtml(pick.champion)}</strong>
                   ${isConflict ? `<span class="collision-badge" title="High contest risk: Opponent also has ${oppChance}% pick chance">⚠️ Shared (${oppChance}%)</span>` : '<span class="unique-badge">✓ Uncontested</span>'}
                 </div>
-                <small>${escapeHtml(pick.option_basis || '')} ${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}% pick chance</small>
+                <small>${escapeHtml(pick.option_basis || '')} ${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}% ranking strength</small>
+                <div class="weekly-context-flags">
+                  <span class="confidence-${escapeHtml(pick.confidence || 'low')}">${escapeHtml(pick.confidence || 'low')} evidence</span>
+                  ${(pick.flags || []).map(flag => `<span>${escapeHtml(flag)}</span>`).join('')}
+                </div>
+                ${(pick.explanations || []).length ? `
+                  <details class="weekly-pick-explanation">
+                    <summary>Why?</summary>
+                    ${pick.explanations.map(line => `<p>${escapeHtml(line)}</p>`).join('')}
+                  </details>
+                ` : ''}
               </div>
             </div>
           `;

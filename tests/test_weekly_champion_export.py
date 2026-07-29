@@ -57,6 +57,11 @@ class WeeklyChampionExportTests(unittest.TestCase):
         )
         self.assertEqual(options[0]["estimated_pick_chance"], 0.2)
         self.assertEqual(
+            payload["players"][0]["picks"]["1.7x"]["ordering_confidence"],
+            "medium",
+        )
+        self.assertIn("explanations", options[0])
+        self.assertEqual(
             payload["players"][0]["recommended_multiplier_tier"],
             "1.7x_novelty_wildcard",
         )

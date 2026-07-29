@@ -917,6 +917,38 @@ tr:hover {
   line-height: 1.5;
 }
 
+.weekly-validation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.weekly-validation-card {
+  background: rgba(0, 242, 254, 0.05);
+  border: 1px solid rgba(0, 242, 254, 0.18);
+  border-radius: 12px;
+  padding: 13px 15px;
+}
+
+.weekly-validation-card span,
+.weekly-validation-card small {
+  color: var(--text-muted);
+  display: block;
+  font-size: 10px;
+}
+
+.weekly-validation-card strong {
+  display: block;
+  font-size: 20px;
+  margin: 5px 0;
+}
+
+.weekly-validation-card.warning {
+  background: rgba(251, 191, 36, 0.05);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
 .weekly-matchup-card {
   margin-bottom: 18px;
 }
@@ -953,6 +985,13 @@ tr:hover {
   gap: 8px;
 }
 
+.weekly-ordering-note {
+  color: var(--text-muted);
+  font-size: 9px;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+}
+
 .weekly-pick-option {
   align-items: flex-start;
   background: rgba(255, 255, 255, 0.025);
@@ -961,6 +1000,42 @@ tr:hover {
   display: flex;
   gap: 8px;
   padding: 8px;
+}
+
+.weekly-context-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.weekly-context-flags span {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 9px;
+  margin: 0;
+  padding: 2px 6px;
+}
+
+.weekly-context-flags .confidence-low { color: #fca5a5; }
+.weekly-context-flags .confidence-medium { color: #fde68a; }
+.weekly-context-flags .confidence-higher { color: #86efac; }
+
+.weekly-pick-explanation {
+  color: var(--text-muted);
+  font-size: 10px;
+  margin-top: 6px;
+}
+
+.weekly-pick-explanation summary {
+  color: var(--accent-cyan);
+  cursor: pointer;
+}
+
+.weekly-pick-explanation p {
+  line-height: 1.35;
+  margin: 5px 0 0;
 }
 
 .weekly-pick-rank {
@@ -1308,6 +1383,10 @@ tr:hover {
   .champion-lab-grid,
   .optimizer-roster-grid,
   .optimizer-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .weekly-validation-grid {
     grid-template-columns: 1fr;
   }
 }

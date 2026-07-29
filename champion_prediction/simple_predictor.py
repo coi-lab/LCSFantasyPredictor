@@ -35,6 +35,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "predictions" / "current_champion_rankings.csv"
 SCORING_RULES_PATH = PROJECT_ROOT / "config" / "scoring_rules.json"
 CHAMPION_MODEL_CONFIG_PATH = PROJECT_ROOT / "config" / "champion_model.json"
+CHAMPION_UNIVERSE_PATH = PROJECT_ROOT / "config" / "champion_universe.json"
 LEADING_LEAGUES = {"LCK", "LPL", "LEC", "EWC", "FST", "MSI"}
 INTERNATIONAL_LEAGUES = {"EWC", "FST", "MSI"}
 MARKET_SPLIT_NAMES = {1: "Lock-In", 2: "Spring", 3: "Summer"}
@@ -98,6 +99,17 @@ def load_production_hyperparameters(
         result["games_to_mature"] = float(
             parameters.get("games_to_mature", 40.0)
         )
+    team_draft = parameters.get("team_draft", {})
+    if isinstance(team_draft, dict) and team_draft.get("enabled"):
+        result["team_tendency_weight"] = float(
+            team_draft.get("team_tendency_weight", 0.0)
+        )
+        result["joint_role_contention_strength"] = float(
+            team_draft.get("joint_role_contention_strength", 0.0)
+        )
+        result["joint_team_draft_enabled"] = float(
+            bool(team_draft.get("joint_team_draft_enabled", False))
+        )
     return result
 
 
@@ -154,6 +166,97 @@ def weighted_champion_shares(
     if denominator <= 0:
         return {}
     return (totals / denominator).to_dict()
+
+
+def recency_champion_means(
+    rows: pd.DataFrame,
+    cutoff: pd.Timestamp,
+    half_life_days: float = 180.0,
+) -> dict[str, tuple[float, float]]:
+    """Return weighted fantasy mean and evidence weight per champion."""
+    if rows.empty:
+        return {}
+    ages = (cutoff - rows["date"]).dt.total_seconds().clip(lower=0) / 86400.0
+    weights = np.power(0.5, ages.to_numpy(dtype=float) / half_life_days)
+    values = pd.to_numeric(rows["fantasy_pts"], errors="coerce").to_numpy(dtype=float)
+    valid = np.isfinite(values) & np.isfinite(weights)
+    weighted = rows.loc[valid, ["champion"]].copy()
+    weighted["_weight"] = weights[valid]
+    weighted["_weighted_points"] = values[valid] * weights[valid]
+    totals = weighted.groupby("champion").agg(
+        weight=("_weight", "sum"),
+        weighted_points=("_weighted_points", "sum"),
+    )
+    return {
+        str(champion): (
+            float(row.weighted_points / row.weight),
+            float(row.weight),
+        )
+        for champion, row in totals.iterrows()
+        if row.weight > 0
+    }
+
+
+def legal_candidate_universe(
+    history: pd.DataFrame,
+    cutoff: pd.Timestamp,
+    role: str,
+    target_patch: str,
+    path: Path = CHAMPION_UNIVERSE_PATH,
+) -> tuple[set[str], dict[str, float], set[str]]:
+    """Return public patch-legal candidates and role-flex priors at ``cutoff``.
+
+    The optional registry is a timestamped public roster feed.  It is separate
+    from match outcomes so a newly released champion can be considered before
+    it appears in professional play.  Older backtests safely fall back to
+    champions already observed before their lock.
+    """
+    cache = history.attrs.setdefault("_legal_candidate_universe_cache", {})
+    cache_key = (cutoff.isoformat(), role, str(target_patch), str(path))
+    if cache_key in cache:
+        names, priors, registry_names = cache[cache_key]
+        return set(names), dict(priors), set(registry_names)
+    observed = history.loc[history["date"].lt(cutoff)].copy()
+    names = set(observed["champion"].dropna().astype(str).str.strip())
+    registry_names: set[str] = set()
+    registry_role_priors: dict[str, float] = {}
+    if path.exists():
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        for entry in payload.get("champions", []):
+            released = pd.to_datetime(entry.get("released_at"), utc=True, errors="coerce")
+            eligible_patch = str(entry.get("competitive_from_patch", "")).strip()
+            name = str(entry.get("champion", "")).strip()
+            patch_is_eligible = (
+                PatchDistanceDecayEngine.parse_patch(target_patch)
+                >= PatchDistanceDecayEngine.parse_patch(eligible_patch)
+            )
+            if (
+                name
+                and eligible_patch
+                and pd.notna(released)
+                and released < cutoff
+                and patch_is_eligible
+            ):
+                names.add(name)
+                registry_names.add(name)
+                role_hints = {
+                    str(value).casefold() for value in entry.get("role_hints", [])
+                }
+                registry_role_priors[name] = 1.0 if role.casefold() in role_hints else 0.01
+
+    counts = observed.groupby(["champion", "role"]).size()
+    totals = observed.groupby("champion").size()
+    # A small floor retains legal flex/new candidates without allowing them to
+    # outrank demonstrated player or patch-meta choices on name alone.
+    priors = {
+        champion: max(
+            registry_role_priors.get(champion, 0.01),
+            float(counts.get((champion, role), 0)) / float(totals.get(champion, 1)),
+        )
+        for champion in names
+    }
+    cache[cache_key] = (set(names), dict(priors), set(registry_names))
+    return names, priors, registry_names
 
 
 def team_player_comfort_persistence(
@@ -288,6 +391,11 @@ def opponent_draft_rates(
     target_patch: str,
 ) -> tuple[dict[str, float], dict[str, float], dict[str, float], int]:
     """Calculate opponent rates and a same-patch public-meta ban baseline."""
+    cache = actions.attrs.setdefault("_opponent_draft_rate_cache", {})
+    cache_key = (canonical_team(opponent), cutoff.isoformat(), str(target_patch))
+    if cache_key in cache:
+        bans, picks, public_bans, games = cache[cache_key]
+        return dict(bans), dict(picks), dict(public_bans), int(games)
     dates = actions["as_of_timestamp"]
     if not isinstance(dates.dtype, pd.DatetimeTZDtype):
         dates = pd.to_datetime(dates, errors="coerce", utc=True)
@@ -308,6 +416,7 @@ def opponent_draft_rates(
     ]
     games = int(rows["gameid"].nunique())
     if games == 0:
+        cache[cache_key] = ({}, {}, {}, 0)
         return {}, {}, {}, 0
     bans = rows.loc[rows["action_type"].eq("ban"), "champion"].value_counts() / games
     picks = rows.loc[rows["action_type"].eq("pick"), "champion"].value_counts() / games
@@ -318,7 +427,9 @@ def opponent_draft_rates(
         if public_games
         else pd.Series(dtype=float)
     )
-    return bans.to_dict(), picks.to_dict(), public_bans.to_dict(), games
+    result = bans.to_dict(), picks.to_dict(), public_bans.to_dict(), games
+    cache[cache_key] = result
+    return result
 
 
 def dynamic_feature_weights(lcs_patch_games: int) -> tuple[float, float, float]:
@@ -568,11 +679,43 @@ def rank_champions(
     leading_shares = weighted_champion_shares(
         leading_rows, cutoff, target_patch, patch_decay_rate
     )
+    tendency_cache = history.attrs.setdefault("_team_draft_tendency_cache", {})
+    tendency_key = (
+        cutoff.isoformat(), canonical_team(team), role, target_patch, patch_decay_rate,
+    )
+    if tendency_key in tendency_cache:
+        team_role_shares, other_role_shares = tendency_cache[tendency_key]
+    else:
+        team_all_role_rows = history.loc[
+            history["date"].lt(cutoff)
+            & history["date"].ge(cutoff - pd.Timedelta(days=730))
+            & history["team"].astype(str).map(canonical_team).eq(canonical_team(team))
+        ]
+        team_role_shares = weighted_champion_shares(
+            team_all_role_rows.loc[team_all_role_rows["role"].eq(role)],
+            cutoff,
+            target_patch,
+            patch_decay_rate,
+        )
+        other_role_shares = weighted_champion_shares(
+            team_all_role_rows.loc[~team_all_role_rows["role"].eq(role)],
+            cutoff,
+            target_patch,
+            patch_decay_rate,
+        )
+        tendency_cache[tendency_key] = (team_role_shares, other_role_shares)
     ban_rates, denial_rates, public_ban_rates, opponent_games = opponent_draft_rates(
         actions, opponent, cutoff, target_patch
     )
 
-    candidates = set(player_shares) | set(lcs_shares) | set(leading_shares)
+    if hp.get("expanded_candidate_universe_enabled", True):
+        legal_candidates, role_flex_priors, registry_candidates = (
+            legal_candidate_universe(history, cutoff, role, target_patch)
+        )
+    else:
+        legal_candidates, role_flex_priors, registry_candidates = set(), {}, set()
+    source_candidates = set(player_shares) | set(lcs_shares) | set(leading_shares)
+    candidates = source_candidates | legal_candidates
     if not candidates:
         return pd.DataFrame()
     role_mean, _, _ = recency_mean(prior.loc[domestic_lcs], cutoff)
@@ -603,6 +746,13 @@ def rank_champions(
     else:
         w_player, w_lcs, w_leading = dynamic_feature_weights(lcs_patch_games)
     comfort_strength = comfort_persistence_strength(lcs_split_games, hp)
+    team_tendency_weight = min(
+        0.5, max(0.0, float(hp.get("team_tendency_weight", 0.0)))
+    )
+    joint_contention_strength = min(
+        1.0, max(0.0, float(hp.get("joint_role_contention_strength", 0.0)))
+    )
+    player_champion_means = recency_champion_means(player_rows, cutoff)
 
     if tier_matrix is None:
         tier_matrix = PatchTierMatrix()
@@ -633,14 +783,28 @@ def rank_champions(
         player_share = float(player_shares.get(champion, 0.0))
         lcs_share = float(lcs_shares.get(champion, 0.0))
         leading_share = float(leading_shares.get(champion, 0.0))
+        team_role_share = float(team_role_shares.get(champion, 0.0))
+        other_role_contention = float(other_role_shares.get(champion, 0.0))
+        role_flex_prior = float(role_flex_priors.get(champion, 0.01))
         team_comfort_score = float(team_comfort.get(champion, 0.0))
 
         tier_mult = tier_matrix.get_multiplier(target_patch, role, champion)
         prio_stats = prio_matrix.calculate_lane_prio(prior, champion, role)
         prio_mult = float(prio_stats.get("prio_index", 1.0))
 
+        source_priority = (
+            w_player * player_share + w_lcs * lcs_share + w_leading * leading_share
+        )
+        source_priority = (
+            (1.0 - team_tendency_weight) * source_priority
+            + team_tendency_weight * team_role_share
+        )
+        source_priority *= 1.0 - joint_contention_strength * other_role_contention
+        # Preserve a non-zero, explicitly labelled tail for patch-legal flex
+        # and new-release candidates.  Its fixed 1% mass is intentionally too
+        # small to replace demonstrated evidence; it only prevents omission.
         base_priority = (
-            (w_player * player_share + w_lcs * lcs_share + w_leading * leading_share)
+            (0.99 * source_priority + 0.01 * role_flex_prior / max(1, len(candidates)))
             * tier_mult
             * (0.85 + 0.15 * prio_mult)
             * (1.0 + comfort_strength * team_comfort_score)
@@ -656,10 +820,9 @@ def rank_champions(
             0.05, min(1.0, 1.0 - (0.70 * ban_rate + 0.30 * denial_rate))
         )
 
-        champion_rows = player_rows.loc[player_rows["champion"].eq(champion)]
-        champion_mean, champion_weight, _ = recency_mean(champion_rows, cutoff)
-        if not math.isfinite(champion_mean):
-            champion_mean = role_mean
+        champion_mean, champion_weight = player_champion_means.get(
+            champion, (role_mean, 0.0)
+        )
         reliability = champion_weight / (champion_weight + 5.0)
         expected_points = reliability * champion_mean + (1.0 - reliability) * role_mean
         records.append({
@@ -675,6 +838,18 @@ def rank_champions(
             "player_recent_share": player_share,
             "lcs_patch_role_share": lcs_share,
             "leading_region_role_share": leading_share,
+            "team_role_recent_share": team_role_share,
+            "team_tendency_weight": team_tendency_weight,
+            "other_role_contention": other_role_contention,
+            "joint_role_contention_strength": joint_contention_strength,
+            "role_flex_prior": role_flex_prior,
+            "candidate_source": (
+                "public_registry" if champion in registry_candidates
+                else "observed_role" if champion in set(lcs_shares) | set(leading_shares)
+                else "player_comfort" if champion in set(player_shares)
+                else "historical_flex"
+            ),
+            "candidate_is_expansion_only": champion not in source_candidates,
             "team_player_comfort_persistence": team_comfort_score,
             "comfort_persistence_strength": comfort_strength,
             "opponent_ban_rate": ban_rate,
@@ -720,15 +895,20 @@ def rank_champions(
     )
     numeric_columns = [
         "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
+        "team_role_recent_share", "team_tendency_weight",
+        "other_role_contention", "joint_role_contention_strength",
         "team_player_comfort_persistence", "comfort_persistence_strength",
         "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
-        "unusual_opponent_ban_interest", "availability_factor", "ranking_share",
-        "base_pick_probability",
+        "unusual_opponent_ban_interest", "availability_factor",
         "patch_tier_multiplier", "lane_priority_multiplier",
         "expected_points_if_picked", "novelty_multiplier",
-        "estimated_pick_probability", "expected_multiplier_bonus",
+        "expected_multiplier_bonus",
     ]
     ranking[numeric_columns] = ranking[numeric_columns].round(4)
+    probability_columns = [
+        "ranking_share", "base_pick_probability", "estimated_pick_probability",
+    ]
+    ranking[probability_columns] = ranking[probability_columns].round(6)
     return ranking.sort_values(
         ["expected_multiplier_bonus", "estimated_pick_probability"],
         ascending=False,
@@ -752,16 +932,22 @@ def rank_weekly_opponents(
 ) -> pd.DataFrame:
     """Combine independently ranked scheduled matchups into one weekly choice."""
     matchup_rankings: list[pd.DataFrame] = []
-    prior = history.loc[
-        history["date"].lt(cutoff)
-        & history["date"].ge(cutoff - pd.Timedelta(days=730))
-        & history["role"].eq(role)
-    ].copy()
-    prior["patch_text"] = prior["patch"].astype(str).str.strip()
-    tier_matrix = PatchTierMatrix()
-    tier_matrix.fit(prior.loc[prior["patch_text"].eq(target_patch)])
-    prio_matrix = LanePriorityMatrix()
-    prio_matrix.fit(prior, role)
+    matrix_cache = history.attrs.setdefault("_weekly_role_matrix_cache", {})
+    matrix_key = (cutoff.isoformat(), role, str(target_patch))
+    if matrix_key in matrix_cache:
+        tier_matrix, prio_matrix = matrix_cache[matrix_key]
+    else:
+        prior = history.loc[
+            history["date"].lt(cutoff)
+            & history["date"].ge(cutoff - pd.Timedelta(days=730))
+            & history["role"].eq(role)
+        ].copy()
+        prior["patch_text"] = prior["patch"].astype(str).str.strip()
+        tier_matrix = PatchTierMatrix()
+        tier_matrix.fit(prior.loc[prior["patch_text"].eq(target_patch)])
+        prio_matrix = LanePriorityMatrix()
+        prio_matrix.fit(prior, role)
+        matrix_cache[matrix_key] = (tier_matrix, prio_matrix)
     for opponent in opponents or [""]:
         ranked = rank_champions(
             history,
@@ -788,10 +974,14 @@ def rank_weekly_opponents(
     combined = pd.concat(matchup_rankings, ignore_index=True)
     identity_columns = [
         "player", "team", "role", "target_patch", "champion",
-        "novelty_category", "novelty_multiplier",
+        "novelty_category", "novelty_multiplier", "candidate_source",
+        "candidate_is_expansion_only",
     ]
     mean_columns = [
         "player_recent_share", "lcs_patch_role_share", "leading_region_role_share",
+        "team_role_recent_share", "team_tendency_weight",
+        "other_role_contention", "joint_role_contention_strength",
+        "role_flex_prior",
         "team_player_comfort_persistence", "comfort_persistence_strength",
         "opponent_ban_rate", "opponent_pick_denial_rate", "public_meta_ban_rate",
         "unusual_opponent_ban_interest", "availability_factor",
@@ -923,6 +1113,91 @@ def apply_expected_team_synergy(
     return adjusted
 
 
+def apply_joint_team_draft(
+    rankings: pd.DataFrame,
+    candidates_per_player: int = 12,
+    beam_width: int = 200,
+) -> pd.DataFrame:
+    """Convert independent role probabilities into legal five-player marginals.
+
+    A beam is a retained high-scoring partial lineup. Champion duplicates are
+    forbidden while roles are added, so flex picks compete across teammates
+    instead of being independently assigned to several players.
+    """
+    if rankings.empty:
+        return rankings.copy()
+    adjusted = rankings.copy()
+    adjusted["pre_joint_base_probability"] = adjusted["base_pick_probability"]
+    adjusted["joint_draft_probability"] = 0.0
+    group_columns = [
+        column
+        for column in ("round_name", "roster_lock", "team", "target_patch")
+        if column in adjusted.columns
+    ]
+    groups = (
+        adjusted.groupby(group_columns, dropna=False, sort=False)
+        if group_columns
+        else [(None, adjusted)]
+    )
+    for _, team_rows in groups:
+        player_groups = [
+            (player, rows.nlargest(candidates_per_player, "base_pick_probability"))
+            for player, rows in team_rows.groupby("player", sort=False)
+        ]
+        beams: list[tuple[float, dict[str, tuple[str, int]]]] = [(0.0, {})]
+        for player, candidates in player_groups:
+            expanded: list[tuple[float, dict[str, tuple[str, int]]]] = []
+            for score, assignment in beams:
+                used = {champion for champion, _ in assignment.values()}
+                for index, row in candidates.iterrows():
+                    champion = str(row["champion"])
+                    if champion in used:
+                        continue
+                    probability = max(1e-12, float(row["base_pick_probability"]))
+                    choice = dict(assignment)
+                    choice[str(player)] = (champion, int(index))
+                    expanded.append((score + math.log(probability), choice))
+            beams = sorted(expanded, key=lambda item: item[0], reverse=True)[:beam_width]
+            if not beams:
+                break
+        if not beams:
+            continue
+        maximum = beams[0][0]
+        weights = np.exp(np.asarray([score - maximum for score, _ in beams]))
+        weights /= weights.sum()
+        for weight, (_, assignment) in zip(weights, beams):
+            for _, (_, index) in assignment.items():
+                adjusted.at[index, "joint_draft_probability"] += float(weight)
+
+    player_keys = [
+        column for column in ("round_name", "roster_lock", "team", "player")
+        if column in adjusted.columns
+    ]
+    totals = adjusted.groupby(player_keys)["joint_draft_probability"].transform("sum")
+    adjusted["base_pick_probability"] = np.where(
+        totals.gt(0),
+        adjusted["joint_draft_probability"] / totals,
+        adjusted["pre_joint_base_probability"],
+    )
+    adjusted["_available_score"] = (
+        adjusted["base_pick_probability"] * adjusted["availability_factor"]
+    )
+    available_totals = adjusted.groupby(player_keys)["_available_score"].transform("sum")
+    adjusted["ranking_share"] = np.where(
+        available_totals.gt(0),
+        adjusted["_available_score"] / available_totals,
+        adjusted["base_pick_probability"],
+    )
+    adjusted["estimated_pick_probability"] = adjusted["ranking_share"]
+    adjusted["expected_multiplier_bonus"] = (
+        adjusted["base_pick_probability"]
+        * adjusted["availability_factor"]
+        * adjusted["expected_points_if_picked"]
+        * (adjusted["novelty_multiplier"] - 1.0)
+    )
+    return adjusted.drop(columns=["_available_score"])
+
+
 def load_actions(path: Path = DEFAULT_DRAFT_DATABASE) -> pd.DataFrame:
     """Load reconstructed professional draft actions."""
     if not path.exists():
@@ -1014,11 +1289,14 @@ def build_current_rankings(
         & actions["action_type"].astype(str).eq("pick")
     ]
     if model_hyperparameters.get("predraft_pair_synergy_enabled", 0.0):
-        return apply_expected_team_synergy(
+        rankings = apply_expected_team_synergy(
             rankings,
             TemporalPairSynergy().fit(known_picks),
         )
-    rankings["expected_team_synergy"] = 0.0
+    else:
+        rankings["expected_team_synergy"] = 0.0
+    if model_hyperparameters.get("joint_team_draft_enabled", 0.0):
+        rankings = apply_joint_team_draft(rankings)
     return rankings
 
 

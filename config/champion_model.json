@@ -6,6 +6,13 @@
       "w_player": 0.35548433677705416,
       "w_lcs": 0.3624191644460097,
       "w_leading": 0.2820964987769362
+    },
+    "team_draft": {
+      "enabled": false,
+      "team_tendency_weight": 0.15,
+      "joint_role_contention_strength": 0.25,
+      "joint_team_draft_enabled": false,
+      "reason": "Disabled after regression on the July 2025 Friday-lock validation."
     }
   },
   "selection": {

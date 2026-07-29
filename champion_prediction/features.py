@@ -139,9 +139,11 @@ class LanePriorityMatrix:
 
     def __init__(self) -> None:
         self.cache: Dict[Tuple[str, str], Dict[str, float]] = {}
+        self.fitted = False
 
     def fit(self, df: pd.DataFrame, position: str | None = None) -> None:
         """Precompute champion-role lane statistics in one grouped pass."""
+        self.fitted = True
         if df.empty or "champion" not in df.columns:
             return
         pos_col = (
@@ -196,6 +198,8 @@ class LanePriorityMatrix:
         cache_key = (champion.casefold(), position.lower())
         if cache_key in self.cache:
             return self.cache[cache_key]
+        if self.fitted:
+            return self._result(0.0, 0.0, 0.0)
 
         if df.empty or "champion" not in df.columns:
             return {"push_rate": 0.5, "csdiff15": 0.0, "golddiff15": 0.0, "prio_index": 1.0}

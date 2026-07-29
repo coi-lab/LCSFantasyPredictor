@@ -6,10 +6,25 @@ import unittest
 
 import pandas as pd
 
-from champion_prediction.weekly_backtest import calibration_table, evaluate_series_choices
+from champion_prediction.weekly_backtest import (
+    build_friday_lock_targets,
+    calibration_table,
+    evaluate_series_choices,
+)
 
 
 class WeeklyBacktestTests(unittest.TestCase):
+    def test_groups_games_under_the_pre_game_friday_lock(self) -> None:
+        history = pd.DataFrame([
+            {"date": "2025-07-25", "league": "LCS", "year": 2025, "split": "Summer", "role": "mid", "player": "One", "team": "A", "opponent": "B", "champion": "Ahri", "gameid": "g1", "patch": "15.14"},
+            {"date": "2025-07-26", "league": "LCS", "year": 2025, "split": "Summer", "role": "mid", "player": "One", "team": "A", "opponent": "B", "champion": "Azir", "gameid": "g2", "patch": "15.14"},
+        ])
+        targets = build_friday_lock_targets(history)
+        self.assertEqual(len(targets), 1)
+        self.assertEqual(targets.iloc[0]["roster_lock"], pd.Timestamp("2025-07-25", tz="UTC"))
+        self.assertEqual(targets.iloc[0]["actual_champions"], ["Ahri", "Azir"])
+        self.assertEqual(targets.iloc[0]["split_week"], 1)
+
     def test_calibration_table_compares_share_with_hits(self) -> None:
         results = pd.DataFrame([
             {"prediction_status": "scored", "ranking_share": 0.2, "hit": False},

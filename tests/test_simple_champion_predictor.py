@@ -11,8 +11,10 @@ import pandas as pd
 
 from champion_prediction.simple_predictor import (
     apply_expected_team_synergy,
+    apply_joint_team_draft,
     champion_multiplier,
     latest_observed_competitive_patch,
+    legal_candidate_universe,
     load_production_hyperparameters,
     maturity_blended_feature_weights,
     rank_champions,
@@ -36,6 +38,39 @@ class SimpleChampionPredictorTests(unittest.TestCase):
              "role": "mid", "player": "One", "team": "A", "opponent": "B",
              "champion": "FutureLeak", "fantasy_pts": 1000.0},
         ])
+
+    def test_timestamped_registry_adds_only_released_patch_eligible_champions(self) -> None:
+        payload = {
+            "champions": [
+                {
+                    "champion": "NewMid",
+                    "released_at": "2025-06-01T00:00:00Z",
+                    "competitive_from_patch": "15.12",
+                    "role_hints": ["mid"],
+                },
+                {
+                    "champion": "Future",
+                    "released_at": "2025-08-01T00:00:00Z",
+                    "competitive_from_patch": "15.15",
+                    "role_hints": ["mid"],
+                },
+            ]
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "champion_universe.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            names, priors, registry = legal_candidate_universe(
+                self.history(),
+                pd.Timestamp("2025-07-01", tz="UTC"),
+                "mid",
+                "15.12",
+                path,
+            )
+
+        self.assertIn("NewMid", names)
+        self.assertIn("NewMid", registry)
+        self.assertEqual(priors["NewMid"], 1.0)
+        self.assertNotIn("Future", names)
 
     def test_loads_frozen_static_production_parameters(self) -> None:
         payload = {
@@ -477,6 +512,32 @@ class SimpleChampionPredictorTests(unittest.TestCase):
             other["base_pick_probability"],
         )
         self.assertLess(lucian["expected_team_synergy"], 0.25)
+
+    def test_joint_draft_assigns_shared_flex_to_only_one_player_per_lineup(self) -> None:
+        rows = []
+        for player, role, options in (
+            ("Top", "top", (("Flex", 0.6), ("Tank", 0.4))),
+            ("Mid", "mid", (("Flex", 0.7), ("Mage", 0.3))),
+        ):
+            for champion, probability in options:
+                rows.append({
+                    "team": "A", "player": player, "role": role,
+                    "champion": champion, "target_patch": "16.14",
+                    "base_pick_probability": probability,
+                    "availability_factor": 1.0,
+                    "expected_points_if_picked": 10.0,
+                    "novelty_multiplier": 1.3,
+                })
+        adjusted = apply_joint_team_draft(pd.DataFrame(rows))
+        flex_total = adjusted.loc[
+            adjusted["champion"].eq("Flex"), "joint_draft_probability"
+        ].sum()
+
+        self.assertLessEqual(float(flex_total), 1.0)
+        for _, group in adjusted.groupby("player"):
+            self.assertAlmostEqual(
+                float(group["base_pick_probability"].sum()), 1.0, places=6
+            )
 
 
 if __name__ == "__main__":

@@ -90,6 +90,7 @@ def rolling_rankings(
     targets: pd.DataFrame,
     meta_weight: float,
     off_patch_weight: float,
+    fearless_context_weight: float = 0.0,
 ) -> tuple[float, float, list[dict[str, Any]]]:
     """Evaluate rankings using only evidence public before each target series."""
     expanded = expand_training_champions(all_series)
@@ -115,6 +116,18 @@ def rolling_rankings(
         prior["_meta_weight"] = prior["_recency"] * prior["_patch_weight"]
         meta = prior.groupby("champion")["_meta_weight"].sum()
         meta = meta / meta.sum() if meta.sum() else meta
+        if "is_fearless" in prior and "is_fearless" in target:
+            context_prior = prior.loc[
+                prior["is_fearless"].astype(bool).eq(bool(target["is_fearless"]))
+            ]
+        else:
+            context_prior = prior
+        context_meta = context_prior.groupby("champion")["_meta_weight"].sum()
+        context_meta = (
+            context_meta / context_meta.sum()
+            if context_meta.sum()
+            else context_meta
+        )
 
         player_prior = prior.loc[
             prior["assigned_player"].astype(str).str.casefold().eq(
@@ -128,9 +141,12 @@ def rolling_rankings(
         else:
             player = pd.Series(dtype=float)
 
-        candidates = set(meta.index) | set(player.index)
+        candidates = set(meta.index) | set(context_meta.index) | set(player.index)
         scores = {
-            champion: meta_weight * float(meta.get(champion, 0.0))
+            champion: meta_weight * (
+                (1.0 - fearless_context_weight) * float(meta.get(champion, 0.0))
+                + fearless_context_weight * float(context_meta.get(champion, 0.0))
+            )
             + (1.0 - meta_weight) * float(player.get(champion, 0.0))
             for champion in candidates
         }
@@ -171,28 +187,37 @@ def tune_rolling_model(series: pd.DataFrame) -> dict[str, Any]:
     trials: list[dict[str, float]] = []
     for meta_weight in (0.50, 0.70, 0.85, 0.95, 1.00):
         for off_patch_weight in (0.05, 0.15, 0.30):
-            top_1, top_3, _ = rolling_rankings(
-                series, validation, meta_weight, off_patch_weight
-            )
-            trials.append({
-                "meta_weight": meta_weight,
-                "off_patch_weight": off_patch_weight,
-                "validation_hit_at_1": round(top_1, 4),
-                "validation_hit_at_3": round(top_3, 4),
-            })
+            for fearless_context_weight in (0.0, 0.15, 0.30):
+                top_1, top_3, _ = rolling_rankings(
+                    series, validation, meta_weight, off_patch_weight,
+                    fearless_context_weight,
+                )
+                trials.append({
+                    "meta_weight": meta_weight,
+                    "off_patch_weight": off_patch_weight,
+                    "fearless_context_weight": fearless_context_weight,
+                    "validation_hit_at_1": round(top_1, 4),
+                    "validation_hit_at_3": round(top_3, 4),
+                })
     best = max(trials, key=lambda trial: (trial["validation_hit_at_3"], trial["validation_hit_at_1"]))
     test_top_1, test_top_3, examples = rolling_rankings(
-        series, test, best["meta_weight"], best["off_patch_weight"]
+        series, test, best["meta_weight"], best["off_patch_weight"],
+        best["fearless_context_weight"],
     )
     premier_top_1, premier_top_3, premier_examples = rolling_rankings(
-        series, premier_test, best["meta_weight"], best["off_patch_weight"]
+        series, premier_test, best["meta_weight"], best["off_patch_weight"],
+        best["fearless_context_weight"],
     )
     meta_only = max(
-        (trial for trial in trials if trial["meta_weight"] == 1.0),
+        (
+            trial for trial in trials
+            if trial["meta_weight"] == 1.0
+            and trial["fearless_context_weight"] == 0.0
+        ),
         key=lambda trial: (trial["validation_hit_at_3"], trial["validation_hit_at_1"]),
     )
     meta_only_top_1, meta_only_top_3, _ = rolling_rankings(
-        series, test, 1.0, meta_only["off_patch_weight"]
+        series, test, 1.0, meta_only["off_patch_weight"], 0.0
     )
     return {
         "validation_player_series": len(validation),
@@ -206,6 +231,9 @@ def tune_rolling_model(series: pd.DataFrame) -> dict[str, Any]:
         "premier_2026_exposure": "previously_exposed_not_pristine",
         "current_meta_only_test_hit_at_1": round(meta_only_top_1, 4),
         "current_meta_only_test_hit_at_3": round(meta_only_top_3, 4),
+        "series_context_delta_hit_at_1": round(test_top_1 - meta_only_top_1, 4),
+        "series_context_delta_hit_at_3": round(test_top_3 - meta_only_top_3, 4),
+        "fearless_context_promoted": bool(best["fearless_context_weight"] > 0.0),
         "rolling_examples": examples,
         "premier_2026_examples": premier_examples,
         "tuning_trials": trials,
