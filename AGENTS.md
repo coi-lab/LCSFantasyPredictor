@@ -156,6 +156,10 @@ When the active client is Codex:
 
 ## Modeling and data requirements
 
+- **Fantasy budget is chronological account state:** 100 gold is only the
+  opening-round budget. After Week 1, never default or reset the optimizer to
+  100. Resolve the exact round budget from the configured account ledger or
+  require an explicit budget; fail closed when later-round state is missing.
 - **Chronological model boundary:** Champion-model training, feature fitting,
   and parameter tuning use 2020–2025 data only. Use 2026 as the premier
   chronological test period and never allow 2026 outcomes into fitted features

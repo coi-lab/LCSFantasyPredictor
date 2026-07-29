@@ -12,10 +12,20 @@ from fantasy_prediction.lineup_optimizer import (
     build_dashboard_payload,
     merge_dashboard_payload,
     optimize_lineups,
+    resolve_current_budget,
 )
 
 
 class LineupOptimizerTests(unittest.TestCase):
+    def test_round_budget_resolves_without_opening_budget_fallback(self) -> None:
+        current = pd.DataFrame([{"round_name": "Round 2 (Split 3)"}])
+        unknown = pd.DataFrame([{"round_name": "Round 3 (Split 3)"}])
+
+        self.assertEqual(resolve_current_budget(current), 109.1)
+        with self.assertRaisesRegex(ValueError, "must not fall back"):
+            resolve_current_budget(unknown)
+        self.assertEqual(resolve_current_budget(unknown, override=117.4), 117.4)
+
     def test_diversity_can_beat_a_higher_unbuffed_stack(self) -> None:
         rows = []
         for role, team in zip(

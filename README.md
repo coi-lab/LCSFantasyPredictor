@@ -204,7 +204,7 @@ Generate player and coach projections, then optimize the current roster:
 
 ```bash
 python -m fantasy_prediction.player_baseline --skip-backtest
-python -m fantasy_prediction.lineup_optimizer --budget 100 --top-n 10
+python -m fantasy_prediction.lineup_optimizer --top-n 10
 ```
 
 The optimizer budget is account state, not a model-training parameter. After a
@@ -212,6 +212,9 @@ completed round, carry forward the prior budget plus the net official price
 change of the six held assets. The confirmed 2026 Split 3 Round 1 roster moved
 from 99.0 to 108.1 gold while retaining 1.0 unspent, producing a Round 2 budget
 of 109.1 gold.
+The CLI resolves the current round from `config/scoring_rules.json`. For any
+later round without a recorded balance it stops instead of resetting to 100;
+use `--budget` only to supply a newly verified account balance.
 
 Capture the official market whenever a new round opens:
 

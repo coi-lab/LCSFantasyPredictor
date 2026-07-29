@@ -55,6 +55,30 @@ def load_variety_buffs(path: Path = DEFAULT_RULES_PATH) -> dict[int, float]:
     }
 
 
+def resolve_current_budget(
+    players: pd.DataFrame,
+    rules_path: Path = DEFAULT_RULES_PATH,
+    override: float | None = None,
+) -> float:
+    """Resolve chronological account budget; never reuse opening gold later."""
+    if override is not None:
+        return float(override)
+    round_name = (
+        str(players["round_name"].iloc[0])
+        if not players.empty and "round_name" in players.columns
+        else ""
+    )
+    payload = json.loads(rules_path.read_text(encoding="utf-8"))
+    round_budgets = payload.get("budget", {}).get("round_budgets", {})
+    if round_name in round_budgets:
+        return float(round_budgets[round_name])
+    raise ValueError(
+        f"No account budget is recorded for {round_name or 'the current round'}. "
+        "After Week 1 the optimizer must not fall back to the 100 opening budget; "
+        "record the round budget in scoring_rules.json or pass --budget explicitly."
+    )
+
+
 def attach_champion_bonus(
     players: pd.DataFrame,
     portfolio: pd.DataFrame | None,
@@ -455,7 +479,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--coaches", type=Path, default=DEFAULT_COACH_PATH)
     parser.add_argument("--champions", type=Path, default=DEFAULT_CHAMPION_PATH)
     parser.add_argument("--rules", type=Path, default=DEFAULT_RULES_PATH)
-    parser.add_argument("--budget", type=float, default=100.0)
+    parser.add_argument(
+        "--budget",
+        type=float,
+        default=None,
+        help="Explicit account budget override; otherwise resolve it by round.",
+    )
     parser.add_argument("--top-n", type=int, default=10)
     parser.add_argument(
         "--matchup-conflict-penalty",
@@ -479,6 +508,7 @@ def main() -> None:
     args = parse_args()
     players = pd.read_csv(args.players)
     coaches = pd.read_csv(args.coaches)
+    budget = resolve_current_budget(players, args.rules, args.budget)
     portfolio = (
         pd.read_csv(args.champions) if args.champions.exists() else None
     )
@@ -487,12 +517,12 @@ def main() -> None:
         players,
         coaches,
         load_variety_buffs(args.rules),
-        budget=float(args.budget),
+        budget=budget,
         top_n=int(args.top_n),
         matchup_conflict_penalty=float(args.matchup_conflict_penalty),
     )
     payload = {
-        "budget": float(args.budget),
+        "budget": budget,
         "objective": (
             "maximize risk-adjusted player + champion + coach points after "
             "official variety buff and matchup-conflict penalty"
@@ -509,7 +539,7 @@ def main() -> None:
     dashboard_lineups = attach_dashboard_champion_options(lineups, portfolio)
     current_dashboard_payload = build_dashboard_payload(
         players,
-        float(args.budget),
+        budget,
         dashboard_lineups,
         float(args.matchup_conflict_penalty),
     )
