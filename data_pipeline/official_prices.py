@@ -11,7 +11,7 @@ from typing import Any, Dict, Iterable, List, Tuple
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEFAULT_SNAPSHOT_DIR = os.path.join(BASE_DIR, "data", "official_market_snapshots")
+DEFAULT_SNAPSHOT_DIR = os.path.join(BASE_DIR, "data", "raw", "official_market_snapshots")
 ESTIMATED_PRICING_SOURCE = "estimated_score_price_mean_reversion"
 
 

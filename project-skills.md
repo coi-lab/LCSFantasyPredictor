@@ -12,10 +12,10 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
 
 ## Data sources and scope
 
-- Oracle's Elixir CSVs in `LCS_stats/` are the primary professional match and draft source.
+- Oracle's Elixir CSVs in `data/raw/oracles_elixir/` are the primary professional match and draft source.
 - Oracle's Elixir player-game rows contain the played `champion`; team-game rows contain ordered `pick1`-`pick5` and `ban1`-`ban5` fields.
 - Oracle's Elixir supplies the recorded game `patch` and `date`; dashboard patch boundaries are derived from those fields rather than inferred from a release calendar.
-- Official LCS Fantasy market snapshots live in `data/official_market_snapshots/` and must remain immutable.
+- Official LCS Fantasy market snapshots live in `data/raw/official_market_snapshots/` and must remain immutable.
 - The public `/market` endpoint supplies current and previous prices but no
   player scores. `/player-stats` supplies `averageRoundScore`,
   `lastRoundScore`, score range, and `lastRoundPrice`. Join the two responses
@@ -82,7 +82,7 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   combination and includes expected champion bonus. Do not optimize expected
   price growth until a second official market round supplies observed changes.
 - The matchup optimizer exports self-contained weekly snapshots to
-  `dashboard/matchup_lineups.json`. Preserve prior week IDs when refreshing the
+  `dashboard/generated/matchup_lineups.json`. Preserve prior week IDs when refreshing the
   current week, and embed champion options in each snapshot so historical week
   toggles never display recommendations from a later roster lock.
 - Rank lineups with a separate matchup-risk score rather than treating

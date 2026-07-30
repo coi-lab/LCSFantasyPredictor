@@ -15,7 +15,7 @@ from data_pipeline.ingest import LCSDataIngestor
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MARKET_DIR = PROJECT_ROOT / "data" / "official_market_snapshots"
+DEFAULT_MARKET_DIR = PROJECT_ROOT / "data" / "raw" / "official_market_snapshots"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "data" / "predictions"
 ROLE_MAP = {
     "top": "top",

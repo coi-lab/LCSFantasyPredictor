@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TaskEvidenceManifest",
+  "type": "object",
+  "required": [
+    "task_id",
+    "timestamp",
+    "implementation_agent",
+    "reviewer_agent",
+    "safety_baseline",
+    "verification_results",
+    "verdict"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "implementation_agent": {
+      "type": "string",
+      "enum": ["AGY", "Codex", "Human"]
+    },
+    "reviewer_agent": {
+      "type": "string",
+      "enum": ["Codex", "AGY", "Human"]
+    },
+    "safety_baseline": {
+      "type": "object",
+      "required": ["git_branch", "git_commit", "clean_status", "test_pass_count"],
+      "properties": {
+        "git_branch": { "type": "string" },
+        "git_commit": { "type": "string" },
+        "clean_status": { "type": "boolean" },
+        "test_pass_count": { "type": "integer" }
+      }
+    },
+    "verification_results": {
+      "type": "object",
+      "required": ["unit_tests_passed", "compile_passed", "diff_check_passed"],
+      "properties": {
+        "unit_tests_passed": { "type": "boolean" },
+        "compile_passed": { "type": "boolean" },
+        "diff_check_passed": { "type": "boolean" }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "required": ["status", "issued_by"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["PENDING_CODEX_REVIEW", "PASS", "FAIL", "NEEDS_REVISION"]
+        },
+        "issued_by": { "type": "string" },
+        "comments": { "type": "string" }
+      }
+    }
+  }
+}

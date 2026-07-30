@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CodexReviewVerdict",
+  "type": "object",
+  "required": ["task_id", "verdict", "commands", "findings", "residual_risks"],
+  "properties": {
+    "task_id": {"type": "string"},
+    "verdict": {"enum": ["PASS", "PASS_WITH_MINOR", "REWORK_REQUIRED", "BLOCKED"]},
+    "commands": {"type": "array"},
+    "findings": {"type": "array"},
+    "residual_risks": {"type": "array"}
+  }
+}

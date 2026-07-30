@@ -17,6 +17,15 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=DASHBOARD_DIR, **kwargs)
 
+    def do_GET(self):
+        """Redirect the dashboard root so browser-relative static assets work."""
+        if self.path in {"/", "/index.html"}:
+            self.send_response(302)
+            self.send_header("Location", "/static/index.html")
+            self.end_headers()
+            return
+        super().do_GET()
+
     def end_headers(self):
         # This is a local development dashboard. Always serve current files so
         # browser caches cannot retain an older app.js after code changes.

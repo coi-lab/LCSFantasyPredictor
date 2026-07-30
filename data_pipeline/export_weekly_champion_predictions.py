@@ -12,7 +12,7 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PLAYERS = PROJECT_ROOT / "data" / "predictions" / "current_player_projections.csv"
 DEFAULT_PORTFOLIO = PROJECT_ROOT / "data" / "predictions" / "current_champion_portfolio.csv"
-DEFAULT_OUTPUT = PROJECT_ROOT / "dashboard" / "weekly_champion_predictions.json"
+DEFAULT_OUTPUT = PROJECT_ROOT / "dashboard" / "generated" / "weekly_champion_predictions.json"
 DEFAULT_WEEKLY_BACKTEST = (
     PROJECT_ROOT / "data" / "predictions" / "friday_lock_july_2025_backtest.json"
 )

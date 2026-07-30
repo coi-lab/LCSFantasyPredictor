@@ -18,7 +18,7 @@ from champion_prediction.draft_actions import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_AUDIT_DIR = PROJECT_ROOT / "data" / "champion_prediction" / "audit"
+DEFAULT_AUDIT_DIR = PROJECT_ROOT / "data" / "generated" / "champion_prediction" / "audit"
 DEFAULT_LEAGUES = ("LCS", "LTA N", "LEC", "LCK", "LPL", "EWC", "FST", "MSI")
 VALID_ROLES = ("top", "jgl", "mid", "bot", "sup")
 CONTEXT_COLUMNS = ["league", "year", "split", "patch"]

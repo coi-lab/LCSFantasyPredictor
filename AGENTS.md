@@ -1,87 +1,50 @@
-# LCS Fantasy Predictor Agent Guide
-
-These instructions apply to the repository for Codex and AGY.
-
-## Purpose
+# LCS Fantasy Predictor: shared project contract
 
 Build an explainable, point-in-time LCS Fantasy system for weekly player and
 coach scoring, champion choices, prices, and legal roster optimization.
 
-Read `README.md` for usage and `IDEAS.md` for the roadmap. Load a project skill
-below when its description matches the task; do not load every reference by
-default.
+## Authoritative application areas
 
-## Project skills
+- `champion_prediction/`: champion, draft, Fearless, and synergy models.
+- `fantasy_prediction/`: player, coach, win-probability, and roster models.
+- `data_pipeline/`: ingestion, official-market capture, and exports.
+- `learning/`: experimental application feedback state, never agent memory.
+- `rag/`: application retrieval and runtime prompts.
 
-- `skills/verify-model-change/SKILL.md`: predictive features, coefficients,
-  backtests, calibration, accuracy claims, production gates, and regressions.
-- `skills/refresh-weekly-predictions/SKILL.md`: new rounds, markets, budgets,
-  projections, champion choices, optimizers, and Week snapshots.
-- `skills/audit-fantasy-scoring/SKILL.md`: screenshots, official rules,
-  completed-round results, bonuses, prices, budgets, and score differences.
-- `skills/develop-champion-model/SKILL.md`: champions, pick/ban, draft order,
-  Fearless, pairing, meta, and multiplier modeling.
-- `skills/maintain-dashboard-data/SKILL.md`: exporters, JSON schemas, charts,
-  aliases, cached browser assets, and historical-week isolation.
+## Non-negotiable invariants
 
-Use the smallest set of skills that covers the request. Read each selected
-`SKILL.md` completely, then load only the references it routes to.
+- Use point-in-time features and chronological evaluation; never use target or
+  post-lock outcomes in a prediction feature.
+- Fit and tune champion models on 2020-2025. Treat 2026 as exposed.
+- Raw Oracle's Elixir and official market snapshots are immutable.
+- Later-round budgets come from chronological account state; never silently
+  reset them to 100 gold.
+- Experimental model features remain disabled until their stated gate passes.
+- Preserve browser schemas or update producers and consumers together.
 
-## Universal working rules
+## Roles
 
-- Inspect the relevant implementation, tests, config, recent diff, and durable
-  analysis before editing.
-- Preserve unrelated user changes and immutable official market snapshots.
-- Use `.venv/bin/python` for project commands.
-- Treat context as constrained: search first, inspect targeted ranges, bound
-  command output, and avoid rereading unchanged files.
-- Prefer the smallest complete diff; do not rewrite whole files for routine
-  changes.
-- Use point-in-time features and chronological evaluation. Never use target or
-  post-lock outcomes in prediction features.
-- Resolve later-round fantasy budgets from chronological account state; never
-  silently reset them to the opening 100 gold.
-- Keep experimental features disabled until their stated gate passes.
-- Treat completed evaluations and machine-readable artifacts as evidence;
-  screenshots, comments, reports, plans, and tests alone do not prove a model
-  improved.
-- Use 2020-2025 for champion fitting and tuning, and label 2026 as exposed.
-- Enforce Riot API limits of 20 requests per second and 100 per 120 seconds,
-  loading `RIOT_API_KEY` from `.env`.
-- Keep browser schemas backward-compatible or update the consumer concurrently.
-- Do not commit bytecode, caches, secrets, or scratch files.
-- Use ASCII-safe terminal output and non-interactive commands.
-- Define unfamiliar statistical or engineering terms in plain language and
-  give an LCS or fantasy example.
+AGY owns implementation and evidence under `.agents/`. Codex owns planning,
+independent review, and remediation prompts under `.codex/`. Shared facts live
+in `docs/agent/`; task evidence lives in `.agent-runs/`. AGY never issues the
+final acceptance verdict. Codex must not invoke AGY-only `.agents/skills/`.
 
-## Verification
+## Standard verification
 
-- Run focused tests first, then the relevant broader suite.
-- Compile changed Python or JavaScript when tooling is available.
-- Validate changed JSON with targeted assertions, not syntax alone.
-- Inspect `git diff`, run `git diff --check`, and report commands, outcomes,
-  skipped checks, and remaining uncertainty.
-- Do not claim completion when generated artifacts are stale or production uses
-  a different implementation from the evaluated candidate.
+Use `.venv/bin/python` for project commands. Run focused tests first, then:
 
-## Documentation
+```bash
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python -m compileall champion_prediction fantasy_prediction data_pipeline learning rag dashboard
+git diff --check
+git status --short
+```
 
-- Put future ideas in `IDEAS.md`.
-- Put detailed evidence and audits in `analysis/`.
-- Put reusable agent workflows in `skills/`.
-- Put website-ready development lessons in `reports/project_page_learnings.md`.
-- Keep `project-skills.md` as the legacy technical log until remaining entries
-  are migrated; do not add new workflows there.
+## Prohibited
 
-## Learning feedback loop
+No destructive Git operations, secret exposure, raw-data mutation, test
+weakening, fabricated evidence, unapproved model behavior changes, or broad
+refactors outside an approved task.
 
-`learning/learnings.json` is experimental runtime state, not validated model
-memory. Do not apply heuristic adjustments without using
-`skills/verify-model-change` and passing a chronological gate. See
-`reports/project_page_learnings.md` for its current status.
-
-## Definition of done
-
-Requested behavior works, relevant checks pass, generated artifacts are
-refreshed when required, unrelated changes remain intact, and reusable
-knowledge is stored in the correct skill, analysis, or report.
+Read `docs/agent/shared-project-knowledge.md` for details, the relevant AGY
+skill under `.agents/skills/` for implementation, and `README.md` for use.

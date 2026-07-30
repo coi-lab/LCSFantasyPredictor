@@ -28,7 +28,7 @@ DEFAULT_OUTPUT = PROJECT_ROOT / "data" / "predictions" / "champion_weight_tuning
 DEFAULT_CHECKPOINT = (
     PROJECT_ROOT / "data" / "predictions" / "champion_weight_trials.json"
 )
-DEFAULT_CACHE_DIR = PROJECT_ROOT / "data" / "champion_prediction" / "feature_cache"
+DEFAULT_CACHE_DIR = PROJECT_ROOT / "data" / "cache" / "champion_prediction" / "feature_cache"
 MATURITY_KEYS = (
     "early_w_player", "early_w_lcs", "early_w_leading",
     "mature_w_player", "mature_w_lcs", "mature_w_leading",

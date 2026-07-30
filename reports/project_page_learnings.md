@@ -120,7 +120,7 @@ We learned to give each one a distinct home:
 | Information | Location |
 |---|---|
 | Universal agent rules | `AGENTS.md` |
-| Repeatable task workflows | `skills/` |
+| Repeatable task workflows | `.agents/skills/` |
 | Runtime persona/query templates | `prompts/` |
 | Model evidence and ablations | `analysis/` |
 | Future implementation ideas | `IDEAS.md` |

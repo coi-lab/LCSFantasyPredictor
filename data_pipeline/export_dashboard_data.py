@@ -107,7 +107,7 @@ def export_dashboard_json(output_path: str = None) -> str:
     Ingests match data, calculates weekly player totals, and exports to JSON.
     """
     if output_path is None:
-        output_dir = os.path.join(BASE_DIR, "dashboard")
+        output_dir = os.path.join(BASE_DIR, "dashboard", "generated")
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, "dashboard_data.json")
 

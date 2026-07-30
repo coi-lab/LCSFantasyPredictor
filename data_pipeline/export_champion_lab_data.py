@@ -266,7 +266,7 @@ def export_champion_lab_json(
 ) -> str:
     """Write Champion Lab JSON and return its path."""
     if output_path is None:
-        output_path = os.path.join(BASE_DIR, "dashboard", "champion_lab_data.json")
+        output_path = os.path.join(BASE_DIR, "dashboard", "generated", "champion_lab_data.json")
     payload = build_champion_lab_payload(player_data)
     with open(output_path, "w", encoding="utf-8") as output_file:
         json.dump(payload, output_file, separators=(",", ":"))

@@ -8,7 +8,7 @@ http://localhost:8050
 
 
 Every week we need to run this:
-1. Re-download current year's Oracle's Elixir match file into LCS_stats/:
+1. Re-download current year's Oracle's Elixir match file into data/raw/oracles_elixir/:
    2026_LoL_esports_match_data_from_OraclesElixir.csv
    (Do NOT delete historical 2023-2025 files!)
 
@@ -28,4 +28,4 @@ Run the virtual enviroment: source .venv/bin/activate
 
 Notes:
 - Player pricing in gold: verify formula for high values (hard to reach above 30).
-- Champion predictor outputs current_champion_rankings.csv and current_champion_portfolio.csv (1.3x floor, 1.5x adoption, 1.7x wildcard picks). 
+- Champion predictor outputs current_champion_rankings.csv and current_champion_portfolio.csv (1.3x floor, 1.5x adoption, 1.7x wildcard picks).

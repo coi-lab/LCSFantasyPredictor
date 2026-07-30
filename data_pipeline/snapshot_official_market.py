@@ -25,7 +25,7 @@ from typing import Any
 DEFAULT_ENDPOINT = "https://api.lcsofficial.gg/market"
 DEFAULT_PLAYER_STATS_ENDPOINT = "https://api.lcsofficial.gg/player-stats"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "data" / "official_market_snapshots"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "data" / "raw" / "official_market_snapshots"
 
 
 def fetch_json(endpoint: str) -> dict[str, Any]:

@@ -1,6 +1,6 @@
 """
 Data Pipeline Ingestion Module for LCS Fantasy Pipeline.
-Ingests CSV stats from LCS_stats/, dynamically applies scoring rules from config/scoring_rules.json,
+Ingests raw Oracle's Elixir CSV stats, dynamically applies scoring rules from config/scoring_rules.json,
 filters to player positions, joins active learnings from learning/learnings.json, and outputs summary preview.
 """
 
@@ -38,7 +38,7 @@ class LCSDataIngestor:
         learning_engine: Optional[LearningEngine] = None
     ):
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.stats_dir = stats_dir or os.path.join(base_dir, "LCS_stats")
+        self.stats_dir = stats_dir or os.path.join(base_dir, "data", "raw", "oracles_elixir")
         self.config_path = config_path or os.path.join(base_dir, "config", "scoring_rules.json")
         self.learning_engine = learning_engine or LearningEngine()
         self.scoring_rules = self.load_scoring_rules()
@@ -51,7 +51,7 @@ class LCSDataIngestor:
             return json.load(f)
 
     def auto_detect_csv_files(self) -> List[str]:
-        """Auto-detect all .csv files inside LCS_stats directory."""
+        """Auto-detect all .csv files inside the Oracle's Elixir raw-data directory."""
         pattern = os.path.join(self.stats_dir, "*.csv")
         files = sorted(glob.glob(pattern))
         if not files:
@@ -60,7 +60,7 @@ class LCSDataIngestor:
 
     def load_raw_data(self) -> Union[Any, List[Dict[str, Any]]]:
         """
-        Load and concatenate all raw CSV match stats from LCS_stats/.
+        Load and concatenate all raw Oracle's Elixir CSV match stats.
         """
         csv_files = self.auto_detect_csv_files()
         print(f"Auto-detected {len(csv_files)} CSV files in {self.stats_dir}:")

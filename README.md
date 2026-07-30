@@ -59,12 +59,12 @@ The weekly workflow:
 
 ## Data
 
-- Oracle's Elixir CSV files in `LCS_stats/` provide professional player-game and team-game statistics.
+- Oracle's Elixir CSV files in `data/raw/oracles_elixir/` provide professional player-game and team-game statistics.
 - Player-game rows contain the champion played and fantasy scoring inputs.
 - Team-game rows contain ordered `pick1`-`pick5` and `ban1`-`ban5` fields.
 - Official LCS Fantasy market and player-score captures live in
-  `data/official_market_snapshots/`.
-- Completed-round fantasy outcomes live in `data/actuals/`.
+  `data/raw/official_market_snapshots/`.
+- Completed-round fantasy outcomes live in `data/raw/fantasy_actuals/`.
 - Generated databases and prediction files live under `data/` and can be rebuilt from source data and configuration.
 
 The official market endpoint exposes the current market rather than a documented historical archive. Each captured snapshot is therefore kept immutable. Official prices override estimates whenever the league, season, split, and participant match.
@@ -162,7 +162,7 @@ LCSFantasy/
 |-- learning/
 |   |-- feedback_loop.py        # Experimental heuristic learning engine
 |   `-- learnings.json          # Experimental persisted learning state
-|-- LCS_stats/                  # Oracle's Elixir source CSV files
+|-- data/raw/oracles_elixir/    # Oracle's Elixir source CSV files
 |-- prompts/                    # Runtime personas and RAG prompt templates
 |   |-- draft_optimizer.md      # Runtime instructions for roster construction
 |   |-- fantasy_analyst.md      # Runtime fantasy-analysis persona
@@ -171,7 +171,7 @@ LCSFantasy/
 |-- reports/
 |   `-- project_page_learnings.md
 |                               # Website story bank about building the project
-|-- skills/
+|-- .agents/skills/             # AGY implementation skills
 |   |-- verify-model-change/    # Controlled model-change evaluation workflow
 |   |-- refresh-weekly-predictions/
 |   |                           # Repeatable weekly generation workflow
@@ -204,7 +204,7 @@ Install the current dependencies:
 python -m pip install -r requirements.txt
 ```
 
-Place the required Oracle's Elixir yearly CSV files in `LCS_stats/`. Keep the historical files when updating the current season because the pipeline loads the available years together.
+Place the required Oracle's Elixir yearly CSV files in `data/raw/oracles_elixir/`. Keep the historical files when updating the current season because the pipeline loads the available years together.
 
 Some Riot-backed data tasks require a temporary development API key. Store it in a local `.env` file:
 
