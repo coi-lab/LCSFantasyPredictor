@@ -21,6 +21,7 @@ data/raw/oracles_elixir/2021_LoL_esports_match_data_from_OraclesElixir.csv
 .env
 .env.*
 *.env
+!.env.example
 
 # Per-task agent evidence is local and reproducible from its task run.
 .agent-runs/*/
