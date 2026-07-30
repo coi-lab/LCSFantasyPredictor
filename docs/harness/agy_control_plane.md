@@ -6,10 +6,13 @@ The AGY Control Plane orchestrates execution for the AGY implementation agent wi
 
 ## Entrypoints & Commands
 
-- **Local interactive / non-interactive execution**:
-  `agy --print --prompt "<task-instructions>"`
-- **Python control-plane module**:
-  `python -m data_pipeline.agy_control_plane` (or harness equivalent in `tests/harness`)
+- AGY CLI: `agy`
+- List documented CLI options: `agy --help`
+- List available agents during a later approved read-only smoke test:
+  `agy agents`
+
+Do not infer successful discovery from these static files. Live AGY discovery
+is pending a separately approved read-only smoke test.
 
 ## Working Rules & Skill Discovery
 
@@ -17,3 +20,4 @@ The AGY Control Plane orchestrates execution for the AGY implementation agent wi
 2. AGY executes baseline safety checks (`git status`, test suite execution, syntax compilation) prior to code modifications.
 3. Every task execution produces a structured evidence bundle in `.agent-runs/<task-id>/`.
 4. AGY cannot self-certify completion with a final `PASS`.
+5. AGY prepares a handoff and stops for independent Codex review.

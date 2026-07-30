@@ -27,7 +27,9 @@ coach scoring, champion choices, prices, and legal roster optimization.
 AGY owns implementation and evidence under `.agents/`. Codex owns planning,
 independent review, and remediation prompts under `.codex/`. Shared facts live
 in `docs/agent/`; task evidence lives in `.agent-runs/`. AGY never issues the
-final acceptance verdict. Codex must not invoke AGY-only `.agents/skills/`.
+final acceptance verdict; the human owner is final authority. Codex may read
+shared `.agents/skills/` to understand or review AGY work, but does not use
+them as authority to implement AGY application tasks while acting as reviewer.
 
 ## Standard verification
 
@@ -44,7 +46,8 @@ git status --short
 
 No destructive Git operations, secret exposure, raw-data mutation, test
 weakening, fabricated evidence, unapproved model behavior changes, or broad
-refactors outside an approved task.
+refactors outside an approved task. Do not fan out to subagents automatically.
 
-Read `docs/agent/shared-project-knowledge.md` for details, the relevant AGY
-skill under `.agents/skills/` for implementation, and `README.md` for use.
+Read [shared project knowledge](docs/agent/shared-project-knowledge.md) for
+details, the relevant shared skill under `.agents/skills/` for approved AGY
+implementation, and the [project README](README.md) for use.
