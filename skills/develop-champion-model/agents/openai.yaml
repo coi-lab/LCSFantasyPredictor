@@ -1,0 +1,4 @@
+interface:
+  display_name: "Develop Champion Model"
+  short_description: "Build cutoff-safe draft prediction features"
+  default_prompt: "Use $develop-champion-model to implement and validate this champion or draft feature."

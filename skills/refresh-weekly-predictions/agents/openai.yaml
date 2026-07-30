@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refresh Weekly Predictions"
+  short_description: "Generate a safe weekly fantasy snapshot"
+  default_prompt: "Use $refresh-weekly-predictions to generate and verify the next weekly fantasy snapshot."

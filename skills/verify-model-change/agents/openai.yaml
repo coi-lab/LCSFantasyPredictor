@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Model Change"
+  short_description: "Validate fantasy model changes safely"
+  default_prompt: "Use $verify-model-change to evaluate this model change against a frozen chronological baseline."

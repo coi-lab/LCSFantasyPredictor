@@ -1,7 +1,9 @@
 # Roster Model Capability Roadmap for AGY
 
 Use this prompt to implement and validate the missing roster-model capabilities.
-Follow `AGENTS.md` and `prompts/model_change_workflow.md` throughout this task.
+Follow `AGENTS.md` and
+`skills/verify-model-change/references/model-change-workflow.md` throughout this
+task.
 Those files override any instruction here that would weaken evidence,
 chronological safety, or preservation of user changes.
 
@@ -115,7 +117,7 @@ Before editing production code:
 
 1. Inspect:
    - `AGENTS.md`;
-   - `prompts/model_change_workflow.md`;
+   - `skills/verify-model-change/references/model-change-workflow.md`;
    - `fantasy_prediction/player_baseline.py`;
    - `fantasy_prediction/lineup_optimizer.py`;
    - relevant tests;

@@ -1,7 +1,7 @@
 # Model Change Verification Workflow
 
-AGY must follow this workflow for every model, feature, backtest, accuracy,
-calibration, or fantasy-value task.
+Follow this workflow for every model, feature, backtest, accuracy, calibration,
+or fantasy-value task.
 
 ## 1. Define the decision before editing
 

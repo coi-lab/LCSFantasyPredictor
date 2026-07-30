@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Dashboard Data"
+  short_description: "Safely update dashboard data and views"
+  default_prompt: "Use $maintain-dashboard-data to update and verify this dashboard export or presentation change."

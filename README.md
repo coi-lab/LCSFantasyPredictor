@@ -120,24 +120,68 @@ This is exhaustive search: every eligible roster combination is checked rather t
 ## Folder Structure
 
 ```txt
-LCSFantasyPredictor/
-|-- analysis/                  # Audits, ablations, and evaluation notes
-|-- champion_prediction/       # Draft state and champion recommendation models
-|-- config/                    # Scoring, draft, taxonomy, and model parameters
-|-- dashboard/                 # Local dashboard and exported browser data
+LCSFantasy/
+|-- AGENTS.md                  # Small agent router and repository-wide rules
+|-- README.md                  # Setup, architecture, and operating commands
+|-- IDEAS.md                   # Unimplemented modeling and product backlog
+|-- project-skills.md          # Legacy technical discoveries awaiting migration
+|-- analysis/                  # Dated audits, ablations, and model evidence
+|-- champion_prediction/       # Draft, champion, synergy, and Fearless models
+|-- config/
+|   |-- scoring_rules.json     # Versioned player and coach fantasy scoring
+|   |-- champion_model.json    # Champion-model weights and feature switches
+|   |-- champion_taxonomy.json # Champion classes and gameplay attributes
+|   |-- champion_universe.json # Supported champion identifiers and aliases
+|   `-- draft_rules.json       # League, side, pick order, and Fearless rules
+|-- dashboard/
+|   |-- index.html             # Dashboard page structure
+|   |-- app.js                 # Browser rendering and interaction logic
+|   |-- styles.css             # Dashboard presentation
+|   |-- server.py              # Local dashboard web server
+|   |-- dashboard_data.json    # Generated current player and model data
+|   |-- matchup_lineups.json   # Preserved weekly lineup snapshots
+|   `-- weekly_champion_predictions.json
+|                               # Generated champion recommendations
 |-- data/
 |   |-- actuals/               # Completed-round fantasy results
-|   `-- official_market_snapshots/
-|-- data_pipeline/             # Ingestion, market capture, and dashboard exports
-|-- fantasy_prediction/        # Player models and lineup optimizer
-|-- learning/                  # Feedback-loop records
-|-- LCS_stats/                 # Oracle's Elixir source CSV files
-|-- rag/                       # Experimental retrieval components
-|-- reports/                   # Model reviews and reports
-|-- tests/                     # Unit and integration tests
-|-- IDEAS.md                   # Modeling backlog
-|-- requirements.txt
-`-- README.md
+|   |-- official_market_snapshots/
+|   |                           # Immutable official prices and rosters by round
+|   `-- predictions/            # Machine-readable evaluation and projection output
+|-- data_pipeline/
+|   |-- ingest.py               # Loads and normalizes historical match data
+|   |-- official_prices.py      # Resolves official prices and account budgets
+|   |-- snapshot_official_market.py
+|   |                           # Captures immutable market snapshots
+|   `-- export_*.py             # Produces dashboard-facing JSON files
+|-- fantasy_prediction/
+|   |-- player_baseline.py      # Player projections and Elo win adjustment
+|   |-- team_win_model.py       # Sequential cutoff-safe team win probabilities
+|   |-- coach_conditional.py    # Coach score conditional on wins and losses
+|   |-- carry_concentration.py  # Disabled diagnostic carry feature
+|   `-- lineup_optimizer.py     # Legal budget and variety-aware roster search
+|-- learning/
+|   |-- feedback_loop.py        # Experimental heuristic learning engine
+|   `-- learnings.json          # Experimental persisted learning state
+|-- LCS_stats/                  # Oracle's Elixir source CSV files
+|-- prompts/                    # Runtime personas and RAG prompt templates
+|   |-- draft_optimizer.md      # Runtime instructions for roster construction
+|   |-- fantasy_analyst.md      # Runtime fantasy-analysis persona
+|   `-- rag_query_rewriter.md   # Converts questions into retrieval queries
+|-- rag/                        # Experimental retrieval and embedding components
+|-- reports/
+|   `-- project_page_learnings.md
+|                               # Website story bank about building the project
+|-- skills/
+|   |-- verify-model-change/    # Controlled model-change evaluation workflow
+|   |-- refresh-weekly-predictions/
+|   |                           # Repeatable weekly generation workflow
+|   |-- audit-fantasy-scoring/  # Official-result reconciliation workflow
+|   |-- develop-champion-model/ # Safe champion and draft modeling workflow
+|   `-- maintain-dashboard-data/
+|                               # Dashboard schema and history workflow
+|-- tests/                      # Unit and integration regression tests
+|-- .env.example               # Template for local environment variables
+`-- requirements.txt            # Python runtime dependencies
 ```
 
 ## Setup

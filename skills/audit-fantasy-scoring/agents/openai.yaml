@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Fantasy Scoring"
+  short_description: "Reconcile official fantasy score results"
+  default_prompt: "Use $audit-fantasy-scoring to reconcile these fantasy results with the official scoring rules."
