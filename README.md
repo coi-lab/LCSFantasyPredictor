@@ -117,6 +117,15 @@ This is exhaustive search: every eligible roster combination is checked rather t
 - Data sources: Oracle's Elixir and official LCS Fantasy market snapshots
 - Tools: `unittest`, configuration-driven JSON rules, chronological backtests
 
+## Project navigation
+
+- [Weekly operations runbook](docs/operations/weekly-runbook.md) covers the active weekly procedure.
+- [Documentation index](docs/README.md) links to operational, architecture, harness, and historical-evidence documentation.
+- [Project knowledge](project-skills.md) records codebase-specific discoveries; [ideas](IDEAS.md) tracks the modeling and product backlog.
+- `analysis/` contains evaluation and research evidence; `reports/` contains project and model reports.
+- Application source is organized under `champion_prediction/`, `fantasy_prediction/`, `data_pipeline/`, and `dashboard/`.
+- `AGENTS.md`, `.agents/`, and `.codex/` are the AGY/Codex control planes.
+
 ## Folder Structure
 
 ```txt
