@@ -166,6 +166,59 @@ the documentation change was reapplied. This reinforced three practices:
 - preserve unrelated user changes;
 - make reversions narrowly target only the current task.
 
+## Designing a Repository That Agents Can Operate Safely
+
+### Problem
+
+As the project gained application code, data, prompts, evidence, and agent
+automation, it became easy to put the right information in the wrong place.
+A checked-in cache obscures which data is reproducible; a real local
+environment file risks exposing a credential; and an instruction that applies
+to only one job becomes noise when every agent has to read it.
+
+### What we learned
+
+The repository structure is part of the system design. Each type of artifact
+needs a clear home and lifecycle:
+
+| Artifact | Home and rule |
+|---|---|
+| Application code | Domain packages such as `champion_prediction/`, `fantasy_prediction/`, and `data_pipeline/` |
+| Universal project guardrails | `AGENTS.md` |
+| Repeatable implementation workflows | `.agents/skills/` |
+| Independent review workflows | `.codex/` and its read-only review agents |
+| Reproducible task evidence | `.agent-runs/<task-id>/` |
+| Immutable source snapshots | `data/raw/` |
+| Rebuildable local artifacts | ignored cache and generated-output directories |
+| Local credentials | ignored `.env`; a tracked `.env.example` contains placeholders only |
+
+The cache cleanup and environment-template change made this concrete: delete
+rebuildable cache files from version control, ignore future cache artifacts,
+and keep a safe template so a new contributor can configure the project
+without committing a personal key.
+
+### Working Effectively With AGY and Codex
+
+The project uses complementary responsibilities instead of asking one agent to
+both make and approve a change. AGY is the implementation client: it discovers
+the smallest relevant skill, performs baseline checks, makes the scoped change,
+and leaves an evidence bundle. Codex is the independent review client: it
+inspects the evidence and diff, reruns appropriate verification, and returns a
+separate verdict. The human owner keeps final acceptance and merge authority.
+
+This separation makes handoffs clearer and reduces a common failure mode of
+AI-assisted work: treating an implementation summary as proof. It also keeps
+the tools efficient: agents load a focused skill only when its workflow is
+needed, while short repository-level rules protect every task.
+
+### Website angle
+
+This provides a useful project-page narrative: reliable AI-assisted engineering
+is not just about selecting a capable model. It also depends on a file
+structure that distinguishes source data from generated artifacts, reusable
+skills from universal guardrails, implementation from review, and evidence
+from claims.
+
 ## Managing Memory and Context
 
 The project encountered two related memory constraints:
