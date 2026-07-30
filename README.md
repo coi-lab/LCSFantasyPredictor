@@ -147,10 +147,12 @@ LCSFantasy/
 |   |-- app.js                 # Browser rendering and interaction logic
 |   |-- styles.css             # Dashboard presentation
 |   |-- server.py              # Local dashboard web server
-|   |-- dashboard_data.json    # Generated current player and model data
-|   |-- matchup_lineups.json   # Preserved weekly lineup snapshots
-|   `-- weekly_champion_predictions.json
-|                               # Generated champion recommendations
+|   `-- generated/
+|       `-- current/           # Active dashboard JSON outputs
+|           |-- dashboard_data.json    # Generated current player and model data
+|           |-- matchup_lineups.json   # Active weekly lineup recommendations
+|           |-- weekly_champion_predictions.json # Generated champion recommendations
+|           `-- champion_lab_data.json # Champion performance and matchup lab data
 |-- data/
 |   |-- actuals/               # Completed-round fantasy results
 |   |-- official_market_snapshots/

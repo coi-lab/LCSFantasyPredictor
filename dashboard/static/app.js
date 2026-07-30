@@ -152,10 +152,10 @@ async function loadDashboardData() {
       weeklyChampionResp,
       matchupOptimizerResp
     ] = await Promise.all([
-      fetch('../generated/dashboard_data.json'),
-      fetch('../generated/champion_lab_data.json'),
-      fetch('../generated/weekly_champion_predictions.json'),
-      fetch('../generated/matchup_lineups.json')
+      fetch('../generated/current/dashboard_data.json'),
+      fetch('../generated/current/champion_lab_data.json'),
+      fetch('../generated/current/weekly_champion_predictions.json'),
+      fetch('../generated/current/matchup_lineups.json')
     ]);
     if (!resp.ok) throw new Error('Could not load dashboard_data.json');
     rawData = await resp.json();

@@ -88,3 +88,53 @@ class WeeklyChampionExportTests(unittest.TestCase):
         self.assertTrue(picks["1.3x"]["available"])
         self.assertEqual(picks["1.3x"]["pick"]["champion"], "Ahri")
         self.assertFalse(picks["1.7x"]["available"])
+
+
+class DashboardCurrentOutputPathTests(unittest.TestCase):
+    def test_producers_default_to_generated_current_directory(self) -> None:
+        from unittest.mock import patch
+
+        from data_pipeline.export_champion_lab_data import export_champion_lab_json
+        from data_pipeline.export_dashboard_data import export_dashboard_json
+        from data_pipeline.export_weekly_champion_predictions import (
+            DEFAULT_OUTPUT as WEEKLY_CHAMPION_DEFAULT,
+        )
+        from fantasy_prediction.lineup_optimizer import (
+            DEFAULT_DASHBOARD_OUTPUT as LINEUP_DASHBOARD_DEFAULT,
+        )
+
+        self.assertTrue(
+            str(WEEKLY_CHAMPION_DEFAULT).endswith(
+                "dashboard/generated/current/weekly_champion_predictions.json"
+            )
+        )
+        self.assertTrue(
+            str(LINEUP_DASHBOARD_DEFAULT).endswith(
+                "dashboard/generated/current/matchup_lineups.json"
+            )
+        )
+
+        with (
+            patch("data_pipeline.export_dashboard_data.LCSDataIngestor") as mock_ingestor,
+            patch("builtins.open"),
+            patch("json.dump"),
+            patch("os.makedirs"),
+        ):
+            mock_ingestor.return_value.run_pipeline.return_value = []
+            mock_ingestor.return_value.scoring_rules = {}
+            dashboard_res = export_dashboard_json()
+            self.assertTrue(
+                dashboard_res.endswith(
+                    "dashboard/generated/current/dashboard_data.json"
+                )
+            )
+
+        with patch("builtins.open"), patch("json.dump"), patch("os.makedirs"):
+            import pandas as pd
+
+            champion_lab_res = export_champion_lab_json(pd.DataFrame())
+            self.assertTrue(
+                champion_lab_res.endswith(
+                    "dashboard/generated/current/champion_lab_data.json"
+                )
+            )

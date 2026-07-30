@@ -26,7 +26,7 @@ DEFAULT_RULES_PATH = PROJECT_ROOT / "config" / "scoring_rules.json"
 DEFAULT_OUTPUT = (
     PROJECT_ROOT / "data" / "predictions" / "current_lineup_recommendations.json"
 )
-DEFAULT_DASHBOARD_OUTPUT = PROJECT_ROOT / "dashboard" / "generated" / "matchup_lineups.json"
+DEFAULT_DASHBOARD_OUTPUT = PROJECT_ROOT / "dashboard" / "generated" / "current" / "matchup_lineups.json"
 REQUIRED_ROLES = ("top", "jgl", "mid", "bot", "sup")
 DEFAULT_MATCHUP_CONFLICT_PENALTY = 5.0
 MATCHUP_CONFLICT_ROLE_WEIGHTS = {

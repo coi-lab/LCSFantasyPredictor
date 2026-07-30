@@ -140,7 +140,7 @@ improvement.
 - `data/predictions/`: machine-readable backtests, tuning, rankings, and
   portfolio outputs.
 - `analysis/`: human-readable evaluations and ablations.
-- `dashboard/generated/weekly_champion_predictions.json`: current browser
+- `dashboard/generated/current/weekly_champion_predictions.json`: current browser
   payload.
 - `config/champion_model.json`: selected behavior and disabled candidates.
 

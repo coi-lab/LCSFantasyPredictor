@@ -82,7 +82,7 @@ This is the living codebase-specific knowledge log. Stable working rules belong 
   combination and includes expected champion bonus. Do not optimize expected
   price growth until a second official market round supplies observed changes.
 - The matchup optimizer exports self-contained weekly snapshots to
-  `dashboard/generated/matchup_lineups.json`. Preserve prior week IDs when refreshing the
+  `dashboard/generated/current/matchup_lineups.json`. Preserve prior week IDs when refreshing the
   current week, and embed champion options in each snapshot so historical week
   toggles never display recommendations from a later roster lock.
 - Rank lineups with a separate matchup-risk score rather than treating

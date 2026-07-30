@@ -13,11 +13,11 @@ before editing an exporter, generated artifact, or browser consumer.
 
 Identify the affected surface and contract:
 
-- player history: `dashboard/generated/dashboard_data.json`;
-- Champion Lab: `dashboard/generated/champion_lab_data.json`;
+- player history: `dashboard/generated/current/dashboard_data.json`;
+- Champion Lab: `dashboard/generated/current/champion_lab_data.json`;
 - champion recommendations:
-  `dashboard/generated/weekly_champion_predictions.json`;
-- saved roster weeks: `dashboard/generated/matchup_lineups.json`;
+  `dashboard/generated/current/weekly_champion_predictions.json`;
+- saved roster weeks: `dashboard/generated/current/matchup_lineups.json`;
 - presentation: `dashboard/static/index.html`, `app.js`, and `styles.css`;
 - local serving and cache headers: `dashboard/server.py`.
 
@@ -39,10 +39,10 @@ Use repository search before reading large generated files:
 ```bash
 git status --short
 rg -n 'FIELD_OR_LABEL' data_pipeline dashboard/static tests
-jq 'keys' dashboard/generated/dashboard_data.json
-jq 'keys' dashboard/generated/champion_lab_data.json
-jq 'keys' dashboard/generated/weekly_champion_predictions.json
-jq 'keys' dashboard/generated/matchup_lineups.json
+jq 'keys' dashboard/generated/current/dashboard_data.json
+jq 'keys' dashboard/generated/current/champion_lab_data.json
+jq 'keys' dashboard/generated/current/weekly_champion_predictions.json
+jq 'keys' dashboard/generated/current/matchup_lineups.json
 ```
 
 ## Change contracts safely
@@ -98,10 +98,10 @@ Check parseability, top-level keys, record counts, types, target filters, null
 rates, and representative records:
 
 ```bash
-jq empty dashboard/generated/dashboard_data.json
-jq empty dashboard/generated/champion_lab_data.json
-jq empty dashboard/generated/weekly_champion_predictions.json
-jq empty dashboard/generated/matchup_lineups.json
+jq empty dashboard/generated/current/dashboard_data.json
+jq empty dashboard/generated/current/champion_lab_data.json
+jq empty dashboard/generated/current/weekly_champion_predictions.json
+jq empty dashboard/generated/current/matchup_lineups.json
 node --check dashboard/static/app.js
 ```
 

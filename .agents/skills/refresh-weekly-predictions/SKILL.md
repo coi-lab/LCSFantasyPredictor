@@ -28,8 +28,8 @@ Inspect the working tree and current artifacts before generation:
 ```bash
 git status --short
 find data/raw/official_market_snapshots -maxdepth 1 -type f -print | sort
-find data/predictions dashboard/generated -maxdepth 1 -type f -print | sort
-jq -r '.weeks[].week_id' dashboard/generated/matchup_lineups.json
+find data/predictions dashboard/generated/current -maxdepth 1 -type f -print | sort
+jq -r '.weeks[].week_id' dashboard/generated/current/matchup_lineups.json
 ```
 
 Preserve hashes or copies of existing generated outputs in
@@ -133,10 +133,10 @@ served dashboard.
 .venv/bin/python -m unittest discover -s tests -p 'test_player_baseline.py' -v
 .venv/bin/python -m unittest discover -s tests -p 'test_weekly_champion_export.py' -v
 .venv/bin/python -m unittest discover -s tests -p 'test_lineup_optimizer.py' -v
-jq empty dashboard/generated/dashboard_data.json
-jq empty dashboard/generated/champion_lab_data.json
-jq empty dashboard/generated/weekly_champion_predictions.json
-jq empty dashboard/generated/matchup_lineups.json
+jq empty dashboard/generated/current/dashboard_data.json
+jq empty dashboard/generated/current/champion_lab_data.json
+jq empty dashboard/generated/current/weekly_champion_predictions.json
+jq empty dashboard/generated/current/matchup_lineups.json
 node --check dashboard/static/app.js
 ```
 
