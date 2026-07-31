@@ -1,0 +1,162 @@
+{
+  "task_id": "cp01d-weekly-total-value-diagnostic-001",
+  "remediation_task_id": "cp01d-remediation-fearless-weekly-value-001",
+  "status": "COMPLETED",
+  "provenance_binding_status": "PARTIAL_BASELINE_BINDING",
+  "manifest_verification": {
+    "manifest_path": "analysis/champion_baselines/cp00/manifest.json",
+    "provenance_binding_status": "PARTIAL_BASELINE_BINDING",
+    "manifest_inconsistencies": [
+      {
+        "code": "BASELINE_MANIFEST_INCONSISTENT",
+        "file": "analysis/champion_baselines/cp00/cp00_baseline_report.md",
+        "expected_sha256": "b9f701b0a52c4d8a06753bdc291f7075eeb078897c4826eb1b6674e94bda94a4",
+        "actual_sha256": "8b57c52c8193b8f46f86df44b363eac5689694433055280637f4ad5c5b4a75d4",
+        "notice": "Artifact analysis/champion_baselines/cp00/cp00_baseline_report.md hash differs from manifest.json. Evaluation data files passed; proceeding under PARTIAL_BASELINE_BINDING."
+      }
+    ],
+    "artifacts_verified": {
+      "analysis/champion_baselines/cp00/aggregate_report.json": {
+        "expected_sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+        "actual_sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+        "matches": true
+      },
+      "analysis/champion_baselines/cp00/cp00_baseline_report.md": {
+        "expected_sha256": "b9f701b0a52c4d8a06753bdc291f7075eeb078897c4826eb1b6674e94bda94a4",
+        "actual_sha256": "8b57c52c8193b8f46f86df44b363eac5689694433055280637f4ad5c5b4a75d4",
+        "matches": false
+      },
+      "analysis/champion_baselines/cp00/row_level_evaluation.json": {
+        "expected_sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+        "actual_sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+        "matches": true
+      }
+    }
+  },
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "primary_metric": {
+    "name": "observed_total_round_bonus",
+    "cp00_per_game_proxy_mean": 0.1019,
+    "observed_total_round_bonus_mean": 0.2135,
+    "mean_metric_unit_discrepancy": -0.1116
+  },
+  "metrics_by_window": {
+    "development_2022_2023": {
+      "window": "development",
+      "years": "2022-2023",
+      "count": 2007,
+      "coverage": 1.0,
+      "conditional_ranking_error_rate": 0.987,
+      "zero_use_rate": 0.987,
+      "hit_at_1": 0.013,
+      "hit_at_3": 0.0429,
+      "mrr": 0.0506,
+      "mean_cp00_per_game_proxy": 0.0393,
+      "observed_total_round_bonus": 0.0632,
+      "mean_metric_unit_discrepancy": -0.024
+    },
+    "confirmation_2024": {
+      "window": "confirmation",
+      "years": "2024-2024",
+      "count": 685,
+      "coverage": 1.0,
+      "conditional_ranking_error_rate": 0.9825,
+      "zero_use_rate": 0.9825,
+      "hit_at_1": 0.0175,
+      "hit_at_3": 0.0248,
+      "mrr": 0.0454,
+      "mean_cp00_per_game_proxy": 0.0472,
+      "observed_total_round_bonus": 0.0979,
+      "mean_metric_unit_discrepancy": -0.0507
+    },
+    "final_validation_2025": {
+      "window": "final_validation",
+      "years": "2025-2025",
+      "count": 688,
+      "coverage": 1.0,
+      "conditional_ranking_error_rate": 0.9593,
+      "zero_use_rate": 0.9593,
+      "hit_at_1": 0.0407,
+      "hit_at_3": 0.0669,
+      "mrr": 0.0884,
+      "mean_cp00_per_game_proxy": 0.1363,
+      "observed_total_round_bonus": 0.3204,
+      "mean_metric_unit_discrepancy": -0.1841
+    },
+    "exposed_test_2026": {
+      "window": "exposed_test",
+      "years": "2026-2026",
+      "count": 709,
+      "coverage": 1.0,
+      "conditional_ranking_error_rate": 0.9281,
+      "zero_use_rate": 0.9281,
+      "hit_at_1": 0.0719,
+      "hit_at_3": 0.086,
+      "mrr": 0.1127,
+      "mean_cp00_per_game_proxy": 0.2989,
+      "observed_total_round_bonus": 0.6468,
+      "mean_metric_unit_discrepancy": -0.3478,
+      "classification": "EXPOSED_REPORT_ONLY"
+    }
+  },
+  "overall_metrics": {
+    "count": 4089,
+    "coverage": 1.0,
+    "conditional_ranking_error_rate": 0.9714,
+    "zero_use_rate": 0.9714,
+    "hit_at_1": 0.0286,
+    "hit_at_3": 0.0514,
+    "mrr": 0.0669,
+    "mean_cp00_per_game_proxy": 0.1019,
+    "observed_total_round_bonus": 0.2135,
+    "mean_metric_unit_discrepancy": -0.1116
+  },
+  "fearless_row_counts": {
+    "fearless": 1292,
+    "non_fearless": 2797
+  },
+  "guardrails": {
+    "cp00_expected_rows": 4089,
+    "cp00_actual_rows": 4089,
+    "rows_evaluated": 4089,
+    "role_completeness_check": {
+      "canonical_roles": [
+        "TOP",
+        "JGL",
+        "MID",
+        "BOT",
+        "SUP"
+      ],
+      "role_slice_counts": {
+        "TOP": 820,
+        "JGL": 816,
+        "MID": 816,
+        "BOT": 819,
+        "SUP": 818
+      },
+      "role_slice_sum": 4089,
+      "equals_total": true
+    },
+    "fearless_row_count_check": {
+      "fearless": 1292,
+      "non_fearless": 2797,
+      "sum": 4089,
+      "equals_total": true
+    },
+    "no_post_lock_leakage": true,
+    "no_cp00_overwrites": true
+  },
+  "data_gap_disclosure": {
+    "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+    "official_round_ids_available": false,
+    "official_roster_locks_available": false,
+    "official_schedules_available": false,
+    "expected_starters_available": false,
+    "expected_games_available": false,
+    "notice": "Official fantasy round IDs, official roster locks, exact official schedules, expected starters, and expected game counts per player-week are not available from frozen CP-00 evidence. All round boundaries and locks use EARLIEST_OBSERVED_GAME_START_PROXY. Actual completed-game count is historical outcome measurement and was NOT available pre-lock."
+  },
+  "execution": {
+    "elapsed_seconds": 36.24,
+    "timestamp_utc": "2026-07-31T15:50:40Z"
+  }
+}

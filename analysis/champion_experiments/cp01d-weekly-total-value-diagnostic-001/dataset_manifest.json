@@ -1,0 +1,67 @@
+{
+  "experiment_id": "cp01d-weekly-total-value-diagnostic-001",
+  "remediation_task_id": "cp01d-remediation-fearless-weekly-value-001",
+  "created_at_utc": "2026-07-31T15:50:40Z",
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "provenance_binding_status": "PARTIAL_BASELINE_BINDING",
+  "cp00_baseline_manifest_hash": "97959109968f36199b758ba35eea854ab0b479b7c8aa0d454ab18e03918cf408",
+  "manifest_verification": {
+    "manifest_path": "analysis/champion_baselines/cp00/manifest.json",
+    "provenance_binding_status": "PARTIAL_BASELINE_BINDING",
+    "manifest_inconsistencies": [
+      {
+        "code": "BASELINE_MANIFEST_INCONSISTENT",
+        "file": "analysis/champion_baselines/cp00/cp00_baseline_report.md",
+        "expected_sha256": "b9f701b0a52c4d8a06753bdc291f7075eeb078897c4826eb1b6674e94bda94a4",
+        "actual_sha256": "8b57c52c8193b8f46f86df44b363eac5689694433055280637f4ad5c5b4a75d4",
+        "notice": "Artifact analysis/champion_baselines/cp00/cp00_baseline_report.md hash differs from manifest.json. Evaluation data files passed; proceeding under PARTIAL_BASELINE_BINDING."
+      }
+    ],
+    "artifacts_verified": {
+      "analysis/champion_baselines/cp00/aggregate_report.json": {
+        "expected_sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+        "actual_sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+        "matches": true
+      },
+      "analysis/champion_baselines/cp00/cp00_baseline_report.md": {
+        "expected_sha256": "b9f701b0a52c4d8a06753bdc291f7075eeb078897c4826eb1b6674e94bda94a4",
+        "actual_sha256": "8b57c52c8193b8f46f86df44b363eac5689694433055280637f4ad5c5b4a75d4",
+        "matches": false
+      },
+      "analysis/champion_baselines/cp00/row_level_evaluation.json": {
+        "expected_sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+        "actual_sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+        "matches": true
+      }
+    }
+  },
+  "artifact_fingerprints": {
+    "analysis/champion_experiments/cp01d-weekly-total-value-diagnostic-001/weekly_total_value_rows.json": {
+      "sha256": "47db7fd6331a07936b4dc8d9804df0416151039ecd92af2220bf7a68b8925f88",
+      "size_bytes": 7127076
+    },
+    "analysis/champion_experiments/cp01d-weekly-total-value-diagnostic-001/failure_atlas.json": {
+      "sha256": "ddba142973cec21065f5fd5f6b2986bce6258dcbbbdccd3f737d43e601db9584",
+      "size_bytes": 31623
+    },
+    "analysis/champion_experiments/cp01d-weekly-total-value-diagnostic-001/failure_atlas.md": {
+      "sha256": "eb1211ca6df8f5e534110a8af2ce3cfa6039c59971c7bf4fb4a15de36f489cac",
+      "size_bytes": 3180
+    },
+    "analysis/champion_experiments/cp01d-weekly-total-value-diagnostic-001/metric_contract.md": {
+      "sha256": "729dad699132cca5d843193b2941838cc64d892f9eb154f7d0666b60a20ed0e4",
+      "size_bytes": 2358
+    },
+    "analysis/champion_experiments/cp01d-weekly-total-value-diagnostic-001/run_summary.json": {
+      "sha256": "96b9c7217cef792b940bc9cb8490b329506698c52bbfa583d08da2374b596f24",
+      "size_bytes": 5701
+    }
+  },
+  "guardrail_checks": {
+    "expected_row_count": 4089,
+    "evaluated_row_count": 4089,
+    "rows_matched": true,
+    "role_completeness": true,
+    "no_post_lock_leakage": true
+  }
+}

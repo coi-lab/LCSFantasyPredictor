@@ -1,0 +1,17 @@
+{
+  "experiment_id": "cp01d-weekly-total-value-diagnostic-001",
+  "task_id": "cp01d-weekly-total-value-diagnostic-001",
+  "description": "Weekly total-value diagnostic dataset and failure atlas comparing CP-00 per-game proxy vs actual weekly total incremental champion value.",
+  "baseline_artifact_dir": "analysis/champion_baselines/cp00",
+  "baseline_manifest_path": "analysis/champion_baselines/cp00/manifest.json",
+  "baseline_row_level_path": "analysis/champion_baselines/cp00/row_level_evaluation.json",
+  "baseline_aggregate_path": "analysis/champion_baselines/cp00/aggregate_report.json",
+  "output_dir": "analysis/champion_experiments/cp01d-weekly-total-value-diagnostic-001",
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "seed": 20260723,
+  "guardrails": {
+    "expected_row_count": 4089,
+    "allow_artifact_overwrite": false,
+    "verify_manifest_hashes": true
+  }
+}
