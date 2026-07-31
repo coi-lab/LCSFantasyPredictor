@@ -27,6 +27,28 @@ class WatchdogFixtureTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("external-run.ps1", {path.name for path in packet.iterdir()})
 
+    def test_validation_rejects_missing_and_invalid_contract_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); packet = self.make_packet(root, "invalid", "print('ok')")
+            status_path = packet / "status.json"; status = json.loads(status_path.read_text(encoding="utf-8"))
+            del status["task_id"]
+            status_path.write_text(json.dumps(status), encoding="utf-8")
+            result = self.command(root, "validate", "--packet", ".agent-runs/invalid")
+            self.assertEqual(result.returncode, 2)
+
+            status["task_id"] = "invalid"; status["full_candidate_runs"] = -1
+            status_path.write_text(json.dumps(status), encoding="utf-8")
+            result = self.command(root, "validate", "--packet", ".agent-runs/invalid")
+            self.assertEqual(result.returncode, 2)
+
+            status["full_candidate_runs"] = 0
+            status_path.write_text(json.dumps(status), encoding="utf-8")
+            external_path = packet / "external-run.json"; external = json.loads(external_path.read_text(encoding="utf-8"))
+            del external["safe_resume"]
+            external_path.write_text(json.dumps(external), encoding="utf-8")
+            result = self.command(root, "validate", "--packet", ".agent-runs/invalid")
+            self.assertEqual(result.returncode, 2)
+
     def test_progressing_child_completes(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp); packet = self.make_packet(root, "progress", "import time; [print(i, flush=True) or time.sleep(.04) for i in range(4)]")

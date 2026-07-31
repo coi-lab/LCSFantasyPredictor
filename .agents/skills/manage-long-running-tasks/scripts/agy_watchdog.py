@@ -18,6 +18,10 @@ from datetime import datetime, timezone
 SCHEMA = 2
 REQUIRED_PACKET = ("status.json", "status.md", "external-run.json", "external-run.ps1",
                    "external-run.sh", "resume-packet.md", "logs")
+STATES = {"DISCOVERING", "SAMPLING", "ESTIMATING", "READY", "RUNNING", "PROGRESSING",
+          "VERIFYING", "STALLED_REEVALUATE", "RETRYING_WITH_CHANGED_HYPOTHESIS",
+          "BLOCKED_PERFORMANCE", "HANDOFF_READY", "COMPLETED", "FAILED"}
+VERIFICATION_RESULTS = {"PENDING", "PASS", "FAIL"}
 
 
 def utc_now() -> str:
@@ -216,15 +220,54 @@ def validate_packet(args: argparse.Namespace) -> int:
         print("missing: " + ", ".join(missing), file=sys.stderr); return 2
     if not (packet / "logs").is_dir() or not (packet / "watchdog.py").is_file():
         print("invalid packet support files", file=sys.stderr); return 2
-    status = json.loads((packet / "status.json").read_text(encoding="utf-8"))
+    try:
+        status = json.loads((packet / "status.json").read_text(encoding="utf-8"))
+        external = json.loads((packet / "external-run.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"invalid packet JSON: {exc}", file=sys.stderr); return 2
+    if not isinstance(status, dict) or not isinstance(external, dict):
+        print("invalid packet JSON contract", file=sys.stderr); return 2
     required = {"schema_version", "task_id", "phase", "state", "command_label", "command_start_utc", "last_progress_utc", "elapsed_seconds", "completed_units", "total_units", "throughput", "estimated_remaining_seconds", "latest_artifact", "latest_artifact_size", "last_checkpoint", "next_decision", "stage_fingerprint", "verification", "reuse_decision", "session_budget_seconds", "session_elapsed_seconds", "full_candidate_runs", "evidence"}
     absent = sorted(required - status.keys())
-    if absent or status.get("schema_version") != SCHEMA or set(status.get("verification", {})) != {"artifact", "focused", "acceptance"}:
+    verification = status.get("verification")
+    reuse = status.get("reuse_decision")
+    evidence = status.get("evidence")
+    status_invalid = (
+        not isinstance(status.get("schema_version"), int) or status["schema_version"] != SCHEMA
+        or not isinstance(status.get("task_id"), str) or not status["task_id"]
+        or not isinstance(status.get("phase"), str) or not status["phase"]
+        or status.get("state") not in STATES
+        or not isinstance(status.get("command_label"), str) or not status["command_label"]
+        or status.get("command_start_utc") is not None and not isinstance(status["command_start_utc"], str)
+        or not isinstance(status.get("last_progress_utc"), str) or not status["last_progress_utc"]
+        or not all(isinstance(status.get(name), (int, float)) and not isinstance(status.get(name), bool) and status[name] >= 0
+                   for name in ("elapsed_seconds", "completed_units", "estimated_remaining_seconds", "latest_artifact_size", "session_elapsed_seconds"))
+        or not isinstance(status.get("session_budget_seconds"), (int, float)) or isinstance(status.get("session_budget_seconds"), bool) or status["session_budget_seconds"] <= 0
+        or not isinstance(status.get("full_candidate_runs"), int) or isinstance(status.get("full_candidate_runs"), bool) or status["full_candidate_runs"] < 0
+        or status.get("total_units") is not None and (not isinstance(status["total_units"], (int, float)) or isinstance(status["total_units"], bool) or status["total_units"] < 0)
+        or status.get("throughput") is not None and (not isinstance(status["throughput"], (int, float)) or isinstance(status["throughput"], bool) or status["throughput"] < 0)
+        or status.get("latest_artifact") is not None and (not isinstance(status["latest_artifact"], str) or not status["latest_artifact"] or Path(status["latest_artifact"]).is_absolute() or ".." in Path(status["latest_artifact"]).parts)
+        or status.get("last_checkpoint") is not None and (not isinstance(status["last_checkpoint"], str) or not status["last_checkpoint"] or Path(status["last_checkpoint"]).is_absolute() or ".." in Path(status["last_checkpoint"]).parts)
+        or not isinstance(status.get("next_decision"), str) or not status["next_decision"]
+        or not isinstance(status.get("stage_fingerprint"), str) or len(status["stage_fingerprint"]) != 64 or any(char not in "0123456789abcdef" for char in status["stage_fingerprint"])
+        or not isinstance(verification, dict) or set(verification) != {"artifact", "focused", "acceptance"} or any(value not in VERIFICATION_RESULTS for value in verification.values())
+        or not isinstance(reuse, dict) or reuse.get("decision") not in {"new", "reused", "invalidated"} or not isinstance(reuse.get("reason"), str) or not reuse["reason"]
+        or not isinstance(evidence, dict) or not isinstance(evidence.get("command"), list) or not evidence["command"] or not all(isinstance(part, str) for part in evidence["command"])
+        or not isinstance(evidence.get("cwd"), str) or Path(evidence["cwd"]).is_absolute() or ".." in Path(evidence["cwd"]).parts
+        or not isinstance(evidence.get("logs"), str) or Path(evidence["logs"]).is_absolute() or ".." in Path(evidence["logs"]).parts
+    )
+    if absent or status_invalid:
         print("invalid status: " + ", ".join(absent), file=sys.stderr); return 2
-    external = json.loads((packet / "external-run.json").read_text(encoding="utf-8"))
-    if (external.get("schema_version") != SCHEMA or not isinstance(external.get("command"), list) or not external["command"]
-            or not isinstance(external.get("estimate_seconds"), (int, float)) or not isinstance(external.get("cwd"), str)
-            or Path(external["cwd"]).is_absolute() or ".." in Path(external["cwd"]).parts):
+    if (external.get("schema_version") != SCHEMA or external.get("task_id") != status["task_id"]
+            or not isinstance(external.get("label"), str) or not external["label"]
+            or not isinstance(external.get("command"), list) or not external["command"] or not all(isinstance(part, str) for part in external["command"])
+            or not isinstance(external.get("estimate_seconds"), (int, float)) or isinstance(external.get("estimate_seconds"), bool) or external["estimate_seconds"] < 0
+            or not isinstance(external.get("no_progress_seconds"), (int, float)) or isinstance(external.get("no_progress_seconds"), bool) or external["no_progress_seconds"] <= 0
+            or not isinstance(external.get("terminate_grace_seconds"), (int, float)) or isinstance(external.get("terminate_grace_seconds"), bool) or external["terminate_grace_seconds"] < 0
+            or external.get("stage_fingerprint") != status["stage_fingerprint"]
+            or not isinstance(external.get("required_artifacts"), list) or not all(isinstance(item, str) and not Path(item).is_absolute() and ".." not in Path(item).parts for item in external["required_artifacts"])
+            or not isinstance(external.get("safe_resume"), str) or not external["safe_resume"]
+            or not isinstance(external.get("cwd"), str) or Path(external["cwd"]).is_absolute() or ".." in Path(external["cwd"]).parts):
         print("invalid external run contract", file=sys.stderr); return 2
     ps1 = (packet / "external-run.ps1").read_text(encoding="utf-8")
     sh = (packet / "external-run.sh").read_text(encoding="utf-8")
