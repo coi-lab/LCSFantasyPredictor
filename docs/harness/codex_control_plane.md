@@ -14,8 +14,8 @@ Codex to implement AGY application tasks while acting as reviewer.
 1. **Evidence Packet Inspection**:
    - Codex reads `.agent-runs/<task-id>/` and associated baseline / post-task test output logs.
 2. **Independent Verification**:
-   - Runs full test suite using `.venv/bin/python -m unittest discover -s tests -v`.
-   - Compiles all packages using `.venv/bin/python -m compileall champion_prediction fantasy_prediction data_pipeline learning rag dashboard`.
+   - Runs full test suite using `python -m unittest discover -s tests -v`.
+   - Compiles all packages using `python -m compileall champion_prediction fantasy_prediction data_pipeline learning rag dashboard`.
    - Inspects `git diff --check`.
 3. **Verdict Recording**:
    - Writes a review verdict using `.codex/schemas/review-verdict.schema.json`.

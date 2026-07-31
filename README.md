@@ -209,6 +209,12 @@ On Windows PowerShell:
 .venv\Scripts\Activate.ps1
 ```
 
+On Linux, macOS, Git Bash, or WSL:
+
+```bash
+source .venv/bin/activate
+```
+
 Install the current dependencies:
 
 ```bash

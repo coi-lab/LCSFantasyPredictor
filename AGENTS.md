@@ -33,11 +33,13 @@ them as authority to implement AGY application tasks while acting as reviewer.
 
 ## Standard verification
 
-Use `.venv/bin/python` for project commands. Run focused tests first, then:
+Activate the repository `.venv` first, then use its active `python` command
+for project commands. This works on both Windows and Unix-like shells. Run
+focused tests first, then:
 
 ```bash
-.venv/bin/python -m unittest discover -s tests -v
-.venv/bin/python -m compileall champion_prediction fantasy_prediction data_pipeline learning rag dashboard
+python -m unittest discover -s tests -v
+python -m compileall champion_prediction fantasy_prediction data_pipeline learning rag dashboard
 git diff --check
 git status --short
 ```

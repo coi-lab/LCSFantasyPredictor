@@ -44,5 +44,5 @@ Top-1 accuracy and realized fantasy bonus before activation.
 ## Reproduction
 
 ```bash
-.venv/bin/python -m champion_prediction.predraft_pair_ablation
+python -m champion_prediction.predraft_pair_ablation
 ```

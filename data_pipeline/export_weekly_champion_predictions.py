@@ -14,7 +14,7 @@ DEFAULT_PLAYERS = PROJECT_ROOT / "data" / "predictions" / "current_player_projec
 DEFAULT_PORTFOLIO = PROJECT_ROOT / "data" / "predictions" / "current_champion_portfolio.csv"
 DEFAULT_OUTPUT = PROJECT_ROOT / "dashboard" / "generated" / "current" / "weekly_champion_predictions.json"
 DEFAULT_WEEKLY_BACKTEST = (
-    PROJECT_ROOT / "data" / "predictions" / "friday_lock_july_2025_backtest.json"
+    PROJECT_ROOT / "data" / "predictions" / "canonical_round_lock_july_2025_backtest.json"
 )
 TIERS = (
     (
@@ -190,7 +190,7 @@ def load_validation_summary(path: Path = DEFAULT_WEEKLY_BACKTEST) -> dict[str, A
     report = json.loads(path.read_text(encoding="utf-8"))
     metrics = report.get("expanded_candidate_universe", report)
     return {
-        "label": "July 2025 Friday-lock backtest",
+        "label": "July 2025 canonical round-lock backtest",
         "sample_size": int(metrics.get("scored_player_weeks", 0)),
         "hit_at_1": float(metrics.get("hit_at_1", 0.0)),
         "hit_at_3": float(metrics.get("hit_at_3", 0.0)),

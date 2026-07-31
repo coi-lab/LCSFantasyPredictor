@@ -9,6 +9,11 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from champion_prediction.round_lock import (
+    LOCK_TYPE_EARLIEST_GAME_PROXY,
+    compute_canonical_round_locks,
+    compute_monday_week_start,
+)
 from champion_prediction.series_model import build_player_series
 from champion_prediction.simple_predictor import (
     INTERNATIONAL_LEAGUES,
@@ -60,40 +65,45 @@ def _flatten_unique(values: pd.Series) -> list[str]:
 
 
 def build_weekly_targets(actions: pd.DataFrame) -> pd.DataFrame:
-    """Collapse player-series into conservative roster-lock-frozen weeks.
+    """Collapse player-series into canonical roster-lock-frozen weeks.
 
-    Oracle's Elixir does not publish fantasy round identifiers or roster-lock
-    timestamps. A Monday-Sunday bucket is therefore used within each split,
-    and the first observed series timestamp becomes the shared lock proxy.
+    Under CP-00 canonical lock policy, the roster lock timestamp is computed
+    exclusively via compute_canonical_round_locks.
     """
     series = build_player_series(actions).sort_values(
         "series_start", kind="stable"
     )
     if series.empty:
         return series
-    local_dates = series["series_start"].dt.tz_convert(None).dt.normalize()
-    series["week_start"] = local_dates - pd.to_timedelta(
-        local_dates.dt.weekday, unit="D"
+
+    with_locks = compute_canonical_round_locks(
+        series,
+        timestamp_col="series_start",
+        league_col="league",
+        year_col="year",
+        split_col="split",
     )
+    with_locks["week_start"] = compute_monday_week_start(with_locks["series_start"])
+
     group = [
         "assigned_player", "assigned_role", "acting_team", "league",
         "year", "split", "week_start", "is_fearless",
     ]
-    weekly = series.groupby(group, dropna=False, sort=False).agg(
-        roster_lock=("series_start", "min"),
+    weekly = with_locks.groupby(group, dropna=False, sort=False).agg(
         last_game=("last_game", "max"),
         series_ids=("series_id", lambda values: list(dict.fromkeys(map(str, values)))),
         opponents=("opponent_team", lambda values: list(dict.fromkeys(map(str, values)))),
         gameids=("gameids", _flatten_unique),
         patch=("patch", "first"),
         actual_champions=("actual_champions", _flatten_unique),
+        roster_lock=("round_lock_timestamp", "first"),
+        roster_lock_basis=("lock_type", "first"),
     ).reset_index()
     weekly["games_played"] = weekly["gameids"].map(len)
     first_week = weekly.groupby(
         ["league", "year", "split"], dropna=False
     )["week_start"].transform("min")
     weekly["is_opening_week"] = weekly["week_start"].eq(first_week)
-    weekly["roster_lock_basis"] = "first_observed_game_in_monday_sunday_week"
     return weekly
 
 

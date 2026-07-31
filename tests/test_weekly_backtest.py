@@ -7,19 +7,19 @@ import unittest
 import pandas as pd
 
 from champion_prediction.weekly_backtest import (
-    build_friday_lock_targets,
+    build_canonical_round_lock_targets,
     calibration_table,
     evaluate_series_choices,
 )
 
 
 class WeeklyBacktestTests(unittest.TestCase):
-    def test_groups_games_under_the_pre_game_friday_lock(self) -> None:
+    def test_groups_games_under_the_canonical_round_lock(self) -> None:
         history = pd.DataFrame([
             {"date": "2025-07-25", "league": "LCS", "year": 2025, "split": "Summer", "role": "mid", "player": "One", "team": "A", "opponent": "B", "champion": "Ahri", "gameid": "g1", "patch": "15.14"},
             {"date": "2025-07-26", "league": "LCS", "year": 2025, "split": "Summer", "role": "mid", "player": "One", "team": "A", "opponent": "B", "champion": "Azir", "gameid": "g2", "patch": "15.14"},
         ])
-        targets = build_friday_lock_targets(history)
+        targets = build_canonical_round_lock_targets(history)
         self.assertEqual(len(targets), 1)
         self.assertEqual(targets.iloc[0]["roster_lock"], pd.Timestamp("2025-07-25", tz="UTC"))
         self.assertEqual(targets.iloc[0]["actual_champions"], ["Ahri", "Azir"])

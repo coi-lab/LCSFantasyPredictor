@@ -29,16 +29,23 @@ from fantasy_prediction.player_baseline import prepare_history
 TRAINING_END = pd.Timestamp("2026-01-01", tz="UTC")
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_WEEKLY_REPORT = (
-    PROJECT_ROOT / "data" / "predictions" / "friday_lock_weekly_backtest.json"
+    PROJECT_ROOT / "data" / "predictions" / "canonical_round_lock_weekly_backtest.json"
 )
 
 
-def build_friday_lock_targets(history: pd.DataFrame) -> pd.DataFrame:
+from champion_prediction.round_lock import (
+    LOCK_TYPE_EARLIEST_GAME_PROXY,
+    compute_canonical_round_locks,
+    compute_monday_week_start,
+)
+
+
+def build_canonical_round_lock_targets(history: pd.DataFrame) -> pd.DataFrame:
     """Group realized player games into Monday-Sunday fantasy weeks.
 
-    The reproducible lock proxy is Friday 00:00 UTC, before that week's games.
-    It deliberately derives targets from dated match rows only; it never uses
-    later games as model evidence.
+    Under CP-00 canonical lock policy, the roster lock timestamp is defined as
+    the minimum observed game-start timestamp across all games in that fantasy round
+    computed exclusively via compute_canonical_round_locks.
     """
     required = {
         "date", "league", "year", "split", "role", "player", "team",
@@ -50,13 +57,23 @@ def build_friday_lock_targets(history: pd.DataFrame) -> pd.DataFrame:
     rows = history.loc[history["league"].isin(["LCS", "LTA N"])].copy()
     rows["date"] = pd.to_datetime(rows["date"], utc=True, errors="coerce")
     rows = rows.dropna(subset=["date", "player", "champion"]).sort_values("date")
-    rows["week_start"] = rows["date"].dt.normalize() - pd.to_timedelta(rows["date"].dt.weekday, unit="D")
-    rows["roster_lock"] = rows["week_start"] + pd.Timedelta(days=4)
-    grouped = rows.groupby(
-        ["week_start", "roster_lock", "player", "role", "team", "year", "split"],
+
+    with_locks = compute_canonical_round_locks(
+        rows,
+        timestamp_col="date",
+        league_col="league",
+        year_col="year",
+        split_col="split",
+    )
+    with_locks["week_start"] = compute_monday_week_start(with_locks["date"])
+
+    grouped = with_locks.groupby(
+        ["round_id", "week_start", "league", "year", "split", "player", "role", "team"],
         dropna=False,
     )
     targets = grouped.agg(
+        roster_lock=("round_lock_timestamp", "first"),
+        roster_lock_basis=("lock_type", "first"),
         target_patch=("patch", "last"),
         opponents=("opponent", lambda values: sorted(set(filter(None, map(str, values))))),
         actual_champions=("champion", lambda values: sorted(set(map(str, values)))),
@@ -79,10 +96,10 @@ def evaluate_weekly_choices(
     expanded_candidate_universe: bool,
     predictor_kwargs: dict[str, float] | None = None,
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
-    """Evaluate one Friday-locked champion decision per historical player-week."""
+    """Evaluate one locked champion decision per historical player-week."""
     if start >= end:
         raise ValueError("Backtest start must be earlier than end")
-    targets = build_friday_lock_targets(history)
+    targets = build_canonical_round_lock_targets(history)
     targets = targets.loc[
         targets["roster_lock"].ge(start) & targets["roster_lock"].lt(end)
     ].sort_values(["roster_lock", "player"], kind="stable")
@@ -191,7 +208,7 @@ def evaluate_weekly_choices(
     report = {
         "start": start.isoformat(),
         "end": end.isoformat(),
-        "lock_policy": "Friday 00:00 UTC before the Monday-Sunday match week",
+        "lock_policy": "earliest_observed_game_start_proxy",
         "target_player_weeks": len(results),
         "scored_player_weeks": len(scored),
         "cold_starts": len(results) - len(scored),
@@ -400,7 +417,7 @@ def evaluate_series_choices(
     return results, report
 
 
-def run_friday_lock_comparison(
+def run_canonical_round_lock_comparison(
     history: pd.DataFrame,
     actions: pd.DataFrame,
     start: pd.Timestamp,
@@ -452,7 +469,7 @@ def run_friday_lock_comparison(
         .ne(candidate_rows["chosen_champion"].astype(str))
     ]
     return {
-        "evaluation": "controlled Friday-lock candidate-universe comparison",
+        "evaluation": "controlled canonical round-lock candidate-universe comparison",
         "predictor_kwargs": predictor_kwargs or {},
         "baseline": baseline,
         "expanded_candidate_universe": candidate,
@@ -490,7 +507,7 @@ def main() -> None:
     players = ingestor.filter_player_positions(contextual)
     history = prepare_history(ingestor.calculate_fantasy_points(players))
     actions = load_model_rows()
-    report = run_friday_lock_comparison(
+    report = run_canonical_round_lock_comparison(
         history,
         actions,
         pd.Timestamp(args.start, tz="UTC"),

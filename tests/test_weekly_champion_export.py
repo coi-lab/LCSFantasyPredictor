@@ -6,6 +6,8 @@ import unittest
 
 import pandas as pd
 
+from pathlib import Path
+
 from data_pipeline.export_weekly_champion_predictions import (
     build_weekly_prediction_payload,
 )
@@ -104,12 +106,12 @@ class DashboardCurrentOutputPathTests(unittest.TestCase):
         )
 
         self.assertTrue(
-            str(WEEKLY_CHAMPION_DEFAULT).endswith(
+            Path(WEEKLY_CHAMPION_DEFAULT).as_posix().endswith(
                 "dashboard/generated/current/weekly_champion_predictions.json"
             )
         )
         self.assertTrue(
-            str(LINEUP_DASHBOARD_DEFAULT).endswith(
+            Path(LINEUP_DASHBOARD_DEFAULT).as_posix().endswith(
                 "dashboard/generated/current/matchup_lineups.json"
             )
         )
@@ -124,7 +126,7 @@ class DashboardCurrentOutputPathTests(unittest.TestCase):
             mock_ingestor.return_value.scoring_rules = {}
             dashboard_res = export_dashboard_json()
             self.assertTrue(
-                dashboard_res.endswith(
+                Path(dashboard_res).as_posix().endswith(
                     "dashboard/generated/current/dashboard_data.json"
                 )
             )
@@ -134,7 +136,7 @@ class DashboardCurrentOutputPathTests(unittest.TestCase):
 
             champion_lab_res = export_champion_lab_json(pd.DataFrame())
             self.assertTrue(
-                champion_lab_res.endswith(
+                Path(champion_lab_res).as_posix().endswith(
                     "dashboard/generated/current/champion_lab_data.json"
                 )
             )

@@ -49,7 +49,7 @@ champion recommender, where the future allied composition is unknown.
 ## Reproduction
 
 ```bash
-.venv/bin/python -m champion_prediction.pair_synergy_ablation
+python -m champion_prediction.pair_synergy_ablation
 ```
 
 The machine-readable output is
