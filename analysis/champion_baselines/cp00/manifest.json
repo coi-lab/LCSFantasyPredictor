@@ -1,10 +1,70 @@
 {
-  "baseline_git_commit": "585e9d4f4022248561f72b3fcac7fa2b1d7c7230",
+  "artifact_fingerprints": {
+    "analysis/champion_baselines/cp00/aggregate_report.json": {
+      "sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+      "size_bytes": 16046
+    },
+    "analysis/champion_baselines/cp00/cp00_baseline_report.md": {
+      "sha256": "b9f701b0a52c4d8a06753bdc291f7075eeb078897c4826eb1b6674e94bda94a4",
+      "size_bytes": 5448
+    },
+    "analysis/champion_baselines/cp00/row_level_evaluation.json": {
+      "sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+      "size_bytes": 3875633
+    }
+  },
+  "baseline_git_commit": "1b9c6fb49a98052cb4f6767e95d8027e847c3883",
+  "baseline_status": "FROZEN_CP00_BASELINE",
+  "binding_time_tracked_tree_clean": true,
   "canonical_lock_policy": {
     "name": "earliest_observed_lcs_game_start_proxy",
     "strict_cutoff": "feature_timestamp < round_lock_timestamp",
     "version": "1.0"
   },
+  "config_fingerprints": [
+    {
+      "git_blob_id": "8c7ca7e46f243652debb493e252e4152e70051fe",
+      "relative_path": "config/champion_data_sources.json",
+      "role": "configuration",
+      "sha256": "576ab761e06474b05d2682b990232c04afbccbd8984e2e1645d068c7fb601989",
+      "size_bytes": 3459
+    },
+    {
+      "git_blob_id": "88cd5ebc33d8acc8b53a4dd734fdfc272252f670",
+      "relative_path": "config/champion_model.json",
+      "role": "configuration",
+      "sha256": "ee808077836d6ae393c1c6611b15757817246cff266c45402ff3aea9c1d67b13",
+      "size_bytes": 984
+    },
+    {
+      "git_blob_id": "84982bd02ee01996f4efea3dd29a901c5bacb5e2",
+      "relative_path": "config/champion_taxonomy.json",
+      "role": "configuration",
+      "sha256": "fac438344681d65b3b59c6e2023977903757b64faedd435efd57558aad0a71c8",
+      "size_bytes": 3368
+    },
+    {
+      "git_blob_id": "a789909c42e26a9f53203f38b45e6b5e0b389c5c",
+      "relative_path": "config/champion_universe.json",
+      "role": "configuration",
+      "sha256": "53a4382a10d95cdb87a287c4348ce449af90cafa8dd364d9da3173cf81f68702",
+      "size_bytes": 936
+    },
+    {
+      "git_blob_id": "8b353736931b4ee2f0d5998d874dc6f4d0507bd0",
+      "relative_path": "config/draft_rules.json",
+      "role": "configuration",
+      "sha256": "1e46822aa30673fed19af178a72cbfd084a445ef2a29ce7b22f04a843cdbd708",
+      "size_bytes": 495
+    },
+    {
+      "git_blob_id": "8583d57d33b8eb356f37a18ba3f18d393478a19e",
+      "relative_path": "config/scoring_rules.json",
+      "role": "configuration",
+      "sha256": "3063a00aaf9daa64d547863e8cfc06934409ac08b315be6683ec80dc9afa0936",
+      "size_bytes": 3571
+    }
+  ],
   "config_hashes": {
     "config/champion_data_sources.json": {
       "sha256": "576ab761e06474b05d2682b990232c04afbccbd8984e2e1645d068c7fb601989",
@@ -52,6 +112,13 @@
       "2026-01-01"
     ]
   },
+  "dependency_manifest_fingerprint": {
+    "git_blob_id": "14b9d75488042036f3294068a8da79b207708fb9",
+    "relative_path": "requirements.txt",
+    "role": "dependency_manifest",
+    "sha256": "8654980b109e8f0ee6ad3753f00585c774370cc475f230fed0f08da4ea66c529",
+    "size_bytes": 28
+  },
   "draft_database": {
     "file_sha256": "e2d5ef2c6a55525d29f2c851ad49c936b61c788cf9b00863bd2d5cce5c054100",
     "logical_hashing_method": "Iterates through user tables alphabetically, includes schema SQL, PRAGMA table_info columns, and streams rows sorted by all columns using delimiter-safe, type-tagged, length-prefixed byte serialization.",
@@ -75,6 +142,11 @@
   },
   "evaluation_command": "python -m champion_prediction.cp00_baseline",
   "fixed_seed": 20260723,
+  "generation_evidence": {
+    "command_log": ".agent-runs/cp00-provenance-binding-remediation-001/33-command-log.txt",
+    "verification_record": ".agent-runs/cp00-provenance-binding-remediation-001/32-verification.md"
+  },
+  "provenance_schema_version": "2.0",
   "python_version": "3.14",
   "raw_inputs": [
     {
@@ -113,5 +185,149 @@
       "size_bytes": 51758439
     }
   ],
-  "schema_version": "1.0"
+  "schema_version": "1.0",
+  "source_code_fingerprints": [
+    {
+      "git_blob_id": "0aa3fb985a8922db58f849eb61bb6a6ba9b18789",
+      "relative_path": "champion_prediction/__init__.py",
+      "role": "module_init",
+      "sha256": "a2f676ff92982e5833192b2181d99e4660db727c800659377bc2615c29e4ae2c",
+      "size_bytes": 53
+    },
+    {
+      "git_blob_id": "fde5281334734e62df2ad404126f96381ccc7966",
+      "relative_path": "champion_prediction/board_state_ranker.py",
+      "role": "draft_logic",
+      "sha256": "7b3a06ea8b84abf30c5636128ecc5f0a1d4c6a5b2c839e064e27f97aeb22ae8f",
+      "size_bytes": 17597
+    },
+    {
+      "git_blob_id": "2fc2b4ce84213fecd547697f252cccc2e3e7f0f9",
+      "relative_path": "champion_prediction/cp00_baseline.py",
+      "role": "runner",
+      "sha256": "a68eb4870669623060a191e27c06b16f4beaff851a35a66747fbf0ce7a52dd87",
+      "size_bytes": 31461
+    },
+    {
+      "git_blob_id": "cf81076f18713ff7eedd447f97b667b3a4a44844",
+      "relative_path": "champion_prediction/draft_actions.py",
+      "role": "draft_logic",
+      "sha256": "baeb2efd248afffe58ed63e7ec267ef74c9cbd31107531554f32de1f224658f7",
+      "size_bytes": 19729
+    },
+    {
+      "git_blob_id": "b0b228f46aae1784b592c81cab07c437a57e7139",
+      "relative_path": "champion_prediction/draft_model.py",
+      "role": "draft_logic",
+      "sha256": "ece6051e727be33106bdf9d49c6e4d87618a906b26e1e12db4205945049ece7e",
+      "size_bytes": 8892
+    },
+    {
+      "git_blob_id": "e27956be41ff99eafaf0ad38e74f16dec50bd0bf",
+      "relative_path": "champion_prediction/fast_evaluator.py",
+      "role": "prediction_logic",
+      "sha256": "cacb4f01746f0aa5260a2dc7104a7d22bb8e0fdeebf3743f25dcc46bf7ab523c",
+      "size_bytes": 20197
+    },
+    {
+      "git_blob_id": "4482b639f80b1de4d79fe79e85fdb12f022d4e47",
+      "relative_path": "champion_prediction/features.py",
+      "role": "prediction_logic",
+      "sha256": "57878d5a75b1e66bb527affb115f0fe88f08db013cf4afc774d5ee5c191abb61",
+      "size_bytes": 9275
+    },
+    {
+      "git_blob_id": "770a86b97e6128a64dd7c539d408a284a47a84d9",
+      "relative_path": "champion_prediction/round_lock.py",
+      "role": "lock_logic",
+      "sha256": "6c4fd3bbd0ae292da282fea799979bfb594b917007d8c1a3285a0e89b8d2a467",
+      "size_bytes": 3736
+    },
+    {
+      "git_blob_id": "70919d4c4b4c862742945acd56a3777db1d3b373",
+      "relative_path": "champion_prediction/series_model.py",
+      "role": "prediction_logic",
+      "sha256": "662859bdb5b9064a548babc6520497d242451915a21a51db0d6003efa784fdf4",
+      "size_bytes": 14558
+    },
+    {
+      "git_blob_id": "6079fa781387d8ef1383262dc2af3722fad9400c",
+      "relative_path": "champion_prediction/simple_predictor.py",
+      "role": "prediction_logic",
+      "sha256": "228e95810747f53b040cdcfa61cc673f262b4e2f2415dc6b436293676188d210",
+      "size_bytes": 54154
+    },
+    {
+      "git_blob_id": "1fb0ae20607b5b49ab22f3b417054828c994582a",
+      "relative_path": "champion_prediction/synergy.py",
+      "role": "prediction_logic",
+      "sha256": "5b71bab6a5ba326ace4185250e46be659aeec6cbd23eacf93f452712382e1adf",
+      "size_bytes": 9243
+    },
+    {
+      "git_blob_id": "221b64b5df943e7f65ba5558a1988542fd7e55ac",
+      "relative_path": "champion_prediction/taxonomy.py",
+      "role": "prediction_logic",
+      "sha256": "25a8585e4fb0017a30744961c782f2725582a303c9611e7e400033b5e9632616",
+      "size_bytes": 2560
+    },
+    {
+      "git_blob_id": "146d2b88b4436074f6b514f896c670f95321398e",
+      "relative_path": "champion_prediction/weekly_backtest.py",
+      "role": "prediction_logic",
+      "sha256": "0c13617c53a94bbd48c001f3b02a6a110f6de5342b1f7ac75d5888a655f5ed1a",
+      "size_bytes": 20478
+    },
+    {
+      "git_blob_id": "69e457a3c5bed25e01422ae8c4ff34826c308ac8",
+      "relative_path": "data_pipeline/__init__.py",
+      "role": "module_init",
+      "sha256": "a82a06761b5dae1ec59bb4697565ff02bdd06a62718b608b5f100ab04cc4f2ed",
+      "size_bytes": 123
+    },
+    {
+      "git_blob_id": "06d32f47bf5ff538442390ddd560cc9134db718b",
+      "relative_path": "data_pipeline/ingest.py",
+      "role": "data_pipeline",
+      "sha256": "dc3ae97b7cf510bba5453ac7034a91061afadf6dbf00e4a8b85b07af65df43cc",
+      "size_bytes": 30624
+    },
+    {
+      "git_blob_id": "c33a6307abb68c818157b50c22d981f7af37ec1d",
+      "relative_path": "fantasy_prediction/__init__.py",
+      "role": "module_init",
+      "sha256": "7ac9c2b77f18ae3dc6ad154761d8cd8d7ccde7793ce04678c83f42bc0525708f",
+      "size_bytes": 58
+    },
+    {
+      "git_blob_id": "aecf0aae4a064d6dd782a287bea3d4cbf9e538da",
+      "relative_path": "fantasy_prediction/player_baseline.py",
+      "role": "prediction_logic",
+      "sha256": "c87520fe180dd685f0c489f456d3bbbbafdef9690ef88c94c07da0607d9267be",
+      "size_bytes": 23141
+    },
+    {
+      "git_blob_id": "83f1593fd8b416eef04c577543f621c9a8d08815",
+      "relative_path": "fantasy_prediction/team_win_model.py",
+      "role": "prediction_logic",
+      "sha256": "9ca1e31da05b12716d2ba1a3f0032fb01ddafb545b99a44f0388a29214c5b1c0",
+      "size_bytes": 14351
+    },
+    {
+      "git_blob_id": "45f35829f0bb279692e9dc424ad94a06ab0b9b5e",
+      "relative_path": "learning/__init__.py",
+      "role": "module_init",
+      "sha256": "d2f8f43c9902a253f83f5fc77fcc495c1b5954c0c96653b96f35514815e80f98",
+      "size_bytes": 143
+    },
+    {
+      "git_blob_id": "775e3757dfabcce75e018e323715cbb51c9dfcd8",
+      "relative_path": "learning/feedback_loop.py",
+      "role": "learning_engine",
+      "sha256": "fd0b32a56fe951ad02a71c63eefc06a2d173320ba1caf306c0f81386c004a3b7",
+      "size_bytes": 8424
+    }
+  ],
+  "source_commit": "1b9c6fb49a98052cb4f6767e95d8027e847c3883",
+  "source_tree_clean": true
 }

@@ -5,7 +5,7 @@ This document establishes the official CP-00 point-in-time champion baseline und
 All features strictly satisfy `feature_timestamp < round_lock_timestamp` where `round_lock_timestamp` is computed exclusively via `compute_canonical_round_locks`.
 
 ## 2. Baseline Configuration & Hashes
-- **Baseline Git Commit**: `585e9d4f4022248561f72b3fcac7fa2b1d7c7230`
+- **Baseline Git Commit**: `1b9c6fb49a98052cb4f6767e95d8027e847c3883`
 - **Fixed Seed**: `20260723`
 - **Production Hyperparameters**:
   - `patch_decay_rate`: `0.30`
@@ -92,3 +92,22 @@ python -m champion_prediction.cp00_baseline --compare "$RUN1" "$RUN2"
 | Independent Temp Run 1 | `python -m champion_prediction.cp00_baseline --output-dir temp_run1` | `0` | 36m 19s | Scored 4089/4089 targets (100.0% coverage) |
 | Independent Temp Run 2 | `python -m champion_prediction.cp00_baseline --output-dir temp_run2` | `0` | 35m 56s | Scored 4089/4089 targets (100.0% coverage) |
 | Bitwise Directory Comparison | `python -m champion_prediction.cp00_baseline --compare temp_run1 temp_run2` | `0` | 3.12s | `identical: true` (Bitwise 100% match across all artifacts) |
+
+## 8. Provenance Binding Status
+
+The exact committed runner targeted by provenance binding is
+`1b9c6fb49a98052cb4f6767e95d8027e847c3883`. The earlier
+`585e9d4f4022248561f72b3fcac7fa2b1d7c7230` identifier is a repository
+baseline, not exact provenance for the optimized regenerated artifacts.
+
+Binding does not recompute predictions, metrics, rankings, candidate sets, or
+round locks. The manifest records raw-byte source/config/dependency and
+artifact fingerprints using repository-relative POSIX paths. Its
+`source_tree_clean` field describes binding-time verification that every
+fingerprinted source byte matched the cited Git blob; it does not claim that
+the original artifact-generation working tree was clean.
+
+The historical two-run comparison establishes reproducibility from the cited
+source but does not, by itself, prove the source state at original artifact
+generation. Generation-time identity remains `SUPPORTED_BUT_NOT_PROVEN` until
+a clean-source rerun is preserved and compared to the frozen core artifacts.
