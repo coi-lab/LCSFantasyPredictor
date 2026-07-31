@@ -1,0 +1,685 @@
+{
+  "denominators": {
+    "cold_start_player_weeks": 0,
+    "coverage_denominator": 4089,
+    "excluded_player_weeks": 0,
+    "invalid_player_weeks": 0,
+    "scored_player_weeks": 4089,
+    "total_target_player_weeks": 4089
+  },
+  "lock_policy": "earliest_observed_game_start_proxy",
+  "overall_metrics": {
+    "count": 4089,
+    "coverage": 1.0,
+    "hit_at_1": 0.0286,
+    "hit_at_3": 0.0514,
+    "mean_realized_bonus": 0.1019,
+    "mrr": 0.0669
+  },
+  "realized_bonus_semantics": "Per-game average novelty multiplier bonus earned if predicted rank-1 champion was locked in for the fantasy player-week.",
+  "schema_version": "1.0",
+  "seed": 20260723,
+  "slices": {
+    "frequency_tier": {
+      "niche (<5 games)": {
+        "count": 4089,
+        "coverage": 1.0,
+        "hit_at_1": 0.0286,
+        "hit_at_3": 0.0514,
+        "mean_realized_bonus": 0.1019,
+        "mrr": 0.0669
+      }
+    },
+    "history_depth": {
+      "0-10 games": {
+        "count": 285,
+        "coverage": 1.0,
+        "hit_at_1": 0.0211,
+        "hit_at_3": 0.0667,
+        "mean_realized_bonus": 0.049,
+        "mrr": 0.0654
+      },
+      "11-30 games": {
+        "count": 345,
+        "coverage": 1.0,
+        "hit_at_1": 0.029,
+        "hit_at_3": 0.058,
+        "mean_realized_bonus": 0.0775,
+        "mrr": 0.0696
+      },
+      "31+ games": {
+        "count": 3459,
+        "coverage": 1.0,
+        "hit_at_1": 0.0292,
+        "hit_at_3": 0.0494,
+        "mean_realized_bonus": 0.1087,
+        "mrr": 0.0667
+      }
+    },
+    "patch": {
+      "12.01": {
+        "count": 106,
+        "coverage": 1.0,
+        "hit_at_1": 0.0094,
+        "hit_at_3": 0.0472,
+        "mean_realized_bonus": 0.0012,
+        "mrr": 0.0547
+      },
+      "12.02": {
+        "count": 70,
+        "coverage": 1.0,
+        "hit_at_1": 0.0143,
+        "hit_at_3": 0.0429,
+        "mean_realized_bonus": 0.0333,
+        "mrr": 0.0534
+      },
+      "12.03": {
+        "count": 101,
+        "coverage": 1.0,
+        "hit_at_1": 0.0099,
+        "hit_at_3": 0.0198,
+        "mean_realized_bonus": 0.0734,
+        "mrr": 0.0283
+      },
+      "12.04": {
+        "count": 101,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0122
+      },
+      "12.05": {
+        "count": 168,
+        "coverage": 1.0,
+        "hit_at_1": 0.0119,
+        "hit_at_3": 0.0119,
+        "mean_realized_bonus": 0.0626,
+        "mrr": 0.033
+      },
+      "12.06": {
+        "count": 75,
+        "coverage": 1.0,
+        "hit_at_1": 0.0133,
+        "hit_at_3": 0.0267,
+        "mean_realized_bonus": 0.0097,
+        "mrr": 0.0444
+      },
+      "12.11": {
+        "count": 100,
+        "coverage": 1.0,
+        "hit_at_1": 0.02,
+        "hit_at_3": 0.07,
+        "mean_realized_bonus": 0.0387,
+        "mrr": 0.0671
+      },
+      "12.12": {
+        "count": 100,
+        "coverage": 1.0,
+        "hit_at_1": 0.02,
+        "hit_at_3": 0.05,
+        "mean_realized_bonus": 0.0883,
+        "mrr": 0.0599
+      },
+      "12.13": {
+        "count": 100,
+        "coverage": 1.0,
+        "hit_at_1": 0.03,
+        "hit_at_3": 0.07,
+        "mean_realized_bonus": 0.1636,
+        "mrr": 0.0832
+      },
+      "12.14": {
+        "count": 100,
+        "coverage": 1.0,
+        "hit_at_1": 0.04,
+        "hit_at_3": 0.1,
+        "mean_realized_bonus": 0.1077,
+        "mrr": 0.0957
+      },
+      "12.15": {
+        "count": 106,
+        "coverage": 1.0,
+        "hit_at_1": 0.0472,
+        "hit_at_3": 0.0849,
+        "mean_realized_bonus": 0.0687,
+        "mrr": 0.087
+      },
+      "13.01": {
+        "count": 150,
+        "coverage": 1.0,
+        "hit_at_1": 0.0067,
+        "hit_at_3": 0.0333,
+        "mean_realized_bonus": 0.056,
+        "mrr": 0.0416
+      },
+      "13.03": {
+        "count": 100,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.03,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0418
+      },
+      "13.04": {
+        "count": 101,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0297,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.041
+      },
+      "13.05": {
+        "count": 116,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0345,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0461
+      },
+      "13.11": {
+        "count": 50,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.14,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.1041
+      },
+      "13.12": {
+        "count": 100,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0147
+      },
+      "13.13": {
+        "count": 152,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0329,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0279
+      },
+      "13.14": {
+        "count": 111,
+        "coverage": 1.0,
+        "hit_at_1": 0.027,
+        "hit_at_3": 0.0631,
+        "mean_realized_bonus": 0.0193,
+        "mrr": 0.0759
+      },
+      "14.01": {
+        "count": 40,
+        "coverage": 1.0,
+        "hit_at_1": 0.05,
+        "hit_at_3": 0.075,
+        "mean_realized_bonus": 0.0163,
+        "mrr": 0.0854
+      },
+      "14.02": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.05,
+        "hit_at_3": 0.05,
+        "mean_realized_bonus": 0.1492,
+        "mrr": 0.0737
+      },
+      "14.03": {
+        "count": 40,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.025,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0193
+      },
+      "14.04": {
+        "count": 40,
+        "coverage": 1.0,
+        "hit_at_1": 0.075,
+        "hit_at_3": 0.1,
+        "mean_realized_bonus": 0.3433,
+        "mrr": 0.1079
+      },
+      "14.05": {
+        "count": 105,
+        "coverage": 1.0,
+        "hit_at_1": 0.0286,
+        "hit_at_3": 0.0381,
+        "mean_realized_bonus": 0.0574,
+        "mrr": 0.0573
+      },
+      "14.12": {
+        "count": 120,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0303
+      },
+      "14.13": {
+        "count": 10,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0349
+      },
+      "14.14": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0226
+      },
+      "14.15": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0125,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0261
+      },
+      "14.16": {
+        "count": 90,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.031
+      },
+      "15.02": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0375,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0637
+      },
+      "15.03": {
+        "count": 30,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0276
+      },
+      "15.07": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.0125,
+        "hit_at_3": 0.0375,
+        "mean_realized_bonus": 0.0212,
+        "mrr": 0.0538
+      },
+      "15.08": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.0375,
+        "hit_at_3": 0.05,
+        "mean_realized_bonus": 0.1273,
+        "mrr": 0.0727
+      },
+      "15.09": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.0125,
+        "hit_at_3": 0.0625,
+        "mean_realized_bonus": -0.0095,
+        "mrr": 0.0666
+      },
+      "15.10": {
+        "count": 61,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0164,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0384
+      },
+      "15.11": {
+        "count": 55,
+        "coverage": 1.0,
+        "hit_at_1": 0.0727,
+        "hit_at_3": 0.1273,
+        "mean_realized_bonus": 0.1276,
+        "mrr": 0.136
+      },
+      "15.13": {
+        "count": 10,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0099
+      },
+      "15.14": {
+        "count": 41,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0499
+      },
+      "15.15": {
+        "count": 80,
+        "coverage": 1.0,
+        "hit_at_1": 0.0875,
+        "hit_at_3": 0.125,
+        "mean_realized_bonus": 0.4528,
+        "mrr": 0.1378
+      },
+      "15.16": {
+        "count": 40,
+        "coverage": 1.0,
+        "hit_at_1": 0.15,
+        "hit_at_3": 0.15,
+        "mean_realized_bonus": 0.4131,
+        "mrr": 0.2156
+      },
+      "15.17": {
+        "count": 51,
+        "coverage": 1.0,
+        "hit_at_1": 0.1176,
+        "hit_at_3": 0.1373,
+        "mean_realized_bonus": 0.449,
+        "mrr": 0.154
+      },
+      "15.19": {
+        "count": 5,
+        "coverage": 1.0,
+        "hit_at_1": 0.4,
+        "hit_at_3": 0.4,
+        "mean_realized_bonus": 0.5615,
+        "mrr": 0.4284
+      },
+      "16.02": {
+        "count": 82,
+        "coverage": 1.0,
+        "hit_at_1": 0.0366,
+        "hit_at_3": 0.0366,
+        "mean_realized_bonus": 0.3438,
+        "mrr": 0.0778
+      },
+      "16.03": {
+        "count": 70,
+        "coverage": 1.0,
+        "hit_at_1": 0.1143,
+        "hit_at_3": 0.1286,
+        "mean_realized_bonus": 0.4451,
+        "mrr": 0.1479
+      },
+      "16.04": {
+        "count": 60,
+        "coverage": 1.0,
+        "hit_at_1": 0.1,
+        "hit_at_3": 0.1,
+        "mean_realized_bonus": 0.3801,
+        "mrr": 0.1204
+      },
+      "16.07": {
+        "count": 120,
+        "coverage": 1.0,
+        "hit_at_1": 0.1167,
+        "hit_at_3": 0.1333,
+        "mean_realized_bonus": 0.3331,
+        "mrr": 0.1569
+      },
+      "16.08": {
+        "count": 125,
+        "coverage": 1.0,
+        "hit_at_1": 0.072,
+        "hit_at_3": 0.104,
+        "mean_realized_bonus": 0.3096,
+        "mrr": 0.1241
+      },
+      "16.09": {
+        "count": 81,
+        "coverage": 1.0,
+        "hit_at_1": 0.0123,
+        "hit_at_3": 0.037,
+        "mean_realized_bonus": 0.1569,
+        "mrr": 0.0677
+      },
+      "16.10": {
+        "count": 61,
+        "coverage": 1.0,
+        "hit_at_1": 0.0328,
+        "hit_at_3": 0.0328,
+        "mean_realized_bonus": 0.039,
+        "mrr": 0.0637
+      },
+      "16.11": {
+        "count": 55,
+        "coverage": 1.0,
+        "hit_at_1": 0.0909,
+        "hit_at_3": 0.1091,
+        "mean_realized_bonus": 0.38,
+        "mrr": 0.1212
+      },
+      "16.13": {
+        "count": 10,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0498
+      },
+      "16.14": {
+        "count": 40,
+        "coverage": 1.0,
+        "hit_at_1": 0.025,
+        "hit_at_3": 0.025,
+        "mean_realized_bonus": 0.3078,
+        "mrr": 0.0725
+      }
+    },
+    "role": {
+      "BOT": {
+        "count": 819,
+        "coverage": 1.0,
+        "hit_at_1": 0.0598,
+        "hit_at_3": 0.0598,
+        "mean_realized_bonus": 0.2756,
+        "mrr": 0.0888
+      },
+      "JNG": {
+        "count": 0,
+        "coverage": 0.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0
+      },
+      "MID": {
+        "count": 816,
+        "coverage": 1.0,
+        "hit_at_1": 0.0135,
+        "hit_at_3": 0.1029,
+        "mean_realized_bonus": 0.051,
+        "mrr": 0.0857
+      },
+      "SUP": {
+        "count": 818,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0134,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0448
+      },
+      "TOP": {
+        "count": 820,
+        "coverage": 1.0,
+        "hit_at_1": 0.0646,
+        "hit_at_3": 0.0744,
+        "mean_realized_bonus": 0.1704,
+        "mrr": 0.0925
+      }
+    },
+    "round": {
+      "round_1": {
+        "count": 589,
+        "coverage": 1.0,
+        "hit_at_1": 0.0306,
+        "hit_at_3": 0.0679,
+        "mean_realized_bonus": 0.1241,
+        "mrr": 0.083
+      },
+      "round_10": {
+        "count": 196,
+        "coverage": 1.0,
+        "hit_at_1": 0.0306,
+        "hit_at_3": 0.0612,
+        "mean_realized_bonus": 0.0533,
+        "mrr": 0.0757
+      },
+      "round_11": {
+        "count": 148,
+        "coverage": 1.0,
+        "hit_at_1": 0.0405,
+        "hit_at_3": 0.0473,
+        "mean_realized_bonus": 0.0664,
+        "mrr": 0.0705
+      },
+      "round_12": {
+        "count": 45,
+        "coverage": 1.0,
+        "hit_at_1": 0.0222,
+        "hit_at_3": 0.0222,
+        "mean_realized_bonus": 0.0318,
+        "mrr": 0.0379
+      },
+      "round_13": {
+        "count": 20,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.05,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0503
+      },
+      "round_14": {
+        "count": 20,
+        "coverage": 1.0,
+        "hit_at_1": 0.05,
+        "hit_at_3": 0.05,
+        "mean_realized_bonus": 0.0363,
+        "mrr": 0.0836
+      },
+      "round_15": {
+        "count": 15,
+        "coverage": 1.0,
+        "hit_at_1": 0.0,
+        "hit_at_3": 0.0,
+        "mean_realized_bonus": 0.0,
+        "mrr": 0.0254
+      },
+      "round_2": {
+        "count": 505,
+        "coverage": 1.0,
+        "hit_at_1": 0.0257,
+        "hit_at_3": 0.0436,
+        "mean_realized_bonus": 0.0832,
+        "mrr": 0.062
+      },
+      "round_3": {
+        "count": 455,
+        "coverage": 1.0,
+        "hit_at_1": 0.044,
+        "hit_at_3": 0.0615,
+        "mean_realized_bonus": 0.201,
+        "mrr": 0.0789
+      },
+      "round_4": {
+        "count": 431,
+        "coverage": 1.0,
+        "hit_at_1": 0.0302,
+        "hit_at_3": 0.0487,
+        "mean_realized_bonus": 0.092,
+        "mrr": 0.0647
+      },
+      "round_5": {
+        "count": 411,
+        "coverage": 1.0,
+        "hit_at_1": 0.0268,
+        "hit_at_3": 0.0462,
+        "mean_realized_bonus": 0.1334,
+        "mrr": 0.0653
+      },
+      "round_6": {
+        "count": 412,
+        "coverage": 1.0,
+        "hit_at_1": 0.0218,
+        "hit_at_3": 0.0485,
+        "mean_realized_bonus": 0.0774,
+        "mrr": 0.0565
+      },
+      "round_7": {
+        "count": 354,
+        "coverage": 1.0,
+        "hit_at_1": 0.0226,
+        "hit_at_3": 0.0424,
+        "mean_realized_bonus": 0.0654,
+        "mrr": 0.0541
+      },
+      "round_8": {
+        "count": 273,
+        "coverage": 1.0,
+        "hit_at_1": 0.022,
+        "hit_at_3": 0.0549,
+        "mean_realized_bonus": 0.0478,
+        "mrr": 0.0681
+      },
+      "round_9": {
+        "count": 215,
+        "coverage": 1.0,
+        "hit_at_1": 0.0233,
+        "hit_at_3": 0.0372,
+        "mean_realized_bonus": 0.118,
+        "mrr": 0.0537
+      }
+    }
+  },
+  "windows": {
+    "confirmation_2024": {
+      "count": 685,
+      "coverage": 1.0,
+      "hit_at_1": 0.0175,
+      "hit_at_3": 0.0248,
+      "mean_realized_bonus": 0.0472,
+      "mrr": 0.0454,
+      "window": "confirmation",
+      "years": "2024-2024"
+    },
+    "development_2022_2023": {
+      "count": 2007,
+      "coverage": 1.0,
+      "hit_at_1": 0.013,
+      "hit_at_3": 0.0429,
+      "mean_realized_bonus": 0.0393,
+      "mrr": 0.0506,
+      "window": "development",
+      "years": "2022-2023"
+    },
+    "exposed_test_2026": {
+      "classification": "EXPOSED_REPORT_ONLY",
+      "count": 709,
+      "coverage": 1.0,
+      "hit_at_1": 0.0719,
+      "hit_at_3": 0.086,
+      "mean_realized_bonus": 0.2989,
+      "mrr": 0.1127,
+      "window": "exposed_test",
+      "years": "2026-2026"
+    },
+    "final_validation_2025": {
+      "count": 688,
+      "coverage": 1.0,
+      "hit_at_1": 0.0407,
+      "hit_at_3": 0.0669,
+      "mean_realized_bonus": 0.1363,
+      "mrr": 0.0884,
+      "window": "final_validation",
+      "years": "2025-2025"
+    }
+  }
+}

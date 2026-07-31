@@ -299,14 +299,24 @@ def run_cp00_baseline(
 
     rules = load_champion_bonus_rules()
 
+    if "_year_num" not in history.columns:
+        history["_year_num"] = pd.to_numeric(history["year"], errors="coerce")
+    if "_player_lower" not in history.columns:
+        history["_player_lower"] = history["player"].astype(str).str.casefold()
+
     all_targets = build_canonical_targets(history)
     targets = all_targets.loc[
         all_targets["roster_lock"].ge(start_ts) & all_targets["roster_lock"].lt(end_ts)
     ].sort_values(["roster_lock", "player", "role"], kind="stable")
 
     row_records: list[dict[str, Any]] = []
+    target_list = targets.to_dict("records")
+    total_targets = len(target_list)
 
-    for target in targets.to_dict("records"):
+    for idx, target in enumerate(target_list, start=1):
+        if idx == 1 or idx % 250 == 0 or idx == total_targets:
+            print(f"[{time.strftime('%H:%M:%S')}] Evaluated {idx}/{total_targets} target player-weeks...", flush=True)
+
         cutoff = pd.Timestamp(target["roster_lock"])
         year = int(target["year"])
         player = str(target["player"])
@@ -320,33 +330,43 @@ def run_cp00_baseline(
         prior_history = history.loc[history["date"].lt(cutoff)]
 
         player_hist_games = len(
-            prior_history.loc[
-                prior_history["player"].astype(str).str.casefold().eq(player.casefold())
-            ]
+            prior_history.loc[prior_history["_player_lower"].eq(player.casefold())]
         )
         hist_bucket = history_depth_bucket(player_hist_games)
 
         split_history = prior_history.loc[
             prior_history["league"].eq("LCS")
-            & pd.to_numeric(prior_history["year"], errors="coerce").eq(year)
+            & prior_history["_year_num"].eq(year)
             & prior_history["split"].astype(str).str.casefold().eq(
                 str(target["split"]).casefold()
             )
         ]
 
-        ranking = rank_weekly_opponents(
-            history,
-            actions,
-            player,
-            role,
-            team,
-            list(target["opponents"]),
-            cutoff,
-            str(target["target_patch"]),
-            split_history,
-            rules,
-            top_n=250,
-        )
+        saved_history_attrs = history.attrs
+        saved_actions_attrs = actions.attrs
+        try:
+            history.attrs = {}
+            actions.attrs = {}
+            if split_history is not None:
+                split_history.attrs = {}
+            ranking = rank_weekly_opponents(
+                history,
+                actions,
+                player,
+                role,
+                team,
+                list(target["opponents"]),
+                cutoff,
+                str(target["target_patch"]),
+                split_history,
+                rules,
+                top_n=250,
+            )
+        finally:
+            saved_history_attrs.update(history.attrs)
+            history.attrs = saved_history_attrs
+            saved_actions_attrs.update(actions.attrs)
+            actions.attrs = saved_actions_attrs
 
         actual = sorted(set(map(str, target["actual_champions"])))
 

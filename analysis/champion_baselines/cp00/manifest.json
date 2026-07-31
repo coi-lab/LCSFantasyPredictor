@@ -1,74 +1,117 @@
 {
-  "schema_version": "1.0",
-  "baseline_git_commit": "816f4bc66e75ac81e569493b34c844dda5d4e262",
+  "baseline_git_commit": "585e9d4f4022248561f72b3fcac7fa2b1d7c7230",
+  "canonical_lock_policy": {
+    "name": "earliest_observed_lcs_game_start_proxy",
+    "strict_cutoff": "feature_timestamp < round_lock_timestamp",
+    "version": "1.0"
+  },
+  "config_hashes": {
+    "config/champion_data_sources.json": {
+      "sha256": "576ab761e06474b05d2682b990232c04afbccbd8984e2e1645d068c7fb601989",
+      "size_bytes": 3459
+    },
+    "config/champion_model.json": {
+      "sha256": "ee808077836d6ae393c1c6611b15757817246cff266c45402ff3aea9c1d67b13",
+      "size_bytes": 984
+    },
+    "config/champion_taxonomy.json": {
+      "sha256": "7d4d3a92700e30540d6806956718dd62512ffa68ad3cf0a1abf9dc9158fb7645",
+      "size_bytes": 3451
+    },
+    "config/champion_universe.json": {
+      "sha256": "53a4382a10d95cdb87a287c4348ce449af90cafa8dd364d9da3173cf81f68702",
+      "size_bytes": 936
+    },
+    "config/draft_rules.json": {
+      "sha256": "1e46822aa30673fed19af178a72cbfd084a445ef2a29ce7b22f04a843cdbd708",
+      "size_bytes": 495
+    },
+    "config/scoring_rules.json": {
+      "sha256": "3886e9307023eb4afe4299db2667b970e8cbbf94eb01aeeb751a340d3b0e17e1",
+      "size_bytes": 3639
+    }
+  },
+  "dataset_windows": {
+    "confirmation": [
+      "2024-01-01",
+      "2025-01-01"
+    ],
+    "development": [
+      "2022-01-01",
+      "2024-01-01"
+    ],
+    "exposed_test": {
+      "classification": "EXPOSED_REPORT_ONLY",
+      "range": [
+        "2026-01-01",
+        "2027-01-01"
+      ]
+    },
+    "final_validation": [
+      "2025-01-01",
+      "2026-01-01"
+    ]
+  },
+  "draft_database": {
+    "file_sha256": "e2d5ef2c6a55525d29f2c851ad49c936b61c788cf9b00863bd2d5cce5c054100",
+    "logical_hashing_method": "Iterates through user tables alphabetically, includes schema SQL, PRAGMA table_info columns, and streams rows sorted by all columns using delimiter-safe, type-tagged, length-prefixed byte serialization.",
+    "logical_sha256": "a14030eefbfa131a4ecfe59201b58a6ee3d8a939217bd94cf24e390b20cc52b3",
+    "relative_path": "data/generated/champion_prediction/champion_drafts.sqlite",
+    "size_bytes": 150614016
+  },
+  "emitted_artifacts": {
+    "aggregate_report.json": {
+      "sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+      "size_bytes": 16046
+    },
+    "cp00_baseline_report.md": {
+      "sha256": "4f945b87d050d88c598391f2339ca88b9e16a1c3b7b5c567a3b932c93a2c4602",
+      "size_bytes": 4068
+    },
+    "row_level_evaluation.json": {
+      "sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+      "size_bytes": 3875633
+    }
+  },
+  "evaluation_command": "python -m champion_prediction.cp00_baseline",
+  "fixed_seed": 20260723,
   "python_version": "3.14",
   "raw_inputs": [
     {
       "relative_path": "data/raw/oracles_elixir/2020_LoL_esports_match_data_from_OraclesElixir.csv",
-      "sha256": "7e2ad1e6c603745aaf7c32aa52b650affe3ca04581674601f97a38a31d0bc3fa"
+      "sha256": "7e2ad1e6c603745aaf7c32aa52b650affe3ca04581674601f97a38a31d0bc3fa",
+      "size_bytes": 89069354
     },
     {
       "relative_path": "data/raw/oracles_elixir/2021_LoL_esports_match_data_from_OraclesElixir.csv",
-      "sha256": "36a1495425b38eab127dd36bcf028bf372d81215f6a320475ff27a25df657adc"
+      "sha256": "36a1495425b38eab127dd36bcf028bf372d81215f6a320475ff27a25df657adc",
+      "size_bytes": 109765213
     },
     {
       "relative_path": "data/raw/oracles_elixir/2022_LoL_esports_match_data_from_OraclesElixir.csv",
-      "sha256": "febfbf453000b6ada7587f68c1b046ee4a2770ae2be4436f3cbcd03ffb11e393"
+      "sha256": "febfbf453000b6ada7587f68c1b046ee4a2770ae2be4436f3cbcd03ffb11e393",
+      "size_bytes": 97641612
     },
     {
       "relative_path": "data/raw/oracles_elixir/2023_LoL_esports_match_data_from_OraclesElixir.csv",
-      "sha256": "8cf6c1bbe4a4c75a73d0a38fca826ecea48dd1fb386f515e2a7986797f7c1f3a"
+      "sha256": "8cf6c1bbe4a4c75a73d0a38fca826ecea48dd1fb386f515e2a7986797f7c1f3a",
+      "size_bytes": 85898775
     },
     {
       "relative_path": "data/raw/oracles_elixir/2024_LoL_esports_match_data_from_OraclesElixir.csv",
-      "sha256": "93b5ed6036435120d7d97541b947ffceed6c7158508df4e6cb9b0f8a35cb17ac"
+      "sha256": "93b5ed6036435120d7d97541b947ffceed6c7158508df4e6cb9b0f8a35cb17ac",
+      "size_bytes": 79127713
     },
     {
       "relative_path": "data/raw/oracles_elixir/2025_LoL_esports_match_data_from_OraclesElixir.csv",
-      "sha256": "c9a158b9e0a965a47d31d3674c127a26f75e6c91a324bd1858e4784b1336214a"
+      "sha256": "c9a158b9e0a965a47d31d3674c127a26f75e6c91a324bd1858e4784b1336214a",
+      "size_bytes": 79169638
     },
     {
       "relative_path": "data/raw/oracles_elixir/2026_LoL_esports_match_data_from_OraclesElixir.csv",
-      "sha256": "4e8b821a7afc300667d435d61ba5dc652a8ce932705cd932af8639f7023a96a9"
+      "sha256": "4e8b821a7afc300667d435d61ba5dc652a8ce932705cd932af8639f7023a96a9",
+      "size_bytes": 51758439
     }
   ],
-  "draft_database": {
-    "relative_path": "data/generated/champion_prediction/champion_drafts.sqlite",
-    "build_command": "python -m champion_prediction.draft_actions"
-  },
-  "config_hashes": {
-    "config/champion_data_sources.json": "576ab761e06474b05d2682b990232c04afbccbd8984e2e1645d068c7fb601989",
-    "config/champion_model.json": "ee808077836d6ae393c1c6611b15757817246cff266c45402ff3aea9c1d67b13",
-    "config/champion_taxonomy.json": "7d4d3a92700e30540d6806956718dd62512ffa68ad3cf0a1abf9dc9158fb7645",
-    "config/champion_universe.json": "53a4382a10d95cdb87a287c4348ce449af90cafa8dd364d9da3173cf81f68702",
-    "config/draft_rules.json": "1e46822aa30673fed19af178a72cbfd084a445ef2a29ce7b22f04a843cdbd708",
-    "config/scoring_rules.json": "3886e9307023eb4afe4299db2667b970e8cbbf94eb01aeeb751a340d3b0e17e1"
-  },
-  "canonical_lock_policy": {
-    "name": "earliest_observed_lcs_game_start_proxy",
-    "version": "1.0",
-    "strict_cutoff": "feature_timestamp < round_lock_timestamp"
-  },
-  "dataset_windows": {
-    "development": ["2022-01-01", "2024-01-01"],
-    "confirmation": ["2024-01-01", "2025-01-01"],
-    "final_validation": ["2025-01-01", "2026-01-01"],
-    "exposed_test": {
-      "range": ["2026-01-01", "2027-01-01"],
-      "classification": "EXPOSED_REPORT_ONLY"
-    }
-  },
-  "fixed_seed": 20260723,
-  "evaluation_command": "python -m champion_prediction.fast_evaluator",
-  "legacy_evidence_classification": "LEGACY_UNBOUND_EVIDENCE",
-  "metrics_tracked": [
-    "scored_targets",
-    "excluded_targets",
-    "invalid_targets",
-    "candidate_coverage",
-    "hit_at_1",
-    "hit_at_3",
-    "mrr",
-    "mean_realized_bonus"
-  ]
+  "schema_version": "1.0"
 }

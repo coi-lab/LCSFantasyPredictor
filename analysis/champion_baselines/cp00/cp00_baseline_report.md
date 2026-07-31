@@ -1,49 +1,94 @@
-# CP-00 Champion Baseline and Evaluation Hardening Report
+# CP-00 Champion Baseline and Hardening Report
 
-## 1. Production Champion Predictor Overview
-The current production champion predictor (`champion_prediction/simple_predictor.py`) is an explainable heuristic pre-lock ranking system. It ranks champion options for projected starters by combining three evidence sources:
-- **Player comfort** ($w_{\text{player}} = 0.355484$)
-- **Domestic LCS meta** ($w_{\text{lcs}} = 0.362419$)
-- **Leading-region meta (LCK/LPL/LEC)** ($w_{\text{leading}} = 0.282096$)
+## 1. Executive Summary
+This document establishes the official CP-00 point-in-time champion baseline under canonical round locks.
+All features strictly satisfy `feature_timestamp < round_lock_timestamp` where `round_lock_timestamp` is computed exclusively via `compute_canonical_round_locks`.
 
-Patch distance decay rate is frozen at $\gamma = 0.30$. Dynamic weight blending, maturity blending, pair synergy, and team comfort persistence remain disabled by default in `config/champion_model.json`.
-
-## 2. Baseline Commit and Configuration
-- **Baseline Commit**: `816f4bc66e75ac81e569493b34c844dda5d4e262`
-- **Python Version**: 3.14 / `.venv`
-- **Production Config**: `config/champion_model.json`
-- **Draft Rules Config**: `config/draft_rules.json`
+## 2. Baseline Configuration & Hashes
+- **Baseline Git Commit**: `585e9d4f4022248561f72b3fcac7fa2b1d7c7230`
 - **Fixed Seed**: `20260723`
+- **Production Hyperparameters**:
+  - `patch_decay_rate`: `0.30`
+  - `w_player`: `0.355484`
+  - `w_lcs`: `0.362419`
+  - `w_leading`: `0.282096`
+- **Draft SQLite Database**:
+  - Relative Path: `data/generated/champion_prediction/champion_drafts.sqlite`
+  - File Size: `150614016 bytes`
+  - File SHA-256: `e2d5ef2c6a55525d29f2c851ad49c936b61c788cf9b00863bd2d5cce5c054100`
+  - Logical SHA-256: `a14030eefbfa131a4ecfe59201b58a6ee3d8a939217bd94cf24e390b20cc52b3`
 
-## 3. Canonical Round-Lock Policy
-Historical fantasy round lock timestamp is defined conservatively as:
-$$\text{round\_lock\_timestamp} = \min(\text{earliest observed game start in that Monday--Sunday split week round})$$
-All feature evidence evaluated for target $T$ in round $R$ strictly satisfies:
-$$\text{feature\_timestamp} < \text{round\_lock\_timestamp}_R$$
+## 3. Delimiter-Safe & Type-Tagged Logical SQLite Hashing Method
+To guarantee cross-platform and build-independent identity verification of SQLite draft databases, logical hashing:
+1. Connects to SQLite and retrieves all non-system table names and schema SQL sorted alphabetically.
+2. For each table, fetches column names and declared types from `PRAGMA table_info`.
+3. Queries all table rows ordered by all columns: `SELECT * FROM "table" ORDER BY col1, col2, ...`.
+4. Streams rows and feeds byte-serialized, type-tagged values (`N;` for NULL, `I:val;` for int, `F:ieee_bytes;` for double, `S:len:val;` for string) into SHA-256.
 
-## 4. Evaluation Windows & Classification
-- **Development Window (2022–2023)**: `FROZEN_BASELINE_EVAL`
-- **Confirmation Window (2024)**: `FROZEN_BASELINE_EVAL`
-- **Final Validation Window (2025)**: `FROZEN_BASELINE_EVAL`
-- **Exposed Test Window (2026)**: `EXPOSED_REPORT_ONLY` (never used to fit or tune parameters)
+## 4. Evaluation Window Performance
+- **Development (2022–2023)**: Hit@1: `0.0130`, Hit@3: `0.0429`, Coverage: `1.0000`, Realized Bonus: `0.0393`
+- **Confirmation (2024)**: Hit@1: `0.0175`, Hit@3: `0.0248`, Coverage: `1.0000`, Realized Bonus: `0.0472`
+- **Final Validation (2025)**: Hit@1: `0.0407`, Hit@3: `0.0669`, Coverage: `1.0000`, Realized Bonus: `0.1363`
+- **Exposed Test (2026)** (`EXPOSED_REPORT_ONLY`): Hit@1: `0.0719`, Hit@3: `0.0860`, Coverage: `1.0000`, Realized Bonus: `0.2989`
 
-## 5. Summary of Sources and Manifest Hashes
-- Raw Match CSVs: 7 Oracle's Elixir files (2020–2026) in `data/raw/oracles_elixir/`
-- Derived Draft Database: `data/generated/champion_prediction/champion_drafts.sqlite`
-- Tracked Manifest: `analysis/champion_baselines/cp00/manifest.json`
+## 5. Slice Analysis
+### Role Breakdown
+| Role | Count | Hit@1 | Hit@3 | Coverage | MRR | Realized Bonus |
+|---|---|---|---|---|---|---|
+| TOP | 820 | 0.0646 | 0.0744 | 1.0000 | 0.0925 | 0.1704 |
+| JNG | 0 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
+| MID | 816 | 0.0135 | 0.1029 | 1.0000 | 0.0857 | 0.0510 |
+| BOT | 819 | 0.0598 | 0.0598 | 1.0000 | 0.0888 | 0.2756 |
+| SUP | 818 | 0.0000 | 0.0134 | 1.0000 | 0.0448 | 0.0000 |
 
-## 6. Config vs. Historical Tuning Artifact Conflicts & Legacy Evidence
-Historical tuning reports in `analysis/` (e.g. `weekly_patch_weight_tuning.md`) evaluated alternative decay rates or dynamic weights without complete manifest bindings.
-- **Production Value**: `patch_decay_rate = 0.30`, static weights `(0.3555, 0.3624, 0.2821)`
-- **Conflict Note**: Historical tuning artifacts are recorded for provenance but labeled `LEGACY_UNBOUND_EVIDENCE` and must not be used as final acceptance proof.
+### History Depth Breakdown
+| History Depth | Count | Hit@1 | Hit@3 | Coverage | MRR | Realized Bonus |
+|---|---|---|---|---|---|---|
+| 0-10 games | 285 | 0.0211 | 0.0667 | 1.0000 | 0.0654 | 0.0490 |
+| 11-30 games | 345 | 0.0290 | 0.0580 | 1.0000 | 0.0696 | 0.0775 |
+| 31+ games | 3459 | 0.0292 | 0.0494 | 1.0000 | 0.0667 | 0.1087 |
 
-### Legacy Unbound Evidence Register
-| Artifact Path | Description | Status / Classification |
-|---|---|---|
-| `analysis/weekly_patch_weight_tuning.md` | Patch decay and source weight tuning report | `LEGACY_UNBOUND_EVIDENCE` |
-| `analysis/predraft_pair_2025_ablation.md` | Pre-draft pair synergy ablation report | `LEGACY_UNBOUND_EVIDENCE` |
-| `analysis/pair_synergy_2025_ablation.md` | Pair synergy ablation report | `LEGACY_UNBOUND_EVIDENCE` |
-| `analysis/completed_round_prediction_audit.md` | Historical completed round audit | `LEGACY_UNBOUND_EVIDENCE` |
+## 6. Execution & Cross-Platform Comparison Commands
 
-## 7. Operational Prospective Capture Contract
-The operational contract for prospective live rounds is specified in `docs/operations/official_lock_price_capture_contract.md`.
+### PowerShell Commands
+```powershell
+# 1. Run primary baseline report generation
+python -m champion_prediction.cp00_baseline --output-dir analysis/champion_baselines/cp00
+
+# 2. Execute two independent runs in system temporary directories
+$env:RUN1 = Join-Path $env:TEMP "cp00_run_1"
+$env:RUN2 = Join-Path $env:TEMP "cp00_run_2"
+python -m champion_prediction.cp00_baseline --output-dir $env:RUN1
+python -m champion_prediction.cp00_baseline --output-dir $env:RUN2
+
+# 3. Compare two independent runs using Python standard-library helper
+python -m champion_prediction.cp00_baseline --compare $env:RUN1 $env:RUN2
+```
+
+### Bash Commands
+```bash
+# 1. Run primary baseline report generation
+python -m champion_prediction.cp00_baseline --output-dir analysis/champion_baselines/cp00
+
+# 2. Execute two independent runs in system temporary directories
+RUN1="${TMPDIR:-/tmp}/cp00_run_1"
+RUN2="${TMPDIR:-/tmp}/cp00_run_2"
+python -m champion_prediction.cp00_baseline --output-dir "$RUN1"
+python -m champion_prediction.cp00_baseline --output-dir "$RUN2"
+
+# 3. Compare two independent runs using Python standard-library helper
+python -m champion_prediction.cp00_baseline --compare "$RUN1" "$RUN2"
+```
+
+## 7. Empirical Verification & Verification Suite Record
+
+| Verification Step | Exact Command | Exit Code | Duration | Result / Status |
+|---|---|---|---|---|
+| CP-00 Hardening Tests | `python -m unittest tests/test_cp00_baseline_hardening.py` | `0` | 33.53s | Ran 13 tests, OK |
+| Weekly Backtest & Export Tests | `python -m unittest tests/test_weekly_backtest.py tests/test_weekly_champion_export.py tests/test_champion_lab_export.py` | `0` | 0.17s | Ran 8 tests, OK |
+| Agent Harness Validator | `python -m unittest tests/test_agent_harness_validator.py` | `0` | 4.89s | Ran 14 tests, OK |
+| Python Compilation | `python -m compileall champion_prediction fantasy_prediction data_pipeline learning rag dashboard` | `0` | 0.85s | Clean compilation, 0 errors |
+| Full Unittest Discover Suite | `python -m unittest discover -s tests -v` | `0` | 783.77s | Ran 142 tests, OK |
+| Independent Temp Run 1 | `python -m champion_prediction.cp00_baseline --output-dir temp_run1` | `0` | 36m 19s | Scored 4089/4089 targets (100.0% coverage) |
+| Independent Temp Run 2 | `python -m champion_prediction.cp00_baseline --output-dir temp_run2` | `0` | 35m 56s | Scored 4089/4089 targets (100.0% coverage) |
+| Bitwise Directory Comparison | `python -m champion_prediction.cp00_baseline --compare temp_run1 temp_run2` | `0` | 3.12s | `identical: true` (Bitwise 100% match across all artifacts) |
