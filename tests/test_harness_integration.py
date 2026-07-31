@@ -34,6 +34,7 @@ class DualHarnessContractTests(unittest.TestCase):
         expected_skills = [
             "audit-fantasy-scoring",
             "develop-champion-model",
+            "manage-long-running-tasks",
             "maintain-dashboard-data",
             "refresh-weekly-predictions",
             "verify-model-change",

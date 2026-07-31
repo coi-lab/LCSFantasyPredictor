@@ -33,6 +33,7 @@ EXPECTED_CODEX_AGENT_FILES = {
 EXPECTED_SHARED_SKILL_DIRECTORIES = {
     "audit-fantasy-scoring",
     "develop-champion-model",
+    "manage-long-running-tasks",
     "maintain-dashboard-data",
     "refresh-weekly-predictions",
     "verify-model-change",

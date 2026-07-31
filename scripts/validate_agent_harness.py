@@ -19,6 +19,11 @@ REQUIRED_AGY_AGENTS = {
     "deterministic-verifier",
 }
 REQUIRED_SKILL_ASSETS = {
+    "manage-long-running-tasks": {
+        "SKILL.md",
+        "agents/openai.yaml",
+        "references/long-running-task-playbook.md",
+    },
     "audit-fantasy-scoring": {
         "SKILL.md",
         "agents/openai.yaml",
