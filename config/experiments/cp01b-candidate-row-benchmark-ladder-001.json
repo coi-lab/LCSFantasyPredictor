@@ -1,0 +1,24 @@
+{
+  "experiment_id": "cp01b-candidate-row-benchmark-ladder-001",
+  "task_id": "cp01b-candidate-row-benchmark-ladder-001",
+  "description": "Champion-picker benchmark ladder evaluating candidate-row baseline models (player frequency, patch-role frequency, current heuristic, logistic choice benchmark) under CP-01D weekly total-value semantics.",
+  "cp00_baseline_dir": "analysis/champion_baselines/cp00",
+  "cp00_manifest_file": "analysis/champion_baselines/cp00/manifest.json",
+  "cp00_row_file": "analysis/champion_baselines/cp00/row_level_evaluation.json",
+  "cp00_aggregate_file": "analysis/champion_baselines/cp00/aggregate_report.json",
+  "output_dir": "analysis/champion_experiments/cp01b-candidate-row-benchmark-ladder-001",
+  "agent_runs_dir": ".agent-runs/cp01b-candidate-row-benchmark-ladder-001",
+  "draft_sqlite_path": "data/generated/champion_prediction/champion_drafts.sqlite",
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "seed": 20260723,
+  "chronological_windows": {
+    "development": [2022, 2023],
+    "confirmation": [2024],
+    "final_validation": [2025],
+    "exposed_test": [2026]
+  },
+  "guardrails": {
+    "expected_target_row_count": 4089,
+    "allow_artifact_overwrite": false
+  }
+}
