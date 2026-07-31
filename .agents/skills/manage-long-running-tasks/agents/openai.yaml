@@ -1,4 +1,3 @@
 interface:
   display_name: "Manage Long-Running Tasks"
-  short_description: "Make long-running work visible and bounded"
-  default_prompt: "Use $manage-long-running-tasks to run this lengthy operation with observable progress and checkpoints."
+  short_description: "Bound, verify, and hand off costly work"
