@@ -48,6 +48,22 @@ If raw data cannot establish an official round-to-lock mapping for a historical 
 4. Preserve existing metric definitions only where their target remains valid. If an existing report uses a different horizon/grain, label it clearly rather than merging or relabeling metrics.
 5. Reproduce a frozen pre-2026 baseline using the repaired evaluator. Do not select parameters or claim model improvement. Compare row IDs, cutoff policy, cold starts, candidate coverage, Hit@1, Hit@3, MRR, and realized multiplier bonus against the prior evaluator; explain every population difference.
 
+## Execution observability and time budget
+
+Do not begin a full-database rebuild or all-history evaluation as the first
+operation. Make progress inspectable even if the AGY session itself is quiet.
+
+1. Within the first 2 minutes, write `.agent-runs/champion-pit-evaluator-contract/status.md` with the task phase, the exact command being run, the input row/action/database counts, and the expected next artifact.
+2. Before any command expected to exceed 2 minutes, record a bounded sample or query-plan/profile result: target count, candidate count, actions scanned per target, cache status, elapsed time, and estimated full-run cost. Start with a small chronological slice (for example one split or 25 targets), never a blind all-history run.
+3. Append a checkpoint to `status.md` after each completed phase and at least every 5 minutes during an expensive operation. Each checkpoint must include elapsed time, completed/total units, current throughput, artifact path, and the next decision.
+4. A command with no measurable progress or new artifact after 5 minutes is a profiling event, not a reason to continue waiting. Interrupt it, preserve its partial output, identify the dominant loop/query, and switch to a bounded sample, vectorized/grouped computation, indexed SQLite query, cache, or other documented remedy before retrying.
+5. Do not allow a single opaque command to run longer than 10 minutes. A retry may exceed that only after its 5-minute profile predicts a finite completion time and `status.md` records the estimate. Stop after 20 minutes cumulative on the same unprofiled operation and report `NOT VERIFIED` with the bottleneck evidence.
+6. For repeated target evaluation, emit/flush a deterministic partial artifact every 25 targets (or another documented fixed batch) so interrupted work remains auditable and resumes from a known boundary.
+7. Do not trade away point-in-time filtering, target coverage, or correctness merely to meet the time budget. If the full evaluation is too costly, report the verified bounded result and the scaling blocker.
+
+The human reviewer should be able to inspect `status.md` at any time and learn
+whether AGY is discovering, profiling, implementing, testing, or blocked.
+
 ## Verification
 
 Run, at minimum:
