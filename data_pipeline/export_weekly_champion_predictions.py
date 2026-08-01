@@ -244,7 +244,11 @@ def export_weekly_predictions(
         load_validation_summary(),
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    output_path.write_text(
+        json.dumps(payload, indent=2) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
     print(
         f"Wrote weekly champion predictions: {output_path} "
         f"({len(payload['players'])} starters)"

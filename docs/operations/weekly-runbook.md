@@ -22,7 +22,7 @@ Every week we need to run this:
    - PowerShell: `.venv\Scripts\Activate.ps1`
    - bash/zsh: `source .venv/bin/activate`
    python data_pipeline/snapshot_official_market.py
-   python -m champion_prediction.simple_predictor
+   python scripts/refresh_champion_pool.py
    python data_pipeline/export_dashboard_data.py
 
 4. Run included server:
@@ -31,4 +31,10 @@ Every week we need to run this:
 
 Notes:
 - Player pricing in gold: verify formula for high values (hard to reach above 30).
+- Rebuild `champion_drafts.sqlite` after replacing the Oracle's Elixir file so
+  Fearless legality and opponent draft history use the latest matches.
 - Champion predictor outputs current_champion_rankings.csv and current_champion_portfolio.csv (1.3x floor, 1.5x adoption, 1.7x wildcard picks).
+
+Download these two files:
+analysis/champion_experiments/cp01b-candidate-row-benchmark-ladder-001/candidate_rows.json
+analysis/champion_experiments/cp01b-production-selection-gate-003/candidate_rows.json
