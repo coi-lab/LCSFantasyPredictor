@@ -39,6 +39,21 @@ CHAMPION_UNIVERSE_PATH = PROJECT_ROOT / "config" / "champion_universe.json"
 LEADING_LEAGUES = {"LCK", "LPL", "LEC", "EWC", "FST", "MSI"}
 INTERNATIONAL_LEAGUES = {"EWC", "FST", "MSI"}
 MARKET_SPLIT_NAMES = {1: "Lock-In", 2: "Spring", 3: "Summer"}
+CHOICE_MODEL_FEATURES = (
+    "player_recent_share",
+    "player_career_share",
+    "lcs_patch_role_share",
+    "leading_region_patch_role_share",
+    "days_since_last_played",
+    "player_games_on_champion",
+    "player_history_games",
+    "patch_distance",
+    "role_flex_prior",
+    "opponent_ban_rate",
+    "opponent_pick_denial_rate",
+    "availability_factor",
+    "current_heuristic_score",
+)
 
 
 def load_champion_bonus_rules() -> dict[str, float]:
@@ -110,6 +125,19 @@ def load_production_hyperparameters(
         result["joint_team_draft_enabled"] = float(
             bool(team_draft.get("joint_team_draft_enabled", False))
         )
+    choice_model = parameters.get("choice_model", {})
+    if isinstance(choice_model, dict) and choice_model.get("enabled"):
+        coefficients = choice_model.get("coefficients", {})
+        missing = [name for name in CHOICE_MODEL_FEATURES if name not in coefficients]
+        if missing:
+            raise ValueError(
+                f"Enabled champion choice model is missing coefficients: {missing}"
+            )
+        result["choice_model_enabled"] = 1.0
+        result.update({
+            f"choice_coef_{name}": float(coefficients[name])
+            for name in CHOICE_MODEL_FEATURES
+        })
     return result
 
 
@@ -470,6 +498,15 @@ def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
 
     selected: list[pd.Series] = []
     group_cols = [c for c in ["round_name", "player", "role"] if c in ranking_df.columns]
+    choice_model_enabled = (
+        "choice_model_score" in ranking_df.columns
+        and ranking_df["choice_model_score"].notna().any()
+    )
+    portfolio_order_columns = (
+        ["choice_model_score", "expected_multiplier_bonus"]
+        if choice_model_enabled
+        else ["expected_multiplier_bonus", "estimated_pick_probability"]
+    )
 
     def choose_category_rows(
         cat_rows: pd.DataFrame,
@@ -477,11 +514,11 @@ def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
     ) -> pd.DataFrame:
         """Choose a useful three-option board for one multiplier category."""
         ordered = cat_rows.sort_values(
-            ["expected_multiplier_bonus", "estimated_pick_probability"],
+            portfolio_order_columns,
             ascending=False,
             kind="stable",
         )
-        if category != "opening_round_baseline":
+        if category != "opening_round_baseline" or choice_model_enabled:
             return ordered.head(3)
 
         # Round 1 has one multiplier for every champion. Use the three slots
@@ -587,7 +624,7 @@ def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
             )
             & group["portfolio_rank"].eq(1)
         ].sort_values(
-            ["expected_multiplier_bonus", "estimated_pick_probability"],
+            portfolio_order_columns,
             ascending=False,
             kind="stable",
         )
@@ -606,6 +643,8 @@ def select_tiered_portfolio(ranking_df: pd.DataFrame) -> pd.DataFrame:
         )
         portfolio.loc[pivot_index, "risk_pivot_recommended"] = True
 
+    if choice_model_enabled:
+        portfolio["portfolio_strategy"] = "validated_logistic_choice_model"
     return portfolio
 
 
@@ -916,6 +955,91 @@ def rank_champions(
     ).head(top_n).reset_index(drop=True)
 
 
+def apply_choice_model_ranking(
+    candidates: pd.DataFrame,
+    history: pd.DataFrame,
+    player: str,
+    cutoff: pd.Timestamp,
+    target_patch: str,
+    hyperparameters: dict[str, float],
+) -> pd.DataFrame:
+    """Apply the frozen CP-01B choice model to one player's weekly candidates."""
+    ranked = candidates.copy()
+    if ranked.empty or not hyperparameters.get("choice_model_enabled", 0.0):
+        return ranked
+
+    prior = history.loc[
+        history["date"].lt(cutoff)
+        & history["player"].astype(str).str.casefold().eq(player.casefold())
+    ]
+    player_history_games = len(prior)
+    champion_history = prior.groupby("champion", dropna=False).agg(
+        games=("champion", "size"),
+        last_date=("date", "max"),
+    )
+    patch_engine = PatchDistanceDecayEngine()
+    patch_distance_by_champion = {
+        str(champion): min(
+            patch_engine.calculate_patch_distance(target_patch, str(patch))
+            for patch in rows["patch"].dropna().astype(str)
+        )
+        for champion, rows in prior.groupby("champion", dropna=False)
+        if rows["patch"].notna().any()
+    }
+
+    feature_rows: list[dict[str, float]] = []
+    for row in ranked.itertuples(index=False):
+        champion = str(row.champion)
+        if champion in champion_history.index:
+            games = int(champion_history.loc[champion, "games"])
+            last_date = pd.Timestamp(champion_history.loc[champion, "last_date"])
+            days_since = float((cutoff - last_date).total_seconds() / 86400.0)
+        else:
+            games = 0
+            days_since = 999.0
+        feature_rows.append({
+            "player_recent_share": float(getattr(row, "player_recent_share", 0.0)),
+            "player_career_share": float(games / max(1, player_history_games)),
+            "lcs_patch_role_share": float(getattr(row, "lcs_patch_role_share", 0.0)),
+            "leading_region_patch_role_share": float(
+                getattr(row, "leading_region_role_share", 0.0)
+            ),
+            "days_since_last_played": days_since,
+            "player_games_on_champion": float(games),
+            "player_history_games": float(player_history_games),
+            "patch_distance": float(patch_distance_by_champion.get(champion, 999.0)),
+            "role_flex_prior": float(getattr(row, "role_flex_prior", 0.01)),
+            "opponent_ban_rate": float(getattr(row, "opponent_ban_rate", 0.0)),
+            "opponent_pick_denial_rate": float(
+                getattr(row, "opponent_pick_denial_rate", 0.0)
+            ),
+            "availability_factor": float(getattr(row, "availability_factor", 1.0)),
+            "current_heuristic_score": float(
+                getattr(row, "expected_multiplier_bonus", 0.0)
+            ),
+        })
+
+    feature_frame = pd.DataFrame(feature_rows, index=ranked.index)
+    scores = sum(
+        feature_frame[name] * float(hyperparameters[f"choice_coef_{name}"])
+        for name in CHOICE_MODEL_FEATURES
+    )
+    ranked["choice_model_score"] = scores
+    score_max = float(scores.max())
+    score_mass = np.exp(scores - score_max)
+    ranked["heuristic_ranking_share"] = ranked["ranking_share"]
+    ranked["ranking_share"] = score_mass / float(score_mass.sum())
+    ranked["estimated_pick_probability"] = ranked["ranking_share"]
+    ranked = ranked.sort_values(
+        ["choice_model_score", "expected_multiplier_bonus", "champion"],
+        ascending=[False, False, True],
+        kind="stable",
+    ).reset_index(drop=True)
+    ranked["choice_model_rank"] = np.arange(1, len(ranked) + 1)
+    ranked["production_recommended"] = ranked["choice_model_rank"].eq(1)
+    return ranked
+
+
 def rank_weekly_opponents(
     history: pd.DataFrame,
     actions: pd.DataFrame,
@@ -996,11 +1120,20 @@ def rank_weekly_opponents(
         matchup_count=("opponent", "nunique"),
     )
     weekly["opponent"] = "|".join(opponents)
-    ordered = weekly.sort_values(
-        ["expected_multiplier_bonus", "ranking_share"],
-        ascending=False,
-        kind="stable",
+    weekly = apply_choice_model_ranking(
+        weekly,
+        history,
+        player,
+        cutoff,
+        target_patch,
+        hyperparameters or {},
     )
+    order_columns = (
+        ["choice_model_score", "expected_multiplier_bonus"]
+        if hyperparameters and hyperparameters.get("choice_model_enabled", 0.0)
+        else ["expected_multiplier_bonus", "ranking_share"]
+    )
+    ordered = weekly.sort_values(order_columns, ascending=False, kind="stable")
     # Retain the best candidate from every official multiplier category even
     # when it falls outside the overall Top-N. This lets downstream weekly
     # displays populate all tiers as a split develops.
@@ -1010,11 +1143,7 @@ def rank_weekly_opponents(
     return (
         pd.concat([ordered.head(top_n), tier_leaders], ignore_index=True)
         .drop_duplicates("champion")
-        .sort_values(
-            ["expected_multiplier_bonus", "ranking_share"],
-            ascending=False,
-            kind="stable",
-        )
+        .sort_values(order_columns, ascending=False, kind="stable")
         .reset_index(drop=True)
     )
 
@@ -1353,7 +1482,13 @@ def main() -> None:
 
     if not rankings.empty:
         print(f"Patch basis: {rankings['target_patch'].iloc[0]} ({rankings['patch_basis'].iloc[0]})")
-        print("Probabilities are heuristic ranking shares, not calibrated forecasts.")
+        if "choice_model_score" in rankings.columns:
+            print(
+                "Production locks use the validated logistic choice model; "
+                "ranking shares are relative scores, not calibrated forecasts."
+            )
+        else:
+            print("Probabilities are heuristic ranking shares, not calibrated forecasts.")
 
 
 if __name__ == "__main__":

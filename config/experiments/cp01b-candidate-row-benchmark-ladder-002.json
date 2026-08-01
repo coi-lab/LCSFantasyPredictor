@@ -1,0 +1,24 @@
+{
+  "experiment_id": "cp01b-candidate-row-benchmark-ladder-002",
+  "task_id": "cp01b-candidate-row-benchmark-ladder-002",
+  "description": "Direct corrected champion-picker benchmark using CP-00 only for frozen player-week targets and roster locks, with corrected point-in-time candidate reconstruction.",
+  "cp00_baseline_dir": "analysis/champion_baselines/cp00",
+  "candidate_set_policy": "corrected_point_in_time_reconstruction",
+  "output_dir": "analysis/champion_experiments/cp01b-candidate-row-benchmark-ladder-002",
+  "agent_runs_dir": ".agent-runs/cp01b-candidate-row-benchmark-ladder-002",
+  "draft_sqlite_path": "data/generated/champion_prediction/champion_drafts.sqlite",
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "seed": 20260723,
+  "chronological_windows": {
+    "development": [2022, 2023],
+    "confirmation": [2024],
+    "final_validation": [2025],
+    "exposed_test": [2026]
+  },
+  "guardrails": {
+    "expected_target_row_count": 4089,
+    "allow_artifact_overwrite": false,
+    "require_full_actual_champion_coverage": true,
+    "require_informative_features": true
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "experiment_id": "cp02-expected-value-hurdle-001",
+  "sample_targets_per_year": null,
+  "candidate_sha256": "0028b11d0c29450936a480c8c4936d79173da265f34d5ed71815d83cb4fa59b3",
+  "parsed_candidate_rows": 536128,
+  "retained_candidate_rows": 536128,
+  "retained_targets": 3380,
+  "feature_names": [
+    "player_recent_share",
+    "player_career_share",
+    "lcs_patch_role_share",
+    "leading_region_patch_role_share",
+    "days_since_last_played",
+    "player_games_on_champion",
+    "player_history_games",
+    "patch_distance",
+    "role_flex_prior",
+    "opponent_ban_rate",
+    "opponent_pick_denial_rate",
+    "availability_factor",
+    "current_heuristic_score",
+    "novelty_increment",
+    "split_week",
+    "is_fearless_rule_context"
+  ],
+  "selected_on_2024": "linear_expected_value_hurdle",
+  "final_decision": "KEEP_PRODUCTION_LOGISTIC",
+  "oracle": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 8.6086,
+      "positive_value_rate": 0.996
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 9.6051,
+      "positive_value_rate": 0.9956
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 8.4416,
+      "positive_value_rate": 0.9956
+    }
+  },
+  "acceptance": {
+    "minimum_bonus_delta": 0.15,
+    "observed_bonus_delta": 0.0507,
+    "bonus_gate_passed": false,
+    "maximum_zero_use_delta": 0.0,
+    "observed_zero_use_delta": -0.0087,
+    "zero_use_gate_passed": true,
+    "clustered_bootstrap": {
+      "clusters": 23,
+      "mean_delta": 0.0507,
+      "ci_lower_95": -0.096,
+      "ci_upper_95": 0.2259
+    },
+    "confidence_gate_passed": false
+  },
+  "elapsed_seconds": 40.88
+}

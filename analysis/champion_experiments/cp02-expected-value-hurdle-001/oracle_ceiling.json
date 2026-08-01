@@ -1,0 +1,17 @@
+{
+  "development": {
+    "count": 2007,
+    "mean_bonus": 8.6086,
+    "positive_value_rate": 0.996
+  },
+  "confirmation": {
+    "count": 685,
+    "mean_bonus": 9.6051,
+    "positive_value_rate": 0.9956
+  },
+  "final_validation": {
+    "count": 688,
+    "mean_bonus": 8.4416,
+    "positive_value_rate": 0.9956
+  }
+}

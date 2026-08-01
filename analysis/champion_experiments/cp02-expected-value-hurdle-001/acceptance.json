@@ -1,0 +1,15 @@
+{
+  "minimum_bonus_delta": 0.15,
+  "observed_bonus_delta": 0.0507,
+  "bonus_gate_passed": false,
+  "maximum_zero_use_delta": 0.0,
+  "observed_zero_use_delta": -0.0087,
+  "zero_use_gate_passed": true,
+  "clustered_bootstrap": {
+    "clusters": 23,
+    "mean_delta": 0.0507,
+    "ci_lower_95": -0.096,
+    "ci_upper_95": 0.2259
+  },
+  "confidence_gate_passed": false
+}

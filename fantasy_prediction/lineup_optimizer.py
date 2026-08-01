@@ -91,6 +91,10 @@ def attach_champion_bonus(
         return enriched
 
     primary = portfolio.copy()
+    if "production_recommended" in primary.columns:
+        recommended = primary["production_recommended"].map(_as_bool)
+        if recommended.any():
+            primary = primary.loc[recommended]
     if "portfolio_basis" in primary.columns:
         overall = primary["portfolio_basis"].astype(str).eq("Overall")
         if overall.any():

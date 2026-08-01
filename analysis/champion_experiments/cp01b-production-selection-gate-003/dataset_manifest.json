@@ -1,0 +1,47 @@
+{
+  "experiment_id": "cp01b-production-selection-gate-003",
+  "created_at_utc": "2026-08-01T04:04:51Z",
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "provenance_binding_status": "PARTIAL_BASELINE_BINDING",
+  "cp00_baseline_manifest_hash": "97959109968f36199b758ba35eea854ab0b479b7c8aa0d454ab18e03918cf408",
+  "artifact_fingerprints": {
+    "analysis/champion_experiments/cp01b-production-selection-gate-003/candidate_rows.json": {
+      "sha256": "0028b11d0c29450936a480c8c4936d79173da265f34d5ed71815d83cb4fa59b3",
+      "size_bytes": 581754254
+    },
+    "analysis/champion_experiments/cp01b-production-selection-gate-003/candidate_set_drift.json": {
+      "sha256": "171b6c7a62e1cf5d7ed07923efcb0354646f7dc0eb3efaa14e70f6673c2ba9e8",
+      "size_bytes": 45604
+    },
+    "analysis/champion_experiments/cp01b-production-selection-gate-003/feature_dictionary.md": {
+      "sha256": "5f4762342e866e862bddc5859b6f8dcc4c177e623a9004969ae5956c13fe757e",
+      "size_bytes": 2535
+    },
+    "analysis/champion_experiments/cp01b-production-selection-gate-003/benchmark_results.json": {
+      "sha256": "fae0dacc5adbf5ebead94fc55b2f1d9574ea173a97400ab2680e15f7f80f2444",
+      "size_bytes": 9607
+    },
+    "analysis/champion_experiments/cp01b-production-selection-gate-003/benchmark_report.md": {
+      "sha256": "286aff59ca402d3886d28fe651e3b444a1f6be0f9bf672e7710b4721b9e1acd8",
+      "size_bytes": 1769
+    },
+    "analysis/champion_experiments/cp01b-production-selection-gate-003/paired_deltas.json": {
+      "sha256": "124e9331f0519e45270ff0768ccb52357f6fa9b53e78780c45dba2456bd2035a",
+      "size_bytes": 4780
+    },
+    "analysis/champion_experiments/cp01b-production-selection-gate-003/run_summary.json": {
+      "sha256": "003b8fdcbb6a5dd385564aad09ae2231556a466799f95ef5bb2055b216777858",
+      "size_bytes": 13260
+    }
+  },
+  "guardrail_checks": {
+    "expected_cp00_target_count": 4089,
+    "expected_evaluated_target_count": 3380,
+    "evaluated_target_count": 3380,
+    "targets_matched": true,
+    "no_post_lock_leakage": true,
+    "no_cp00_overwrites": true,
+    "candidate_set_policy": "corrected_point_in_time_reconstruction",
+    "candidate_set_drifted_targets": 120
+  }
+}

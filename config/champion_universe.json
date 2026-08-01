@@ -4,6 +4,18 @@
   "description": "Public release ledger for champions that may be legal before appearing in the point-in-time professional history. competitive_from_patch is the first patch used by the model's selected professional competitions.",
   "champions": [
     {
+      "champion": "Smolder",
+      "released_at": "2024-01-31T00:00:00Z",
+      "competitive_from_patch": "14.03",
+      "role_hints": ["bot"]
+    },
+    {
+      "champion": "Aurora",
+      "released_at": "2024-07-17T00:00:00Z",
+      "competitive_from_patch": "14.15",
+      "role_hints": ["top", "mid"]
+    },
+    {
       "champion": "Mel",
       "released_at": "2025-01-23T19:00:00Z",
       "competitive_from_patch": "15.03",

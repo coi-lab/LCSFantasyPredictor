@@ -312,17 +312,24 @@ def run_cp00_baseline(
     row_records: list[dict[str, Any]] = []
     target_list = targets.to_dict("records")
     total_targets = len(target_list)
-
     for idx, target in enumerate(target_list, start=1):
-        if idx == 1 or idx % 250 == 0 or idx == total_targets:
+        if idx == 1 or idx % 100 == 0 or idx == total_targets:
             print(f"[{time.strftime('%H:%M:%S')}] Evaluated {idx}/{total_targets} target player-weeks...", flush=True)
 
         cutoff = pd.Timestamp(target["roster_lock"])
         year = int(target["year"])
         player = str(target["player"])
-        role = str(target["role"]).upper()
+        # ``prepare_history`` stores model roles in lowercase (top/jgl/mid/bot/sup).
+        # Keep that vocabulary at the ranker boundary and reserve uppercase for
+        # canonical report/row-id labels.  Passing uppercase here silently
+        # filtered every role-specific history frame to zero rows.
+        model_role = str(target["role"]).casefold()
+        role = "JGL" if model_role in {"jng", "jungle", "jgl"} else model_role.upper()
         team = str(target["team"])
         round_id = str(target["round_id"])
+
+        history.attrs = {}
+        actions.attrs = {}
 
         row_id = build_canonical_row_id(round_id, player, role, team)
 
@@ -342,18 +349,20 @@ def run_cp00_baseline(
             )
         ]
 
-        saved_history_attrs = history.attrs
-        saved_actions_attrs = actions.attrs
+        # Pandas propagates DataFrame.attrs into slices.  The ranker uses attrs
+        # for memoization, so carrying target-local caches forward makes later
+        # targets copy an ever-growing dictionary.  Isolate and discard those
+        # caches after every player-week.
+        history.attrs = {}
+        actions.attrs = {}
         try:
-            history.attrs = {}
-            actions.attrs = {}
             if split_history is not None:
                 split_history.attrs = {}
             ranking = rank_weekly_opponents(
                 history,
                 actions,
                 player,
-                role,
+                model_role,
                 team,
                 list(target["opponents"]),
                 cutoff,
@@ -361,12 +370,13 @@ def run_cp00_baseline(
                 split_history,
                 rules,
                 top_n=250,
+                hyperparameters={
+                    "opening_round_baseline": float(int(target["split_week"]) == 1),
+                },
             )
         finally:
-            saved_history_attrs.update(history.attrs)
-            history.attrs = saved_history_attrs
-            saved_actions_attrs.update(actions.attrs)
-            actions.attrs = saved_actions_attrs
+            history.attrs = {}
+            actions.attrs = {}
 
         actual = sorted(set(map(str, target["actual_champions"])))
 

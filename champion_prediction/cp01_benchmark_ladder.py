@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
+from champion_prediction.features import PatchDistanceDecayEngine
 from champion_prediction.cp00_baseline import (
     PROJECT_ROOT,
     build_canonical_row_id,
@@ -124,6 +125,9 @@ def extract_candidate_row_features(
     """Extract cutoff-safe point-in-time features for each candidate in a player-week."""
     player = str(target["player"])
     role = normalize_role(str(target["role"]))
+    model_role = str(target["role"]).casefold()
+    if model_role in {"jng", "jungle"}:
+        model_role = "jgl"
     team = str(target["team"])
     round_id = str(target["round_id"])
     row_id = build_canonical_row_id(round_id, player, role, team)
@@ -173,6 +177,15 @@ def extract_candidate_row_features(
     champion_history = player_prior.groupby("champion", dropna=False).agg(
         games=("gameid", "size"), last_date=("date", "max")
     )
+    decay = PatchDistanceDecayEngine()
+    patch_distance_by_champion = {
+        str(champion): min(
+            decay.calculate_patch_distance(str(target["target_patch"]), str(patch))
+            for patch in champion_rows["patch"].dropna().astype(str)
+        )
+        for champion, champion_rows in player_prior.groupby("champion", dropna=False)
+        if len(champion_rows["patch"].dropna()) > 0
+    }
 
     candidate_records: list[dict[str, Any]] = []
 
@@ -187,7 +200,9 @@ def extract_candidate_row_features(
         ban_rate = float(row.get("opponent_ban_rate", 0.0))
         denial_rate = float(row.get("opponent_pick_denial_rate", 0.0))
         avail_factor = float(row.get("availability_factor", 1.0))
-        heur_score = float(row.get("unnormalized_pick_priority", 0.0))
+        # The weekly ranker aggregates matchup rows and exposes the score it
+        # actually sorts on as expected_multiplier_bonus.
+        heur_score = float(row.get("expected_multiplier_bonus", 0.0))
         heur_rank = int(idx + 1) if isinstance(idx, int) else int(row.get("rank", 1))
 
         # Career & recent historical stats
@@ -204,10 +219,10 @@ def extract_candidate_row_features(
         else:
             days_since = 999.0
 
-        # Target patch distance proxy
-        patch_dist = 0.0
-        if "patch_distance" in row:
-            patch_dist = float(row["patch_distance"])
+        # Minimum distance from the target patch to a patch on which this
+        # player previously played the candidate.  Never-played candidates use
+        # a large sentinel rather than the misleading old value of zero.
+        patch_dist = patch_distance_by_champion.get(champ, 999.0)
 
         # Outcomes / labels
         chosen_in_round = 1 if champ in actual_champs else 0
@@ -222,9 +237,12 @@ def extract_candidate_row_features(
             ]
             if len(played) > 0:
                 fantasy_sum = float(played["fantasy_pts"].sum())
-                _, novelty_mult = champion_multiplier(
-                    split_history, player, role, champ, bonus_rules
-                )
+                if int(target["split_week"]) == 1:
+                    novelty_mult = float(bonus_rules["opening_round_baseline"])
+                else:
+                    _, novelty_mult = champion_multiplier(
+                        split_history, player, model_role, champ, bonus_rules
+                    )
                 observed_bonus = round(fantasy_sum * (float(novelty_mult) - 1.0), 4)
 
         observed_zero_use = 1 if chosen_in_round == 0 else 0
@@ -632,6 +650,7 @@ def run_cp01_benchmark_ladder(
     agent_runs_dir: Path | None = None,
     draft_db_path: Path = DEFAULT_DRAFT_SQLITE_PATH,
     sample_size: int | None = None,
+    sample_start_index: int | None = None,
     year_filter: int | None = None,
 ) -> dict[str, Any]:
     """Execute CP-01B candidate-row benchmark ladder and save deterministic artifacts."""
@@ -645,6 +664,10 @@ def run_cp01_benchmark_ladder(
 
     with open(config_path, "r", encoding="utf-8") as f:
         config = json.load(f)
+    experiment_id = str(config.get("experiment_id", DEFAULT_EXPERIMENT_ID))
+    candidate_set_policy = str(
+        config.get("candidate_set_policy", "strict_cp00")
+    )
 
     if output_dir is None:
         output_dir = PROJECT_ROOT / config.get("output_dir", "analysis/champion_experiments/cp01b-candidate-row-benchmark-ladder-001")
@@ -657,7 +680,8 @@ def run_cp01_benchmark_ladder(
         agent_runs_dir = (PROJECT_ROOT / agent_runs_dir).resolve()
 
     cp00_dir = PROJECT_ROOT / config.get(
-        "baseline_artifact_dir", "analysis/champion_baselines/cp00"
+        "cp00_baseline_dir",
+        config.get("baseline_artifact_dir", "analysis/champion_baselines/cp00"),
     )
     cp00_manifest_path = cp00_dir / "manifest.json"
     cp00_rows_path = cp00_dir / "row_level_evaluation.json"
@@ -767,65 +791,113 @@ def run_cp01_benchmark_ladder(
     cp00_by_row_id = {str(r["row_id"]): r for r in cp00_rows}
 
     active_targets = target_list
+    evaluation_end_year_exclusive = config.get("evaluation_end_year_exclusive")
+    if evaluation_end_year_exclusive is not None:
+        active_targets = [
+            t for t in active_targets
+            if int(t["year"]) < int(evaluation_end_year_exclusive)
+        ]
     if year_filter is not None:
         active_targets = [t for t in target_list if int(t["year"]) == year_filter]
     if sample_size is not None and sample_size < len(active_targets):
-        sample_indices = np.linspace(0, len(active_targets) - 1, sample_size, dtype=int)
-        active_targets = [active_targets[i] for i in sample_indices]
+        if sample_start_index is None:
+            sample_indices = np.linspace(0, len(active_targets) - 1, sample_size, dtype=int)
+            active_targets = [active_targets[i] for i in sample_indices]
+        else:
+            start = max(0, int(sample_start_index))
+            stop = min(len(active_targets), start + sample_size)
+            active_targets = active_targets[start:stop]
 
     candidate_rows_by_target: dict[str, list[dict[str, Any]]] = {}
     target_metadata: dict[str, dict[str, Any]] = {}
     all_candidate_rows_flat: list[dict[str, Any]] = []
+    candidate_set_drift: list[dict[str, Any]] = []
 
+    # Pandas propagates ``DataFrame.attrs`` during slicing/copying.  The
+    # production ranker stores memoization dictionaries there; retaining those
+    # dictionaries across thousands of target rows makes every later slice
+    # copy a progressively larger cache.  Keep caches local to one target.
+    history.attrs = {}
+    actions.attrs = {}
     print(f"Extracting candidate rows for {len(active_targets)} target player-weeks...", flush=True)
 
     for idx, target in enumerate(active_targets, start=1):
-        if idx == 1 or idx % 500 == 0 or idx == len(active_targets):
-            print(f"[{time.strftime('%H:%M:%S')}] Extracted {idx}/{len(active_targets)} target candidate sets...", flush=True)
-
         cutoff = pd.Timestamp(target["roster_lock"])
         year = int(target["year"])
         player = str(target["player"])
         role = normalize_role(str(target["role"]))
+        model_role = str(target["role"]).casefold()
+        if model_role in {"jng", "jungle"}:
+            model_role = "jgl"
         team = str(target["team"])
         round_id = str(target["round_id"])
         row_id = build_canonical_row_id(round_id, player, role, team)
 
+        history.attrs = {}
+        actions.attrs = {}
+
         cp00_r = cp00_by_row_id[row_id]
 
         prior_history = history.loc[history["date"].lt(cutoff)]
+        prior_history.attrs = {}
         split_history = prior_history.loc[
             prior_history["league"].eq("LCS")
             & prior_history["_year_num"].eq(year)
             & prior_history["split"].astype(str).str.casefold().eq(str(target["split"]).casefold())
         ]
+        split_history.attrs = {}
 
-        ranking = rank_weekly_opponents(
-            history,
-            actions,
-            player,
-            role,
-            team,
-            list(target["opponents"]),
-            cutoff,
-            str(target["target_patch"]),
-            split_history,
-            bonus_rules,
-            top_n=250,
-        )
+        history.attrs = {}
+        actions.attrs = {}
+        try:
+            ranking = rank_weekly_opponents(
+                history,
+                actions,
+                player,
+                model_role,
+                team,
+                list(target["opponents"]),
+                cutoff,
+                str(target["target_patch"]),
+                split_history,
+                bonus_rules,
+                top_n=250,
+                hyperparameters={
+                    "opening_round_baseline": float(int(target["split_week"]) == 1),
+                },
+            )
+        finally:
+            # Discard target-local memoization so it cannot be copied into
+            # later history slices.  This does not alter formulas or inputs.
+            history.attrs = {}
+            actions.attrs = {}
         ranked_champions = ranking["champion"].astype(str).tolist()
         reconstructed_hash = hashlib.sha256(
             ",".join(sorted(ranked_champions)).encode("utf-8")
         ).hexdigest()
-        if reconstructed_hash != str(cp00_r["candidate_set_hash"]):
+        hash_changed = reconstructed_hash != str(cp00_r["candidate_set_hash"])
+        count_changed = len(ranked_champions) != int(cp00_r["candidate_count"])
+        if hash_changed or count_changed:
+            drift = {
+                "row_id": row_id,
+                "cp00_candidate_count": int(cp00_r["candidate_count"]),
+                "corrected_candidate_count": len(ranked_champions),
+                "cp00_candidate_set_hash": str(cp00_r["candidate_set_hash"]),
+                "corrected_candidate_set_hash": reconstructed_hash,
+            }
+            candidate_set_drift.append(drift)
+            if candidate_set_policy == "strict_cp00":
+                raise ValueError(
+                    f"Candidate-set drift under strict_cp00 for {row_id}: {drift}"
+                )
+        missing_actual = sorted(
+            set(map(str, target["actual_champions"])) - set(ranked_champions)
+        )
+        if missing_actual:
             raise ValueError(
-                f"Candidate-set hash mismatch for {row_id}: "
-                f"CP-00={cp00_r['candidate_set_hash']} reconstructed={reconstructed_hash}"
-            )
-        if len(ranked_champions) != int(cp00_r["candidate_count"]):
-            raise ValueError(
-                f"Candidate-count mismatch for {row_id}: "
-                f"CP-00={cp00_r['candidate_count']} reconstructed={len(ranked_champions)}"
+                f"Candidate universe omits actual champions for {row_id}: "
+                f"{missing_actual}. Update the point-in-time release registry and "
+                "regenerate CP-00 before benchmarking."
             )
 
         c_records = extract_candidate_row_features(
@@ -863,6 +935,35 @@ def run_cp01_benchmark_ladder(
             "is_fearless": any(is_f_flags) if is_f_flags else False,
             "is_playoffs": any(playoffs_flags) if playoffs_flags else False,
         }
+        if idx == 1 or idx % 5 == 0 or idx == len(active_targets):
+            print(
+                f"[{time.strftime('%H:%M:%S')}] Completed "
+                f"{idx}/{len(active_targets)} target candidate sets...",
+                flush=True,
+            )
+
+    # A benchmark with silently constant model inputs is not a benchmark of
+    # the advertised policies.  This guard caught an uppercase/lowercase role
+    # mismatch that had reduced recent- and patch-frequency baselines to
+    # fallback tie-breakers.
+    if sample_size is None:
+        required_informative_features = [
+            "player_recent_share",
+            "lcs_patch_role_share",
+            "leading_region_patch_role_share",
+            "patch_distance",
+            "current_heuristic_score",
+        ]
+        constant_features = [
+            feature
+            for feature in required_informative_features
+            if len({row[feature] for row in all_candidate_rows_flat}) <= 1
+        ]
+        if constant_features:
+            raise ValueError(
+                "Candidate feature extraction produced constant advertised inputs: "
+                f"{constant_features}"
+            )
 
     # Separate Development Candidate Rows for Training Logistic Model
     dev_c_rows = [r for r in all_candidate_rows_flat if r["year"] in (2022, 2023)]
@@ -905,27 +1006,37 @@ def run_cp01_benchmark_ladder(
     benchmark_decision = "REJECT_EXPERIMENT"
     winner_evidence: dict[str, Any] = {}
 
+    # Select and freeze exactly one candidate using 2024 confirmation data.
+    # Only that frozen candidate is then opened on the one-shot 2025 window.
+    confirmation_candidates: list[tuple[float, str]] = []
     for m_name in ["logistic_choice_benchmark", "player_recent_frequency", "patch_role_frequency"]:
         m_res = eval_results[m_name]
         m_2024_bonus = m_res["windows"]["confirmation_2024"]["observed_total_round_bonus"]
-        m_2025_bonus = m_res["windows"]["final_validation_2025"]["observed_total_round_bonus"]
         m_2024_cov = m_res["windows"]["confirmation_2024"]["coverage"]
         m_2024_zu = m_res["windows"]["confirmation_2024"]["zero_use_rate"]
+        if (
+            m_2024_bonus > heur_2024_bonus
+            and m_2024_cov >= heur_2024_cov
+            and m_2024_zu <= heur_2024_zu
+        ):
+            confirmation_candidates.append((m_2024_bonus, m_name))
 
-        pass_2024 = m_2024_bonus > heur_2024_bonus
-        pass_2025 = m_2025_bonus > heur_2025_bonus
-        pass_cov = m_2024_cov >= heur_2024_cov
-        pass_zu = m_2024_zu <= heur_2024_zu
-
-        if pass_2024 and pass_2025 and pass_cov and pass_zu:
-            benchmark_winner = m_name
+    if confirmation_candidates:
+        m_2024_bonus, frozen_candidate = max(confirmation_candidates)
+        frozen_res = eval_results[frozen_candidate]
+        m_2025_bonus = frozen_res["windows"]["final_validation_2025"][
+            "observed_total_round_bonus"
+        ]
+        if m_2025_bonus > heur_2025_bonus:
+            benchmark_winner = frozen_candidate
             benchmark_decision = "PROMOTED_BENCHMARK_WINNER"
             winner_evidence = {
-                "winner": m_name,
+                "winner": frozen_candidate,
+                "selection_window": "confirmation_2024",
+                "validation_window": "final_validation_2025",
                 "2024_bonus_improvement": round(m_2024_bonus - heur_2024_bonus, 4),
                 "2025_bonus_improvement": round(m_2025_bonus - heur_2025_bonus, 4),
             }
-            break
 
     # Write Artifacts
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -935,6 +1046,14 @@ def run_cp01_benchmark_ladder(
     # support an auditable benchmark or reproduce its fitted rows.
     cand_rows_path = output_dir / "candidate_rows.json"
     write_json_utf8_lf(cand_rows_path, all_candidate_rows_flat)
+
+    drift_path = output_dir / "candidate_set_drift.json"
+    write_json_utf8_lf(drift_path, {
+        "policy": candidate_set_policy,
+        "cp00_usage": "frozen target rows and roster locks only",
+        "drifted_target_count": len(candidate_set_drift),
+        "rows": candidate_set_drift,
+    })
 
     # Artifact 2: feature_dictionary.md
     feat_dict_md = """# Feature Dictionary: CP-01B Champion-Picker Benchmark Ladder
@@ -999,7 +1118,7 @@ All features are computed strictly from historical match evidence prior to `rost
     # Artifact 5: benchmark_report.md
     report_md = f"""# Benchmark Report: CP-01B Champion-Picker Ladder
 
-**Task ID**: `{DEFAULT_EXPERIMENT_ID}`  
+**Task ID**: `{experiment_id}`
 **Provenance Binding Status**: `{provenance_status}`  
 **Roster Lock Policy**: `{LOCK_LABEL}`  
 **Evaluated Target Player-Weeks**: `{len(active_targets)}`  
@@ -1039,7 +1158,7 @@ Primary Metric: **Observed Mean Total Incremental Champion Bonus** (`observed_to
     # Artifact 6: run_summary.json
     elapsed_sec = time.time() - start_time
     summary_json_data = {
-        "task_id": DEFAULT_EXPERIMENT_ID,
+        "task_id": experiment_id,
         "status": "COMPLETED",
         "benchmark_decision": benchmark_decision,
         "benchmark_winner": benchmark_winner,
@@ -1048,6 +1167,8 @@ Primary Metric: **Observed Mean Total Incremental Champion Bonus** (`observed_to
         "lock_type": LOCK_LABEL,
         "evaluated_targets": len(active_targets),
         "total_candidate_rows": len(all_candidate_rows_flat),
+        "candidate_set_policy": candidate_set_policy,
+        "candidate_set_drifted_targets": len(candidate_set_drift),
         "logistic_model_coefficients": dict(
             zip(FEATURE_NAMES, map(lambda c: round(float(c), 6), logistic_model.coef_[0]))
         ),
@@ -1064,6 +1185,7 @@ Primary Metric: **Observed Mean Total Incremental Champion Bonus** (`observed_to
     # Artifact 7: dataset_manifest.json
     output_files = [
         cand_rows_path,
+        drift_path,
         feat_dict_path,
         bench_results_path,
         report_path,
@@ -1079,18 +1201,29 @@ Primary Metric: **Observed Mean Total Incremental Champion Bonus** (`observed_to
         }
 
     dataset_manifest_data = {
-        "experiment_id": DEFAULT_EXPERIMENT_ID,
+        "experiment_id": experiment_id,
         "created_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "lock_type": LOCK_LABEL,
         "provenance_binding_status": provenance_status,
         "cp00_baseline_manifest_hash": compute_file_sha256(cp00_manifest_path),
         "artifact_fingerprints": artifact_fingerprints,
         "guardrail_checks": {
-            "expected_target_count": expected_total_rows,
+            "expected_cp00_target_count": expected_total_rows,
+            "expected_evaluated_target_count": int(
+                config.get("guardrails", {}).get(
+                    "expected_evaluated_target_count", expected_total_rows
+                )
+            ),
             "evaluated_target_count": len(active_targets),
-            "targets_matched": len(active_targets) == expected_total_rows,
+            "targets_matched": len(active_targets) == int(
+                config.get("guardrails", {}).get(
+                    "expected_evaluated_target_count", expected_total_rows
+                )
+            ),
             "no_post_lock_leakage": True,
             "no_cp00_overwrites": True,
+            "candidate_set_policy": candidate_set_policy,
+            "candidate_set_drifted_targets": len(candidate_set_drift),
         },
     }
     manifest_path = output_dir / "dataset_manifest.json"
@@ -1099,6 +1232,7 @@ Primary Metric: **Observed Mean Total Incremental Champion Bonus** (`observed_to
     evidence_paths = [
         relative_posix(manifest_path),
         relative_posix(cand_rows_path),
+        relative_posix(drift_path),
         relative_posix(feat_dict_path),
         relative_posix(bench_results_path),
         relative_posix(report_path),
@@ -1108,7 +1242,7 @@ Primary Metric: **Observed Mean Total Incremental Champion Bonus** (`observed_to
 
     generate_status_packet(
         agent_runs_dir=agent_runs_dir,
-        task_id=DEFAULT_EXPERIMENT_ID,
+        task_id=experiment_id,
         phase="COMPLETED",
         state="COMPLETED",
         elapsed_sec=elapsed_sec,
@@ -1151,13 +1285,27 @@ def main() -> None:
         help="Run Tier 2 deterministic 25-row sample",
     )
     parser.add_argument(
+        "--sample-size",
+        type=int,
+        default=None,
+        help="Run a deterministic sample of this many target player-weeks",
+    )
+    parser.add_argument(
+        "--sample-start-index",
+        type=int,
+        default=None,
+        help="Use a contiguous sample beginning at this sorted target index",
+    )
+    parser.add_argument(
         "--year-2024",
         action="store_true",
         help="Run Tier 3 2024 confirmation subset",
     )
     args = parser.parse_args()
 
-    sample_size = 25 if args.sample_25 else None
+    sample_size = args.sample_size if args.sample_size is not None else (25 if args.sample_25 else None)
+    if sample_size is not None and sample_size <= 0:
+        parser.error("--sample-size must be positive")
     year_filter = 2024 if args.year_2024 else None
 
     print(
@@ -1168,6 +1316,7 @@ def main() -> None:
         output_dir=args.output_dir,
         agent_runs_dir=args.agent_runs_dir,
         sample_size=sample_size,
+        sample_start_index=args.sample_start_index,
         year_filter=year_filter,
     )
     print(

@@ -32,6 +32,77 @@ from champion_prediction.cp01_diagnostic import (
 
 
 class CP01BenchmarkLadderUnitTest(unittest.TestCase):
+    def test_candidate_features_use_model_role_and_opening_multiplier(self) -> None:
+        cutoff = pd.Timestamp("2024-02-10T00:00:00Z")
+        history = pd.DataFrame.from_records([
+            {
+                "gameid": "prior",
+                "date": cutoff - pd.Timedelta(days=30),
+                "league": "LCS",
+                "split": "Spring",
+                "_year_num": 2024,
+                "_player_lower": "player",
+                "player": "Player",
+                "role": "bot",
+                "champion": "Smolder",
+                "patch": "14.02",
+                "fantasy_pts": 10.0,
+            },
+            {
+                "gameid": "target",
+                "date": cutoff + pd.Timedelta(hours=1),
+                "league": "LCS",
+                "split": "Spring",
+                "_year_num": 2024,
+                "_player_lower": "player",
+                "player": "Player",
+                "role": "bot",
+                "champion": "Smolder",
+                "patch": "14.03",
+                "fantasy_pts": 10.0,
+            },
+        ])
+        target = {
+            "player": "Player",
+            "role": "bot",
+            "team": "Team",
+            "round_id": "round",
+            "roster_lock": cutoff,
+            "year": 2024,
+            "split": "Spring",
+            "split_week": 1,
+            "target_patch": "14.03",
+            "gameids": ["target"],
+            "actual_champions": ["Smolder"],
+        }
+        ranking = pd.DataFrame.from_records([{
+            "champion": "Smolder",
+            "player_recent_share": 0.5,
+            "lcs_patch_role_share": 0.25,
+            "leading_region_role_share": 0.2,
+            "role_flex_prior": 1.0,
+            "opponent_ban_rate": 0.1,
+            "opponent_pick_denial_rate": 0.1,
+            "availability_factor": 0.8,
+            "expected_multiplier_bonus": 2.5,
+        }])
+        rules = {
+            "opening_round_baseline": 1.3,
+            "unplayed_in_role": 1.7,
+            "unplayed_by_player": 1.5,
+            "already_played_by_player": 1.3,
+        }
+
+        row = extract_candidate_row_features(
+            history, target, ranking, rules, {}, {}
+        )[0]
+
+        self.assertEqual(row["role"], "BOT")
+        self.assertEqual(row["player_recent_share"], 0.5)
+        self.assertEqual(row["current_heuristic_score"], 2.5)
+        self.assertGreater(row["patch_distance"], 0.0)
+        self.assertAlmostEqual(row["observed_total_round_bonus_if_locked"], 3.0)
+
     def test_verify_cp00_manifest(self) -> None:
         manifest_path = PROJECT_ROOT / "analysis" / "champion_baselines" / "cp00" / "manifest.json"
         res = verify_cp00_manifest(manifest_path)

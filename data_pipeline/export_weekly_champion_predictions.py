@@ -63,6 +63,12 @@ def _pick_payload(row: pd.Series) -> dict[str, Any]:
             "and pick order are unknown at Friday lock."
         ),
     ]
+    recommended_value = row.get("production_recommended", False)
+    production_recommended = (
+        bool(recommended_value)
+        if isinstance(recommended_value, bool)
+        else str(recommended_value).strip().casefold() in {"1", "true", "yes"}
+    )
     return {
         "champion": str(row["champion"]),
         "option_basis": str(row.get("portfolio_basis", "")),
@@ -70,6 +76,11 @@ def _pick_payload(row: pd.Series) -> dict[str, Any]:
         "estimated_pick_chance": round(estimated_chance, 4),
         "expected_multiplier_bonus": round(
             float(row["expected_multiplier_bonus"]), 4
+        ),
+        "production_recommended": production_recommended,
+        "choice_model_rank": int(float(row.get("choice_model_rank", 0) or 0)),
+        "choice_model_score": round(
+            float(row.get("choice_model_score", 0.0) or 0.0), 6
         ),
         "availability": round(float(row["availability_factor"]), 4),
         "opponent_ban_rate": round(float(row["opponent_ban_rate"]), 4),
@@ -137,6 +148,21 @@ def build_weekly_prediction_payload(
                     "low" if margin < 0.03 else "medium" if margin < 0.08 else "higher"
                 ),
             }
+        recommended_lock = None
+        if "production_recommended" in candidates.columns:
+            recommended_mask = candidates["production_recommended"].map(
+                lambda value: (
+                    bool(value)
+                    if isinstance(value, bool)
+                    else str(value).strip().casefold() in {"1", "true", "yes"}
+                )
+            )
+            if recommended_mask.any():
+                recommended_lock = _pick_payload(
+                    candidates.loc[recommended_mask].sort_values(
+                        "choice_model_rank", kind="stable"
+                    ).iloc[0]
+                )
         records.append({
             "player": str(player.player),
             "role": str(player.role).upper(),
@@ -145,6 +171,7 @@ def build_weekly_prediction_payload(
             "projected_fantasy_points": round(
                 float(player.projected_fantasy_pts), 2
             ),
+            "recommended_lock": recommended_lock,
             "portfolio_strategy": (
                 str(candidates["portfolio_strategy"].iloc[0])
                 if not candidates.empty
@@ -175,7 +202,14 @@ def build_weekly_prediction_payload(
         "patch": patch,
         "starter_method": "most recent historical participant by team and role",
         "model_status": (
-            "estimated pick chances are normalized heuristic ranking shares; "
+            "production lock uses the 2022-2025 validated logistic choice model; "
+            "displayed ranking shares are relative scores, not calibrated probabilities"
+            if not portfolio.empty
+            and "portfolio_strategy" in portfolio.columns
+            and portfolio["portfolio_strategy"].astype(str).eq(
+                "validated_logistic_choice_model"
+            ).any()
+            else "estimated pick chances are normalized heuristic ranking shares; "
             "they are not calibrated probabilities"
         ),
         "validation": validation or {},

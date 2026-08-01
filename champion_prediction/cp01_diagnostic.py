@@ -524,6 +524,9 @@ def run_cp01_diagnostic(
         pred_status = str(row.get("prediction_status", "scored"))
         player = str(row.get("player", target["player"]))
         role = normalize_role(str(row.get("role", target["role"])))
+        model_role = str(target["role"]).casefold()
+        if model_role in {"jng", "jungle"}:
+            model_role = "jgl"
         cutoff_ts = pd.Timestamp(target["roster_lock"])
         year = int(row.get("year", target["year"]))
         split = str(row.get("split", target["split"]))
@@ -592,9 +595,12 @@ def run_cp01_diagnostic(
                 & prior_history["_year_num"].eq(year)
                 & prior_history["split"].astype(str).str.casefold().eq(split.casefold())
             ]
-            _, novelty_mult = champion_multiplier(
-                split_history, player, role, chosen_champ, bonus_rules
-            )
+            if int(row.get("split_week", target["split_week"])) == 1:
+                novelty_mult = float(bonus_rules["opening_round_baseline"])
+            else:
+                _, novelty_mult = champion_multiplier(
+                    split_history, player, model_role, chosen_champ, bonus_rules
+                )
 
         observed_total_bonus = round(fantasy_pts_sum * (float(novelty_mult) - 1.0), 4)
         zero_use = bool(games_on_chosen == 0)

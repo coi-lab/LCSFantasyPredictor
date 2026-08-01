@@ -1,0 +1,182 @@
+{
+  "current_heuristic": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.09,
+      "zero_use_rate": 0.5874,
+      "hit_at_1": 0.4126
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.0178,
+      "zero_use_rate": 0.6584,
+      "hit_at_1": 0.3416
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.6277,
+      "zero_use_rate": 0.6395,
+      "hit_at_1": 0.3605
+    }
+  },
+  "production_logistic": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.204,
+      "zero_use_rate": 0.5949,
+      "hit_at_1": 0.4051
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.3782,
+      "zero_use_rate": 0.6161,
+      "hit_at_1": 0.3839
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.7026,
+      "zero_use_rate": 0.6395,
+      "hit_at_1": 0.3605
+    }
+  },
+  "linear_expected_value_hurdle": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.2174,
+      "zero_use_rate": 0.5994,
+      "hit_at_1": 0.4006
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.4424,
+      "zero_use_rate": 0.6131,
+      "hit_at_1": 0.3869
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.7533,
+      "zero_use_rate": 0.6308,
+      "hit_at_1": 0.3692
+    }
+  },
+  "gbm_expected_value_hurdle": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.0747,
+      "zero_use_rate": 0.7947,
+      "hit_at_1": 0.2053
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 1.5333,
+      "zero_use_rate": 0.7971,
+      "hit_at_1": 0.2029
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.4236,
+      "zero_use_rate": 0.8052,
+      "hit_at_1": 0.1948
+    }
+  },
+  "direct_gbm_expected_value": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 3.1104,
+      "zero_use_rate": 0.5267,
+      "hit_at_1": 0.4733
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.4881,
+      "zero_use_rate": 0.638,
+      "hit_at_1": 0.362
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.7893,
+      "zero_use_rate": 0.6265,
+      "hit_at_1": 0.3735
+    }
+  },
+  "patch_role_frequency": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.3199,
+      "zero_use_rate": 0.5869,
+      "hit_at_1": 0.4131
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.4483,
+      "zero_use_rate": 0.6234,
+      "hit_at_1": 0.3766
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.7725,
+      "zero_use_rate": 0.6279,
+      "hit_at_1": 0.3721
+    }
+  },
+  "logistic_patch_ensemble_0.25": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.3023,
+      "zero_use_rate": 0.5864,
+      "hit_at_1": 0.4136
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.4486,
+      "zero_use_rate": 0.6175,
+      "hit_at_1": 0.3825
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.793,
+      "zero_use_rate": 0.6206,
+      "hit_at_1": 0.3794
+    }
+  },
+  "logistic_patch_ensemble_0.50": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.2866,
+      "zero_use_rate": 0.5874,
+      "hit_at_1": 0.4126
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.3397,
+      "zero_use_rate": 0.6204,
+      "hit_at_1": 0.3796
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.7348,
+      "zero_use_rate": 0.6294,
+      "hit_at_1": 0.3706
+    }
+  },
+  "logistic_patch_ensemble_0.75": {
+    "development": {
+      "count": 2007,
+      "mean_bonus": 2.2483,
+      "zero_use_rate": 0.5934,
+      "hit_at_1": 0.4066
+    },
+    "confirmation": {
+      "count": 685,
+      "mean_bonus": 2.3582,
+      "zero_use_rate": 0.619,
+      "hit_at_1": 0.381
+    },
+    "final_validation": {
+      "count": 688,
+      "mean_bonus": 1.7457,
+      "zero_use_rate": 0.6265,
+      "hit_at_1": 0.3735
+    }
+  }
+}

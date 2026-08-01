@@ -1,0 +1,847 @@
+{
+  "policy": "corrected_point_in_time_reconstruction",
+  "cp00_usage": "frozen target rows and roster locks only",
+  "drifted_target_count": 120,
+  "rows": [
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"apa\",\"MID\",\"Team Liquid\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"armao\",\"JGL\",\"Immortals\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"berserker\",\"BOT\",\"Cloud9\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"blaber\",\"JGL\",\"Cloud9\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"bugi\",\"JGL\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"busio\",\"SUP\",\"FlyQuest\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"bvoy\",\"BOT\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"bwipo\",\"TOP\",\"FlyQuest\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"castle\",\"TOP\",\"Immortals\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"contractz\",\"JGL\",\"NRG\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"corejj\",\"SUP\",\"Team Liquid\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"dhokla\",\"TOP\",\"NRG\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"dove\",\"MID\",\"Dignitas\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"eyla\",\"SUP\",\"100 Thieves\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"fbi\",\"BOT\",\"NRG\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"fakegod\",\"TOP\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"fudge\",\"TOP\",\"Cloud9\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"impact\",\"TOP\",\"Team Liquid\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"insanity\",\"MID\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"inspired\",\"JGL\",\"FlyQuest\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"isles\",\"SUP\",\"Dignitas\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"jensen\",\"MID\",\"FlyQuest\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"jojopyun\",\"MID\",\"Cloud9\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"mask\",\"MID\",\"Immortals\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"massu\",\"BOT\",\"FlyQuest\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"meech\",\"BOT\",\"100 Thieves\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"olleh\",\"SUP\",\"Immortals\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"palafox\",\"MID\",\"NRG\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"quid\",\"MID\",\"100 Thieves\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"rich\",\"TOP\",\"Dignitas\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"river\",\"JGL\",\"100 Thieves\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"sniper\",\"TOP\",\"100 Thieves\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"tactical\",\"BOT\",\"Immortals\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"tomo\",\"BOT\",\"Dignitas\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"umti\",\"JGL\",\"Team Liquid\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"vulcan\",\"SUP\",\"Cloud9\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"yeon\",\"BOT\",\"Team Liquid\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"zeyzal\",\"SUP\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"exyu\",\"JGL\",\"Dignitas\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Spring_2024-02-05\",\"huhi\",\"SUP\",\"NRG\"]",
+      "cp00_candidate_count": 160,
+      "corrected_candidate_count": 161,
+      "cp00_candidate_set_hash": "ccf5607d70ba5c30a153c323051a70257320fbc97d4becd4ccb0a3318214f3ff",
+      "corrected_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"apa\",\"MID\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"armao\",\"JGL\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"berserker\",\"BOT\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"blaber\",\"JGL\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"bugi\",\"JGL\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"busio\",\"SUP\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"bvoy\",\"BOT\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"bwipo\",\"TOP\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"castle\",\"TOP\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"contractz\",\"JGL\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"corejj\",\"SUP\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"dhokla\",\"TOP\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"eyla\",\"SUP\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"fbi\",\"BOT\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"fakegod\",\"TOP\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"impact\",\"TOP\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"insanity\",\"MID\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"inspired\",\"JGL\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"isles\",\"SUP\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"jensen\",\"MID\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"jojopyun\",\"MID\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"licorice\",\"TOP\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"mask\",\"MID\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"massu\",\"BOT\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"olleh\",\"SUP\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"palafox\",\"MID\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"quad\",\"MID\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"quid\",\"MID\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"river\",\"JGL\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"sniper\",\"TOP\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"spica\",\"JGL\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"tactical\",\"BOT\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"thanatos\",\"TOP\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"tomo\",\"BOT\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"umti\",\"JGL\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"vulcan\",\"SUP\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"yeon\",\"BOT\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"zeyzal\",\"SUP\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"zven\",\"BOT\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-07-29\",\"huhi\",\"SUP\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"apa\",\"MID\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"armao\",\"JGL\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"berserker\",\"BOT\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"blaber\",\"JGL\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"bugi\",\"JGL\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"busio\",\"SUP\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"bvoy\",\"BOT\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"bwipo\",\"TOP\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"castle\",\"TOP\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"contractz\",\"JGL\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"corejj\",\"SUP\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"dhokla\",\"TOP\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"eyla\",\"SUP\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"fbi\",\"BOT\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"fakegod\",\"TOP\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"impact\",\"TOP\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"insanity\",\"MID\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"inspired\",\"JGL\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"isles\",\"SUP\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"jensen\",\"MID\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"jojopyun\",\"MID\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"licorice\",\"TOP\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"mask\",\"MID\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"massu\",\"BOT\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"olleh\",\"SUP\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"palafox\",\"MID\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"quad\",\"MID\",\"FlyQuest\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"quid\",\"MID\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"river\",\"JGL\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"sniper\",\"TOP\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"spica\",\"JGL\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"tactical\",\"BOT\",\"Immortals\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"thanatos\",\"TOP\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"tomo\",\"BOT\",\"100 Thieves\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"umti\",\"JGL\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"vulcan\",\"SUP\",\"Cloud9\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"yeon\",\"BOT\",\"Team Liquid\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"zeyzal\",\"SUP\",\"Shopify Rebellion\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"zven\",\"BOT\",\"Dignitas\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    },
+    {
+      "row_id": "[\"LCS_2024_Summer_2024-08-05\",\"huhi\",\"SUP\",\"NRG\"]",
+      "cp00_candidate_count": 161,
+      "corrected_candidate_count": 162,
+      "cp00_candidate_set_hash": "2a9893fd46b2d82b71fa4a958b041a86e8900026768f712cbd4aa28a6de54d06",
+      "corrected_candidate_set_hash": "7ec87e916633748168a764be6199b652d57df3a9a632f2efd218d5a9bdcd2862"
+    }
+  ]
+}

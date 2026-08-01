@@ -1,0 +1,37 @@
+{
+  "experiment_id": "cp02-expected-value-hurdle-001",
+  "candidate_rows": "analysis/champion_experiments/cp01b-production-selection-gate-003/candidate_rows.json",
+  "candidate_manifest": "analysis/champion_experiments/cp01b-production-selection-gate-003/dataset_manifest.json",
+  "production_summary": "analysis/champion_experiments/cp01b-production-selection-gate-003/run_summary.json",
+  "output_dir": "analysis/champion_experiments/cp02-expected-value-hurdle-001",
+  "expected_candidate_rows": 536128,
+  "expected_targets": 3380,
+  "target_counts_by_year": {
+    "2022": 1127,
+    "2023": 880,
+    "2024": 685,
+    "2025": 688
+  },
+  "windows": {
+    "development": [2022, 2023],
+    "confirmation": [2024],
+    "final_validation": [2025]
+  },
+  "seed": 20260801,
+  "models": {
+    "hist_gradient_boosting": {
+      "max_iter": 100,
+      "learning_rate": 0.05,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 30,
+      "l2_regularization": 1.0
+    },
+    "ensemble_alphas": [0.25, 0.5, 0.75]
+  },
+  "acceptance": {
+    "minimum_2025_bonus_delta": 0.15,
+    "maximum_2025_zero_use_delta": 0.0,
+    "bootstrap_rounds": 2000,
+    "minimum_clustered_ci_lower": 0.0
+  }
+}

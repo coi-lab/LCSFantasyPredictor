@@ -7,6 +7,7 @@ import unittest
 import pandas as pd
 
 from fantasy_prediction.lineup_optimizer import (
+    attach_champion_bonus,
     attach_dashboard_champion_options,
     build_matchup_conflicts,
     build_dashboard_payload,
@@ -17,6 +18,26 @@ from fantasy_prediction.lineup_optimizer import (
 
 
 class LineupOptimizerTests(unittest.TestCase):
+    def test_champion_bonus_uses_validated_production_recommendation(self) -> None:
+        players = pd.DataFrame([{"player": "Player", "team": "Team"}])
+        portfolio = pd.DataFrame([
+            {
+                "player": "Player", "team": "Team", "champion": "Heuristic",
+                "production_recommended": False, "portfolio_rank": 1,
+                "portfolio_basis": "Overall", "expected_multiplier_bonus": 5.0,
+            },
+            {
+                "player": "Player", "team": "Team", "champion": "Validated",
+                "production_recommended": True, "portfolio_rank": 1,
+                "portfolio_basis": "Rank 1", "expected_multiplier_bonus": 2.0,
+            },
+        ])
+
+        result = attach_champion_bonus(players, portfolio)
+
+        self.assertEqual(result.iloc[0]["champion"], "Validated")
+        self.assertEqual(result.iloc[0]["champion_expected_bonus"], 2.0)
+
     def test_round_budget_resolves_without_opening_budget_fallback(self) -> None:
         current = pd.DataFrame([{"round_name": "Round 2 (Split 3)"}])
         unknown = pd.DataFrame([{"round_name": "Round 3 (Split 3)"}])

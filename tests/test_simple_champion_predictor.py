@@ -10,6 +10,8 @@ from pathlib import Path
 import pandas as pd
 
 from champion_prediction.simple_predictor import (
+    CHOICE_MODEL_FEATURES,
+    apply_choice_model_ranking,
     apply_expected_team_synergy,
     apply_joint_team_draft,
     champion_multiplier,
@@ -38,6 +40,62 @@ class SimpleChampionPredictorTests(unittest.TestCase):
              "role": "mid", "player": "One", "team": "A", "opponent": "B",
              "champion": "FutureLeak", "fantasy_pts": 1000.0},
         ])
+
+    def test_validated_choice_model_controls_production_recommendation(self) -> None:
+        candidates = pd.DataFrame([
+            {
+                "champion": "Comfort",
+                "player_recent_share": 0.8,
+                "lcs_patch_role_share": 0.2,
+                "leading_region_role_share": 0.1,
+                "role_flex_prior": 1.0,
+                "opponent_ban_rate": 0.0,
+                "opponent_pick_denial_rate": 0.0,
+                "availability_factor": 1.0,
+                "expected_multiplier_bonus": 5.0,
+                "ranking_share": 0.8,
+                "estimated_pick_probability": 0.8,
+            },
+            {
+                "champion": "Meta",
+                "player_recent_share": 0.1,
+                "lcs_patch_role_share": 0.2,
+                "leading_region_role_share": 0.9,
+                "role_flex_prior": 1.0,
+                "opponent_ban_rate": 0.0,
+                "opponent_pick_denial_rate": 0.0,
+                "availability_factor": 1.0,
+                "expected_multiplier_bonus": 1.0,
+                "ranking_share": 0.2,
+                "estimated_pick_probability": 0.2,
+            },
+        ])
+        history = pd.DataFrame([
+            {
+                "date": pd.Timestamp("2025-01-01", tz="UTC"),
+                "player": "Player",
+                "champion": "Comfort",
+                "patch": "15.1",
+            }
+        ])
+        hyperparameters = {"choice_model_enabled": 1.0}
+        hyperparameters.update({
+            f"choice_coef_{name}": 0.0 for name in CHOICE_MODEL_FEATURES
+        })
+        hyperparameters["choice_coef_leading_region_patch_role_share"] = 10.0
+
+        result = apply_choice_model_ranking(
+            candidates,
+            history,
+            "Player",
+            pd.Timestamp("2025-02-01", tz="UTC"),
+            "15.3",
+            hyperparameters,
+        )
+
+        self.assertEqual(result.iloc[0]["champion"], "Meta")
+        self.assertTrue(bool(result.iloc[0]["production_recommended"]))
+        self.assertEqual(int(result.iloc[0]["choice_model_rank"]), 1)
 
     def test_timestamped_registry_adds_only_released_patch_eligible_champions(self) -> None:
         payload = {

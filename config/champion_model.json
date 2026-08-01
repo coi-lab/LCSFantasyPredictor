@@ -13,6 +13,29 @@
       "joint_role_contention_strength": 0.25,
       "joint_team_draft_enabled": false,
       "reason": "Disabled after regression on the July 2025 Friday-lock validation."
+    },
+    "choice_model": {
+      "enabled": true,
+      "model": "logistic_choice_benchmark",
+      "selection_gate": "cp01b-production-selection-gate-003",
+      "trained_on": [2022, 2023],
+      "selected_on": [2024],
+      "validated_on": [2025],
+      "coefficients": {
+        "player_recent_share": -1.802874,
+        "player_career_share": -1.362816,
+        "lcs_patch_role_share": 3.824867,
+        "leading_region_patch_role_share": 6.190262,
+        "days_since_last_played": -0.002199,
+        "player_games_on_champion": 0.020045,
+        "player_history_games": -0.002276,
+        "patch_distance": 0.000223,
+        "role_flex_prior": 2.177129,
+        "opponent_ban_rate": -0.510698,
+        "opponent_pick_denial_rate": 0.164168,
+        "availability_factor": -1.94095,
+        "current_heuristic_score": 0.469596
+      }
     }
   },
   "selection": {

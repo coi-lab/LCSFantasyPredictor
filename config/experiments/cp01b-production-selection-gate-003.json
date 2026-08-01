@@ -1,0 +1,26 @@
+{
+  "experiment_id": "cp01b-production-selection-gate-003",
+  "task_id": "cp01b-production-selection-gate-003",
+  "description": "Production selection gate over development, confirmation, and final validation years; 2026 remains excluded as exposed report-only data.",
+  "cp00_baseline_dir": "analysis/champion_baselines/cp00",
+  "candidate_set_policy": "corrected_point_in_time_reconstruction",
+  "evaluation_end_year_exclusive": 2026,
+  "output_dir": "analysis/champion_experiments/cp01b-production-selection-gate-003",
+  "agent_runs_dir": ".agent-runs/cp01b-production-selection-gate-003-child",
+  "draft_sqlite_path": "data/generated/champion_prediction/champion_drafts.sqlite",
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "seed": 20260723,
+  "chronological_windows": {
+    "development": [2022, 2023],
+    "confirmation": [2024],
+    "final_validation": [2025],
+    "exposed_test": [2026]
+  },
+  "guardrails": {
+    "expected_target_row_count": 4089,
+    "expected_evaluated_target_count": 3380,
+    "allow_artifact_overwrite": false,
+    "require_full_actual_champion_coverage": true,
+    "require_informative_features": true
+  }
+}

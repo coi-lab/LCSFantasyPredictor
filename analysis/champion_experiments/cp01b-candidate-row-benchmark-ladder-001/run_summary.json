@@ -1,0 +1,402 @@
+{
+  "task_id": "cp01b-candidate-row-benchmark-ladder-001",
+  "status": "COMPLETED",
+  "benchmark_decision": "PROMOTED_BENCHMARK_WINNER",
+  "benchmark_winner": "logistic_choice_benchmark",
+  "provenance_binding_status": "PARTIAL_BASELINE_BINDING",
+  "manifest_verification": {
+    "manifest_path": "analysis/champion_baselines/cp00/manifest.json",
+    "provenance_binding_status": "PARTIAL_BASELINE_BINDING",
+    "manifest_inconsistencies": [
+      {
+        "code": "BASELINE_MANIFEST_INCONSISTENT",
+        "file": "analysis/champion_baselines/cp00/cp00_baseline_report.md",
+        "expected_sha256": "b9f701b0a52c4d8a06753bdc291f7075eeb078897c4826eb1b6674e94bda94a4",
+        "actual_sha256": "8b57c52c8193b8f46f86df44b363eac5689694433055280637f4ad5c5b4a75d4",
+        "notice": "Artifact analysis/champion_baselines/cp00/cp00_baseline_report.md hash differs from manifest.json. Evaluation data files passed; proceeding under PARTIAL_BASELINE_BINDING."
+      }
+    ],
+    "artifacts_verified": {
+      "analysis/champion_baselines/cp00/aggregate_report.json": {
+        "expected_sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+        "actual_sha256": "f9f580dd578013c75f16b7ac120c187d1d84e4a6f01a44fc32dd93a587aeca5a",
+        "matches": true
+      },
+      "analysis/champion_baselines/cp00/cp00_baseline_report.md": {
+        "expected_sha256": "b9f701b0a52c4d8a06753bdc291f7075eeb078897c4826eb1b6674e94bda94a4",
+        "actual_sha256": "8b57c52c8193b8f46f86df44b363eac5689694433055280637f4ad5c5b4a75d4",
+        "matches": false
+      },
+      "analysis/champion_baselines/cp00/row_level_evaluation.json": {
+        "expected_sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+        "actual_sha256": "6dae9b97eb4efbbf6df465381a04567b490a3c43cb79ece974fa3a2f68f12ee1",
+        "matches": true
+      }
+    }
+  },
+  "lock_type": "EARLIEST_OBSERVED_GAME_START_PROXY",
+  "evaluated_targets": 4089,
+  "total_candidate_rows": 655864,
+  "logistic_model_coefficients": {
+    "player_recent_share": 0.0,
+    "player_career_share": 0.092973,
+    "lcs_patch_role_share": 0.0,
+    "leading_region_patch_role_share": 0.0,
+    "days_since_last_played": -0.003996,
+    "player_games_on_champion": 0.045552,
+    "player_history_games": -0.003927,
+    "patch_distance": 0.0,
+    "role_flex_prior": -0.001269,
+    "opponent_ban_rate": 1.070033,
+    "opponent_pick_denial_rate": 1.637986,
+    "availability_factor": -1.367348,
+    "current_heuristic_score": 0.0
+  },
+  "models_summary": {
+    "player_recent_frequency": {
+      "model_name": "player_recent_frequency",
+      "total_evaluated_targets": 4089,
+      "overall_metrics": {
+        "window": "overall",
+        "years": "2022-2026",
+        "count": 4089,
+        "coverage": 1.0,
+        "conditional_ranking_error_rate": 0.7574,
+        "hit_at_1": 0.2426,
+        "hit_at_3": 0.5092,
+        "mrr": 0.4258,
+        "zero_use_rate": 0.7574,
+        "observed_total_round_bonus": 2.5133,
+        "mean_cp00_per_game_proxy": 0.1019,
+        "mean_metric_unit_discrepancy": -2.4114
+      },
+      "windows": {
+        "development_2022_2023": {
+          "window": "development",
+          "years": "2022-2023",
+          "count": 2007,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.7539,
+          "hit_at_1": 0.2461,
+          "hit_at_3": 0.4783,
+          "mrr": 0.416,
+          "zero_use_rate": 0.7539,
+          "observed_total_round_bonus": 2.5939,
+          "mean_cp00_per_game_proxy": 0.0393,
+          "mean_metric_unit_discrepancy": -2.5547
+        },
+        "confirmation_2024": {
+          "window": "confirmation",
+          "years": "2024-2024",
+          "count": 685,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.7796,
+          "hit_at_1": 0.2204,
+          "hit_at_3": 0.4745,
+          "mrr": 0.3974,
+          "zero_use_rate": 0.7796,
+          "observed_total_round_bonus": 2.529,
+          "mean_cp00_per_game_proxy": 0.0472,
+          "mean_metric_unit_discrepancy": -2.4818
+        },
+        "final_validation_2025": {
+          "window": "final_validation",
+          "years": "2025-2025",
+          "count": 688,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.7485,
+          "hit_at_1": 0.2515,
+          "hit_at_3": 0.564,
+          "mrr": 0.4514,
+          "zero_use_rate": 0.7485,
+          "observed_total_round_bonus": 2.4176,
+          "mean_cp00_per_game_proxy": 0.1363,
+          "mean_metric_unit_discrepancy": -2.2813
+        },
+        "exposed_test_2026": {
+          "window": "exposed_test",
+          "years": "2026-2026",
+          "count": 709,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.7546,
+          "hit_at_1": 0.2454,
+          "hit_at_3": 0.5769,
+          "mrr": 0.4558,
+          "zero_use_rate": 0.7546,
+          "observed_total_round_bonus": 2.3628,
+          "mean_cp00_per_game_proxy": 0.2989,
+          "mean_metric_unit_discrepancy": -2.0639,
+          "classification": "EXPOSED_REPORT_ONLY"
+        }
+      },
+      "role_slices": {
+        "TOP": 1.9197,
+        "JGL": 2.3528,
+        "MID": 2.1041,
+        "BOT": 2.85,
+        "SUP": 3.3396
+      }
+    },
+    "patch_role_frequency": {
+      "model_name": "patch_role_frequency",
+      "total_evaluated_targets": 4089,
+      "overall_metrics": {
+        "window": "overall",
+        "years": "2022-2026",
+        "count": 4089,
+        "coverage": 1.0,
+        "conditional_ranking_error_rate": 0.9944,
+        "hit_at_1": 0.0056,
+        "hit_at_3": 0.0132,
+        "mrr": 0.0508,
+        "zero_use_rate": 0.9944,
+        "observed_total_round_bonus": 0.0668,
+        "mean_cp00_per_game_proxy": 0.1019,
+        "mean_metric_unit_discrepancy": 0.0351
+      },
+      "windows": {
+        "development_2022_2023": {
+          "window": "development",
+          "years": "2022-2023",
+          "count": 2007,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.9995,
+          "hit_at_1": 0.0005,
+          "hit_at_3": 0.0154,
+          "mrr": 0.0503,
+          "zero_use_rate": 0.9995,
+          "observed_total_round_bonus": 0.0053,
+          "mean_cp00_per_game_proxy": 0.0393,
+          "mean_metric_unit_discrepancy": 0.0339
+        },
+        "confirmation_2024": {
+          "window": "confirmation",
+          "years": "2024-2024",
+          "count": 685,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.9752,
+          "hit_at_1": 0.0248,
+          "hit_at_3": 0.0263,
+          "mrr": 0.0673,
+          "zero_use_rate": 0.9752,
+          "observed_total_round_bonus": 0.2868,
+          "mean_cp00_per_game_proxy": 0.0472,
+          "mean_metric_unit_discrepancy": -0.2395
+        },
+        "final_validation_2025": {
+          "window": "final_validation",
+          "years": "2025-2025",
+          "count": 688,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.9927,
+          "hit_at_1": 0.0073,
+          "hit_at_3": 0.0073,
+          "mrr": 0.0498,
+          "zero_use_rate": 0.9927,
+          "observed_total_round_bonus": 0.0962,
+          "mean_cp00_per_game_proxy": 0.1363,
+          "mean_metric_unit_discrepancy": 0.0401
+        },
+        "exposed_test_2026": {
+          "window": "exposed_test",
+          "years": "2026-2026",
+          "count": 709,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 1.0,
+          "hit_at_1": 0.0,
+          "hit_at_3": 0.0,
+          "mrr": 0.0372,
+          "zero_use_rate": 1.0,
+          "observed_total_round_bonus": 0.0,
+          "mean_cp00_per_game_proxy": 0.2989,
+          "mean_metric_unit_discrepancy": 0.2989,
+          "classification": "EXPOSED_REPORT_ONLY"
+        }
+      },
+      "role_slices": {
+        "TOP": 0.0,
+        "JGL": 0.3102,
+        "MID": 0.0,
+        "BOT": 0.0,
+        "SUP": 0.0246
+      }
+    },
+    "current_heuristic": {
+      "model_name": "current_heuristic",
+      "total_evaluated_targets": 4089,
+      "overall_metrics": {
+        "window": "overall",
+        "years": "2022-2026",
+        "count": 4089,
+        "coverage": 1.0,
+        "conditional_ranking_error_rate": 0.9714,
+        "hit_at_1": 0.0286,
+        "hit_at_3": 0.0514,
+        "mrr": 0.0669,
+        "zero_use_rate": 0.9714,
+        "observed_total_round_bonus": 0.2135,
+        "mean_cp00_per_game_proxy": 0.1019,
+        "mean_metric_unit_discrepancy": -0.1116
+      },
+      "windows": {
+        "development_2022_2023": {
+          "window": "development",
+          "years": "2022-2023",
+          "count": 2007,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.987,
+          "hit_at_1": 0.013,
+          "hit_at_3": 0.0429,
+          "mrr": 0.0506,
+          "zero_use_rate": 0.987,
+          "observed_total_round_bonus": 0.0632,
+          "mean_cp00_per_game_proxy": 0.0393,
+          "mean_metric_unit_discrepancy": -0.024
+        },
+        "confirmation_2024": {
+          "window": "confirmation",
+          "years": "2024-2024",
+          "count": 685,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.9825,
+          "hit_at_1": 0.0175,
+          "hit_at_3": 0.0248,
+          "mrr": 0.0454,
+          "zero_use_rate": 0.9825,
+          "observed_total_round_bonus": 0.0979,
+          "mean_cp00_per_game_proxy": 0.0472,
+          "mean_metric_unit_discrepancy": -0.0507
+        },
+        "final_validation_2025": {
+          "window": "final_validation",
+          "years": "2025-2025",
+          "count": 688,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.9593,
+          "hit_at_1": 0.0407,
+          "hit_at_3": 0.0669,
+          "mrr": 0.0884,
+          "zero_use_rate": 0.9593,
+          "observed_total_round_bonus": 0.3204,
+          "mean_cp00_per_game_proxy": 0.1363,
+          "mean_metric_unit_discrepancy": -0.1841
+        },
+        "exposed_test_2026": {
+          "window": "exposed_test",
+          "years": "2026-2026",
+          "count": 709,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.9281,
+          "hit_at_1": 0.0719,
+          "hit_at_3": 0.086,
+          "mrr": 0.1127,
+          "zero_use_rate": 0.9281,
+          "observed_total_round_bonus": 0.6468,
+          "mean_cp00_per_game_proxy": 0.2989,
+          "mean_metric_unit_discrepancy": -0.3478,
+          "classification": "EXPOSED_REPORT_ONLY"
+        }
+      },
+      "role_slices": {
+        "TOP": 0.3277,
+        "JGL": 0.0495,
+        "MID": 0.1064,
+        "BOT": 0.5825,
+        "SUP": 0.0
+      }
+    },
+    "logistic_choice_benchmark": {
+      "model_name": "logistic_choice_benchmark",
+      "total_evaluated_targets": 4089,
+      "overall_metrics": {
+        "window": "overall",
+        "years": "2022-2026",
+        "count": 4089,
+        "coverage": 1.0,
+        "conditional_ranking_error_rate": 0.6965,
+        "hit_at_1": 0.3035,
+        "hit_at_3": 0.6241,
+        "mrr": 0.4992,
+        "zero_use_rate": 0.6965,
+        "observed_total_round_bonus": 3.2426,
+        "mean_cp00_per_game_proxy": 0.1019,
+        "mean_metric_unit_discrepancy": -3.1407
+      },
+      "windows": {
+        "development_2022_2023": {
+          "window": "development",
+          "years": "2022-2023",
+          "count": 2007,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.6771,
+          "hit_at_1": 0.3229,
+          "hit_at_3": 0.6383,
+          "mrr": 0.5144,
+          "zero_use_rate": 0.6771,
+          "observed_total_round_bonus": 3.5125,
+          "mean_cp00_per_game_proxy": 0.0393,
+          "mean_metric_unit_discrepancy": -3.4733
+        },
+        "confirmation_2024": {
+          "window": "confirmation",
+          "years": "2024-2024",
+          "count": 685,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.7066,
+          "hit_at_1": 0.2934,
+          "hit_at_3": 0.5883,
+          "mrr": 0.4756,
+          "zero_use_rate": 0.7066,
+          "observed_total_round_bonus": 3.4649,
+          "mean_cp00_per_game_proxy": 0.0472,
+          "mean_metric_unit_discrepancy": -3.4177
+        },
+        "final_validation_2025": {
+          "window": "final_validation",
+          "years": "2025-2025",
+          "count": 688,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.7209,
+          "hit_at_1": 0.2791,
+          "hit_at_3": 0.6192,
+          "mrr": 0.486,
+          "zero_use_rate": 0.7209,
+          "observed_total_round_bonus": 2.7807,
+          "mean_cp00_per_game_proxy": 0.1363,
+          "mean_metric_unit_discrepancy": -2.6443
+        },
+        "exposed_test_2026": {
+          "window": "exposed_test",
+          "years": "2026-2026",
+          "count": 709,
+          "coverage": 1.0,
+          "conditional_ranking_error_rate": 0.7179,
+          "hit_at_1": 0.2821,
+          "hit_at_3": 0.6234,
+          "mrr": 0.4919,
+          "zero_use_rate": 0.7179,
+          "observed_total_round_bonus": 2.712,
+          "mean_cp00_per_game_proxy": 0.2989,
+          "mean_metric_unit_discrepancy": -2.413,
+          "classification": "EXPOSED_REPORT_ONLY"
+        }
+      },
+      "role_slices": {
+        "TOP": 2.1371,
+        "JGL": 3.5538,
+        "MID": 2.8727,
+        "BOT": 3.5125,
+        "SUP": 4.1391
+      }
+    }
+  },
+  "winner_evidence": {
+    "winner": "logistic_choice_benchmark",
+    "2024_bonus_improvement": 3.367,
+    "2025_bonus_improvement": 2.4603
+  },
+  "execution": {
+    "elapsed_seconds": 2026.47,
+    "timestamp_utc": "2026-08-01T01:30:30Z"
+  }
+}

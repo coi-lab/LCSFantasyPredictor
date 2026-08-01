@@ -1,0 +1,179 @@
+{
+  "player_recent_frequency": {
+    "candidate_model": "player_recent_frequency",
+    "baseline_model": "current_heuristic",
+    "overall_paired_deltas": {
+      "window": "overall",
+      "years": "2022-2026",
+      "count": 3380,
+      "mean_bonus_delta": -0.3578,
+      "std_error_bonus_delta": 0.0495,
+      "mean_zero_use_delta": 0.0562,
+      "wins": 230,
+      "losses": 416,
+      "ties": 2734,
+      "win_rate": 0.068
+    },
+    "by_window": {
+      "development_2022_2023": {
+        "window": "development",
+        "years": "2022-2023",
+        "count": 2007,
+        "mean_bonus_delta": -0.4177,
+        "std_error_bonus_delta": 0.0671,
+        "mean_zero_use_delta": 0.0678,
+        "wins": 126,
+        "losses": 259,
+        "ties": 1622,
+        "win_rate": 0.0628
+      },
+      "confirmation_2024": {
+        "window": "confirmation",
+        "years": "2024-2024",
+        "count": 685,
+        "mean_bonus_delta": -0.35,
+        "std_error_bonus_delta": 0.1091,
+        "mean_zero_use_delta": 0.0409,
+        "wins": 40,
+        "losses": 67,
+        "ties": 578,
+        "win_rate": 0.0584
+      },
+      "final_validation_2025": {
+        "window": "final_validation",
+        "years": "2025-2025",
+        "count": 688,
+        "mean_bonus_delta": -0.1909,
+        "std_error_bonus_delta": 0.0949,
+        "mean_zero_use_delta": 0.0378,
+        "wins": 64,
+        "losses": 90,
+        "ties": 534,
+        "win_rate": 0.093
+      },
+      "exposed_test_2026": {
+        "count": 0,
+        "mean_bonus_delta": 0.0,
+        "mean_zero_use_delta": 0.0
+      }
+    }
+  },
+  "patch_role_frequency": {
+    "candidate_model": "patch_role_frequency",
+    "baseline_model": "current_heuristic",
+    "overall_paired_deltas": {
+      "window": "overall",
+      "years": "2022-2026",
+      "count": 3380,
+      "mean_bonus_delta": 0.1545,
+      "std_error_bonus_delta": 0.066,
+      "mean_zero_use_delta": 0.0098,
+      "wins": 513,
+      "losses": 532,
+      "ties": 2335,
+      "win_rate": 0.1518
+    },
+    "by_window": {
+      "development_2022_2023": {
+        "window": "development",
+        "years": "2022-2023",
+        "count": 2007,
+        "mean_bonus_delta": 0.1377,
+        "std_error_bonus_delta": 0.0869,
+        "mean_zero_use_delta": 0.0224,
+        "wins": 308,
+        "losses": 339,
+        "ties": 1360,
+        "win_rate": 0.1535
+      },
+      "confirmation_2024": {
+        "window": "confirmation",
+        "years": "2024-2024",
+        "count": 685,
+        "mean_bonus_delta": 0.2107,
+        "std_error_bonus_delta": 0.1546,
+        "mean_zero_use_delta": -0.0088,
+        "wins": 90,
+        "losses": 87,
+        "ties": 508,
+        "win_rate": 0.1314
+      },
+      "final_validation_2025": {
+        "window": "final_validation",
+        "years": "2025-2025",
+        "count": 688,
+        "mean_bonus_delta": 0.1477,
+        "std_error_bonus_delta": 0.1309,
+        "mean_zero_use_delta": -0.0087,
+        "wins": 115,
+        "losses": 106,
+        "ties": 467,
+        "win_rate": 0.1672
+      },
+      "exposed_test_2026": {
+        "count": 0,
+        "mean_bonus_delta": 0.0,
+        "mean_zero_use_delta": 0.0
+      }
+    }
+  },
+  "logistic_choice_benchmark": {
+    "candidate_model": "logistic_choice_benchmark",
+    "baseline_model": "current_heuristic",
+    "overall_paired_deltas": {
+      "window": "overall",
+      "years": "2022-2026",
+      "count": 3380,
+      "mean_bonus_delta": 0.156,
+      "std_error_bonus_delta": 0.0643,
+      "mean_zero_use_delta": -0.0041,
+      "wins": 526,
+      "losses": 514,
+      "ties": 2340,
+      "win_rate": 0.1556
+    },
+    "by_window": {
+      "development_2022_2023": {
+        "window": "development",
+        "years": "2022-2023",
+        "count": 2007,
+        "mean_bonus_delta": 0.114,
+        "std_error_bonus_delta": 0.0846,
+        "mean_zero_use_delta": 0.0075,
+        "wins": 296,
+        "losses": 311,
+        "ties": 1400,
+        "win_rate": 0.1475
+      },
+      "confirmation_2024": {
+        "window": "confirmation",
+        "years": "2024-2024",
+        "count": 685,
+        "mean_bonus_delta": 0.3603,
+        "std_error_bonus_delta": 0.15,
+        "mean_zero_use_delta": -0.0423,
+        "wins": 108,
+        "losses": 79,
+        "ties": 498,
+        "win_rate": 0.1577
+      },
+      "final_validation_2025": {
+        "window": "final_validation",
+        "years": "2025-2025",
+        "count": 688,
+        "mean_bonus_delta": 0.0749,
+        "std_error_bonus_delta": 0.129,
+        "mean_zero_use_delta": 0.0,
+        "wins": 122,
+        "losses": 124,
+        "ties": 442,
+        "win_rate": 0.1773
+      },
+      "exposed_test_2026": {
+        "count": 0,
+        "mean_bonus_delta": 0.0,
+        "mean_zero_use_delta": 0.0
+      }
+    }
+  }
+}
