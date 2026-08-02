@@ -1,0 +1,22 @@
+{
+  "evaluation": "2026 Split 3 Round 1 retrospective live-model audit",
+  "classification": "EXPOSED_RETROSPECTIVE_NOT_A_SEALED_HOLDOUT",
+  "market_snapshot": "data/raw/official_market_snapshots/round-1-split-3_20260724T131915Z.csv",
+  "roster_lock": "2026-07-25T20:00:00+00:00",
+  "evaluation_end_exclusive": "2026-07-28T15:00:00+00:00",
+  "sample_players": null,
+  "market_players": 42,
+  "scored_players": 39,
+  "did_not_play": 3,
+  "missing_predictions": 0,
+  "actual_games": 9,
+  "hit_at_1_count": 13,
+  "hit_at_1": 0.3333,
+  "hit_at_3_count": 24,
+  "hit_at_3": 0.6154,
+  "zero_use_rate": 0.6667,
+  "mean_realized_total_round_bonus": 1.738,
+  "total_realized_bonus": 67.782,
+  "heuristic_hit_at_1_count": 7,
+  "heuristic_hit_at_1": 0.1795
+}

@@ -1,0 +1,43 @@
+player,team,role,status,predicted_champion,predicted_multiplier,actual_champions,games_played,hit_at_1,top_3,hit_at_3,realized_total_round_bonus,heuristic_champion,heuristic_hit_at_1
+eXyu,Dignitas,JGL,scored,Jarvan IV,1.3,"['Jarvan IV', 'Pantheon', 'Trundle']",3.0,True,"['Jarvan IV', 'Naafiri', 'Nocturne']",True,7.311,Jarvan IV,True
+Ignar,Dignitas,SUP,scored,Rakan,1.3,"['Camille', 'Karma', 'Milio']",3.0,False,"['Rakan', 'Bard', 'Rell']",False,0.0,Bard,False
+FBI,Dignitas,BOT,scored,Ezreal,1.3,"['Caitlyn', 'Lucian', 'Ziggs']",3.0,False,"['Ezreal', 'Lucian', 'Aphelios']",True,0.0,Ezreal,False
+Palafox,Dignitas,MID,scored,Orianna,1.3,"['Orianna', 'Ryze', 'Syndra']",3.0,True,"['Orianna', 'Ryze', 'Viktor']",True,9.126,Orianna,True
+Denathor,Dignitas,TOP,scored,Gnar,1.3,"['Ambessa', 'Gnar', 'Jayce']",3.0,True,"['Gnar', 'Rumble', ""K'Sante""]",True,1.554,Rumble,False
+Lyonz,Disguised,SUP,scored,Bard,1.3,"['Milio', 'Shen']",2.0,False,"['Bard', 'Leona', 'Rakan']",False,0.0,Bard,False
+KryRa,Disguised,JGL,scored,Jarvan IV,1.3,"['Jarvan IV', 'Pantheon']",2.0,True,"['Jarvan IV', 'Naafiri', 'Vi']",True,6.033,Nocturne,False
+Callme,Disguised,MID,scored,Orianna,1.3,"['Cassiopeia', 'Ryze']",2.0,False,"['Orianna', 'Ryze', 'Cassiopeia']",True,0.0,Ryze,True
+sajed,Disguised,BOT,scored,Ezreal,1.3,"['Lucian', 'Ziggs']",2.0,False,"['Ezreal', 'Caitlyn', 'Lucian']",True,0.0,Caitlyn,False
+Srtty,Disguised,TOP,scored,Rumble,1.3,"['Ambessa', 'Rumble']",2.0,True,"['Rumble', 'Gnar', ""K'Sante""]",True,0.138,Rumble,True
+DARKWINGS,Sentinels,MID,scored,Orianna,1.3,"['Sylas', 'Taliyah', 'Viktor']",3.0,False,"['Orianna', 'Ryze', 'Cassiopeia']",False,0.0,Orianna,False
+Rahel,Sentinels,BOT,scored,Ezreal,1.3,"['Ezreal', 'Jhin', 'Zeri']",3.0,True,"['Ezreal', 'Caitlyn', 'Ziggs']",True,6.081,Caitlyn,False
+HamBak,Sentinels,JGL,scored,Jarvan IV,1.3,"['Naafiri', 'Qiyana', 'Vi']",3.0,False,"['Jarvan IV', 'Naafiri', 'Nocturne']",True,0.0,Jarvan IV,False
+huhi,Sentinels,SUP,scored,Leona,1.3,"['Bard', 'Leona', 'Nautilus']",3.0,True,"['Leona', 'Rakan', 'Bard']",True,8.895,Bard,True
+Impact,Sentinels,TOP,scored,K'Sante,1.3,"[""K'Sante"", 'Malphite', 'Shen']",3.0,True,"[""K'Sante"", 'Gnar', 'Rumble']",True,2.409,Rumble,False
+Zeyzal,Shopify Rebellion,SUP,scored,Leona,1.3,"['Camille', 'Nautilus']",2.0,False,"['Leona', 'Rakan', 'Nautilus']",True,0.0,Rell,False
+Fudge,Shopify Rebellion,TOP,scored,Gnar,1.3,"['Gnar', 'Jayce']",2.0,True,"['Gnar', ""K'Sante"", 'Rumble']",True,5.331,Rumble,False
+Bvoy,Shopify Rebellion,BOT,scored,Ezreal,1.3,"['Ezreal', 'Viktor']",2.0,True,"['Ezreal', 'Caitlyn', 'Lucian']",True,7.749,Ezreal,True
+Contractz,Shopify Rebellion,JGL,scored,Jarvan IV,1.3,"['Vi', 'Xin Zhao']",2.0,False,"['Jarvan IV', 'Vi', 'Nocturne']",True,0.0,Wukong,False
+Zinie,Shopify Rebellion,MID,scored,Ryze,1.3,"['Anivia', 'Galio']",2.0,False,"['Ryze', 'Viktor', 'Annie']",False,0.0,Ryze,False
+Massu,FlyQuest,BOT,scored,Ezreal,1.3,"['Sylas', 'Ziggs']",2.0,False,"['Ezreal', 'Caitlyn', 'Lucian']",False,0.0,Ezreal,False
+Gakgos,FlyQuest,TOP,scored,Gnar,1.3,"['Ambessa', 'Olaf']",2.0,False,"['Gnar', 'Rumble', ""K'Sante""]",False,0.0,Rumble,False
+Cryogen,FlyQuest,SUP,scored,Bard,1.3,"['Leona', 'Rell']",2.0,False,"['Bard', 'Nautilus', 'Nami']",False,0.0,Bard,False
+Gryffinn,FlyQuest,JGL,scored,Jarvan IV,1.3,"['Lee Sin', 'Vi']",2.0,False,"['Jarvan IV', 'Naafiri', 'Nocturne']",False,0.0,Jarvan IV,False
+Quad,FlyQuest,MID,scored,Orianna,1.3,"['Akali', 'Syndra']",2.0,False,"['Orianna', 'Ryze', 'Cassiopeia']",False,0.0,Cassiopeia,False
+Inspired,LYON,JGL,did_not_play,,,,,,,,,,
+Saint,LYON,MID,scored,Orianna,1.3,"['LeBlanc', 'Viktor']",2.0,False,"['Orianna', 'Ryze', 'Cassiopeia']",False,0.0,Ryze,False
+Berserker,LYON,BOT,scored,Ezreal,1.3,"['Cassiopeia', 'Jayce']",2.0,False,"['Ezreal', 'Caitlyn', 'Lucian']",False,0.0,Ezreal,False
+Isles,LYON,SUP,scored,Leona,1.3,"['Camille', 'Shen']",2.0,False,"['Leona', 'Bard', 'Rakan']",False,0.0,Bard,False
+Dhokla,LYON,TOP,scored,Rumble,1.3,"['Gnar', 'Volibear']",2.0,False,"['Rumble', 'Gnar', ""K'Sante""]",True,0.0,Rumble,False
+Tactical,Cloud9,BOT,scored,Ezreal,1.3,"['Ezreal', 'Viktor']",2.0,True,"['Ezreal', 'Ziggs', 'Lucian']",True,2.85,Ezreal,True
+Thanatos,Cloud9,TOP,scored,Gnar,1.3,"['Ambessa', 'Rumble']",2.0,False,"['Gnar', 'Rumble', ""K'Sante""]",True,0.0,Gnar,False
+Vulcan,Cloud9,SUP,scored,Leona,1.3,"['Bard', 'Leona']",2.0,True,"['Leona', 'Rakan', 'Nautilus']",True,5.457,Nautilus,False
+APA,Cloud9,MID,did_not_play,,,,,,,,,,
+Loki,Cloud9,MID,scored,Orianna,1.3,"['Akali', 'Ryze']",2.0,False,"['Orianna', 'Ryze', 'Cassiopeia']",True,0.0,Orianna,False
+Blaber,Cloud9,JGL,scored,Jarvan IV,1.3,"['Lee Sin', 'Skarner']",2.0,False,"['Jarvan IV', 'Naafiri', 'Nocturne']",False,0.0,Jarvan IV,False
+Zven,Cloud9,BOT,did_not_play,,,,,,,,,,
+Morgan,Team Liquid,TOP,scored,Renekton,1.3,"['Gnar', 'Renekton']",2.0,True,"['Renekton', 'Gnar', 'Rumble']",True,4.848,Rumble,False
+Quid,Team Liquid,MID,scored,Orianna,1.3,"['Locke', 'Syndra']",2.0,False,"['Orianna', 'Ryze', 'Cassiopeia']",False,0.0,Ryze,False
+CoreJJ,Team Liquid,SUP,scored,Rakan,1.3,"['Nautilus', 'Rell']",2.0,False,"['Rakan', 'Nautilus', 'Bard']",True,0.0,Rakan,False
+Yeon,Team Liquid,BOT,scored,Ezreal,1.3,"['Corki', ""Kai'Sa""]",2.0,False,"['Ezreal', 'Caitlyn', 'Ziggs']",False,0.0,Caitlyn,False
+Josedeodo,Team Liquid,JGL,scored,Jarvan IV,1.3,"['Naafiri', 'Wukong']",2.0,False,"['Jarvan IV', 'Naafiri', 'Nocturne']",True,0.0,Jarvan IV,False

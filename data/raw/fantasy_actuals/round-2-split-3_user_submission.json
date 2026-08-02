@@ -1,0 +1,51 @@
+{
+  "round_name": "Round 2 (Split 3)",
+  "lock_date": "2026-08-01",
+  "status": "final_submitted_lineup",
+  "source": "User-provided final lineup screenshot and explanation",
+  "evaluation_rule": "Each player has one locked champion for the entire round; a champion hit occurs if that player uses the locked champion in any game during the round.",
+  "roster": [
+    {
+      "slot": "top",
+      "player_name": "Dhokla",
+      "team": "LYON",
+      "locked_champion": "Jayce",
+      "selection_notes": "Dhokla and opposing top Fudge shared all three recommended picks; Jayce was selected for its volatile carry upside."
+    },
+    {
+      "slot": "jnl",
+      "player_name": "Blaber",
+      "team": "Cloud9 Kia",
+      "locked_champion": "Lee Sin",
+      "selection_notes": "Uncontested selection."
+    },
+    {
+      "slot": "mid",
+      "player_name": "Quid",
+      "team": "Team Liquid Alienware",
+      "locked_champion": "Akali",
+      "selection_notes": "Quid and opposing mid DARKWINGS had overlapping viable recommended pools; Akali was selected to resolve the matchup."
+    },
+    {
+      "slot": "bot",
+      "player_name": "Berserker",
+      "team": "LYON",
+      "locked_champion": "Ziggs",
+      "selection_notes": "Uncontested selection."
+    },
+    {
+      "slot": "sup",
+      "player_name": "Cryogen",
+      "team": "FlyQuest",
+      "locked_champion": "Milio",
+      "selection_notes": "Uncontested selection."
+    },
+    {
+      "slot": "coach",
+      "player_name": "Thinkcard",
+      "team": "FlyQuest",
+      "locked_champion": null,
+      "selection_notes": "Coach slot; no champion lock."
+    }
+  ]
+}
