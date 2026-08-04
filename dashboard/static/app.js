@@ -4,6 +4,7 @@ let rawData = null;
 let championLabData = null;
 let weeklyChampionData = null;
 let matchupOptimizerData = null;
+let historicalLineupData = null;
 let selectedMatchupLineupRank = 1;
 let filteredPlayers = [];
 let currentPositionFilter = 'ALL';
@@ -121,6 +122,14 @@ function buildPatchMarkers(entries) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   addChampionLabTab();
+  // Make the audit route visible immediately; its small payload loads
+  // independently of the much larger player-history dashboard JSON.
+  if (window.location.hash === '#historical-lineups') {
+    document.querySelectorAll('.view-tab-btn').forEach(button => button.classList.remove('active'));
+    document.querySelectorAll('.view-section').forEach(section => section.classList.remove('active'));
+    document.querySelector('[data-view="view-historical-lineups"]')?.classList.add('active');
+    document.getElementById('view-historical-lineups')?.classList.add('active');
+  }
   await loadDashboardData();
   setupEventListeners();
   if (window.location.hash === '#weekly-champions') {
@@ -130,6 +139,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   } else if (window.location.hash === '#matchup-optimizer') {
     document.querySelector(
       '[data-view="view-matchup-optimizer"]'
+    )?.click();
+  } else if (window.location.hash === '#historical-lineups') {
+    document.querySelector(
+      '[data-view="view-historical-lineups"]'
     )?.click();
   }
 });
@@ -145,6 +158,17 @@ function addChampionLabTab() {
 }
 
 async function loadDashboardData() {
+  const historicalRequest = fetch('../generated/current/historical_lineups.json')
+    .then(async response => {
+      historicalLineupData = response.ok ? await response.json() : { phases: [] };
+      populateHistoricalLineupControls();
+      renderHistoricalLineups();
+    })
+    .catch(error => {
+      console.error('Error loading historical lineup data:', error);
+      historicalLineupData = { phases: [] };
+      renderHistoricalLineups();
+    });
   try {
     const [
       resp,
@@ -174,6 +198,7 @@ async function loadDashboardData() {
     renderWeeklyChampionPicks();
     populateMatchupWeekSelect();
     renderMatchupOptimizer();
+    await historicalRequest;
   } catch (err) {
     console.error('Error loading dashboard data:', err);
     document.getElementById('tableContainer').innerHTML = `
@@ -182,6 +207,7 @@ async function loadDashboardData() {
       </div>
     `;
   }
+  await historicalRequest;
 }
 
 function populateFilterDropdowns() {
@@ -289,6 +315,8 @@ function setupEventListeners() {
         renderWeeklyChampionPicks();
       } else if (targetViewId === 'view-matchup-optimizer') {
         renderMatchupOptimizer();
+      } else if (targetViewId === 'view-historical-lineups') {
+        renderHistoricalLineups();
       }
     });
   });
@@ -342,6 +370,16 @@ function setupEventListeners() {
     selectedMatchupLineupRank = 1;
     renderMatchupOptimizer();
   });
+  document.getElementById('historicalPhaseSelect')?.addEventListener('change', () => {
+    populateHistoricalPolicySelect();
+    populateHistoricalWeekSelect();
+    renderHistoricalLineups();
+  });
+  document.getElementById('historicalPolicySelect')?.addEventListener('change', () => {
+    populateHistoricalWeekSelect();
+    renderHistoricalLineups();
+  });
+  document.getElementById('historicalWeekSelect')?.addEventListener('change', renderHistoricalLineups);
 }
 
 function renderWeeklyChampionPicks() {
@@ -726,6 +764,187 @@ function renderMatchupOptimizer() {
         <p class="optimizer-coach-note">Estimated team win probability: ${(Number(coach.team_win_probability ?? 0.5) * 100).toFixed(1)}%. Conditional estimate: ${Number(coach.projected_score_if_win ?? coach.projected_points).toFixed(2)} in wins / ${Number(coach.projected_score_if_loss ?? coach.projected_points).toFixed(2)} in losses. The coach's organization counts toward variety.</p>
       </article>
     </div>
+  `;
+}
+
+function historicalPhases() {
+  return historicalLineupData && Array.isArray(historicalLineupData.phases)
+    ? historicalLineupData.phases
+    : [];
+}
+
+function selectedHistoricalPhase() {
+  const phases = historicalPhases();
+  const selectedId = document.getElementById('historicalPhaseSelect')?.value;
+  return phases.find(phase => phase.phase_id === selectedId) || phases[0] || null;
+}
+
+function selectedHistoricalPolicy() {
+  const phase = selectedHistoricalPhase();
+  const policies = phase && Array.isArray(phase.policies) ? phase.policies : [];
+  const selectedId = document.getElementById('historicalPolicySelect')?.value;
+  return policies.find(policy => policy.policy_id === selectedId) || policies[0] || null;
+}
+
+function populateHistoricalLineupControls() {
+  const select = document.getElementById('historicalPhaseSelect');
+  if (!select) return;
+  const phases = historicalPhases();
+  const prior = select.value;
+  select.innerHTML = phases.map(phase =>
+    `<option value="${escapeHtml(phase.phase_id)}">${escapeHtml(phase.label)}</option>`
+  ).join('');
+  if (phases.some(phase => phase.phase_id === prior)) select.value = prior;
+  populateHistoricalPolicySelect();
+  populateHistoricalWeekSelect();
+}
+
+function populateHistoricalPolicySelect() {
+  const select = document.getElementById('historicalPolicySelect');
+  if (!select) return;
+  const phase = selectedHistoricalPhase();
+  const policies = phase && Array.isArray(phase.policies) ? phase.policies : [];
+  const prior = select.value;
+  select.innerHTML = policies.map(policy =>
+    `<option value="${escapeHtml(policy.policy_id)}">${escapeHtml(policy.label)}</option>`
+  ).join('');
+  if (policies.some(policy => policy.policy_id === prior)) select.value = prior;
+}
+
+function populateHistoricalWeekSelect() {
+  const select = document.getElementById('historicalWeekSelect');
+  if (!select) return;
+  const policy = selectedHistoricalPolicy();
+  const weeks = policy && Array.isArray(policy.weeks) ? policy.weeks : [];
+  const prior = select.value;
+  select.innerHTML = weeks.map((week, index) => `
+    <option value="${escapeHtml(week.week_id)}">
+      ${escapeHtml(week.round_name || `Week ${index + 1}`)}
+    </option>
+  `).join('');
+  if (weeks.some(week => week.week_id === prior)) select.value = prior;
+}
+
+function formatHistoricalNumber(value, digits = 2, unavailable = 'Unavailable') {
+  return value === null || value === undefined || Number.isNaN(Number(value))
+    ? unavailable
+    : Number(value).toFixed(digits);
+}
+
+function renderHistoricalLineups() {
+  const notice = document.getElementById('historicalLineupNotice');
+  const summary = document.getElementById('historicalLineupSummary');
+  const content = document.getElementById('historicalLineupContent');
+  const weekSelect = document.getElementById('historicalWeekSelect');
+  if (!notice || !summary || !content || !weekSelect) return;
+
+  const phase = selectedHistoricalPhase();
+  const policy = selectedHistoricalPolicy();
+  const weeks = policy && Array.isArray(policy.weeks) ? policy.weeks : [];
+  const week = weeks.find(item => item.week_id === weekSelect.value) || weeks[0];
+  if (!phase || !policy || !week) {
+    notice.textContent = 'No historical lineup audit is available. Run the historical lineup dashboard exporter.';
+    summary.innerHTML = '';
+    content.innerHTML = '<div class="card historical-empty">No weekly lineup records found.</div>';
+    return;
+  }
+  if (!weekSelect.value) weekSelect.value = week.week_id;
+
+  notice.innerHTML = `
+    <strong>${escapeHtml(phase.price_status)}</strong><br>
+    ${escapeHtml(phase.champion_status)}<br>
+    ${escapeHtml(historicalLineupData.budget_notice || '')}
+  `;
+  const relativeValue = week.winner_relative != null
+    ? `${(Number(week.winner_relative) * 100).toFixed(2)}%`
+    : (week.opportunity_capture != null
+      ? `${(Number(week.opportunity_capture) * 100).toFixed(2)}%`
+      : 'Unavailable');
+  const relativeLabel = week.winner_relative != null ? 'Relative to first' : 'Opportunity capture';
+  const budget = week.budget || {};
+  summary.innerHTML = `
+    <div class="historical-summary-card"><span>Phase</span><strong>${escapeHtml(phase.category.replace('_', ' '))}</strong><small>${escapeHtml(policy.label)}</small></div>
+    <div class="historical-summary-card"><span>Weekly score</span><strong>${formatHistoricalNumber(week.score)}</strong><small>Champion and variety included when available</small></div>
+    <div class="historical-summary-card"><span>${escapeHtml(relativeLabel)}</span><strong>${escapeHtml(relativeValue)}</strong><small>${week.oracle_score != null ? `Oracle ${formatHistoricalNumber(week.oracle_score)} pts` : 'Official leaderboard comparison'}</small></div>
+    <div class="historical-summary-card"><span>Starting budget</span><strong>${formatHistoricalNumber(budget.starting_gold, 1)}g</strong><small>${budget.official ? 'Official' : 'Synthetic scenario'}</small></div>
+    <div class="historical-summary-card"><span>Variety bonus</span><strong>+${formatHistoricalNumber(Number(week.variety_bonus) * 100, 0)}%</strong><small>${new Set((week.lineup || []).map(entry => entry.player)).size} roster entries</small></div>
+    <div class="historical-summary-card"><span>${week.regret != null ? 'Oracle regret' : 'Champion hits'}</span><strong>${week.regret != null ? formatHistoricalNumber(week.regret) : formatHistoricalNumber(week.champion_top1_hits, 0)}</strong><small>${week.regret != null ? 'Points below best legal lineup' : `+${formatHistoricalNumber(week.realized_champion_bonus)} realized bonus`}</small></div>
+  `;
+
+  const budgetCards = [
+    ['Starting', budget.starting_gold],
+    ['Roster spent', budget.spent_gold],
+    ['Unspent', budget.unspent_gold],
+    ['Held asset change', budget.held_asset_change],
+    ['Ending', budget.ending_gold]
+  ].filter(([, value]) => value != null).map(([label, value]) => `
+    <div><span>${escapeHtml(label)}</span><strong>${label === 'Held asset change' && Number(value) >= 0 ? '+' : ''}${formatHistoricalNumber(value, 1)}g</strong></div>
+  `).join('');
+
+  const rosterCards = (week.lineup || []).map(entry => {
+    const slotPrice = entry.gold_price != null
+      ? `${formatHistoricalNumber(entry.gold_price, 1)}g`
+      : 'Price unavailable';
+    const priceChange = entry.gold_change != null
+      ? `<p class="historical-price-change">Next: ${formatHistoricalNumber(entry.next_gold_price, 1)}g (${Number(entry.gold_change) >= 0 ? '+' : ''}${formatHistoricalNumber(entry.gold_change, 1)}g)</p>`
+      : '';
+    let championHtml;
+    if (entry.is_coach) {
+      championHtml = '<p class="historical-champion unavailable">Coach slot has no champion lock.</p>';
+    } else if (!entry.champion_pick) {
+      championHtml = '<p class="historical-champion unavailable">Champion lock not preserved for this phase.</p>';
+    } else {
+      const outcomeClass = entry.champion_hit === true ? 'hit' : (entry.champion_hit === false ? 'miss' : 'unknown');
+      const outcome = entry.champion_hit === true ? 'Hit' : (entry.champion_hit === false ? 'Miss' : 'Unscored');
+      championHtml = `
+        <div class="historical-champion ${outcomeClass}">
+          <span>Top-1 champion</span>
+          <strong>${escapeHtml(entry.champion_pick)} <small>x${formatHistoricalNumber(entry.multiplier, 1, '-')}</small></strong>
+          <em>${escapeHtml(outcome)}</em>
+        </div>
+        <p class="historical-actual-champions">Played: ${escapeHtml((entry.actual_champions || []).join(', ') || 'Unavailable')}</p>
+      `;
+    }
+    return `
+      <article class="card historical-roster-card">
+        <div class="optimizer-card-head">
+          <span class="optimizer-role">${escapeHtml(String(entry.role).toUpperCase())}</span>
+          <span class="historical-slot-price">${slotPrice}</span>
+        </div>
+        <h3>${escapeHtml(entry.player)}</h3>
+        ${priceChange}
+        ${championHtml}
+      </article>
+    `;
+  }).join('');
+
+  const comparisons = week.oracle_score != null ? `
+    <div><span>Current baseline</span><strong>${formatHistoricalNumber(week.baseline_score)}</strong></div>
+    <div><span>Exact legal oracle</span><strong>${formatHistoricalNumber(week.oracle_score)}</strong></div>
+    <div><span>Candidate regret</span><strong>${formatHistoricalNumber(week.regret)}</strong></div>
+  ` : `
+    <div><span>Base score</span><strong>${formatHistoricalNumber(week.base_score)}</strong></div>
+    <div><span>Cumulative score</span><strong>${formatHistoricalNumber(week.cumulative_score)}</strong></div>
+    <div><span>First place cumulative</span><strong>${formatHistoricalNumber(week.winner_cumulative_points)}</strong></div>
+  `;
+  content.innerHTML = `
+    <div class="card historical-week-heading">
+      <div>
+        <span class="weekly-eyebrow">${escapeHtml(phase.label)}</span>
+        <h3>${escapeHtml(week.round_name)}</h3>
+        <p>${escapeHtml(policy.status.replaceAll('_', ' '))}</p>
+      </div>
+      <div class="historical-comparison-strip">${comparisons}</div>
+    </div>
+    <div class="card historical-budget-panel">
+      <div>
+        <span class="weekly-eyebrow">Weekly budget ledger</span>
+        <h3>${budget.official ? 'Official account state' : 'Historical account state'}</h3>
+        <p>${escapeHtml(budget.source || 'Budget source unavailable')}</p>
+      </div>
+      <div class="historical-budget-grid">${budgetCards}</div>
+    </div>
+    <div class="historical-roster-grid">${rosterCards}</div>
   `;
 }
 

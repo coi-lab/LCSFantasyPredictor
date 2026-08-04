@@ -166,6 +166,79 @@ the documentation change was reapplied. This reinforced three practices:
 - preserve unrelated user changes;
 - make reversions narrowly target only the current task.
 
+## Treating the Filesystem as an Operating Model
+
+### Problem
+
+The early repository accumulated code, dashboard assets, generated exports,
+raw inputs, agent instructions, and experiment evidence in overlapping
+locations. That made it difficult to answer a simple but important question:
+which files are source-of-truth inputs, which are reproducible outputs, and
+which are only local working state?
+
+### What we changed
+
+We made an explicit filesystem transition around artifact lifecycles:
+
+- domain code lives in `champion_prediction/`, `fantasy_prediction/`, and
+  `data_pipeline/`;
+- immutable source inputs, including Oracle's Elixir data and captured official
+  market snapshots, live under `data/raw/`;
+- dashboard assets are separated into `dashboard/static/` and generated data
+  under `dashboard/generated/current/`;
+- model evaluations and written conclusions live in `analysis/`;
+- instructions, reusable skills, and task evidence have distinct homes rather
+  than being mixed with application code.
+
+### What we learned
+
+This was more than cleanup. File placement communicates operational meaning.
+An immutable snapshot can support a reproducible historical recommendation;
+a generated export can be safely rebuilt; and an analysis report is not
+mistaken for a production input. Clear paths also give contributors and agents
+a smaller, safer search space when changing one part of the system.
+
+### Website angle
+
+The project page can present this as an architecture milestone: we turned a
+growing working directory into a system with explicit data provenance,
+rebuildable outputs, and clear ownership boundaries.
+
+## From a Scoring Calculator to a Simulated Fantasy Market
+
+### Problem
+
+An early version of the project could calculate fantasy points and rank strong
+players, but that is not the same as making a useful fantasy decision. A
+weekly roster must be chosen before matches happen, within the prices and
+budget available at that moment. Evaluating a player using later results or
+today's market state would make historical recommendations look better than
+they could have been in reality.
+
+### What we changed
+
+The system shifted to a point-in-time simulated market. For each historical or
+weekly decision, it freezes the information available before the roster lock,
+uses official market snapshots when they exist, tracks chronological account
+budget state, projects player and coach outcomes, and searches legal six-slot
+lineups under those constraints. Where a verified official market capture is
+unavailable, the system labels price estimates rather than presenting them as
+observed history.
+
+### What we learned
+
+Fantasy value is a decision problem, not a leaderboard. A high projected score
+only matters in relation to price, position, opponents, team win probability,
+and the rest of a legal roster. Simulating that market context also makes the
+evaluation more honest: each backtest is restricted to the data and budget a
+real manager would have had at the time.
+
+### Website angle
+
+This is the central modeling story for the project: it evolved from answering
+“who is likely to score?” to answering “what legal roster was the best
+evidence-based choice at that week's lock?”
+
 ## Designing a Repository That Agents Can Operate Safely
 
 ### Problem

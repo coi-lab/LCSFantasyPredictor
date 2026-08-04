@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import glob
 from pathlib import Path
+from typing import Any, Callable, Mapping
 
 import pandas as pd
 
@@ -19,6 +20,46 @@ DEFAULT_ORACLE = (
     PROJECT_ROOT / "data" / "raw" / "oracles_elixir"
     / "2026_LoL_esports_match_data_from_OraclesElixir.csv"
 )
+
+
+def load_frozen_player_model(path: Path) -> dict[str, Any]:
+    """Load a disabled research scorer without changing production defaults."""
+    model = json.loads(path.read_text(encoding="utf-8"))
+    required = {
+        "feature_order", "intercept", "coefficients",
+        "numeric_imputation_means", "numeric_scales",
+    }
+    missing = required.difference(model)
+    if missing:
+        raise ValueError(f"Frozen player model is missing fields: {sorted(missing)}")
+    if len(model["feature_order"]) != len(model["coefficients"]):
+        raise ValueError("Frozen player model feature and coefficient counts differ")
+    return model
+
+
+def score_frozen_player_model(
+    projection_features: Mapping[str, Any],
+    role: str,
+    model: Mapping[str, Any],
+) -> float:
+    """Apply the serialized standardized-ridge scorer to pre-lock features."""
+    means = model["numeric_imputation_means"]
+    scales = model["numeric_scales"]
+    values: list[float] = []
+    for feature in model["feature_order"]:
+        if feature.startswith("role_is_"):
+            values.append(float(role == feature.removeprefix("role_is_")))
+            continue
+        mean = float(means[feature])
+        raw = projection_features.get(feature)
+        value = mean if raw is None or pd.isna(raw) else float(raw)
+        scale = float(scales[feature]) or 1.0
+        values.append((value - mean) / scale)
+    prediction = float(model["intercept"]) + sum(
+        value * float(coefficient)
+        for value, coefficient in zip(values, model["coefficients"])
+    )
+    return prediction
 
 
 def load_projection_history() -> pd.DataFrame:
@@ -118,6 +159,8 @@ def attach_cutoff_safe_projections(
     weeks: list[HistoricalWeek],
     history: pd.DataFrame,
     manifest: dict | None = None,
+    projection_model: Mapping[str, Any] | None = None,
+    projection_scorer: Callable[[Mapping[str, Any], str], float] | None = None,
 ) -> list[HistoricalWeek]:
     """Attach pre-lock player projections and an explicit team-coach proxy.
 
@@ -146,9 +189,17 @@ def attach_cutoff_safe_projections(
                 prior_history, player.identifier, player.role, list(player.opponents), cutoff,
                 team_win_feature_enabled=False,
             )
+            if projection_scorer is not None:
+                projected_points = projection_scorer(projection, player.role)
+            elif projection_model is not None:
+                projected_points = score_frozen_player_model(
+                    projection, player.role, projection_model
+                )
+            else:
+                projected_points = float(projection["projected_fantasy_pts"])
             players.append(MarketPlayer(
                 identifier=player.identifier, role=player.role, team=player.team,
-                projected_points=float(projection["projected_fantasy_pts"]),
+                projected_points=projected_points,
                 opponents=player.opponents,
             ))
         actuals = dict(week.actual_points)

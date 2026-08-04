@@ -8,6 +8,7 @@ from fantasy_prediction.historical_inputs import (
     attach_cutoff_safe_projections,
     build_split_one_weeks,
     load_split_one_player_rows,
+    score_frozen_player_model,
 )
 from fantasy_prediction.player_baseline import prepare_history
 
@@ -34,6 +35,19 @@ class HistoricalInputsTests(unittest.TestCase):
         self.assertEqual(len([p for p in projected[1].market if p.role == "coach"]), 8)
         self.assertTrue(all(p.projected_points >= 0.0 for p in projected[1].market))
         self.assertTrue(all(key.startswith("coach::") for key in projected[1].actual_points if key.startswith("coach::")))
+
+    def test_applies_serialized_ridge_with_role_indicator(self) -> None:
+        model = {
+            "feature_order": ["baseline_projection", "role_is_mid"],
+            "intercept": 5.0,
+            "coefficients": [2.0, 3.0],
+            "numeric_imputation_means": {"baseline_projection": 10.0},
+            "numeric_scales": {"baseline_projection": 2.0},
+        }
+        score = score_frozen_player_model(
+            {"baseline_projection": 14.0}, "mid", model
+        )
+        self.assertEqual(score, 12.0)
 
 
 if __name__ == "__main__":

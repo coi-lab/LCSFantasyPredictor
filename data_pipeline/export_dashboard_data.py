@@ -15,6 +15,10 @@ if BASE_DIR not in sys.path:
 
 from data_pipeline.ingest import LCSDataIngestor
 from data_pipeline.export_champion_lab_data import export_champion_lab_json
+from data_pipeline.export_historical_lineup_dashboard import (
+    DEFAULT_HISTORICAL_REPORT,
+    export_historical_lineup_dashboard,
+)
 from data_pipeline.official_prices import add_missing_official_profiles, apply_official_prices
 
 try:
@@ -435,6 +439,10 @@ def export_dashboard_json(output_path: str = None) -> str:
     if HAS_PANDAS and isinstance(data, pd.DataFrame):
         # Champion Lab enforces its 2020-2025 training-data scope internally.
         export_champion_lab_json(data)
+    if DEFAULT_HISTORICAL_REPORT.exists():
+        export_historical_lineup_dashboard()
+    else:
+        print("Historical lineup report unavailable; skipped its dashboard export.")
     return output_path
 
 

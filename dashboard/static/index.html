@@ -106,6 +106,9 @@
       <button class="view-tab-btn" data-view="view-matchup-optimizer">
         <span>Matchup Optimizer</span>
       </button>
+      <button class="view-tab-btn" data-view="view-historical-lineups">
+        <span>Training & Test Lineups</span>
+      </button>
     </div>
 
     <!-- View 1: Leaderboard Grid (Table + Chart) -->
@@ -185,7 +188,29 @@
       <div id="matchupOptimizerContent"></div>
     </div>
 
-    <!-- View 5: Player champion tendencies and opponent ban context -->
+    <!-- View 5: Chronological model-training and test lineup audit -->
+    <div class="view-section" id="view-historical-lineups">
+      <div class="card historical-lineup-header">
+        <div>
+          <span class="weekly-eyebrow">Chronological model audit</span>
+          <h2>Training & Test Lineups</h2>
+          <p>Inspect the exact weekly rosters, budget state, scoring comparisons, and frozen champion locks used in historical evaluation.</p>
+        </div>
+        <div class="historical-lineup-controls">
+          <label for="historicalPhaseSelect">Evaluation phase</label>
+          <select id="historicalPhaseSelect"></select>
+          <label for="historicalPolicySelect">Policy</label>
+          <select id="historicalPolicySelect"></select>
+          <label for="historicalWeekSelect">Week</label>
+          <select id="historicalWeekSelect"></select>
+        </div>
+      </div>
+      <div id="historicalLineupNotice" class="weekly-champion-notice"></div>
+      <div id="historicalLineupSummary" class="historical-summary-grid"></div>
+      <div id="historicalLineupContent"></div>
+    </div>
+
+    <!-- View 6: Player champion tendencies and opponent ban context -->
     <div class="view-section" id="view-champion-lab">
       <div class="champion-lab-toolbar card">
         <div>
@@ -497,6 +522,6 @@
     </div>
   </div>
 
-  <script src="./app.js?v=20260728-10"></script>
+  <script src="./app.js?v=20260804-11"></script>
 </body>
 </html>

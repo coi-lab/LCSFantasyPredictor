@@ -1,0 +1,37 @@
+{
+  "model_type": "joint_lineup_utility_policy",
+  "trained_on": "2022-2023 diagnostic",
+  "selected_on": "2024 confirmation opportunity capture",
+  "held_out_validation": "2025",
+  "exposed_test_excluded": "2026",
+  "weights": {
+    "ridge_blend": 0.0,
+    "floor_weight": 0.15,
+    "ceiling_weight": 0.0,
+    "uncertainty_weight": 0.1,
+    "champion_bonus_weight": 1.0,
+    "diversity_scale": 0.75,
+    "coach_correlation_penalty": 0.0,
+    "future_value_weight": 0.0
+  },
+  "price_status": "synthetic fixed-price scenario; official historical prices unavailable",
+  "champion_status": "expected and realized champion bonus unavailable in pre-2026 table; zero for selection",
+  "validation_metrics": {
+    "weeks": 26,
+    "candidate_score": 3118.667,
+    "baseline_score": 3109.4324,
+    "oracle_score": 4257.5982,
+    "opportunity_capture": 0.732494,
+    "baseline_opportunity_capture": 0.730325,
+    "regret": 1138.9312,
+    "baseline_regret": 1148.1658,
+    "weeks_beating_baseline": 12,
+    "worst_week_regret": 82.0191,
+    "baseline_worst_week_regret": 127.9983,
+    "mean_variety_bonus": 0.182692,
+    "baseline_mean_variety_bonus": 0.053846,
+    "end_budget": 100.0
+  },
+  "deployment_gate_passed": true,
+  "enabled": false
+}
