@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "competitions": {
+    "2026_split_1": {
+      "label": "2026 Split 1",
+      "evaluation_status": "previously_exposed_not_pristine",
+      "market_status": "synthetic_market_scenario",
+      "official_regret_status": "NOT VERIFIED",
+      "starting_gold": 100.0,
+      "price_period": "2026_split_1_continuous",
+      "notes": [
+        "Week 7 begins the Spring stage but is not a new fantasy account or price period.",
+        "Leaderboard totals come only from OverallRankingWeek# screenshots.",
+        "Historical official prices and private roster locks were not preserved publicly."
+      ],
+      "weeks": [
+        {"week": 1, "stage_round": "Lock-In Round 1", "start_date": "2026-01-24", "end_date": "2026-01-25", "winner_cumulative_points": 177.21, "rayz_cumulative_points": 137.52, "leaderboard_screenshot": "LCSFantasyImages/Week1/OverallRankingWeek1.png"},
+        {"week": 2, "stage_round": "Lock-In Round 2", "start_date": "2026-01-31", "end_date": "2026-02-01", "winner_cumulative_points": 330.76, "rayz_cumulative_points": 271.58, "leaderboard_screenshot": "LCSFantasyImages/Week2/OverallRankingWeek2.png"},
+        {"week": 3, "stage_round": "Lock-In Round 3", "start_date": "2026-02-07", "end_date": "2026-02-08", "winner_cumulative_points": 481.42, "rayz_cumulative_points": 414.92, "leaderboard_screenshot": "LCSFantasyImages/Week3/OverallRankingWeek3.png"},
+        {"week": 4, "stage_round": "Lock-In Round 4", "start_date": "2026-02-14", "end_date": "2026-02-15", "winner_cumulative_points": 671.26, "rayz_cumulative_points": 580.21, "leaderboard_screenshot": "LCSFantasyImages/Week4/OverallRankingWeek4.png"},
+        {"week": 5, "stage_round": "Lock-In Round 5", "start_date": "2026-02-20", "end_date": "2026-02-22", "winner_cumulative_points": 844.85, "rayz_cumulative_points": 714.62, "leaderboard_screenshot": "LCSFantasyImages/Week5/OverallRankingWeek5.png"},
+        {"week": 6, "stage_round": "Lock-In Round 6", "start_date": "2026-02-27", "end_date": "2026-03-01", "winner_cumulative_points": 962.68, "rayz_cumulative_points": 826.73, "leaderboard_screenshot": "LCSFantasyImages/Week6/OverallRankingWeek6.png"},
+        {"week": 7, "stage_round": "Spring Round 1", "start_date": "2026-04-04", "end_date": "2026-04-05", "winner_cumulative_points": 1083.61, "rayz_cumulative_points": 939.71, "leaderboard_screenshot": "LCSFantasyImages/Week7/OverallRankingWeek7.png"},
+        {"week": 8, "stage_round": "Spring Round 2", "start_date": "2026-04-11", "end_date": "2026-04-12", "winner_cumulative_points": 1179.72, "rayz_cumulative_points": 1050.68, "leaderboard_screenshot": "LCSFantasyImages/Week8/OverallRankingWeek8.png"},
+        {"week": 9, "stage_round": "Spring Round 3", "start_date": "2026-04-18", "end_date": "2026-04-19", "winner_cumulative_points": 1349.14, "rayz_cumulative_points": 1181.78, "leaderboard_screenshot": "LCSFantasyImages/Week9/OverallRankingWeek9.png"},
+        {"week": 10, "stage_round": "Spring Round 4", "start_date": "2026-04-25", "end_date": "2026-04-26", "winner_cumulative_points": 1449.77, "rayz_cumulative_points": 1295.24, "leaderboard_screenshot": "LCSFantasyImages/Week10/OverallRankingWeek10.png"},
+        {"week": 11, "stage_round": "Spring Round 5", "start_date": "2026-05-02", "end_date": "2026-05-03", "winner_cumulative_points": 1572.90, "rayz_cumulative_points": 1404.69, "leaderboard_screenshot": "LCSFantasyImages/Week11/OverallRankingWeek11.png"}
+      ],
+      "evidence_corrections": {
+        "LCSFantasyImages/Week2/Rahel.png": "Week 3; visible Feb 7 Round 3 details",
+        "LCSFantasyImages/Week7/seraphine.png": "Week 8; visible Apr 11 Round 2 details"
+      }
+    }
+  }
+}
