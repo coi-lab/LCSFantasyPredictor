@@ -136,7 +136,9 @@ class PlayerModelV2EvaluationTests(unittest.TestCase):
         self.assertEqual(before, after)
         self.assertEqual(first["historical_price"]["status"], "NOT_VERIFIED")
         self.assertIsNone(first["historical_price"]["candidate_predictions"])
-        self.assertEqual(first["player_rating"]["status"], "NOT_STARTED")
+        self.assertEqual(first["player_rating"]["status"], "NOT_VERIFIED")
+        self.assertFalse(first["player_rating"]["ablation_eligible"])
+        self.assertIsNone(first["player_rating"]["candidate_predictions"])
 
     def test_enabled_v2_gate_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

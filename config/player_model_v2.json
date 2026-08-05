@@ -39,28 +39,815 @@
   },
   "player_rating": {
     "enabled": false,
-    "rating_baseline": 1500.0,
-    "k_factor_base": 32.0,
-    "offseason_threshold_days": 60.0,
+    "algorithm_version": "persistent_player_rating_v1",
+    "configuration_version": "2026-08-04.phase_b.v1",
+    "supported_roles": ["top", "jgl", "mid", "bot", "sup"],
+    "role_aliases": {
+      "top": "top",
+      "jng": "jgl",
+      "jungle": "jgl",
+      "jgl": "jgl",
+      "mid": "mid",
+      "middle": "mid",
+      "bot": "bot",
+      "bottom": "bot",
+      "adc": "bot",
+      "sup": "sup",
+      "support": "sup"
+    },
+    "unknown_role_policy": "reject",
     "component_weights": {
-      "z_fantasy_performance": 0.55,
-      "z_KP": 0.15,
-      "z_balanced_win_loss": 0.10,
-      "z_q25_floor": 0.10,
-      "z_above_role_median_rate": 0.05,
-      "z_starter_reliability": 0.05
+      "fantasy_performance": 0.35,
+      "role_adjusted_kp": 0.15,
+      "balanced_win_loss": 0.15,
+      "q25_floor": 0.15,
+      "above_role_median_rate": 0.10,
+      "starter_reliability": 0.10
     },
-    "grid": {
-      "prior_strength": [5.0, 10.0, 20.0],
-      "offseason_half_life": [180.0, 365.0, 730.0],
-      "role_transfer_factor": [0.0, 0.5],
-      "price_prior_coefficient": [0.0, 0.25, 0.5]
+    "win_loss_weights": {
+      "win": 0.5,
+      "loss": 0.5
     },
-    "default": {
-      "prior_strength": 10.0,
-      "offseason_half_life": 365.0,
-      "role_transfer_factor": 0.5,
-      "price_prior_coefficient": 0.25
+    "component_priors": {
+      "fantasy_performance": 0.0,
+      "role_adjusted_kp": 0.0,
+      "balanced_win_loss": 0.0,
+      "q25_floor": 0.0,
+      "above_role_median_rate": 0.0,
+      "starter_reliability": 0.0
+    },
+    "role_priors": {
+      "top": {"median": 15.0, "mad": 5.0, "kp_median": 0.65, "kp_mad": 0.15},
+      "jgl": {"median": 15.0, "mad": 5.0, "kp_median": 0.70, "kp_mad": 0.15},
+      "mid": {"median": 15.0, "mad": 5.0, "kp_median": 0.65, "kp_mad": 0.15},
+      "bot": {"median": 15.0, "mad": 5.0, "kp_median": 0.65, "kp_mad": 0.15},
+      "sup": {"median": 15.0, "mad": 5.0, "kp_median": 0.70, "kp_mad": 0.15}
+    },
+    "recency": {
+      "half_life_days": 180.0,
+      "split_decay": 0.90,
+      "offseason_decay": 0.75
+    },
+    "shrinkage": {
+      "component_strength": 5.0,
+      "role_stat_min_effective": 1.0
+    },
+    "robust": {
+      "mad_scale_constant": 1.4826,
+      "epsilon": 0.000001,
+      "clip": 3.0
+    },
+    "q25": {
+      "quantile": 0.25,
+      "convention": "left_cumulative_weight"
+    },
+    "starter_reliability": {
+      "alpha": 2.0,
+      "beta": 2.0,
+      "participation_fallback": true
+    },
+    "above_role_median": {
+      "prior_rate": 0.5,
+      "scale": 0.5
+    },
+    "rating_scale": {
+      "center": 1500.0,
+      "scale": 100.0,
+      "legacy_display_center": 15.0,
+      "legacy_display_scale": 3.0
+    },
+    "uncertainty": {
+      "prior_strength": 2.0,
+      "prior_variance": 2.25,
+      "floor": 0.10,
+      "ceiling": 3.0,
+      "missing_component_penalty": 0.10,
+      "role_fallback_penalty": 0.20,
+      "identity_fallback_penalty": 0.20
+    },
+    "identity": {
+      "fallback_policy": "normalized_name_with_collision_risk"
+    },
+    "historical_price": {
+      "neutral_value": 0.5,
+      "status": "NOT_VERIFIED",
+      "provenance": "fallback_price_prior",
+      "verified": false,
+      "rating_weight": 0.0
+    }
+  },
+  "core_v2": {
+    "enabled": false,
+    "algorithm_version": "joint_roster_core_v2_v1",
+    "configuration_version": "2026-08-05.phase_c.v1",
+    "supported_roles": ["top", "jgl", "mid", "bot", "sup"],
+    "role_aliases": {
+      "top": "top",
+      "jng": "jgl",
+      "jungle": "jgl",
+      "jgl": "jgl",
+      "mid": "mid",
+      "middle": "mid",
+      "bot": "bot",
+      "bottom": "bot",
+      "adc": "bot",
+      "sup": "sup",
+      "support": "sup"
+    },
+    "carry_roles": ["top", "mid", "bot"],
+    "facilitating_roles": ["jgl", "sup"],
+    "normalization": {
+      "policy": "fixed_role_aware_center_scale",
+      "clip": 3.0,
+      "neutral_normalized_value": 0.0,
+      "components": {
+        "persistent_rating": {"center": 1500.0, "scale": 100.0},
+        "role_relative_rating": {"center": 0.0, "scale": 1.0},
+        "role_adjusted_kp": {"center": 0.0, "scale": 1.0},
+        "median_performance": {
+          "center_by_role": {"top": 15.0, "jgl": 15.0, "mid": 15.0, "bot": 15.0, "sup": 15.0},
+          "scale_by_role": {"top": 5.0, "jgl": 5.0, "mid": 5.0, "bot": 5.0, "sup": 5.0}
+        },
+        "q25_performance": {
+          "center_by_role": {"top": 15.0, "jgl": 15.0, "mid": 15.0, "bot": 15.0, "sup": 15.0},
+          "scale_by_role": {"top": 5.0, "jgl": 5.0, "mid": 5.0, "bot": 5.0, "sup": 5.0}
+        },
+        "above_role_median_rate": {"center": 0.5, "scale": 0.5},
+        "win_contribution": {"center": 0.0, "scale": 1.0},
+        "loss_retained_production": {"center": 0.0, "scale": 1.0},
+        "starter_reliability": {"center": 0.5, "scale": 0.5}
+      }
+    },
+    "common_component_weights": {
+      "persistent_rating": 0.15,
+      "role_relative_rating": 0.20,
+      "role_adjusted_kp": 0.10,
+      "median_performance": 0.10,
+      "q25_performance": 0.15,
+      "above_role_median_rate": 0.10,
+      "win_contribution": 0.10,
+      "loss_retained_production": 0.10
+    },
+    "carry_component_weights": {
+      "role_relative_rating": 0.25,
+      "median_performance": 0.15,
+      "q25_performance": 0.20,
+      "above_role_median_rate": 0.15,
+      "win_contribution": 0.15,
+      "loss_retained_production": 0.10
+    },
+    "facilitating_component_weights": {
+      "role_adjusted_kp": 0.30,
+      "persistent_rating": 0.10,
+      "role_relative_rating": 0.15,
+      "q25_performance": 0.10,
+      "above_role_median_rate": 0.15,
+      "win_contribution": 0.10,
+      "loss_retained_production": 0.10
+    },
+    "missing_components": {
+      "policy": "neutral_prior_with_weight_renormalization",
+      "renormalize_available_weights": true,
+      "penalty_per_missing_component": 0.05
+    },
+    "score_contributions": {
+      "common_weight": 0.60,
+      "role_specific_weight": 0.25,
+      "starter_weight": 0.15,
+      "uncertainty_penalty_weight": 0.20,
+      "cold_start_penalty": 0.25
+    },
+    "thresholds": {
+      "version": "phase_c_provisional_thresholds_v1",
+      "status": "PROVISIONAL_NOT_VALIDATED",
+      "source": "phase_c_conservative_engineering_defaults_no_outcome_tuning",
+      "primary_selection_rule": "highest_deterministic_rank",
+      "minimum_additional_core_score": 0.0,
+      "maximum_primary_score_gap": 0.75,
+      "minimum_effective_evidence": 2.0,
+      "maximum_residual_uncertainty": 2.0,
+      "minimum_starter_reliability": 0.5,
+      "maximum_additional_cores": 2
+    },
+    "tie_break": {
+      "policy_version": "core_v2_tie_break_v1",
+      "fields": [
+        "core_score_desc",
+        "q25_performance_desc",
+        "persistent_rating_desc",
+        "starter_reliability_desc",
+        "effective_evidence_desc",
+        "residual_uncertainty_asc",
+        "player_id_asc"
+      ]
+    },
+    "historical_price": {
+      "required_status_while_weight_zero": "NOT_VERIFIED",
+      "component_weight": 0.0,
+      "selection_exclusion": true
+    }
+  },
+  "team_strength_v2": {
+    "enabled": false,
+    "algorithm_version": "player_derived_team_strength_v2_v1",
+    "configuration_version": "2026-08-05.phase_d.v1",
+    "compatible_player_rating_algorithm": "persistent_player_rating_v1",
+    "compatible_player_rating_configuration": "2026-08-04.phase_b.v1",
+    "compatible_core_algorithm": "joint_roster_core_v2_v1",
+    "compatible_core_configuration": "2026-08-05.phase_c.v1",
+    "supported_roles": ["top", "jgl", "mid", "bot", "sup"],
+    "role_weights": {"top": 0.20, "jgl": 0.20, "mid": 0.20, "bot": 0.20, "sup": 0.20},
+    "active_features": [
+      "starter_rating", "weakest_role", "continuous_core", "roster_continuity",
+      "role_coverage", "starter_reliability", "organization_prior", "uncertainty"
+    ],
+    "forbidden_features": {
+      "elo": false,
+      "trailing_win_rate": false,
+      "direct_team_win_bonus": false,
+      "historical_price": false,
+      "opponent": false,
+      "schedule_volume": false
+    },
+    "normalization": {
+      "clip": 3.0,
+      "starter_rating": {"center": 1500.0, "scale": 100.0},
+      "weakest_role": {"center": 0.0, "scale": 1.0},
+      "continuous_core": {"center": 0.0, "scale": 1.0},
+      "roster_continuity": {"center": 0.5, "scale": 0.5},
+      "role_coverage": {"center": 0.5, "scale": 0.5},
+      "starter_reliability": {"center": 0.5, "scale": 0.5},
+      "organization_prior": {"center": 0.0, "scale": 1.0}
+    },
+    "component_weights": {
+      "starter_rating": 0.35,
+      "weakest_role": 0.15,
+      "continuous_core": 0.20,
+      "roster_continuity": 0.08,
+      "role_coverage": 0.07,
+      "starter_reliability": 0.10,
+      "organization_prior": 0.05
+    },
+    "core_aggregation": {
+      "policy": "weighted_continuous_summary",
+      "weights": {"mean_all": 0.50, "mean_top_two": 0.30, "weakest": 0.20},
+      "binary_primary_weight": 0.0,
+      "binary_additional_weight": 0.0
+    },
+    "continuity": {
+      "same_role_weight": 0.60,
+      "retained_player_weight": 0.40,
+      "first_roster_value": 0.5
+    },
+    "coverage": {
+      "minimum_effective_evidence": 2.0,
+      "penalties": {"cold_start": 0.20, "identity_fallback": 0.20, "low_evidence": 0.15, "missing_component": 0.10}
+    },
+    "starter_reliability": {"mean_weight": 0.75, "minimum_weight": 0.25},
+    "organization_prior": {
+      "half_life_days": 180.0,
+      "update_rate": 1.0,
+      "shrinkage_strength": 5.0,
+      "maximum_signal": 1.0,
+      "maximum_component_weight": 0.05,
+      "player_signal_minimum_weight": 0.20,
+      "aliases": {
+        "cloud9": "cloud9",
+        "cloud9 kia": "cloud9",
+        "team liquid": "team-liquid",
+        "team liquid alienware": "team-liquid"
+      }
+    },
+    "uncertainty": {
+      "penalty_weight": 0.10,
+      "floor": 0.10,
+      "ceiling": 3.0,
+      "evidence_prior_strength": 2.0,
+      "continuity_fallback_penalty": 0.20,
+      "organization_fallback_penalty": 0.20,
+      "starter_fallback_penalty": 0.10,
+      "identity_fallback_penalty": 0.10,
+      "cold_start_penalty": 0.10,
+      "missing_component_penalty": 0.05
+    },
+    "pairwise_model": {
+      "coefficient": 1.0,
+      "scale": 1.0,
+      "side_intercept": 0.0,
+      "probability_clip": 0.000001,
+      "regularization_l2": 1.0,
+      "fit_status": "NOT_VERIFIED",
+      "calibration_status": "NOT_VERIFIED",
+      "coefficient_status": "PROVISIONAL_NOT_VALIDATED",
+      "coefficient_source": "phase_d_engineering_default_no_outcome_tuning"
+    },
+    "baselines": {
+      "constant_probability": 0.5,
+      "trailing_window": 10,
+      "trailing_prior_wins": 1.0,
+      "trailing_prior_games": 2.0,
+      "elo_initial_rating": 1500.0,
+      "elo_k_factor": 20.0,
+      "elo_scale": 400.0,
+      "elo_season_decay": 1.0,
+      "comparison_metrics": ["log_loss", "brier_score", "accuracy"]
+    },
+    "missing_components": {"policy": "neutral_with_explicit_uncertainty_penalty"},
+    "preflight": {
+      "allowed_years": [2020, 2021, 2022, 2023, 2024],
+      "forbidden_years": [2025, 2026],
+      "projected_roster_globs": ["data/raw/official_market_snapshots/*.json"],
+      "lock_metadata_files": ["config/historical_competitions.json"]
+    }
+  },
+  "shared_matchup_probability": {
+    "enabled": false,
+    "algorithm_version": "canonical_shared_matchup_probability_v1",
+    "configuration_version": "2026-08-05.phase_e.v1",
+    "serialization_schema_version": "shared_matchup_probability_schema_v1",
+    "canonical_identity_policy": "explicit_id_else_sha256_prelock_fields",
+    "canonical_team_order_policy": "normalized_stable_id_lexical_ascending",
+    "required_descriptor_fields": [
+      "competition_id",
+      "split_id",
+      "week_id_or_round_id",
+      "scheduled_start_timestamp",
+      "target_lock_timestamp",
+      "team_1_id",
+      "team_2_id",
+      "schedule_source",
+      "schedule_source_timestamp",
+      "schedule_version"
+    ],
+    "optional_explicit_series_id_field": "series_id",
+    "fallback_identity_policy": {
+      "status": "FALLBACK_PRELOCK_HASH",
+      "collision_risk": true,
+      "fields": [
+        "competition_id",
+        "split_id",
+        "week_id_or_round_id",
+        "scheduled_start_timestamp",
+        "canonical_team_pair",
+        "schedule_version"
+      ]
+    },
+    "team_aliases": {
+      "cloud9": "cloud9",
+      "cloud9 kia": "cloud9",
+      "c9": "cloud9",
+      "team liquid": "team-liquid",
+      "team liquid alienware": "team-liquid",
+      "tl": "team-liquid"
+    },
+    "conflict_detection_policy": "fail_closed_material_field_diff",
+    "registry_policy": "explicit_instance_one_object_per_canonical_series",
+    "probability_complement_tolerance": 0.000000000000001,
+    "accepted_phase_d": {
+      "algorithm_versions": ["player_derived_team_strength_v2_v1"],
+      "configuration_versions": ["2026-08-05.phase_d.v1"],
+      "required_fit_status": "NOT_VERIFIED",
+      "required_calibration_status": "NOT_VERIFIED",
+      "fit_status_propagation": "exact"
+    },
+    "uncertainty": {
+      "policy": "root_mean_square_phase_d_strength_uncertainty",
+      "fallback_series_identity_penalty": 0.10,
+      "descriptor_complete_status": "COMPLETE",
+      "calibration_status": "NOT_VERIFIED"
+    },
+    "prohibited_adjustments": {
+      "sequential_elo": false,
+      "trailing_win_rate": false,
+      "direct_win_bonus": false,
+      "legacy_opponent_adjustment": false,
+      "coach_only_probability": false,
+      "player_only_probability": false,
+      "reporting_only_probability": false,
+      "historical_price": false,
+      "schedule_volume": false,
+      "realized_series_length": false,
+      "expected_games": false,
+      "playstyle": false,
+      "champion_features": false
+    },
+    "consumer_specific_coefficients": {
+      "player": null,
+      "coach": null,
+      "reporting": null
+    },
+    "future_evaluation_arm": {
+      "registered": true,
+      "executed": false,
+      "arm_name": "phase_e_probability_parity",
+      "baseline": "phase_d_direct_pairwise_output",
+      "candidate": "phase_e_canonical_shared_object",
+      "prediction_contract": "exact_probability_parity",
+      "metrics": [
+        "exact_probability_parity",
+        "exact_complementarity",
+        "one_object_per_eligible_series",
+        "zero_duplicate_recalculations",
+        "zero_consumer_probability_divergence",
+        "zero_silent_conflicting_overwrites",
+        "canonical_coverage_rate",
+        "invalid_descriptor_rate",
+        "provenance_completeness",
+        "deterministic_replay"
+      ],
+      "predictive_improvement_metric": null
+    }
+  },
+  "schedule_representation": {
+    "enabled": false,
+    "algorithm_version": "complete_prelock_schedule_representation_v1",
+    "configuration_version": "2026-08-05.phase_f.v1",
+    "serialization_schema_version": "schedule_representation_schema_v1",
+    "fantasy_week_identity_policy": "explicit_competition_split_week_mapping_only",
+    "required_week_identity_fields": [
+      "competition_id",
+      "split_id",
+      "fantasy_week_id_or_round_id",
+      "week_mapping_source",
+      "week_mapping_source_timestamp",
+      "week_mapping_version"
+    ],
+    "required_schedule_fields": [
+      "schedule_record_id",
+      "series_id",
+      "schedule_source",
+      "schedule_source_timestamp",
+      "schedule_version",
+      "competition_id",
+      "split_id",
+      "fantasy_week_id_or_round_id",
+      "week_mapping_source",
+      "week_mapping_source_timestamp",
+      "week_mapping_version",
+      "scheduled_start_timestamp",
+      "target_lock_timestamp",
+      "team_1_id",
+      "team_2_id",
+      "series_format",
+      "series_format_source",
+      "series_format_source_timestamp",
+      "series_status"
+    ],
+    "supported_formats": ["BO1", "BO3", "BO5"],
+    "format_aliases": {
+      "bo1": "BO1",
+      "best of 1": "BO1",
+      "best-of-1": "BO1",
+      "1": "BO1",
+      "bo3": "BO3",
+      "best of 3": "BO3",
+      "best-of-3": "BO3",
+      "3": "BO3",
+      "bo5": "BO5",
+      "best of 5": "BO5",
+      "best-of-5": "BO5",
+      "5": "BO5"
+    },
+    "unknown_format": {
+      "accepted_tokens": ["UNKNOWN", "TBD"],
+      "normalized_value": "UNKNOWN",
+      "status": "NOT_VERIFIED",
+      "fallback_policy": "conservative_configured_prior"
+    },
+    "format_source_policy": "explicit_prelock_only_no_realized_game_count",
+    "expected_games": {
+      "prior_version": "phase_f_unfitted_engineering_priors_v1",
+      "fit_status": "NOT_VERIFIED",
+      "priors": {"BO1": 1.0, "BO3": 2.5, "BO5": 4.0, "UNKNOWN": 1.0},
+      "allowed_uses": ["opponent_weighting", "schedule_uncertainty", "coverage_diagnostics"],
+      "prohibited_uses": [
+        "player_points",
+        "coach_points",
+        "fantasy_points_multiplier",
+        "game_volume_bonus",
+        "series_volume_bonus",
+        "schedule_points_bonus"
+      ]
+    },
+    "supported_series_statuses": ["SCHEDULED", "RESCHEDULED", "POSTPONED", "CANCELLED", "TBD"],
+    "active_series_statuses": ["SCHEDULED", "RESCHEDULED"],
+    "inactive_series_statuses": ["POSTPONED", "CANCELLED", "TBD"],
+    "duplicate_policy": "reuse_identical_fail_closed_material_conflict",
+    "registry_policy": "explicit_instance_one_active_version_per_canonical_series",
+    "supersession_policy": "later_source_timestamp_then_schedule_version",
+    "opponent_weighting": {
+      "policy": "normalized_expected_games",
+      "sum_tolerance": 0.000000000000001,
+      "zero_active_policy": "UNAVAILABLE",
+      "points_multiplier": false
+    },
+    "weekly_probability_aggregation": {
+      "policy": "expected_games_weighted_exact_phase_e_probabilities",
+      "one_series_exact": true,
+      "recalculate_probability": false
+    },
+    "uncertainty": {
+      "policy": "additive_structural_schedule_uncertainty_v1",
+      "base": 0.0,
+      "unknown_format_penalty": 0.25,
+      "unknown_opponent_penalty": 0.40,
+      "missing_phase_e_penalty": 0.40,
+      "schedule_source_fallback_penalty": 0.10,
+      "reschedule_penalty": 0.15,
+      "incomplete_week_penalty": 0.20,
+      "low_confidence_week_mapping_penalty": 0.20,
+      "provisional_probability_penalty": 0.10,
+      "missing_or_stale_timestamp_penalty": 0.30,
+      "calibration_status": "NOT_VERIFIED"
+    },
+    "coverage": {
+      "statuses": ["COMPLETE", "PARTIAL", "NOT_VERIFIED", "UNAVAILABLE", "INVALID"],
+      "complete_requires_explicit_batch_assertion": true,
+      "historical_coverage_status": "NOT_VERIFIED"
+    },
+    "accepted_phase_e": {
+      "algorithm_versions": ["canonical_shared_matchup_probability_v1"],
+      "configuration_versions": ["2026-08-05.phase_e.v1"],
+      "serialization_schema_versions": ["shared_matchup_probability_schema_v1"],
+      "required_fit_status": "NOT_VERIFIED",
+      "required_calibration_status": "NOT_VERIFIED"
+    },
+    "prohibited_features": {
+      "iso_week_equivalence": false,
+      "realized_game_count_format_source": false,
+      "realized_game_count_expected_games": false,
+      "game_volume_bonus": false,
+      "series_volume_bonus": false,
+      "expected_games_points_multiplier": false,
+      "schedule_points_bonus": false,
+      "sequential_elo": false,
+      "trailing_win_rate": false,
+      "direct_win_bonus": false,
+      "historical_price": false,
+      "playstyle": false,
+      "player_projection": false,
+      "coach_projection": false,
+      "optimizer": false
+    },
+    "future_evaluation": {
+      "registered": true,
+      "executed": false,
+      "cumulative_arm": "M5_shared_matchup_plus_complete_schedule",
+      "baseline_arm": "M4_shared_matchup_without_complete_schedule",
+      "leave_one_out_arm": "full_model_without_schedule_aggregation",
+      "limited_interactions": ["team_strength_x_matchup", "matchup_x_schedule"],
+      "metrics": [
+        "schedule_series_coverage",
+        "opponent_coverage",
+        "known_format_coverage",
+        "week_mapping_coverage",
+        "duplicate_conflict_rate",
+        "reschedule_handling_accuracy",
+        "exact_phase_e_reference_reuse",
+        "weighted_context_determinism",
+        "player_weekly_mae_rmse_after_phase_h",
+        "coach_weekly_mae_rmse_after_phase_h",
+        "schedule_uncertainty_diagnostics",
+        "later_lineup_decision_metrics"
+      ]
+    }
+  },
+  "restricted_playstyle_mixture": {
+    "enabled": false,
+    "algorithm_version": "restricted_top_sup_playstyle_mixture_v1",
+    "configuration_version": "2026-08-05.phase_g.v1",
+    "serialization_schema_version": "restricted_playstyle_mixture_schema_v1",
+    "mapping_version": "restricted_top_sup_static_mapping_v1",
+    "mapping_source": "restricted_projection_of_reviewed_static_champion_style_taxonomy_v1_NOT_VERIFIED",
+    "weighting_version": "phase_g_unfitted_weighting_v1",
+    "fit_status": "PROVISIONAL_NOT_VALIDATED",
+    "calibration_status": "NOT_VERIFIED",
+    "supported_roles": ["top", "sup"],
+    "classes": {
+      "top": ["weakside_tank", "carry_bruiser", "unknown"],
+      "sup": ["engage", "enchanter", "unknown"]
+    },
+    "role_aliases": {
+      "top": "top", "top lane": "top",
+      "sup": "sup", "support": "sup",
+      "jgl": "jgl", "jungle": "jgl",
+      "mid": "mid", "middle": "mid",
+      "bot": "bot", "adc": "bot", "bottom": "bot"
+    },
+    "champion_identity": {
+      "policy": "stable_id_first_else_exact_normalized_name_no_fuzzy_matching",
+      "stable_ids": {
+        "aatrox": "aatrox", "alistar": "alistar", "blitzcrank": "blitzcrank",
+        "braum": "braum", "camille": "camille", "chogath": "cho gath",
+        "darius": "darius", "drmundo": "dr mundo", "fiora": "fiora",
+        "galio": "galio", "gangplank": "gangplank", "garen": "garen",
+        "gnar": "gnar", "gwen": "gwen", "illaoi": "illaoi",
+        "irelia": "irelia", "janna": "janna", "jax": "jax", "jayce": "jayce",
+        "karma": "karma", "ksante": "k sante", "kled": "kled", "leona": "leona",
+        "lulu": "lulu", "malphite": "malphite", "maokai": "maokai",
+        "milio": "milio", "mordekaiser": "mordekaiser", "nami": "nami",
+        "nasus": "nasus", "nautilus": "nautilus", "olaf": "olaf",
+        "ornn": "ornn", "poppy": "poppy", "rakan": "rakan", "rell": "rell",
+        "renataglasc": "renata glasc", "renekton": "renekton", "riven": "riven",
+        "rumble": "rumble", "seraphine": "seraphine", "sett": "sett",
+        "shen": "shen", "singed": "singed", "sion": "sion", "sona": "sona",
+        "soraka": "soraka", "tahmkench": "tahm kench", "taric": "taric",
+        "thresh": "thresh", "trundle": "trundle", "tryndamere": "tryndamere",
+        "udyr": "udyr", "urgot": "urgot", "volibear": "volibear",
+        "yorick": "yorick", "yuumi": "yuumi", "zaahen": "zaahen"
+      },
+      "aliases": {
+        "Aatrox": "aatrox", "Alistar": "alistar", "Blitzcrank": "blitzcrank",
+        "Braum": "braum", "Camille": "camille", "Cho'Gath": "cho gath",
+        "Darius": "darius", "Dr. Mundo": "dr mundo", "Fiora": "fiora",
+        "Galio": "galio", "Gangplank": "gangplank", "Garen": "garen",
+        "Gnar": "gnar", "Gwen": "gwen", "Illaoi": "illaoi",
+        "Irelia": "irelia", "Janna": "janna", "Jax": "jax", "Jayce": "jayce",
+        "Karma": "karma", "K'Sante": "k sante", "Kled": "kled", "Leona": "leona",
+        "Lulu": "lulu", "Malphite": "malphite", "Maokai": "maokai",
+        "Milio": "milio", "Mordekaiser": "mordekaiser", "Nami": "nami",
+        "Nasus": "nasus", "Nautilus": "nautilus", "Olaf": "olaf",
+        "Ornn": "ornn", "Poppy": "poppy", "Rakan": "rakan", "Rell": "rell",
+        "Renata Glasc": "renata glasc", "Renekton": "renekton", "Riven": "riven",
+        "Rumble": "rumble", "Seraphine": "seraphine", "Sett": "sett",
+        "Shen": "shen", "Singed": "singed", "Sion": "sion", "Sona": "sona",
+        "Soraka": "soraka", "Tahm Kench": "tahm kench", "Taric": "taric",
+        "Thresh": "thresh", "Trundle": "trundle", "Tryndamere": "tryndamere",
+        "Udyr": "udyr", "Urgot": "urgot", "Volibear": "volibear",
+        "Yorick": "yorick", "Yuumi": "yuumi", "Zaahen": "zaahen"
+      }
+    },
+    "champion_mapping": {
+      "top": {
+        "weakside_tank": ["cho gath", "dr mundo", "k sante", "malphite", "maokai", "ornn", "poppy", "shen", "sion", "tahm kench"],
+        "carry_bruiser": ["aatrox", "camille", "darius", "fiora", "gangplank", "garen", "gnar", "gwen", "illaoi", "irelia", "jax", "jayce", "kled", "mordekaiser", "nasus", "olaf", "renekton", "riven", "rumble", "sett", "singed", "trundle", "tryndamere", "udyr", "urgot", "volibear", "yorick", "zaahen"]
+      },
+      "sup": {
+        "engage": ["alistar", "blitzcrank", "braum", "galio", "leona", "maokai", "nautilus", "poppy", "rakan", "rell", "thresh"],
+        "enchanter": ["janna", "karma", "lulu", "milio", "nami", "renata glasc", "seraphine", "sona", "soraka", "taric", "yuumi"]
+      }
+    },
+    "prior_mass": {
+      "top": {"weakside_tank": 1.0, "carry_bruiser": 1.0, "unknown": 2.0},
+      "sup": {"engage": 1.0, "enchanter": 1.0, "unknown": 2.0}
+    },
+    "unknown_minimum": 0.40,
+    "identity_fallback_unknown_mass": 0.50,
+    "probability_tolerance": 0.000000000000001,
+    "weighting": {
+      "recency_half_life_days": 180.0,
+      "patch_policy": "exact_equality_else_configured_fallback",
+      "same_patch_weight": 1.0,
+      "different_patch_weight": 0.65,
+      "missing_patch_weight": 0.40,
+      "competition_weights": {"default": 1.0},
+      "evidence_quality_weights": {"official_game_record": 1.0, "verified_fallback": 0.75, "default": 0.50}
+    },
+    "uncertainty": {
+      "inverse_evidence": 0.40,
+      "class_balance": 0.10,
+      "unknown_mass": 0.25,
+      "mapping_gap": 0.15,
+      "identity_fallback": 0.10,
+      "role_transition": 0.10,
+      "missing_patch": 0.10,
+      "stale_evidence": 0.10,
+      "missing_field": 0.05,
+      "stale_after_days": 365.0,
+      "ceiling": 1.0,
+      "interpretation": "uncalibrated_structural_uncertainty"
+    },
+    "cold_start_policy": "exact_configured_role_priors",
+    "role_change_policy": "projected_role_history_only_cross_role_provenance_only",
+    "prohibited_signals": {
+      "team_win_probability": false,
+      "trailing_win_rate": false,
+      "elo": false,
+      "direct_win_bonus": false,
+      "opponent_identity": false,
+      "phase_e_probability": false,
+      "schedule_volume": false,
+      "expected_games": false,
+      "historical_price": false,
+      "target_fantasy_points": false,
+      "target_game_result": false,
+      "core_binary_selection": false,
+      "optimizer_state": false
+    },
+    "future_evaluation": {
+      "registered": true,
+      "executed": false,
+      "cumulative_arm": "M6_complete_schedule_plus_restricted_top_sup_playstyle",
+      "baseline_arm": "M5_complete_schedule_without_playstyle",
+      "leave_one_out_arm": "full_model_without_restricted_playstyle",
+      "limited_interactions": ["playstyle_x_role"],
+      "roles": ["top", "sup"],
+      "metrics": ["mae", "rmse", "pearson", "spearman", "top_role_recall", "uncertainty_diagnostics", "cold_start_slices", "patch_slices", "sample_size_slices", "unknown_mass_coverage", "class_probability_calibration_if_enabled_later", "post_phase_h_lineup_metrics"]
+    }
+  },
+  "unified_player_model_v2": {
+    "enabled": false,
+    "algorithm_version": "unified_player_model_v2_v1",
+    "configuration_version": "2026-08-05.phase_h.v1",
+    "input_schema_version": "unified_player_model_v2_input_v1",
+    "output_schema_version": "unified_player_model_v2_output_v1",
+    "serialization_schema_version": "unified_player_model_v2_serialization_v1",
+    "fit_status": "PROVISIONAL_NOT_VALIDATED",
+    "calibration_status": "NOT_VERIFIED",
+    "accepted_dependencies": {
+      "phase_b": {"algorithm_versions": ["persistent_player_rating_v1"], "configuration_versions": ["2026-08-04.phase_b.v1"]},
+      "phase_c": {"algorithm_versions": ["joint_roster_core_v2_v1"], "configuration_versions": ["2026-08-05.phase_c.v1"]},
+      "phase_d": {"algorithm_versions": ["player_derived_team_strength_v2_v1"], "configuration_versions": ["2026-08-05.phase_d.v1"]},
+      "phase_e": {"algorithm_versions": ["canonical_shared_matchup_probability_v1"], "configuration_versions": ["2026-08-05.phase_e.v1"]},
+      "phase_f": {"algorithm_versions": ["complete_prelock_schedule_representation_v1"], "configuration_versions": ["2026-08-05.phase_f.v1"]},
+      "phase_g": {"algorithm_versions": ["restricted_top_sup_playstyle_mixture_v1"], "configuration_versions": ["2026-08-05.phase_g.v1"]}
+    },
+    "playstyle_source_precedence": ["CHAMPION_DISTRIBUTION", "PHASE_G_HISTORY_FALLBACK", "ROLE_PRIOR_FALLBACK", "NOT_APPLICABLE"],
+    "playstyle_blending": false,
+    "champion_adapter": {
+      "policy": "read_only_existing_distribution_strict_context",
+      "fearless_owner": "champion_prediction",
+      "parse_draft_rules": false,
+      "remove_unavailable_champions": false,
+      "infer_future_lockout": false,
+      "mass_tolerance": 0.000000000001,
+      "accepted_algorithm_versions": ["injected_champion_distribution_v1", "series_champion_model_v1", "simple_champion_predictor_v1"],
+      "accepted_configuration_versions": ["phase_h_adapter_fixture_v1", "champion_predictor_current_v1"]
+    },
+    "multi_series_aggregation": {
+      "policy": "exact_phase_f_normalized_weights_whole_week_source",
+      "fearless_state_cross_series": false,
+      "expected_games_points_multiplier": false,
+      "raw_volume_bonus": false
+    },
+    "projection_coefficients": {
+      "player": {"rating": 0.0, "core": 0.0, "team_strength": 0.0, "shared_matchup": 0.0, "schedule_context": 0.0, "playstyle": 0.0},
+      "coach": {"team_strength": 0.0, "shared_matchup": 0.0, "schedule_context": 0.0}
+    },
+    "market_policy": {
+      "historical_price_fallback": 0.5,
+      "historical_price_status": "NOT_VERIFIED",
+      "fallback_provenance": "fallback_price_prior",
+      "fallback_verified": false,
+      "official_price_fabrication": false,
+      "optimizer_ready": false
+    },
+    "uncertainty": {
+      "policy": "root_mean_square_available_components_plus_penalties",
+      "missing_component_penalty": 0.10,
+      "unresolved_future_lockout_penalty": 0.10,
+      "ceiling": 10.0,
+      "calibration_status": "NOT_VERIFIED"
+    },
+    "prohibited_duplicate_signals": {
+      "direct_elo": false,
+      "trailing_win_rate": false,
+      "direct_win_bonus": false,
+      "second_matchup_probability": false,
+      "coach_specific_probability": false,
+      "player_specific_probability": false,
+      "expected_games_points_bonus": false,
+      "raw_schedule_volume_bonus": false,
+      "historical_price_performance": false,
+      "second_champion_tendency_model": false,
+      "champion_phase_g_blending": false,
+      "target_outcome": false,
+      "optimizer": false
+    },
+    "future_evaluation": {
+      "registered": true,
+      "executed": false,
+      "cumulative_ladder": [
+        {"arm": "M0", "description": "existing production baseline", "executed": false},
+        {"arm": "M1", "description": "M0 plus persistent player rating", "executed": false},
+        {"arm": "M2", "description": "M1 plus Core V2", "executed": false},
+        {"arm": "M3", "description": "M2 plus player-derived team strength", "executed": false},
+        {"arm": "M4", "description": "M3 plus shared matchup probability", "executed": false},
+        {"arm": "M5", "description": "M4 plus complete schedule representation", "executed": false},
+        {"arm": "M6", "description": "M5 plus restricted TOP/SUP playstyle", "executed": false},
+        {"arm": "M7", "description": "full unified Player Model V2", "executed": false}
+      ],
+      "playstyle_arms": [
+        {"arm": "G1", "description": "Phase G historical mixture only", "executed": false},
+        {"arm": "G2", "description": "champion-derived archetype mixture only", "executed": false},
+        {"arm": "G3", "description": "champion-derived with Phase G fallback", "executed": false},
+        {"arm": "G4", "description": "no playstyle component", "executed": false}
+      ],
+      "leave_one_out_arms": [
+        {"arm": "without_core_v2", "executed": false},
+        {"arm": "without_team_strength", "executed": false},
+        {"arm": "without_schedule_aggregation", "executed": false},
+        {"arm": "without_playstyle", "executed": false},
+        {"arm": "without_uncertainty_adjustment", "executed": false}
+      ],
+      "limited_interactions": ["rating_x_core", "core_x_team_strength", "team_strength_x_matchup", "matchup_x_schedule", "playstyle_x_role", "uncertainty_x_cold_start"],
+      "fearless_slices": ["STANDARD_vs_FULL_FEARLESS", "BO1_vs_BO3_vs_BO5", "GAME1_vs_LATER_GAMES", "KNOWN_vs_UNRESOLVED_FUTURE_LOCKOUT", "SINGLE_vs_MULTI_SERIES", "TOP_vs_SUP", "MAPPED_vs_UNMAPPED_MASS"],
+      "metrics": {
+        "player": ["mae", "rmse", "pearson", "spearman", "role_mae", "top_role_recall", "cold_start_patch_sample_slices", "uncertainty_coverage_if_calibrated"],
+        "coach": ["mae", "rmse", "correlation", "matchup_schedule_slices"],
+        "match_series_probability": ["log_loss", "brier", "calibration", "accuracy_secondary"],
+        "lineup": ["scenario_opportunity_capture", "scenario_regret", "realized_lineup_score", "unavailable_invalid_weeks"]
+      }
     }
   },
   "evaluation": {

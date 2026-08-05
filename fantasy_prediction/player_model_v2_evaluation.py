@@ -253,7 +253,7 @@ def run_preflight_checks(
         "price_exclusion_counts": exclusions,
         "historical_price_ablation_allowed": price_status == "VERIFIED",
         "rating_evaluation_allowed": False,
-        "rating_reason": "phase_b_not_authorized",
+        "rating_reason": "phase_b_foundation_only_predictive_evaluation_not_authorized",
         "selection_evaluation_allowed": True,
     }
 
@@ -346,9 +346,11 @@ def run_evaluation(
     rating = {
         "schema_version": 2,
         "artifact": "player_rating_ablation",
-        "status": "NOT_STARTED",
-        "reason": "phase_b_not_authorized",
+        "status": "NOT_VERIFIED",
+        "reason": "phase_b_foundation_implemented_predictive_ablation_not_run",
         "ablation_eligible": False,
+        "algorithm_version": config.get("player_rating", {}).get("algorithm_version"),
+        "configuration_version": config.get("player_rating", {}).get("configuration_version"),
         "target_count": len(target_ids),
         "target_ids": target_ids,
         "candidate_metrics": None,
