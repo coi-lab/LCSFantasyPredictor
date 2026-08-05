@@ -1,0 +1,74 @@
+{
+  "schema_version": 2,
+  "global_seed": 42,
+  "feature_gates": {
+    "historical_price_prior_enabled": false,
+    "player_rating_enabled": false
+  },
+  "statistics": {
+    "recency_half_lives": [180.0, 365.0, 730.0],
+    "prior_strengths": [5.0, 10.0, 20.0],
+    "robust_z_epsilon": 1e-6,
+    "robust_z_clip": 3.0
+  },
+  "historical_price_prior": {
+    "enabled": false,
+    "capability_status": "NOT_VERIFIED",
+    "ablation_eligible": false,
+    "dashboard_join_status": "NOT_VERIFIED",
+    "source_qualities": {
+      "official": 1.0,
+      "estimated": 0.5
+    },
+    "role_match_factors": {
+      "matching": 1.0,
+      "changed": 0.5
+    },
+    "league_match_factors": {
+      "matching": 1.0,
+      "changed": 0.75
+    },
+    "grid": {
+      "half_life_days": [180.0, 365.0, 730.0],
+      "include_estimated": [false, true]
+    },
+    "default": {
+      "half_life_days": 365.0,
+      "include_estimated": true
+    }
+  },
+  "player_rating": {
+    "enabled": false,
+    "rating_baseline": 1500.0,
+    "k_factor_base": 32.0,
+    "offseason_threshold_days": 60.0,
+    "component_weights": {
+      "z_fantasy_performance": 0.55,
+      "z_KP": 0.15,
+      "z_balanced_win_loss": 0.10,
+      "z_q25_floor": 0.10,
+      "z_above_role_median_rate": 0.05,
+      "z_starter_reliability": 0.05
+    },
+    "grid": {
+      "prior_strength": [5.0, 10.0, 20.0],
+      "offseason_half_life": [180.0, 365.0, 730.0],
+      "role_transfer_factor": [0.0, 0.5],
+      "price_prior_coefficient": [0.0, 0.25, 0.5]
+    },
+    "default": {
+      "prior_strength": 10.0,
+      "offseason_half_life": 365.0,
+      "role_transfer_factor": 0.5,
+      "price_prior_coefficient": 0.25
+    }
+  },
+  "evaluation": {
+    "fitting_years": [2022, 2023],
+    "selection_years": [2024],
+    "warmup_years": [2020, 2021],
+    "target_grain": "player_week",
+    "missing_data_policy": "explicit_fallback",
+    "tie_break_rule": "stable_source_key"
+  }
+}
