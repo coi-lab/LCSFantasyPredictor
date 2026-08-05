@@ -1,0 +1,30 @@
+competition_id,competition_name,season,source_league,split_id,split_name,stage_id,stage_name,source_id,provenance
+LCS,League Championship Series,2020,LCS,LCS:2020:spring,Spring,LCS:2020:spring:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2020,LCS,LCS:2020:spring,Spring,LCS:2020:spring:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2020,LCS,LCS:2020:summer,Summer,LCS:2020:summer:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2020,LCS,LCS:2020:summer,Summer,LCS:2020:summer:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2021,LCS,LCS:2021:spring,Spring,LCS:2021:spring:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2021,LCS,LCS:2021:spring,Spring,LCS:2021:spring:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2021,LCS,LCS:2021:summer,Summer,LCS:2021:summer:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2021,LCS,LCS:2021:summer,Summer,LCS:2021:summer:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2022,LCS,LCS:2022:spring,Spring,LCS:2022:spring:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2022,LCS,LCS:2022:spring,Spring,LCS:2022:spring:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2022,LCS,LCS:2022:summer,Summer,LCS:2022:summer:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2022,LCS,LCS:2022:summer,Summer,LCS:2022:summer:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2022,LCS,LCS:2022:unknown,UNKNOWN,LCS:2022:unknown:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2023,LCS,LCS:2023:spring,Spring,LCS:2023:spring:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2023,LCS,LCS:2023:spring,Spring,LCS:2023:spring:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2023,LCS,LCS:2023:summer,Summer,LCS:2023:summer:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2023,LCS,LCS:2023:summer,Summer,LCS:2023:summer:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2024,LCS,LCS:2024:spring,Spring,LCS:2024:spring:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2024,LCS,LCS:2024:spring,Spring,LCS:2024:spring:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2024,LCS,LCS:2024:summer,Summer,LCS:2024:summer:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2024,LCS,LCS:2024:summer,Summer,LCS:2024:summer:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2025,LTA N,LCS:2025:split1,Split 1,LCS:2025:split1:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT_WITH_2025_LTA_N_TO_LCS_LOGICAL_MAPPING
+LCS,League Championship Series,2025,LTA N,LCS:2025:split2,Split 2,LCS:2025:split2:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT_WITH_2025_LTA_N_TO_LCS_LOGICAL_MAPPING
+LCS,League Championship Series,2025,LTA N,LCS:2025:split2,Split 2,LCS:2025:split2:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT_WITH_2025_LTA_N_TO_LCS_LOGICAL_MAPPING
+LCS,League Championship Series,2025,LTA N,LCS:2025:split3,Split 3,LCS:2025:split3:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT_WITH_2025_LTA_N_TO_LCS_LOGICAL_MAPPING
+LCS,League Championship Series,2026,LCS,LCS:2026:lockin,Lock-In,LCS:2026:lockin:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2026,LCS,LCS:2026:spring,Spring,LCS:2026:spring:playoffs,PLAYOFFS,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2026,LCS,LCS:2026:spring,Spring,LCS:2026:spring:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT
+LCS,League Championship Series,2026,LCS,LCS:2026:summer,Summer,LCS:2026:summer:regular,REGULAR,src_oracles_elixir,DIRECT_SOURCE_FACT

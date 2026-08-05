@@ -1,0 +1,16 @@
+team_id,source_team_id,team_name,normalized_team_name,competition_id,valid_from,valid_to,source_id,identity_method,identity_confidence,quality_flags,provenance
+oe:team:0dbb780176ecad18f17292d1f5653af,oe:team:0dbb780176ecad18f17292d1f5653af,Dignitas,dignitas,LCS,2020-01-25T22:32:55Z,2026-07-25T23:45:03Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:289284911fb6f41c0ccaecc3a0c2891,oe:team:289284911fb6f41c0ccaecc3a0c2891,Disguised,disguised,LCS,2025-01-26T21:13:44Z,2026-07-26T23:12:26Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:2e66da41dc460dd378e3bcc57042d31,oe:team:2e66da41dc460dd378e3bcc57042d31,FlyQuest,flyquest,LCS,2020-01-26T00:44:16Z,2026-07-25T21:01:06Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:4bd1751425ef6a9bc9d4d8e9385b4a6,oe:team:4bd1751425ef6a9bc9d4d8e9385b4a6,100 Thieves,100thieves,LCS,2020-01-25T23:39:30Z,2025-09-07T22:50:47Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:87ee02298073abc2d55060f097d4041,oe:team:87ee02298073abc2d55060f097d4041,Golden Guardians,goldenguardians,LCS,2020-01-25T23:39:30Z,2023-08-14T01:25:01Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:8eb884e168f28402ce685bedebb5250,oe:team:8eb884e168f28402ce685bedebb5250,Team Liquid,teamliquid,LCS,2020-01-25T21:37:53Z,2026-07-26T21:25:07Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:a22510a4756fa424cb0771b13261139,oe:team:a22510a4756fa424cb0771b13261139,TSM,tsm,LCS,2020-01-26T20:35:10Z,2023-08-04T01:14:20Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:b360f1d729b0a8e0f29a5243c4200fa,oe:team:b360f1d729b0a8e0f29a5243c4200fa,Shopify Rebellion,shopifyrebellion,LCS,2024-01-20T22:30:21Z,2026-07-26T23:12:26Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:c334c629fea759876e9e04afbe4aee7,oe:team:c334c629fea759876e9e04afbe4aee7,Immortals,immortals,LCS,2020-01-26T00:44:16Z,2024-08-11T23:48:41Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:cbfaf0ca2181f0903d2fcceb6c28f3b,oe:team:cbfaf0ca2181f0903d2fcceb6c28f3b,Counter Logic Gaming,counterlogicgaming,LCS,2020-01-25T22:32:55Z,2023-03-26T22:57:23Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:da1143bf9a245b78a8dc86417de85b3,oe:team:da1143bf9a245b78a8dc86417de85b3,LYON,lyon,LCS,2025-01-25T23:04:54Z,2026-07-25T21:01:06Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:e758ebe9a5a2cc81b9c8078479c2d87,oe:team:e758ebe9a5a2cc81b9c8078479c2d87,NRG,nrg,LCS,2023-06-15T00:03:10Z,2024-08-23T23:39:20Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:f7f7324c151aa6ed770b244ce08e027,oe:team:f7f7324c151aa6ed770b244ce08e027,Evil Geniuses,evilgeniuses,LCS,2020-01-26T19:20:42Z,2023-08-10T23:37:02Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:f90422f1cbcb24bc2a855202582ec29,oe:team:f90422f1cbcb24bc2a855202582ec29,Sentinels,sentinels,LCS,2026-01-24T23:14:34Z,2026-07-25T23:45:03Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT
+oe:team:fc8e90107dabb9a35c490b0d86adea0,oe:team:fc8e90107dabb9a35c490b0d86adea0,Cloud9,cloud9,LCS,2020-01-25T21:37:53Z,2026-07-26T21:25:07Z,src_oracles_elixir,SOURCE_ID,HIGH,,DIRECT_SOURCE_FACT

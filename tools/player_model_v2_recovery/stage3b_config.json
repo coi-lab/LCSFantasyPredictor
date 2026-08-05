@@ -1,0 +1,76 @@
+{
+  "candidate_id": "player-model-v2-structural-20260805-39b2744-c735b540e14c",
+  "stage_2_inventory_sha256": "3c8b8fbb453a71b4edc18da2cef61f3a42e3dac3dbe79afad1e06d8c9df11627",
+  "stage_3a_manifest_sha256": "e5b0e07fb68ce23690ee132c2b064789f99098576eabda603a4a9acac1ed4824",
+  "protected_column_policy_version": "protected_columns_v1",
+  "starter_policy_version": "strict_prior_series_continuity_v1",
+  "starter_max_lookback_days": 60,
+  "prior_event_completion_buffer_hours": 6,
+  "oracle_event_timezone_policy": "parse source date as UTC, matching Stage 2 metadata inventory",
+  "format_policy_version": "explicit_or_phase_f_unknown_v1",
+  "unknown_format_fallback_approved": true,
+  "unknown_format_fallback_authority": "Frozen Phase F fallback behavior: UNKNOWN/UNAVAILABLE",
+  "schedule_revision_policy_version": "reciprocal_official_round_snapshot_v1",
+  "lock_policy_version": "documented_market_close_operational_v2",
+  "market_source_paths": [
+    "data/raw/official_market_snapshots/round-1-split-3_20260722T192318Z.csv",
+    "data/raw/official_market_snapshots/round-1-split-3_20260724T131915Z.csv",
+    "data/raw/official_market_snapshots/round-2-split-3_20260728T150509Z.csv",
+    "data/raw/official_market_snapshots/round-2-split-3_20260728T150935Z.csv"
+  ],
+  "continuity_source_paths": [
+    "data/raw/oracles_elixir/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+    "data/generated/champion_prediction/champion_drafts.sqlite"
+  ],
+  "authority_source_paths": [
+    "config/scoring_rules.json",
+    "docs/operations/official_lock_price_capture_contract.md"
+  ],
+  "market_allowed_columns": [
+    "captured_at_utc",
+    "round_id",
+    "round_name",
+    "round_index_in_split",
+    "market_closes_at",
+    "round_player_id",
+    "pro_player_id",
+    "summoner_name",
+    "role",
+    "team_id",
+    "team_code",
+    "team_name",
+    "opponent_codes",
+    "opponent_sides",
+    "match_timestamps",
+    "source_endpoint"
+  ],
+  "oracle_allowed_columns": [
+    "gameid",
+    "date",
+    "league",
+    "year",
+    "split",
+    "position",
+    "playername",
+    "playerid",
+    "teamname",
+    "teamid"
+  ],
+  "protected_columns": [
+    "actual_fantasy_pts",
+    "actual_games",
+    "average_round_score",
+    "last_round_score",
+    "max_round_score",
+    "min_round_score",
+    "baseline_projection",
+    "ridge_prediction",
+    "result",
+    "kills",
+    "deaths",
+    "assists",
+    "price",
+    "previous_round_price",
+    "price_change"
+  ]
+}
