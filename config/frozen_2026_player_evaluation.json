@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "status": "BLOCKED_FROZEN_2026",
+  "benchmark": {
+    "identity": "2026_split_1_frozen_highest_projected_per_role_synthetic_baseline",
+    "artifact": "data/predictions/2026_split_1_synthetic_baseline.json",
+    "sha256": "c41a3c61fee55e2aa98d90d54796a597a0e1a0519295f2e14e82679b7d7e0afe",
+    "expected_score": 1365.72
+  },
+  "candidate": {
+    "identity": "player_feature_improvement_candidate_2026_v1",
+    "families_in_order": [
+      "persistent_player_rating",
+      "strict_historical_price_prior",
+      "core_v2",
+      "player_derived_team_rating_shared_win_model",
+      "complete_schedule_representation",
+      "restricted_top_sup_playstyle"
+    ],
+    "definitions_complete": false,
+    "implementation_complete": false,
+    "selection_fallback": "baseline"
+  },
+  "seasons": {
+    "training": [2022, 2023],
+    "selection": [2022, 2023, 2024],
+    "validation": [2025],
+    "frozen_evaluation": [2026]
+  },
+  "cutoff_contract": {
+    "comparison": "strictly_before",
+    "lock_proxy": "earliest target-week game when an official historical lock is unavailable",
+    "post_lock_inputs_prohibited": true,
+    "schedule_and_roster_as_of_required": true
+  },
+  "missing_data_policy": {
+    "status": "BLOCKED_UNDEFINED_FOR_REQUESTED_FAMILIES",
+    "no_implicit_imputation": true,
+    "required_definitions": [
+      "persistent rating cold-start and cross-season rule",
+      "historical price prior fallback by provenance class",
+      "Core V2 incomplete-lineup fallback",
+      "schedule format and expected-games fallback",
+      "restricted TOP/SUP sparse-history probability fallback"
+    ]
+  },
+  "candidate_universe": {
+    "target_grain": "one LCS/LTA player-week",
+    "roles": ["top", "jgl", "mid", "bot", "sup"],
+    "eligibility": "known pre-lock roster and schedule only",
+    "substitutions": "only when an as_of timestamp is strictly before lock",
+    "unknown_lineups": "blocked pending the plan-defined deterministic fallback"
+  },
+  "market_and_oracle_status": {
+    "market": "SYNTHETIC_MARKET",
+    "authentic_pre_lock_snapshots_verified": false,
+    "official_regret": "NOT_VERIFIED",
+    "legal_oracle": "NOT_VERIFIED"
+  },
+  "determinism": {
+    "random_seeds": {"global": 20260804},
+    "row_order_invariant": true,
+    "candidate_order_frozen": true,
+    "tie_breaking": "blocked pending the plan-defined Core V2 key"
+  },
+  "inputs": {
+    "candidate_hash_files": [
+      "fantasy_prediction/freeze_manifest.py",
+      "fantasy_prediction/historical_training_table.py",
+      "fantasy_prediction/matchup_features.py",
+      "fantasy_prediction/playstyle_features.py",
+      "fantasy_prediction/team_core_features.py"
+    ],
+    "fingerprints": [
+      {
+        "path": "data/predictions/2026_split_1_synthetic_baseline.json",
+        "sha256": "c41a3c61fee55e2aa98d90d54796a597a0e1a0519295f2e14e82679b7d7e0afe"
+      },
+      {
+        "path": "data/predictions/2026_split_1_lineup_aware.json",
+        "sha256": "95f38bcd1943daf89e21d53afffc0b9a92c5f7847a005a974cf1f623ae4c2f13"
+      },
+      {
+        "path": "analysis/2026_exposed_lineup_aware_evaluation.md",
+        "sha256": "12acaef75cde4e69c8ace0a0ef5b559f7a4c21b327bd6e2094f58bb0b13cce42"
+      }
+    ]
+  },
+  "candidate_hash": null,
+  "frozen_validation": {
+    "required_runs": 1,
+    "completed_runs": 0,
+    "artifact": null,
+    "sha256": null
+  },
+  "frozen_evaluation": {
+    "required_runs": 1,
+    "completed_runs": 0,
+    "candidate_hash_recorded_before_run": false,
+    "outputs": [],
+    "historical_2026_evidence": [
+      {
+        "artifact": "data/predictions/2026_split_1_lineup_aware.json",
+        "sha256": "95f38bcd1943daf89e21d53afffc0b9a92c5f7847a005a974cf1f623ae4c2f13",
+        "score": 1148.29,
+        "use": "historical_rejected_evidence_only"
+      },
+      {
+        "artifact": "data/predictions/2026_split_1_synthetic_baseline.json",
+        "sha256": "c41a3c61fee55e2aa98d90d54796a597a0e1a0519295f2e14e82679b7d7e0afe",
+        "score": 1365.72,
+        "use": "benchmark_identity_only"
+      }
+    ],
+    "rerun_prohibited_while_blocked": true
+  },
+  "blockers": [
+    {
+      "code": "MISSING_AUTHORITATIVE_FEATURE_DEFINITIONS",
+      "detail": "No checked-in improvement plan defines the requested rating update/decay/reset, role adjustments, Core V2 carry/facilitating/floor formulas and caps, price-prior fallback, schedule expected-games aggregation, or TOP/SUP probability calibration and fallback."
+    },
+    {
+      "code": "FROZEN_2025_NOT_RUN",
+      "detail": "The requested candidate cannot be selected or validated until its authoritative definitions and implementation exist."
+    }
+  ]
+}

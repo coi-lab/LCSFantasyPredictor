@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "reviewed_at": "2026-08-04",
+  "status": "reviewed_static_reference",
+  "description": "A deterministic primary gameplay class for champions seen in the 2020-2025 professional history. Classes are reference attributes only and never encode target-week usage or results.",
+  "reference": "Riot Data Dragon static champion identity/tags, followed by project review for fantasy-relevant primary class",
+  "classes": {
+    "assassin": [
+      "Akali", "Akshan", "Bel'Veth", "Briar", "Ekko", "Evelynn", "Fizz", "Kassadin", "Katarina", "Kayn", "Kha'Zix", "LeBlanc", "Master Yi", "Naafiri", "Nidalee", "Nocturne", "Pyke", "Qiyana", "Rengar", "Shaco", "Talon", "Viego", "Yone", "Zed"
+    ],
+    "bruiser_fighter": [
+      "Aatrox", "Ambessa", "Camille", "Darius", "Diana", "Dr. Mundo", "Fiora", "Gangplank", "Garen", "Gnar", "Graves", "Gwen", "Hecarim", "Illaoi", "Irelia", "Jarvan IV", "Jax", "Jayce", "Kled", "Lee Sin", "Mordekaiser", "Nasus", "Olaf", "Pantheon", "Rek'Sai", "Renekton", "Riven", "Rumble", "Sett", "Shyvana", "Singed", "Skarner", "Sylas", "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "Volibear", "Warwick", "Wukong", "Xin Zhao", "Yasuo", "Yorick", "Zaahen"
+    ],
+    "tank": [
+      "Amumu", "Cho'Gath", "K'Sante", "Malphite", "Maokai", "Nunu & Willump", "Ornn", "Poppy", "Rammus", "Sejuani", "Shen", "Sion", "Tahm Kench", "Zac"
+    ],
+    "control_mage": [
+      "Anivia", "Aurelion Sol", "Azir", "Cassiopeia", "Hwei", "Karthus", "Lissandra", "Malzahar", "Mel", "Orianna", "Ryze", "Swain", "Syndra", "Taliyah", "Twisted Fate", "Vex", "Viktor", "Vladimir", "Zilean"
+    ],
+    "burst_mage": [
+      "Ahri", "Annie", "Aurora", "Brand", "Fiddlesticks", "Kennen", "Neeko", "Veigar", "Zoe"
+    ],
+    "artillery_poke": [
+      "Corki", "Heimerdinger", "Lux", "Vel'Koz", "Xerath", "Ziggs", "Zyra"
+    ],
+    "enchanter": [
+      "Ivern", "Janna", "Karma", "Lulu", "Milio", "Nami", "Renata Glasc", "Seraphine", "Sona", "Soraka", "Taric", "Yuumi"
+    ],
+    "marksman": [
+      "Aphelios", "Ashe", "Caitlyn", "Draven", "Ezreal", "Jhin", "Jinx", "Kai'Sa", "Kalista", "Kindred", "Kog'Maw", "Lucian", "Miss Fortune", "Nilah", "Quinn", "Samira", "Senna", "Sivir", "Smolder", "Tristana", "Twitch", "Varus", "Vayne", "Xayah", "Yunara", "Zeri"
+    ],
+    "engage_support": [
+      "Alistar", "Blitzcrank", "Braum", "Galio", "Leona", "Nautilus", "Rakan", "Rell", "Thresh"
+    ],
+    "specialist": [
+      "Bard", "Elise", "Gragas", "Kayle", "Lillia", "Morgana", "Teemo"
+    ]
+  }
+}

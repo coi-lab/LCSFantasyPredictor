@@ -13,6 +13,7 @@ from fantasy_prediction.historical_training_table import (
     build_player_week_targets,
     build_training_table,
     chronological_split,
+    compare_feature_families,
     compare_models,
 )
 
@@ -91,6 +92,29 @@ class HistoricalTrainingTableTests(unittest.TestCase):
         pd.testing.assert_series_equal(
             scored_first["ridge_prediction"], scored_second["ridge_prediction"]
         )
+
+    def test_feature_family_selection_uses_2024_and_never_2026(self) -> None:
+        records = []
+        for year, split in ((2022, "development"), (2023, "development"), (2024, "confirmation"), (2025, "validation"), (2026, "exposed_test")):
+            for index, role in enumerate(("top", "jgl", "mid", "bot", "sup")):
+                base = float(10 + index)
+                row = {
+                    "target_id": f"{year}-{role}", "year": year,
+                    "week_start": f"{year}-01-01", "split_assignment": split,
+                    "role": role, "actual_fantasy_pts": base + index,
+                    "baseline_projection": base, "candidate_signal": float(index),
+                }
+                for feature in NUMERIC_FEATURES:
+                    row.setdefault(feature, base)
+                records.append(row)
+        report = compare_feature_families(
+            pd.DataFrame(records), feature_groups={"candidate": ("candidate_signal",)},
+            fixed_alpha=100.0,
+        )
+        self.assertFalse(report["exposed_2026_used"])
+        self.assertEqual(report["fixed_alpha"], 100.0)
+        self.assertFalse(report["production_gate"]["enabled"])
+        self.assertNotIn("exposed_test", report)
 
 
 if __name__ == "__main__":
