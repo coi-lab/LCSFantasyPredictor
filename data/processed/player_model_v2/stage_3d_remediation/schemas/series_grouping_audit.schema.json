@@ -1,0 +1,1 @@
+{"column_order":["series_id","classification","game_count","first_actual_start_utc","last_actual_start_utc","team_1_id","team_2_id","checks_json","corroboration","provenance"],"dataset":"series_grouping_audit","format":"UTF-8 CSV LF","primary_key":["series_id"],"row_order":["series_id"],"schema_version":"player_model_v2_stage_3d_remediation_series_audit_v1"}

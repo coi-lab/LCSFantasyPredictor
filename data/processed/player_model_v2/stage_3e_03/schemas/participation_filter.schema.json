@@ -1,0 +1,33 @@
+{
+  "columns": [
+    "player_id",
+    "team_id",
+    "role",
+    "prediction_period_id",
+    "game_count_participated",
+    "series_count_participated",
+    "participated",
+    "participation_source",
+    "participation_provenance"
+  ],
+  "dataset": "participation_filter",
+  "foreign_keys": [],
+  "format": "utf-8-csv",
+  "normalized_null": "empty CSV field; JSON null inside canonical JSON fields",
+  "primary_key": [
+    "player_id",
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage_3e_v1",
+  "stable_column_order": [
+    "player_id",
+    "team_id",
+    "role",
+    "prediction_period_id",
+    "game_count_participated",
+    "series_count_participated",
+    "participated",
+    "participation_source",
+    "participation_provenance"
+  ]
+}

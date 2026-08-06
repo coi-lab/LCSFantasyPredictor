@@ -1,0 +1,38 @@
+{
+  "columns": [
+    "player_id",
+    "prediction_period_id",
+    "feature_name",
+    "feature_value",
+    "feature_source_max_timestamp",
+    "target_cutoff",
+    "cutoff_safe",
+    "feature_family",
+    "feature_version",
+    "provenance",
+    "missingness_reason"
+  ],
+  "dataset": "feature_provenance",
+  "foreign_keys": [],
+  "format": "utf-8-csv",
+  "normalized_null": "empty CSV field; JSON null inside canonical JSON fields",
+  "primary_key": [
+    "player_id",
+    "prediction_period_id",
+    "feature_name"
+  ],
+  "schema_version": "player_model_v2_stage_3e_v1",
+  "stable_column_order": [
+    "player_id",
+    "prediction_period_id",
+    "feature_name",
+    "feature_value",
+    "feature_source_max_timestamp",
+    "target_cutoff",
+    "cutoff_safe",
+    "feature_family",
+    "feature_version",
+    "provenance",
+    "missingness_reason"
+  ]
+}

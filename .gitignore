@@ -29,3 +29,4 @@ data/raw/oracles_elixir/2021_LoL_esports_match_data_from_OraclesElixir.csv
 
 # Reproducible champion benchmark candidate matrices exceed GitHub's file limit.
 analysis/champion_experiments/**/candidate_rows.json
+data/processed/player_model_v2/stage_3e_03/label_components.csv

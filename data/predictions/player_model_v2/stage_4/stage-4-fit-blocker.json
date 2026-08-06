@@ -1,0 +1,12 @@
+{
+  "evidence_path": [
+    "evaluation-registry.json records IDs/descriptions/parents but not registered_features or fit_parameters",
+    "fantasy_prediction/player_model_v2_evaluation.py evaluates M0 only and explicitly disallows rating evaluation",
+    "config/player_model_v2.json contains zero placeholder projection coefficients and no player coefficient fitter",
+    "fantasy_prediction/historical_training_table.py is absent from the frozen candidate bundle and uses a different ISO-week feature schema"
+  ],
+  "protected_outcomes_opened": false,
+  "recommendation": "FROZEN_CANDIDATE_REVIEW_REQUIRED",
+  "schema_version": "player_model_v2_stage_4_fit_blocker_v1",
+  "verdict": "BLOCKED_BY_FIT_SPECIFICATION_AMBIGUITY"
+}

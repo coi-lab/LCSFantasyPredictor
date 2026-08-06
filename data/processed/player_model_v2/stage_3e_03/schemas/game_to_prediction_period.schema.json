@@ -1,0 +1,22 @@
+{
+  "columns": [
+    "game_id",
+    "prediction_period_id",
+    "mapping_method",
+    "quality_status"
+  ],
+  "dataset": "game_to_prediction_period",
+  "foreign_keys": [],
+  "format": "utf-8-csv",
+  "normalized_null": "empty CSV field; JSON null inside canonical JSON fields",
+  "primary_key": [
+    "game_id"
+  ],
+  "schema_version": "player_model_v2_stage_3e_v1",
+  "stable_column_order": [
+    "game_id",
+    "prediction_period_id",
+    "mapping_method",
+    "quality_status"
+  ]
+}

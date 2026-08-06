@@ -1,0 +1,45 @@
+{
+  "columns": [
+    "player_id",
+    "team_id",
+    "role",
+    "prediction_period_id",
+    "target_cutoff",
+    "participated",
+    "chronological_partition",
+    "prelock_features",
+    "projected_fantasy_points",
+    "realized_fantasy_points",
+    "scoring_rule_version",
+    "label_policy_id",
+    "feature_provenance",
+    "label_provenance",
+    "row_quality"
+  ],
+  "dataset": "modeling_table",
+  "foreign_keys": [],
+  "format": "utf-8-csv",
+  "normalized_null": "empty CSV field; JSON null inside canonical JSON fields",
+  "primary_key": [
+    "player_id",
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage_3e_v1",
+  "stable_column_order": [
+    "player_id",
+    "team_id",
+    "role",
+    "prediction_period_id",
+    "target_cutoff",
+    "participated",
+    "chronological_partition",
+    "prelock_features",
+    "projected_fantasy_points",
+    "realized_fantasy_points",
+    "scoring_rule_version",
+    "label_policy_id",
+    "feature_provenance",
+    "label_provenance",
+    "row_quality"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "columns": [
+    "chronological_partition",
+    "years",
+    "row_count",
+    "protected",
+    "path",
+    "sha256",
+    "access_policy"
+  ],
+  "dataset": "chronological_partitions",
+  "foreign_keys": [],
+  "format": "utf-8-csv",
+  "normalized_null": "empty CSV field; JSON null inside canonical JSON fields",
+  "primary_key": [
+    "chronological_partition"
+  ],
+  "schema_version": "player_model_v2_stage_3e_v1",
+  "stable_column_order": [
+    "chronological_partition",
+    "years",
+    "row_count",
+    "protected",
+    "path",
+    "sha256",
+    "access_policy"
+  ]
+}

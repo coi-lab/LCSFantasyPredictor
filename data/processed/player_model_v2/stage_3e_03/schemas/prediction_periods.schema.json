@@ -1,0 +1,46 @@
+{
+  "columns": [
+    "prediction_period_id",
+    "competition_id",
+    "season",
+    "split_id",
+    "stage_id",
+    "period_label",
+    "period_sequence",
+    "period_start_utc",
+    "period_end_utc",
+    "target_cutoff",
+    "cutoff_policy_id",
+    "mapping_method",
+    "direct_evidence",
+    "inference_used",
+    "provenance",
+    "quality_status"
+  ],
+  "dataset": "prediction_periods",
+  "foreign_keys": [],
+  "format": "utf-8-csv",
+  "normalized_null": "empty CSV field; JSON null inside canonical JSON fields",
+  "primary_key": [
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage_3e_v1",
+  "stable_column_order": [
+    "prediction_period_id",
+    "competition_id",
+    "season",
+    "split_id",
+    "stage_id",
+    "period_label",
+    "period_sequence",
+    "period_start_utc",
+    "period_end_utc",
+    "target_cutoff",
+    "cutoff_policy_id",
+    "mapping_method",
+    "direct_evidence",
+    "inference_used",
+    "provenance",
+    "quality_status"
+  ]
+}

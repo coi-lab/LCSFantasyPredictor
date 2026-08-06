@@ -1,0 +1,52 @@
+{
+  "columns": [
+    "player_id",
+    "prediction_period_id",
+    "component_id",
+    "component_name",
+    "component_scope",
+    "raw_source_value",
+    "derived_value",
+    "rule_operator",
+    "rule_threshold",
+    "component_points",
+    "component_status",
+    "source_dataset",
+    "source_field",
+    "source_record_locator",
+    "proxy_used",
+    "exclusion_policy_id",
+    "quality_flags",
+    "provenance"
+  ],
+  "dataset": "label_components",
+  "foreign_keys": [],
+  "format": "utf-8-csv",
+  "normalized_null": "empty CSV field; JSON null inside canonical JSON fields",
+  "primary_key": [
+    "player_id",
+    "prediction_period_id",
+    "component_id"
+  ],
+  "schema_version": "player_model_v2_stage_3e_v1",
+  "stable_column_order": [
+    "player_id",
+    "prediction_period_id",
+    "component_id",
+    "component_name",
+    "component_scope",
+    "raw_source_value",
+    "derived_value",
+    "rule_operator",
+    "rule_threshold",
+    "component_points",
+    "component_status",
+    "source_dataset",
+    "source_field",
+    "source_record_locator",
+    "proxy_used",
+    "exclusion_policy_id",
+    "quality_flags",
+    "provenance"
+  ]
+}
