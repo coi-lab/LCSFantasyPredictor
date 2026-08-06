@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "properties": {
+    "candidate_id": {
+      "const": "player-model-v2-fit-spec-v1-20260805-26176082"
+    },
+    "parent_candidate_id": {
+      "const": "player-model-v2-structural-20260805-39b2744-c735b540e14c"
+    },
+    "prediction_mode": {
+      "const": "residual_correction_over_m0"
+    }
+  },
+  "required": [
+    "candidate_id",
+    "parent_candidate_id",
+    "target",
+    "grain",
+    "prediction_mode",
+    "m0",
+    "model",
+    "preprocessing"
+  ],
+  "title": "Player Model V2 Stage 4A executable fit specification",
+  "type": "object"
+}

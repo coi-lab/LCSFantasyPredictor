@@ -1,0 +1,17 @@
+{
+  "columns": [
+    "player_id",
+    "prediction_period_id",
+    "target_cutoff",
+    "chronological_status",
+    "realized_labels_reference",
+    "realized_labels_sha256",
+    "projected_fantasy_points"
+  ],
+  "primary_key": [
+    "player_id",
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage4c_context_v1",
+  "table": "context_modeling_table_reference"
+}

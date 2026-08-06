@@ -1,0 +1,206 @@
+{
+  "arms": [
+    {
+      "arm_id": "M0",
+      "ordered_features": [
+        "prior_realized_labels_strictly_before_target_cutoff"
+      ],
+      "parent": null,
+      "selection_eligible_development_only": true,
+      "status": "ELIGIBLE"
+    },
+    {
+      "arm_id": "M1",
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp"
+      ],
+      "parent": "M0",
+      "selection_eligible_development_only": true,
+      "status": "ELIGIBLE"
+    },
+    {
+      "arm_id": "M2",
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state"
+      ],
+      "parent": "M1",
+      "selection_eligible_development_only": true,
+      "status": "ELIGIBLE"
+    },
+    {
+      "arm_id": "M3",
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state"
+      ],
+      "parent": "M2",
+      "selection_eligible_development_only": true,
+      "status": "ELIGIBLE"
+    },
+    {
+      "arm_id": "M4",
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability"
+      ],
+      "parent": "M3",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_NO_COVERAGE"
+    },
+    {
+      "arm_id": "M5",
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context"
+      ],
+      "parent": "M4",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_NO_COVERAGE"
+    },
+    {
+      "arm_id": "M6",
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable"
+      ],
+      "parent": "M5",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_NO_COVERAGE"
+    },
+    {
+      "arm_id": "M7",
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable"
+      ],
+      "parent": "M6",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_NO_COVERAGE"
+    },
+    {
+      "arm_id": "G1",
+      "ordered_features": [],
+      "parent": "M7",
+      "reason": "G variants cannot be distinguished from compact generic Phase G fields",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    },
+    {
+      "arm_id": "G2",
+      "ordered_features": [],
+      "parent": "M7",
+      "reason": "G variants cannot be distinguished from compact generic Phase G fields",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    },
+    {
+      "arm_id": "G3",
+      "ordered_features": [],
+      "parent": "M7",
+      "reason": "G variants cannot be distinguished from compact generic Phase G fields",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    },
+    {
+      "arm_id": "G4",
+      "ordered_features": [],
+      "parent": "M7",
+      "reason": "G variants cannot be distinguished from compact generic Phase G fields",
+      "selection_eligible_development_only": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    }
+  ],
+  "candidate_id": "player-model-v2-context-fit-spec-v1-20260805-440fe82fa633",
+  "context_feature_hash": "440fe82fa63371fb06b13a45063ca01fe00471f5d6828af8a46f4ad7cf2b5e3a",
+  "context_root": "data/processed/player_model_v2/stage_4c_context",
+  "estimator": "Stage4A ridge residual correction over M0; development-only selection policy",
+  "original_parent_candidate_id": "player-model-v2-structural-20260805-39b2744-c735b540e14c",
+  "parent_candidate_id": "player-model-v2-fit-spec-v1-20260805-26176082"
+}

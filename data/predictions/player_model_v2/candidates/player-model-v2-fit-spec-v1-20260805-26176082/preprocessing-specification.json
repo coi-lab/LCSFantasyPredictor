@@ -1,0 +1,35 @@
+{
+  "categorical_features": [
+    "role",
+    "m0_fallback_level"
+  ],
+  "fit_scope": "training window only",
+  "numeric_features": [
+    "m0_prediction",
+    "m0_source_count",
+    "prior_player_rating",
+    "prior_residual_uncertainty",
+    "prior_effective_evidence",
+    "prior_role_relative_rating",
+    "prior_role_adjusted_kp"
+  ],
+  "order": [
+    "preserve null provenance",
+    "add training-null indicators",
+    "training median numeric imputation",
+    "training mean/population-standard-deviation scaling",
+    "exclude zero-standard-deviation numeric columns",
+    "deterministic categorical one-hot"
+  ],
+  "prohibited_features": [
+    "player_id",
+    "team_id",
+    "prediction_period_id",
+    "season",
+    "target_participation",
+    "realized_game_count"
+  ],
+  "schema_version": "player_model_v2_stage4a_preprocessing_v1",
+  "target_aware_imputation": false,
+  "unknown_category": "__UNKNOWN__"
+}

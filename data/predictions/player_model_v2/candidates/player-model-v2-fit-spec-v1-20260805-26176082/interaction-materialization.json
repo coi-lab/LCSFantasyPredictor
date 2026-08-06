@@ -1,0 +1,252 @@
+{
+  "arms": [
+    {
+      "arm_id": "I1",
+      "coverage": "M7 unavailable or at least one registered operand unavailable",
+      "feature_family": "limited_interaction",
+      "fit_eligible": false,
+      "interaction": {
+        "form": "standardized_product",
+        "operands": [
+          "prior_player_rating",
+          "prior_core_state"
+        ]
+      },
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable",
+        "interaction__prior_player_rating__x__prior_core_state"
+      ],
+      "parent": "M7",
+      "reason": "Interaction operands and executable M7 are mandatory",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_DEPENDENCY_FAILURE"
+    },
+    {
+      "arm_id": "I2",
+      "coverage": "M7 unavailable or at least one registered operand unavailable",
+      "feature_family": "limited_interaction",
+      "fit_eligible": false,
+      "interaction": {
+        "form": "standardized_product",
+        "operands": [
+          "prior_core_state",
+          "prior_team_strength"
+        ]
+      },
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable",
+        "interaction__prior_core_state__x__prior_team_strength"
+      ],
+      "parent": "M7",
+      "reason": "Interaction operands and executable M7 are mandatory",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_DEPENDENCY_FAILURE"
+    },
+    {
+      "arm_id": "I3",
+      "coverage": "M7 unavailable or at least one registered operand unavailable",
+      "feature_family": "limited_interaction",
+      "fit_eligible": false,
+      "interaction": {
+        "form": "standardized_product",
+        "operands": [
+          "prior_team_strength",
+          "canonical_matchup_probability"
+        ]
+      },
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable",
+        "interaction__prior_team_strength__x__canonical_matchup_probability"
+      ],
+      "parent": "M7",
+      "reason": "Interaction operands and executable M7 are mandatory",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_DEPENDENCY_FAILURE"
+    },
+    {
+      "arm_id": "I4",
+      "coverage": "M7 unavailable or at least one registered operand unavailable",
+      "feature_family": "limited_interaction",
+      "fit_eligible": false,
+      "interaction": {
+        "form": "standardized_product",
+        "operands": [
+          "canonical_matchup_probability",
+          "schedule_opponent_context"
+        ]
+      },
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable",
+        "interaction__canonical_matchup_probability__x__schedule_opponent_context"
+      ],
+      "parent": "M7",
+      "reason": "Interaction operands and executable M7 are mandatory",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_DEPENDENCY_FAILURE"
+    },
+    {
+      "arm_id": "I5",
+      "coverage": "M7 unavailable or at least one registered operand unavailable",
+      "feature_family": "limited_interaction",
+      "fit_eligible": false,
+      "interaction": {
+        "form": "standardized_product",
+        "operands": [
+          "playstyle_class_1_probability",
+          "role_top_sup_indicator"
+        ]
+      },
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable",
+        "interaction__playstyle_class_1_probability__x__role_top_sup_indicator"
+      ],
+      "parent": "M7",
+      "reason": "Interaction operands and executable M7 are mandatory",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_DEPENDENCY_FAILURE"
+    },
+    {
+      "arm_id": "I6",
+      "coverage": "M7 unavailable or at least one registered operand unavailable",
+      "feature_family": "limited_interaction",
+      "fit_eligible": false,
+      "interaction": {
+        "form": "standardized_product",
+        "operands": [
+          "prior_residual_uncertainty",
+          "cold_start_indicator"
+        ]
+      },
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context",
+        "playstyle_class_1_probability",
+        "playstyle_class_2_probability",
+        "playstyle_unknown_probability",
+        "playstyle_uncertainty",
+        "playstyle_applicable",
+        "interaction__prior_residual_uncertainty__x__cold_start_indicator"
+      ],
+      "parent": "M7",
+      "reason": "Interaction operands and executable M7 are mandatory",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_DEPENDENCY_FAILURE"
+    }
+  ],
+  "form": "z(feature_a) * z(feature_b)",
+  "requirements": [
+    "both operands exact and registered",
+    "both operands prelock and nonconstant",
+    "both operands pass coverage",
+    "executable M7 parent"
+  ],
+  "schema_version": "player_model_v2_stage4a_interactions_v1"
+}

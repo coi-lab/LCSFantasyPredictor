@@ -1,0 +1,16 @@
+{
+  "all_mandatory_inputs_must_pass": true,
+  "constant_columns_excluded": true,
+  "diagnostic_arms_can_win": false,
+  "not_applicable_nulls_are_not_unexplained": true,
+  "schema_version": "player_model_v2_stage4a_arm_eligibility_policy_v1",
+  "selection_requires_original_parent_chain": true,
+  "thresholds": {
+    "maximum_unexplained_missing_fraction": 0.05,
+    "minimum_non_null_fraction": 0.2,
+    "minimum_non_null_training_rows": 100,
+    "minimum_period_coverage": 10,
+    "minimum_role_coverage": "at least one applicable role with 100 rows",
+    "minimum_unique_non_null_values": 2
+  }
+}

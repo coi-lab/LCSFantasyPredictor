@@ -1,0 +1,36 @@
+{
+  "canonical_root": "data/processed/player_model_v2/stage_3e_03",
+  "entrypoints": [
+    "validate-inputs",
+    "measure-coverage",
+    "build-m0",
+    "build-design-matrix",
+    "fit-development-fold",
+    "select-alpha-development",
+    "freeze-fit",
+    "predict",
+    "evaluate-aggregate",
+    "verify-determinism"
+  ],
+  "grain": [
+    "player_id",
+    "prediction_period_id"
+  ],
+  "iso_week_population_logic_used": false,
+  "module": "fantasy_prediction.player_model_v2_stage4a_evaluator",
+  "refused": [
+    "random split",
+    "unregistered arm",
+    "protected access without policy hash",
+    "all protected access during Stage 4A",
+    "production gate change",
+    "lineup optimization",
+    "price input",
+    "leaderboard input"
+  ],
+  "schema_version": "player_model_v2_stage4a_offline_evaluator_v1",
+  "stage4a_outcome_allowlist": [
+    "partitions/warmup_2020_2021.csv",
+    "partitions/development_2022_2023.csv"
+  ]
+}

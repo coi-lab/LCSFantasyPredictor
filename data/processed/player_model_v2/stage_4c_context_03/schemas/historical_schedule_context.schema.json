@@ -1,0 +1,14 @@
+{
+  "columns": [
+    "team_id",
+    "prediction_period_id",
+    "status",
+    "reason"
+  ],
+  "primary_key": [
+    "team_id",
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage4c_context_v1",
+  "table": "historical_schedule_context"
+}

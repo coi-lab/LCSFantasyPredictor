@@ -1,0 +1,24 @@
+{
+  "alpha_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "calibration": "none",
+  "fit_intercept": true,
+  "maximum_iterations": 10000,
+  "model_family": "ridge_regression",
+  "objective": "mean squared error with L2 penalty",
+  "random_seed": 20260805,
+  "schema_version": "player_model_v2_stage4a_regularization_v1",
+  "selection": "chronological development-fold MAE",
+  "solver": "numpy.linalg.solve_centered_normal_equation",
+  "tie_break": [
+    "lower RMSE",
+    "larger alpha",
+    "deterministic numeric order"
+  ],
+  "tolerance": 1e-08
+}

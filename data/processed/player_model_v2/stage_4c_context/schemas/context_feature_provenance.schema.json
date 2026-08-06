@@ -1,0 +1,18 @@
+{
+  "required_columns": [
+    "player_id",
+    "prediction_period_id",
+    "feature_name",
+    "feature_value",
+    "feature_family",
+    "feature_version",
+    "source_max_timestamp",
+    "target_cutoff",
+    "cutoff_safe",
+    "direct_or_derived",
+    "source_records",
+    "source_snapshot_hashes",
+    "missingness_reason",
+    "quality_status"
+  ]
+}

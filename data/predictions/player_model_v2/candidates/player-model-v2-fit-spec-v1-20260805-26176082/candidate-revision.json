@@ -1,0 +1,12 @@
+{
+  "additive_revision": true,
+  "candidate_id": "player-model-v2-fit-spec-v1-20260805-26176082",
+  "identity_rule": "fit-policy canonical SHA-256 prefix 26176082",
+  "original_candidate_mutated": false,
+  "owner_authorization": "player_model_v2_stage_4a_executable_fit_specification_remediation_codex_prompt.md",
+  "parent_candidate_id": "player-model-v2-structural-20260805-39b2744-c735b540e14c",
+  "recommendation": "STAGE_4_RERUN_PROMPT_AUTHORIZED",
+  "revision_reason": "Resolve Stage 4 BLOCKED_BY_FIT_SPECIFICATION_AMBIGUITY with owner-authorized executable M0 and ridge contract",
+  "schema_version": "player_model_v2_stage4a_candidate_revision_v1",
+  "verdict": "STAGE_4A_EXECUTABLE_FIT_SPECIFICATION_READY"
+}

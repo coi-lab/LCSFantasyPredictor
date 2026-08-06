@@ -1,0 +1,24 @@
+{
+  "columns": [
+    "team_id",
+    "prediction_period_id",
+    "target_cutoff",
+    "prior_team_state",
+    "prior_team_strength",
+    "team_strength_uncertainty",
+    "team_core_strength",
+    "team_noncore_strength",
+    "team_role_balance",
+    "team_continuity",
+    "team_effective_evidence",
+    "source_max_timestamp",
+    "cutoff_safe",
+    "quality_status"
+  ],
+  "primary_key": [
+    "team_id",
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage4c_context_v1",
+  "table": "historical_team_state"
+}

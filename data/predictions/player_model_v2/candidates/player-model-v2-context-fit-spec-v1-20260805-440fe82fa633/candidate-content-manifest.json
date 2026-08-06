@@ -1,0 +1,25 @@
+{
+  "candidate_id": "player-model-v2-context-fit-spec-v1-20260805-440fe82fa633",
+  "files": [
+    {
+      "bytes": 5725,
+      "path": "arm-feature-membership.json",
+      "sha256": "ae8b4a7781e208a8a2c68f13427ea505ec84e25ebb674b23827346e321e152f7"
+    },
+    {
+      "bytes": 6230,
+      "path": "candidate-bundle.json",
+      "sha256": "124071cf89efb977a816dd0f4ebd8ac9b23b4b565895fc2b46c796dbe41737bb"
+    },
+    {
+      "bytes": 574,
+      "path": "candidate-content-manifest.json",
+      "sha256": "c7f472f2e354b432e533eac1c47928ad6c6c19f8cec3fb421a76c160216228b0"
+    },
+    {
+      "bytes": 163,
+      "path": "candidate-manifest.json",
+      "sha256": "62619a63e50f85a3b85ff7f3f39edd518b8529d08d9add73290e1521d5dcb343"
+    }
+  ]
+}

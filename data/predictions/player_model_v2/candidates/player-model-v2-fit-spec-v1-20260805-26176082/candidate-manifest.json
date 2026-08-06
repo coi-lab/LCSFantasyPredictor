@@ -1,0 +1,81 @@
+{
+  "candidate_id": "player-model-v2-fit-spec-v1-20260805-26176082",
+  "deterministic_payload_sha256": "760637ca7c8fd4f5946cdf6a87e28a80a81db6e35ddfbf44bdb8ca8adbbaf1a4",
+  "members": [
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/arm-eligibility-policy.json",
+      "sha256": "51665d33153512ce660746f6979389092369f2785bb3f071bf75010739a5af85",
+      "size_bytes": 599
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/arm-feature-membership.json",
+      "sha256": "d7a734ccce818abc9731d132068f116a55e4551def8db4c2a0a4d39b8df15932",
+      "size_bytes": 25198
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/candidate-bundle.json",
+      "sha256": "a9c93ecad2b6461ca33f48b4d9bab8082e117e38e2c5a640eeef8134088e1599",
+      "size_bytes": 5887
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/candidate-bundle.sha256",
+      "sha256": "cd42b2883a65103b455ee83ad13cb387a3443a896fae14f73ec1fd91b89bd191",
+      "size_bytes": 88
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/candidate-revision.json",
+      "sha256": "ff343c73b890479d2137d144afbe7c9513a14f6e86a9fcc94bce3ebf0ed8765d",
+      "size_bytes": 718
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/fit-specification.json",
+      "sha256": "659a5a56d5ac8f2701cc4ac0d415e578a80346f6fa3fb69c303accbe1ccf46cc",
+      "size_bytes": 3711
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/fit-specification.schema.json",
+      "sha256": "208d0fc4c6c793a5f4dc78eb3dd7da81d83d4378f2b2cb3c9789892ca971675d",
+      "size_bytes": 646
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/g-arm-materialization.json",
+      "sha256": "7d6858996635128503a17509ad96967e15108e5585a7a9c8a6cffbae39473649",
+      "size_bytes": 2070
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/interaction-materialization.json",
+      "sha256": "71a89dceb99338094147abaff7681a35aedfa84a98f8bbdbc37734d2d1ca5b79",
+      "size_bytes": 8179
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/m0-baseline-specification.json",
+      "sha256": "9fa9a8cdb122ca8f3872223ed74336f8fd9c473cd23c77dce3d1193e22f11cc6",
+      "size_bytes": 577
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/offline-evaluator-entrypoint.json",
+      "sha256": "ded20ca1c7d9c283d1f13617e4da9aad137c661ffaf6dd569b04f00a3d3e2ee9",
+      "size_bytes": 517
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/offline-evaluator-specification.json",
+      "sha256": "52215b1144f4defc3145ed378c02893dac7098d3f2fc8233ba70fa0211a992a8",
+      "size_bytes": 940
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/preprocessing-specification.json",
+      "sha256": "fea6347521aa50bf284642e84718524a03e8a5248ac227c43c497b1279b01d94",
+      "size_bytes": 919
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/regularization-specification.json",
+      "sha256": "f88b62c6f5075804e4f5e20a9224c5205a0432ba3268a33393cfae9ac441c1cf",
+      "size_bytes": 566
+    }
+  ],
+  "parent_candidate_id": "player-model-v2-structural-20260805-39b2744-c735b540e14c",
+  "protected_outcomes_opened": false,
+  "recommendation": "STAGE_4_RERUN_PROMPT_AUTHORIZED",
+  "schema_version": "player_model_v2_stage4a_candidate_manifest_v1",
+  "verdict": "STAGE_4A_EXECUTABLE_FIT_SPECIFICATION_READY"
+}

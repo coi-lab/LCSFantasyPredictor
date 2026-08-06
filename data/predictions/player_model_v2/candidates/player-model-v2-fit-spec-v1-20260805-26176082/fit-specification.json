@@ -1,0 +1,120 @@
+{
+  "candidate_id": "player-model-v2-fit-spec-v1-20260805-26176082",
+  "cold_start": "M0 role then global fallback; rating priors remain explicit features",
+  "development_folds": [
+    {
+      "fold_id": "D1",
+      "train_end": "2022-06-30T23:59:59Z",
+      "train_start": "2022-01-01T00:00:00Z",
+      "validation_end": "2022-12-31T23:59:59Z",
+      "validation_start": "2022-07-01T00:00:00Z"
+    },
+    {
+      "fold_id": "D2",
+      "train_end": "2022-12-31T23:59:59Z",
+      "train_start": "2022-01-01T00:00:00Z",
+      "validation_end": "2023-06-30T23:59:59Z",
+      "validation_start": "2023-01-01T00:00:00Z"
+    },
+    {
+      "fold_id": "D3",
+      "train_end": "2023-06-30T23:59:59Z",
+      "train_start": "2022-01-01T00:00:00Z",
+      "validation_end": "2023-12-31T23:59:59Z",
+      "validation_start": "2023-07-01T00:00:00Z"
+    }
+  ],
+  "final_prediction": "m0_prediction + predicted_residual",
+  "grain": [
+    "player_id",
+    "prediction_period_id"
+  ],
+  "m0": {
+    "baseline_id": "player_role_expanding_mean_v1",
+    "fallback_order": [
+      "player",
+      "role",
+      "global"
+    ],
+    "future_labels_prohibited": true,
+    "history_availability_rule": "period_end_utc strictly less than target_cutoff",
+    "mean_weighting": "equal weight by prior player-period",
+    "minimum_player_periods": 3,
+    "outputs": [
+      "m0_prediction",
+      "m0_source_count",
+      "m0_fallback_level",
+      "m0_source_max_timestamp",
+      "m0_cutoff_safe"
+    ],
+    "rounding": "none",
+    "schema_version": "player_model_v2_stage4a_m0_v1",
+    "target_period_excluded": true
+  },
+  "model": {
+    "alpha_grid": [
+      0.01,
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "calibration": "none",
+    "fit_intercept": true,
+    "maximum_iterations": 10000,
+    "model_family": "ridge_regression",
+    "objective": "mean squared error with L2 penalty",
+    "random_seed": 20260805,
+    "schema_version": "player_model_v2_stage4a_regularization_v1",
+    "selection": "chronological development-fold MAE",
+    "solver": "numpy.linalg.solve_centered_normal_equation",
+    "tie_break": [
+      "lower RMSE",
+      "larger alpha",
+      "deterministic numeric order"
+    ],
+    "tolerance": 1e-08
+  },
+  "parent_candidate_id": "player-model-v2-structural-20260805-39b2744-c735b540e14c",
+  "prediction_mode": "residual_correction_over_m0",
+  "preprocessing": {
+    "categorical_features": [
+      "role",
+      "m0_fallback_level"
+    ],
+    "fit_scope": "training window only",
+    "numeric_features": [
+      "m0_prediction",
+      "m0_source_count",
+      "prior_player_rating",
+      "prior_residual_uncertainty",
+      "prior_effective_evidence",
+      "prior_role_relative_rating",
+      "prior_role_adjusted_kp"
+    ],
+    "order": [
+      "preserve null provenance",
+      "add training-null indicators",
+      "training median numeric imputation",
+      "training mean/population-standard-deviation scaling",
+      "exclude zero-standard-deviation numeric columns",
+      "deterministic categorical one-hot"
+    ],
+    "prohibited_features": [
+      "player_id",
+      "team_id",
+      "prediction_period_id",
+      "season",
+      "target_participation",
+      "realized_game_count"
+    ],
+    "schema_version": "player_model_v2_stage4a_preprocessing_v1",
+    "target_aware_imputation": false,
+    "unknown_category": "__UNKNOWN__"
+  },
+  "protected_access_prohibition": "Stage 4A may not open 2024-2026 outcomes",
+  "residual_target": "realized_fantasy_points - m0_prediction",
+  "schema_version": "player_model_v2_stage4a_fit_specification_v1",
+  "target": "realized_fantasy_points",
+  "uncertainty_usage": "prior_residual_uncertainty is an M1 input; no new uncertainty model"
+}

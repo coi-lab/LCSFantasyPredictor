@@ -1,0 +1,22 @@
+{
+  "baseline_id": "player_role_expanding_mean_v1",
+  "fallback_order": [
+    "player",
+    "role",
+    "global"
+  ],
+  "future_labels_prohibited": true,
+  "history_availability_rule": "period_end_utc strictly less than target_cutoff",
+  "mean_weighting": "equal weight by prior player-period",
+  "minimum_player_periods": 3,
+  "outputs": [
+    "m0_prediction",
+    "m0_source_count",
+    "m0_fallback_level",
+    "m0_source_max_timestamp",
+    "m0_cutoff_safe"
+  ],
+  "rounding": "none",
+  "schema_version": "player_model_v2_stage4a_m0_v1",
+  "target_period_excluded": true
+}

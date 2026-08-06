@@ -1,0 +1,89 @@
+{
+  "candidate_id": "player-model-v2-fit-spec-v1-20260805-26176082",
+  "evaluator_module": {
+    "path": "fantasy_prediction/player_model_v2_stage4a_evaluator.py",
+    "sha256": "936c7389ea1a9ec6375770cc76ae807ca31f0447596744817aaf29a0019e6b0c",
+    "size_bytes": 38916
+  },
+  "members": [
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/arm-eligibility-policy.json",
+      "sha256": "51665d33153512ce660746f6979389092369f2785bb3f071bf75010739a5af85",
+      "size_bytes": 599
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/arm-feature-membership.json",
+      "sha256": "d7a734ccce818abc9731d132068f116a55e4551def8db4c2a0a4d39b8df15932",
+      "size_bytes": 25198
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/candidate-revision.json",
+      "sha256": "ff343c73b890479d2137d144afbe7c9513a14f6e86a9fcc94bce3ebf0ed8765d",
+      "size_bytes": 718
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/fit-specification.json",
+      "sha256": "659a5a56d5ac8f2701cc4ac0d415e578a80346f6fa3fb69c303accbe1ccf46cc",
+      "size_bytes": 3711
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/fit-specification.schema.json",
+      "sha256": "208d0fc4c6c793a5f4dc78eb3dd7da81d83d4378f2b2cb3c9789892ca971675d",
+      "size_bytes": 646
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/g-arm-materialization.json",
+      "sha256": "7d6858996635128503a17509ad96967e15108e5585a7a9c8a6cffbae39473649",
+      "size_bytes": 2070
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/interaction-materialization.json",
+      "sha256": "71a89dceb99338094147abaff7681a35aedfa84a98f8bbdbc37734d2d1ca5b79",
+      "size_bytes": 8179
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/m0-baseline-specification.json",
+      "sha256": "9fa9a8cdb122ca8f3872223ed74336f8fd9c473cd23c77dce3d1193e22f11cc6",
+      "size_bytes": 577
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/offline-evaluator-entrypoint.json",
+      "sha256": "ded20ca1c7d9c283d1f13617e4da9aad137c661ffaf6dd569b04f00a3d3e2ee9",
+      "size_bytes": 517
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/offline-evaluator-specification.json",
+      "sha256": "52215b1144f4defc3145ed378c02893dac7098d3f2fc8233ba70fa0211a992a8",
+      "size_bytes": 940
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/preprocessing-specification.json",
+      "sha256": "fea6347521aa50bf284642e84718524a03e8a5248ac227c43c497b1279b01d94",
+      "size_bytes": 919
+    },
+    {
+      "path": "data/predictions/player_model_v2/candidates/player-model-v2-fit-spec-v1-20260805-26176082/regularization-specification.json",
+      "sha256": "f88b62c6f5075804e4f5e20a9224c5205a0432ba3268a33393cfae9ac441c1cf",
+      "size_bytes": 566
+    }
+  ],
+  "parent_candidate_id": "player-model-v2-structural-20260805-39b2744-c735b540e14c",
+  "schema_version": "player_model_v2_stage4a_candidate_bundle_v1",
+  "source_hashes": {
+    ".agent-runs/player-model-v2-stage-1-freeze-20260805/complete-candidate-bundle.zip": "bdc2fc2520a41879c261b4c5b60bbac551cee663e0e3bef98fbc2fc516c91985",
+    ".agent-runs/player-model-v2-stage-1-freeze-20260805/evaluation-registry.json": "7c6b0e66e0602df3106f2650f32e0061160200f5214153d7e8fb373645d2f363",
+    ".agent-runs/player-model-v2-stage-1-freeze-20260805/freeze-manifest.json": "46774173cd5658d682aec4f7477f3929929fc41d49ce8bc613b927bb7ca9afe1",
+    ".agent-runs/player-model-v2-stage-3c-requirements-addendum-20260805/stage-3c-addendum-manifest.json": "c88f14a780dfcf0cb65fee3cc407e06c4d293082d1752ec2312f5a1b5b08ed4b",
+    ".agent-runs/player-model-v2-stage-3c-source-research-20260805/stage-3c-research-manifest.json": "edaa85a06294c6b08bd23b1aa660c083a4b5bdce019f7ba5f8dee634062ad27b",
+    ".agent-runs/player-model-v2-stage-3d-gol-gg-solo-kills-20260805/stage-3d-gol-gg-manifest.json": "fd901f1ab19f192f2b1beb98f1749e45a297fc327cf2120c54596ea2fb9e87da",
+    ".agent-runs/player-model-v2-stage-3d-oracles-elixir-acquisition-20260805/stage-3d-manifest.json": "9ba0b06b7b003308228e1bdf10e69fb08e14331b4160093d17bb25fd09ce678d",
+    ".agent-runs/player-model-v2-stage-3d-remediation-split1-scoring-20260805/stage-3d-remediation-manifest.json": "a21fcf5b0ae055b5e98d5712f7acb61e1ad6171959605e98b562982f5a52a590",
+    ".agent-runs/player-model-v2-stage-3e-leak-safe-modeling-table-20260805/stage-3e-manifest.json": "cc0f2c3a0cbd181b5e3d90582f576bca135f72a137d7f91ae2131f78065f4bf9",
+    ".agent-runs/player-model-v2-stage-4-fit-validate-20260805/stage-4-manifest.json": "1d12da9fc6c82bac5c060966c8eb7af10f893ab5cbe004f7aa2f841f438533dc",
+    "config/player_model_v2.json": "7cbace478cb37aab25891c6c172ca588307830315ca7a5d92c611b493f381bef",
+    "data/processed/player_model_v2/stage_3e_03/chronological_partitions.csv": "4d7d58dfb1613ed0eb49519d0411e3ad302b13b506209ca7dfa02fc4df4ac9ab",
+    "data/processed/player_model_v2/stage_3e_03/modeling_table.csv": "9dc12f3e7918228bdbb27d144578bdd1faddd4f368923df232f108b08520d258",
+    "data/processed/player_model_v2/stage_3e_03/prelock_features.csv": "852b9dd9fe37c7a19af0fcef98acd93933c9ef3627279543fb8e3fc25afd363a",
+    "data/processed/player_model_v2/stage_3e_03/realized_labels.csv": "c678a2e0ac0abddb04b21ce60814b115c182d262c3dcb00b6ab2fc0f36c0197e"
+  }
+}

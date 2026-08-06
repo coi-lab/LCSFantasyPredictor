@@ -1,0 +1,66 @@
+{
+  "arms": [
+    {
+      "arm_id": "G1",
+      "coverage": "source-specific variant not materialized",
+      "feature_family": "playstyle_source_variant",
+      "fit_eligible": false,
+      "ordered_features": [],
+      "parent": "M7",
+      "reason": "Phase G historical source field absent",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    },
+    {
+      "arm_id": "G2",
+      "coverage": "source-specific variant not materialized",
+      "feature_family": "playstyle_source_variant",
+      "fit_eligible": false,
+      "ordered_features": [],
+      "parent": "M7",
+      "reason": "champion-derived source field absent",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    },
+    {
+      "arm_id": "G3",
+      "coverage": "source-specific variant not materialized",
+      "feature_family": "playstyle_source_variant",
+      "fit_eligible": false,
+      "ordered_features": [],
+      "parent": "M7",
+      "reason": "champion-derived-with-fallback source field absent",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    },
+    {
+      "arm_id": "G4",
+      "coverage": "source-specific variant not materialized",
+      "feature_family": "playstyle_source_variant",
+      "fit_eligible": false,
+      "ordered_features": [
+        "m0_prediction",
+        "m0_source_count",
+        "m0_fallback_level",
+        "role",
+        "prior_player_rating",
+        "prior_residual_uncertainty",
+        "prior_effective_evidence",
+        "prior_role_relative_rating",
+        "prior_role_adjusted_kp",
+        "prior_core_state",
+        "prior_team_strength",
+        "prior_team_state",
+        "canonical_matchup_probability",
+        "schedule_opponent_context",
+        "bo_format_context"
+      ],
+      "parent": "M7",
+      "reason": "M7 parent unavailable",
+      "selection_eligible": false,
+      "status": "INELIGIBLE_SCHEMA_MISMATCH"
+    }
+  ],
+  "schema_version": "player_model_v2_stage4a_g_arms_v1",
+  "synthesis_from_generic_playstyle_prohibited": true
+}

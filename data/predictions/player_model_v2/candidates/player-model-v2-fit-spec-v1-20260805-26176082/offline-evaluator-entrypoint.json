@@ -1,0 +1,17 @@
+{
+  "command_template": ".venv/bin/python -m fantasy_prediction.player_model_v2_stage4a_evaluator <entrypoint>",
+  "commands": [
+    "validate-inputs",
+    "measure-coverage",
+    "build-m0",
+    "build-design-matrix",
+    "fit-development-fold",
+    "select-alpha-development",
+    "freeze-fit",
+    "predict",
+    "evaluate-aggregate",
+    "verify-determinism"
+  ],
+  "module_sha256": "936c7389ea1a9ec6375770cc76ae807ca31f0447596744817aaf29a0019e6b0c",
+  "schema_version": "player_model_v2_stage4a_entrypoint_v1"
+}

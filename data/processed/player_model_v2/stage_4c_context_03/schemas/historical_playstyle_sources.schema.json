@@ -1,0 +1,20 @@
+{
+  "columns": [
+    "player_id",
+    "prediction_period_id",
+    "role",
+    "target_cutoff",
+    "playstyle_source",
+    "source_specific_availability",
+    "champion_distribution_evidence",
+    "history_fallback_evidence",
+    "role_prior_evidence",
+    "cutoff_safe"
+  ],
+  "primary_key": [
+    "player_id",
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage4c_context_v1",
+  "table": "historical_playstyle_sources"
+}

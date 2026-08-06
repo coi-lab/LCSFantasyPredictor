@@ -1,0 +1,49 @@
+{
+  "2024": {
+    "evaluated_arms": [
+      "M0",
+      "M1"
+    ],
+    "mae_margin_m0_minus_m1": -0.038342957262086586,
+    "metrics": {
+      "M0": {
+        "correlation_status": {
+          "pearson": "DEFINED",
+          "spearman": "DEFINED"
+        },
+        "mae": 5.363626372236148,
+        "pearson": 0.31093743541335306,
+        "rmse": 6.5625153919447525,
+        "sample_size": 675,
+        "spearman": 0.2960238923750242
+      },
+      "M1": {
+        "correlation_status": {
+          "pearson": "DEFINED",
+          "spearman": "DEFINED"
+        },
+        "mae": 5.401969329498234,
+        "pearson": 0.32071028407338315,
+        "rmse": 6.56480523087733,
+        "sample_size": 675,
+        "spearman": 0.2999291833199377
+      }
+    },
+    "row_level_output": false,
+    "selected_arm": "M0",
+    "selection_rule": "M1 only if M1 MAE < M0 MAE; tie selects M0",
+    "status": "COMPLETE"
+  },
+  "2025": {
+    "reason": "M0 won the strict 2024 MAE selection rule",
+    "status": "NOT_ACCESSED"
+  },
+  "2026": {
+    "reason": "M0 won 2024; 2025 and 2026 access prohibited",
+    "status": "NOT_ACCESSED"
+  },
+  "policy_sha256": "1cf50916591642246204f4a82407b94d51873f222ab7c86ac346852e1137073a",
+  "recommendation": "PLAYER_MODEL_V2_MODELING_REVISION_REQUIRED",
+  "selected_arm": "M0",
+  "verdict": "STAGE_4_FIT_SPEC_CANDIDATE_NO_IMPROVEMENT"
+}

@@ -1,0 +1,22 @@
+{
+  "feature_families": {
+    "core_v2": [
+      "prior_core_state"
+    ],
+    "schedule_matchup_bo": [
+      "canonical_matchup_probability",
+      "schedule_opponent_context",
+      "bo_format_context"
+    ],
+    "team_strength": [
+      "prior_team_strength",
+      "prior_team_state"
+    ]
+  },
+  "label_reference_sha256": "c678a2e0ac0abddb04b21ce60814b115c182d262c3dcb00b6ab2fc0f36c0197e",
+  "primary_key": [
+    "player_id",
+    "prediction_period_id"
+  ],
+  "schema_version": "player_model_v2_stage4c_context_v1"
+}
