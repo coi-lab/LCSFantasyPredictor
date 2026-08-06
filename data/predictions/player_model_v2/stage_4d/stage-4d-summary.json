@@ -1,0 +1,94 @@
+{
+  "development": {
+    "M0": {
+      "alpha": null,
+      "converged": true,
+      "metrics": {
+        "mae": 5.165341992950912,
+        "pearson": 0.2427236759306152,
+        "rmse": 6.542480720042419,
+        "sample_size": 1282,
+        "spearman": 0.2458000403826051
+      },
+      "observations": 1282
+    },
+    "M1": {
+      "alpha": 10.0,
+      "converged": true,
+      "metrics": {
+        "mae": 5.077734556101584,
+        "pearson": 0.2900841551619777,
+        "rmse": 6.442515846294209,
+        "sample_size": 1282,
+        "spearman": 0.29696827359929046
+      },
+      "observations": 1282
+    },
+    "M2": {
+      "alpha": 10.0,
+      "converged": true,
+      "metrics": {
+        "mae": 5.063271036918488,
+        "pearson": 0.2899310278222328,
+        "rmse": 6.445615066250958,
+        "sample_size": 1282,
+        "spearman": 0.29960406354347935
+      },
+      "observations": 1282
+    },
+    "M3": {
+      "alpha": 10.0,
+      "converged": true,
+      "metrics": {
+        "mae": 5.060352777227633,
+        "pearson": 0.29052417446294676,
+        "rmse": 6.433872576778955,
+        "sample_size": 1282,
+        "spearman": 0.29915862815650246
+      },
+      "observations": 1282
+    }
+  },
+  "evaluation_2026": {
+    "M0": {
+      "mae": 6.498914847689083,
+      "pearson": 0.25381349366210343,
+      "rmse": 8.02814488622441,
+      "sample_size": 637,
+      "spearman": 0.27073025895792185
+    },
+    "candidate": {
+      "mae": 6.462122487534916,
+      "pearson": 0.24752678577413922,
+      "rmse": 8.032347937962424,
+      "sample_size": 637,
+      "spearman": 0.26495971880521474
+    },
+    "retuned": false,
+    "status": "COMPLETE"
+  },
+  "recommendation": "STAGE_5_PLAYER_PROJECTION_REVIEW_AUTHORIZED",
+  "selected": "M3",
+  "validation_2025": {
+    "M0": {
+      "mae": 5.731481352584976,
+      "pearson": 0.3964193019703189,
+      "rmse": 7.128705753753983,
+      "sample_size": 668,
+      "spearman": 0.4008317518202846
+    },
+    "arm": "M3",
+    "attempt_count": 1,
+    "candidate": {
+      "mae": 5.672544746449785,
+      "pearson": 0.4316785320341698,
+      "rmse": 7.102119978076854,
+      "sample_size": 668,
+      "spearman": 0.43674690188807647
+    },
+    "retuned": false,
+    "status": "COMPLETE",
+    "strict_mae_passed": true
+  },
+  "verdict": "STAGE_4D_CONTEXT_CANDIDATE_VALIDATED"
+}
