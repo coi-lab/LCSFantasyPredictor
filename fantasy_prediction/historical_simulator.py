@@ -31,6 +31,8 @@ class HistoricalWeek:
     market: tuple[MarketPlayer, ...]
     actual_points: Mapping[str, float]
     target_patch: str = ""
+    participation: Mapping[str, bool | str | None] | None = None
+    official_prices: Mapping[str, float] | None = None
 
 
 @dataclass(frozen=True)
@@ -49,8 +51,16 @@ class SyntheticPriceModel:
 
     starting_price: float = 15.0
     decimals: int = 1
+    previous_price_weight: float | None = None
+    score_weight: float | None = None
 
-    def update(self, previous_price: float, actual_points: float, did_participate: bool = True) -> float:
+    def update(self, previous_price: float, actual_points: float, did_participate: bool | str | None = "UNKNOWN") -> float:
+        if self.previous_price_weight is not None or self.score_weight is not None:
+            p_w = self.previous_price_weight if self.previous_price_weight is not None else 0.747528
+            s_w = self.score_weight if self.score_weight is not None else 0.239998
+            if did_participate in (False, "DID_NOT_PARTICIPATE"):
+                return previous_price
+            return round(p_w * previous_price + s_w * actual_points, self.decimals)
         from data_pipeline.official_prices import reconstruct_price
         return reconstruct_price(previous_price, actual_points, did_participate)
 
@@ -88,10 +98,18 @@ def _prelock_prices(
     model: SyntheticPriceModel,
 ) -> dict[str, float]:
     """Return only current prices; actual scores are intentionally unavailable."""
-    return {
-        player.identifier: float(prices.get(player.identifier, model.starting_price))
-        for player in week.market
-    }
+    res = {}
+    official = week.official_prices or {}
+    for player in week.market:
+        pid = player.identifier
+        # Precedence: official_snapshot_price (if present in official) > prices (reconstructed)
+        from data_pipeline.official_prices import resolve_price
+        price, _ = resolve_price(
+            official_snapshot_price=official.get(pid),
+            reconstructed_price=prices.get(pid, model.starting_price)
+        )
+        res[pid] = float(price)
+    return res
 
 
 def simulate_competition(
@@ -116,7 +134,7 @@ def simulate_competition(
     budget = float(starting_budget)
     prices: dict[str, float] = {}
     results: list[WeeklySimulationResult] = []
-    for week in ordered:
+    for idx, week in enumerate(ordered):
         market_by_id = {player.identifier: player for player in week.market}
         if len(market_by_id) != len(week.market):
             raise ValueError(f"Week {week.week} contains duplicate market identifiers")
@@ -139,10 +157,31 @@ def simulate_competition(
             raise ValueError(f"Week {week.week} roster cost {roster_cost} exceeds budget {budget}")
 
         realized_points = round(sum(float(week.actual_points[player_id]) for player_id in chosen), 2)
-        next_prices = {
-            player_id: price_model.update(current_prices[player_id], float(week.actual_points[player_id]))
-            for player_id in market_by_id
-        }
+        part_map = week.participation or {}
+        
+        # Look ahead for next week's official prices to override next_prices
+        next_week_official = {}
+        if idx + 1 < len(ordered):
+            next_week_official = ordered[idx + 1].official_prices or {}
+            
+        next_prices = {}
+        for player_id in market_by_id:
+            recon = price_model.update(
+                current_prices[player_id],
+                float(week.actual_points[player_id]),
+                part_map.get(player_id, "UNKNOWN")
+            )
+            from data_pipeline.official_prices import resolve_price
+            price, _ = resolve_price(
+                official_snapshot_price=next_week_official.get(player_id),
+                reconstructed_price=recon
+            )
+            next_prices[player_id] = price
+
+        # Update persistent price state for current market players, leaving absent ones unchanged
+        for player_id, next_price in next_prices.items():
+            prices[player_id] = next_price
+
         from data_pipeline.official_prices import calculate_next_budget
         held_asset_change = round(
             sum(next_prices[player_id] - current_prices[player_id] for player_id in chosen),
@@ -165,5 +204,4 @@ def simulate_competition(
             champion_locks=dict(decision.champion_locks),
         ))
         budget = next_budget
-        prices = next_prices
     return results

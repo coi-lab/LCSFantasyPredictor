@@ -199,5 +199,146 @@ class TestStage6RIntegration(unittest.TestCase):
             self.assertIn("fix_tests.py", classifications)
             self.assertIn("generate_final.py", classifications)
 
+    def test_remediation_final_patch_tests(self):
+        # Test A — participant, positive score
+        self.assertAlmostEqual(reconstruct_price(15.0, 10.0, "PARTICIPATED"), 13.6)
+
+        # Test B — participant, zero score (should NOT hold price)
+        self.assertAlmostEqual(reconstruct_price(15.0, 0.0, "PARTICIPATED"), 11.2)
+
+        # Test C — explicit DNP (should hold price)
+        self.assertEqual(reconstruct_price(12.5, 0.0, "DID_NOT_PARTICIPATE"), 12.5)
+
+    def test_returning_player_absent_three_periods(self):
+        # Test D — absent one week, returns later (minimal three-period simulation fixture)
+        # Test E — absent player is not selectable
+        from fantasy_prediction.historical_simulator import (
+            HistoricalWeek,
+            MarketPlayer,
+            RosterDecision,
+            SyntheticPriceModel,
+            simulate_competition
+        )
+        
+        roles = ("top", "jgl", "mid", "bot", "sup", "coach")
+        
+        # Period 1: player_a participates
+        week1 = HistoricalWeek(
+            week=1,
+            stage_round="Round 1",
+            market=tuple(
+                MarketPlayer("player_a" if r == "top" else f"player_{r}", r, "Team", 10.0)
+                for r in roles
+            ),
+            actual_points={("player_a" if r == "top" else f"player_{r}"): 10.0 for r in roles},
+            participation={
+                "player_a": "PARTICIPATED",
+                **{f"player_{r}": "PARTICIPATED" for r in roles if r != "top"}
+            }
+        )
+        
+        # Period 2: player_a is ABSENT from market, top role has player_other
+        week2 = HistoricalWeek(
+            week=2,
+            stage_round="Round 2",
+            market=tuple(
+                MarketPlayer("player_other" if r == "top" else f"player_{r}", r, "Team", 5.0)
+                for r in roles
+            ),
+            actual_points={("player_other" if r == "top" else f"player_{r}"): 5.0 for r in roles},
+            participation={
+                "player_other": "PARTICIPATED",
+                **{f"player_{r}": "PARTICIPATED" for r in roles if r != "top"}
+            }
+        )
+        
+        # Period 3: player_a returns
+        week3 = HistoricalWeek(
+            week=3,
+            stage_round="Round 3",
+            market=tuple(
+                MarketPlayer("player_a" if r == "top" else f"player_{r}", r, "Team", 15.0)
+                for r in roles
+            ),
+            actual_points={("player_a" if r == "top" else f"player_{r}"): 15.0 for r in roles},
+            participation={
+                "player_a": "PARTICIPATED",
+                **{f"player_{r}": "PARTICIPATED" for r in roles if r != "top"}
+            }
+        )
+        
+        seen_prices = []
+        def selector(target, prices, budget):
+            seen_prices.append(dict(prices))
+            top_player = "player_a" if "player_a" in prices else "player_other"
+            player_ids = (top_player, "player_jgl", "player_mid", "player_bot", "player_sup", "player_coach")
+            return RosterDecision(player_ids, {})
+            
+        model = SyntheticPriceModel(starting_price=15.0)
+        simulate_competition([week1, week2, week3], selector, model)
+        
+        self.assertEqual(seen_prices[0]["player_a"], 15.0)
+        
+        # Test E
+        self.assertNotIn("player_a", seen_prices[1])
+        self.assertIn("player_other", seen_prices[1])
+        
+        # Test D: returning player must start at 13.6
+        self.assertEqual(seen_prices[2]["player_a"], 13.6)
+        
+    def test_returning_player_official_price_override(self):
+        # Test F — official returning price overrides reconstructed state
+        from fantasy_prediction.historical_simulator import (
+            HistoricalWeek,
+            MarketPlayer,
+            RosterDecision,
+            SyntheticPriceModel,
+            simulate_competition
+        )
+        
+        roles = ("top", "jgl", "mid", "bot", "sup", "coach")
+        
+        week1 = HistoricalWeek(
+            week=1,
+            stage_round="Round 1",
+            market=tuple(
+                MarketPlayer("player_a" if r == "top" else f"player_{r}", r, "Team", 10.0)
+                for r in roles
+            ),
+            actual_points={("player_a" if r == "top" else f"player_{r}"): 10.0 for r in roles},
+            participation={
+                "player_a": "PARTICIPATED",
+                **{f"player_{r}": "PARTICIPATED" for r in roles if r != "top"}
+            }
+        )
+        
+        week2 = HistoricalWeek(
+            week=2,
+            stage_round="Round 2",
+            market=tuple(
+                MarketPlayer("player_a" if r == "top" else f"player_{r}", r, "Team", 15.0)
+                for r in roles
+            ),
+            actual_points={("player_a" if r == "top" else f"player_{r}"): 15.0 for r in roles},
+            participation={
+                "player_a": "PARTICIPATED",
+                **{f"player_{r}": "PARTICIPATED" for r in roles if r != "top"}
+            },
+            official_prices={
+                "player_a": 17.5
+            }
+        )
+        
+        seen_prices = []
+        def selector(target, prices, budget):
+            seen_prices.append(dict(prices))
+            player_ids = ("player_a", "player_jgl", "player_mid", "player_bot", "player_sup", "player_coach")
+            return RosterDecision(player_ids, {})
+            
+        model = SyntheticPriceModel(starting_price=15.0)
+        simulate_competition([week1, week2], selector, model)
+        
+        self.assertEqual(seen_prices[1]["player_a"], 17.5)
+
 if __name__ == '__main__':
     unittest.main()
