@@ -1,0 +1,16 @@
+{
+  "competition": "2026_split_1",
+  "final_player_model": "G0 (OBC Base, alpha=10.0)",
+  "fit_alpha": 10.0,
+  "cumulative_points_achieved": 1445.34,
+  "leaderboard_winner_points": 1572.9,
+  "leaderboard_rayz_points": 1404.69,
+  "rank_comparison": {
+    "rank_bound": "Rank 2",
+    "percentile_bound": "Top 50%",
+    "is_above_winner": false,
+    "is_above_rayz": true,
+    "gap_to_winner": 127.56,
+    "gap_to_rayz": -40.65
+  }
+}
