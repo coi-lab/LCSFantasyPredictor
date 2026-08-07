@@ -1,0 +1,12 @@
+{
+  "authoritative_stage_6g_policy_hash": "17e1d07677c587287cc94a690e6e53f98ae75672b29fa24d9cc747dff83fe890",
+  "budget_policy_hash": "97e58d9c1adb7cd722ecd9f7a4cc0300593f34c04f6a0d4d6926f0eac5f0df2e",
+  "champion_predictor_specification_hash": "83acf980ee71e6b8d0fca077b24d1e57fe2273dbf5cb88927614f22b304f2621",
+  "final_player_model_candidate_id": "G0",
+  "final_player_model_specification_hash": "b6499ec5bab0789f5c63e88167e56f67a67b4767ec10a31a51c2cbf7dbfd9e48",
+  "freeze_timestamp_utc": "2026-08-07T19:13:19.691667+00:00",
+  "participation_market_oracle_policy": "authorized look-ahead oracle on actual participants, no post-lock target outcomes leakage",
+  "pricing_policy_hash": "0a5b80bc07124f0ef574844764080f3a62b7c81ccd2c339666bf5532649defc2",
+  "repository_head": "34abbb88d57134ce8c40804fba2b0b5081734804",
+  "scoring_configuration_hash": "3063a00aaf9daa64d547863e8cfc06934409ac08b315be6683ec80dc9afa0936"
+}

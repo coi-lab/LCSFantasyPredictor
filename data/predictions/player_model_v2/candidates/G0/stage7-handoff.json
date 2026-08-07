@@ -1,0 +1,11 @@
+{
+  "budget": "calculate_next_budget in data_pipeline/official_prices.py hash: 97e58d9c1adb7cd722ecd9f7a4cc0300593f34c04f6a0d4d6926f0eac5f0df2e",
+  "champion_prediction": "CP00 baseline with predictor specification hash: 83acf980ee71e6b8d0fca077b24d1e57fe2273dbf5cb88927614f22b304f2621",
+  "historical_market_membership": "eligible player market = actual participants for that fantasy weekend. Lookahead allowed ONLY to identify binary participation set.",
+  "leaderboard_seal": "sealed until weekly decisions and cumulative simulated scores are frozen",
+  "player_predictions": "Stage 6G final frozen Player Model 2 (G0) specification hash: b6499ec5bab0789f5c63e88167e56f67a67b4767ec10a31a51c2cbf7dbfd9e48",
+  "prices": "Stage 6F/6R active integrated pricing policy hash: 0a5b80bc07124f0ef574844764080f3a62b7c81ccd2c339666bf5532649defc2",
+  "realized_statistics": "Oracle's Elixir + existing Games of Legends supplementation post-selection only",
+  "scoring_rules": "config/scoring_rules.json hash: 3063a00aaf9daa64d547863e8cfc06934409ac08b315be6683ec80dc9afa0936",
+  "simulation_freeze_v2_hash": "333e795159d200ee9d798116c438d0ea1cd23f8a61b026f82fca1175a8036330"
+}
