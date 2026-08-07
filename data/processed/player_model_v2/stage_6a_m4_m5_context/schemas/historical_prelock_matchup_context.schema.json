@@ -1,0 +1,20 @@
+{
+  "fields": [
+    "team_id",
+    "prediction_period_id",
+    "canonical_matchup_probability",
+    "team_strength",
+    "opponent_count",
+    "series_count",
+    "total_expected_games",
+    "matchup_uncertainty",
+    "method",
+    "shared_within_team",
+    "no_target_outcome",
+    "evidence_class"
+  ],
+  "primary_key": [
+    "team_id",
+    "prediction_period_id"
+  ]
+}

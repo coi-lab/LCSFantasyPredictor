@@ -1,0 +1,28 @@
+{
+  "selected_arm_id": "M3",
+  "exact_source_feature_order": [
+    "m0_prediction",
+    "m0_source_count",
+    "m0_fallback_level",
+    "role",
+    "prior_player_rating",
+    "prior_residual_uncertainty",
+    "prior_effective_evidence",
+    "prior_role_relative_rating",
+    "prior_role_adjusted_kp",
+    "prior_core_state",
+    "prior_team_strength",
+    "prior_team_state"
+  ],
+  "exact_interaction_order": [],
+  "selected_alpha": 10.0,
+  "preprocessing_contract": "Stage4A train-only, null indicators, median imputation, standardization",
+  "missingness_contract": "unknown category -> __UNKNOWN__, training-constant column removal",
+  "solver": "Ridge",
+  "seed": "20260805",
+  "software_versions": "pandas, numpy, python=3.14",
+  "parent_candidate_id": "player-model-v2-m5-fit-spec-v1-20260807-6a-candidate",
+  "input_hashes": {},
+  "selection_policy_hash": "242412e3b8505b33e29006e3e0490aeb08b3e229b3f9f5975ddca2d7da55d93a",
+  "development_result_hash": "d6610e2049556facf971df5955926ae416b3739a5e889327d884b789f1d0572d"
+}

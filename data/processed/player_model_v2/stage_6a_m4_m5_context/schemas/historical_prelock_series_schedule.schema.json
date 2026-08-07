@@ -1,0 +1,25 @@
+{
+  "fields": [
+    "team_id",
+    "prediction_period_id",
+    "opponent_team_id",
+    "series_id",
+    "season",
+    "split",
+    "stage",
+    "series_date",
+    "series_format",
+    "best_of",
+    "expected_games",
+    "expected_games_method",
+    "target_cutoff",
+    "evidence_class",
+    "quality_status"
+  ],
+  "primary_key": [
+    "team_id",
+    "opponent_team_id",
+    "prediction_period_id",
+    "series_id"
+  ]
+}
