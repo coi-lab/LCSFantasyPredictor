@@ -1,0 +1,14 @@
+{
+  "baseline_manifest_path": "analysis/champion_baselines/cp00/manifest.json",
+  "baseline_manifest_sha256": "97959109968f36199b758ba35eea854ab0b479b7c8aa0d454ab18e03918cf408",
+  "champion_predictor_identity": "CP00_BASELINE",
+  "configuration_files": {
+    "config/champion_model.json": "ee808077836d6ae393c1c6611b15757817246cff266c45402ff3aea9c1d67b13",
+    "config/champion_taxonomy.json": "7d4d3a92700e30540d6806956718dd62512ffa68ad3cf0a1abf9dc9158fb7645"
+  },
+  "database_logical_sha256": "a14030eefbfa131a4ecfe59201b58a6ee3d8a939217bd94cf24e390b20cc52b3",
+  "database_path": "data/generated/champion_prediction/champion_drafts.sqlite",
+  "implementation_class": "champion_prediction.simple_predictor.SimpleComfortPredictor",
+  "implementation_module": "champion_prediction.simple_predictor",
+  "provenance_commit": "1b9c6fb49a98052cb4f6767e95d8027e847c3883"
+}

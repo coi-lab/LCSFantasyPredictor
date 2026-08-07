@@ -1,0 +1,64 @@
+{
+  "D1_D3_folds": [
+    {
+      "fold_id": "D1",
+      "train_end": "2022-06-30T23:59:59Z",
+      "train_start": "2022-01-01T00:00:00Z",
+      "validation_end": "2022-12-31T23:59:59Z",
+      "validation_start": "2022-07-01T00:00:00Z"
+    },
+    {
+      "fold_id": "D2",
+      "train_end": "2022-12-31T23:59:59Z",
+      "train_start": "2022-01-01T00:00:00Z",
+      "validation_end": "2023-06-30T23:59:59Z",
+      "validation_start": "2023-01-01T00:00:00Z"
+    },
+    {
+      "fold_id": "D3",
+      "train_end": "2023-06-30T23:59:59Z",
+      "train_start": "2022-01-01T00:00:00Z",
+      "validation_end": "2023-12-31T23:59:59Z",
+      "validation_start": "2023-07-01T00:00:00Z"
+    }
+  ],
+  "OBC_base_identity": "OBC from Stage 6D",
+  "OBC_incumbent_rule": "candidate replaces OBC only if candidate_MAE < OBC_MAE strictly",
+  "alpha_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "candidate_configurations": [
+    "G0",
+    "G1",
+    "G2",
+    "G5",
+    "G6"
+  ],
+  "common_rows": 1282,
+  "eligible_interactions": [
+    "I1",
+    "I2",
+    "I5",
+    "I6"
+  ],
+  "final_freeze_rule": "Select best surviving candidate or OBC",
+  "forbidden_actions": [
+    "no tuning on 2024/2025/2026",
+    "no leaderboard access"
+  ],
+  "interaction_retention_rule": "survivor must beat OBC MAE",
+  "policy_id": "player-model-v2-stage-6g-registered-interaction-test-20260807-v1",
+  "primary_metric": "aggregate chronological development MAE",
+  "tie_breaks": [
+    "lower RMSE",
+    "higher Spearman",
+    "higher Pearson",
+    "fewer interactions",
+    "fewer transformed features",
+    "deterministic candidate ID"
+  ]
+}
