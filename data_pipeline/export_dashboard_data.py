@@ -45,14 +45,6 @@ def build_estimated_price_history(
     the next price from both the weekly score and the previous price.
     """
     start_price = float(market_model.get("starting_price", 15.0))
-    previous_price_weight = float(
-        market_model.get("previous_price_weight", 0.747528)
-    )
-    score_weight = float(market_model.get("score_weight", 0.239998))
-    intercept = float(market_model.get("intercept", 0.015874))
-    rounding = int(market_model.get("rounding_decimals", 1))
-    price_floor = float(market_model.get("price_floor", 5.0))
-    price_ceiling = float(market_model.get("price_ceiling", 32.0))
     reset_each_split = bool(market_model.get("reset_each_split", True))
 
     current_price = start_price
@@ -73,22 +65,11 @@ def build_estimated_price_history(
 
         points = float(week.get("fantasy_pts", 0.0))
         previous_price = period_prices.get(price_key, start_price)
-        current_price = round(
-            min(
-                price_ceiling,
-                max(
-                    price_floor,
-                    (
-                        previous_price_weight * previous_price
-                        + score_weight * points
-                        + intercept
-                    ),
-                ),
-            ),
-            rounding,
-        )
+        did_participate = int(week.get("games", 0)) > 0
+        from data_pipeline.official_prices import reconstruct_price
+        current_price = reconstruct_price(previous_price, points, did_participate)
         period_prices[price_key] = current_price
-        actual_change = round(current_price - previous_price, rounding)
+        actual_change = round(current_price - previous_price, 1)
         history.append({
             "week": week_key,
             "split": week.get("split"),

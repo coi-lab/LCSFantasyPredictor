@@ -70,45 +70,13 @@ class LineupChoice:
 
 @dataclass(frozen=True)
 class ReconstructedPriceModel:
-    """Declared historical price proxy used only after a week's lock.
-
-    The coefficients are the application's existing estimated-market model.
-    They are a scenario, not recovered official historical prices.
-    """
-
+    """Declared historical price proxy used only after a week's lock."""
     starting_price: float = 15.0
-    previous_price_weight: float = 0.747528
-    score_weight: float = 0.239998
-    intercept: float = 0.015874
-    floor: float = 5.0
-    ceiling: float = 32.0
     decimals: int = 1
-    minimum_weekly_move: float = 0.1
 
-    def update(self, previous_price: float, actual_points: float) -> float:
-        raw = min(self.ceiling, max(self.floor, (
-            self.previous_price_weight * previous_price
-            + self.score_weight * actual_points
-            + self.intercept
-        )))
-        updated = round(raw, self.decimals)
-        if updated != previous_price:
-            return updated
-        # The UI market moves in visible gold increments.  Avoid a false flat
-        # price caused solely by rounding: use the score direction relative to
-        # the model's break-even score for this price.
-        break_even = (
-            previous_price * (1.0 - self.previous_price_weight) - self.intercept
-        ) / self.score_weight
-        direction = 1.0 if actual_points >= break_even else -1.0
-        moved = round(previous_price + direction * self.minimum_weekly_move, self.decimals)
-        # At a hard boundary, preserve a visible move by stepping back inside
-        # the range; this is preferable to representing an unchanged price.
-        if moved > self.ceiling:
-            moved = round(previous_price - self.minimum_weekly_move, self.decimals)
-        if moved < self.floor:
-            moved = round(previous_price + self.minimum_weekly_move, self.decimals)
-        return moved
+    def update(self, previous_price: float, actual_points: float, did_participate: bool = True) -> float:
+        from data_pipeline.official_prices import reconstruct_price
+        return reconstruct_price(previous_price, actual_points, did_participate)
 
 
 def load_dashboard_price_book(path: Path = DEFAULT_DASHBOARD_MARKET) -> dict[tuple[str, str], list[dict[str, Any]]]:
@@ -491,7 +459,13 @@ def evaluate_policy(
             "candidate": candidate, "baseline": baseline, "oracle": oracle,
         }.items()}
         candidate_price_moves = held_price_moves(candidate)
-        next_budgets = {name: round(budgets[name] + changes[name], 2) for name in budgets}
+        from data_pipeline.official_prices import calculate_next_budget
+        next_budgets = {
+            name: calculate_next_budget(
+                round(budgets[name] - {"candidate": candidate.cost, "baseline": baseline.cost, "oracle": oracle.cost}[name], 2),
+                round(changes[name] + {"candidate": candidate.cost, "baseline": baseline.cost, "oracle": oracle.cost}[name], 2)
+            ) for name in budgets
+        }
         changed_slots = sum(a != b for a, b in zip(candidate.identifiers, baseline.identifiers))
         weeks.append({
             "year": year,
