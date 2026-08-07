@@ -1,0 +1,10 @@
+{
+  "pricing_policy_id": "stage6f_piecewise_dnp_hold_v1",
+  "dnp_hold_semantics": "If DNP (did_participate == False), next_price = previous_price. Zero score does not imply DNP.",
+  "unsupported_absolute_clamp_status": "DEPRECATED",
+  "active_reconstructed_price_coefficients": {
+    "previous_price_weight": 0.747528,
+    "score_weight": 0.239998,
+    "intercept": 0.015874
+  }
+}

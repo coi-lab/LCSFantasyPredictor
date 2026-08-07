@@ -69,13 +69,12 @@ The weekly workflow:
 
 The official market endpoint exposes the current market rather than a documented historical archive. Each captured snapshot is therefore kept immutable. Official prices override estimates whenever the league, season, split, and participant match.
 
-For weeks without an official market capture, the dashboard labels prices as
-experimental estimates. The current estimator combines that week's fantasy
-score with the preceding gold price, resets to 15 gold at each product split,
-and clamps the result to the configured 5-32 gold range. It was inferred from
-one exposed 2026 Split 3 transition, so it is a visualization aid rather than a
-recovered official formula. The player modal plots fantasy points and gold on
-separate axes because they use different units.
+For weeks without an official market capture, the dashboard labels prices as experimental estimates. The current estimator operates under the following rules:
+- Official prices override estimates whenever available.
+- If a player did not participate (DNP), the previous price is exactly held constant.
+- For participating entities, the price is reconstructed using the linear formula: `next_price = round(0.747528 * previous_price + 0.239998 * last_round_score + 0.015874, 1)`.
+- The unsupported absolute 5–32 clamp is not part of the active reconstructed simulation contract.
+- This historical reconstruction remains experimental and is a visualization aid rather than a recovered official LCS formula. The player modal plots fantasy points and gold on separate axes because they use different units.
 
 ## Models
 

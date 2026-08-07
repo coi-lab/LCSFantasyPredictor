@@ -65,9 +65,9 @@ def build_estimated_price_history(
 
         points = float(week.get("fantasy_pts", 0.0))
         previous_price = period_prices.get(price_key, start_price)
-        did_participate = int(week.get("games", 0)) > 0
-        from data_pipeline.official_prices import reconstruct_price
-        current_price = reconstruct_price(previous_price, points, did_participate)
+        from data_pipeline.official_prices import reconstruct_price, resolve_participation
+        participation = resolve_participation(week.get("games"))
+        current_price = reconstruct_price(previous_price, points, participation)
         period_prices[price_key] = current_price
         actual_change = round(current_price - previous_price, 1)
         history.append({

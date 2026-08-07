@@ -63,9 +63,36 @@ RECONSTRUCTED_PRICE_WEIGHT = 0.747528
 RECONSTRUCTED_SCORE_WEIGHT = 0.239998
 RECONSTRUCTED_INTERCEPT = 0.015874
 
-def reconstruct_price(previous_price: float, last_round_score: float, did_participate: bool) -> float:
-    """Calculate Stage 6F piecewise reconstructed simulation price."""
-    if not did_participate:
+def resolve_participation(games: Any) -> str:
+    """Determine participation state: PARTICIPATED, DID_NOT_PARTICIPATE, or UNKNOWN.
+    
+    games > 0: PARTICIPATED
+    games == 0 with known valid field: DID_NOT_PARTICIPATE
+    games missing/null/invalid: UNKNOWN
+    """
+    if games in (None, "", "None", "null"):
+        return "UNKNOWN"
+    try:
+        val = int(games)
+        if val > 0:
+            return "PARTICIPATED"
+        elif val == 0:
+            return "DID_NOT_PARTICIPATE"
+        else:
+            return "UNKNOWN"
+    except (ValueError, TypeError):
+        return "UNKNOWN"
+
+
+def reconstruct_price(previous_price: float, last_round_score: float, did_participate: bool | str | None) -> float:
+    """Calculate Stage 6F piecewise reconstructed simulation price.
+    
+    If did_participate is False or 'DID_NOT_PARTICIPATE', the price is held constant.
+    Otherwise (True, 'PARTICIPATED', 'UNKNOWN', or None), the fail-closed fallback is
+    to treat the player as participating (reconstructing the price) to avoid silently
+    holding the price as a DNP without explicit evidence of zero games played.
+    """
+    if did_participate in (False, "DID_NOT_PARTICIPATE"):
         return previous_price
     return round(
         RECONSTRUCTED_PRICE_WEIGHT * previous_price
@@ -73,6 +100,7 @@ def reconstruct_price(previous_price: float, last_round_score: float, did_partic
         + RECONSTRUCTED_INTERCEPT,
         1
     )
+
 
 def resolve_price(
     official_snapshot_price: float | None = None,

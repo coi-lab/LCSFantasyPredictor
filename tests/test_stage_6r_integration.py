@@ -1,37 +1,46 @@
 import unittest
+from unittest.mock import patch
+from pathlib import Path
+import os
+import json
+
 from data_pipeline.official_prices import (
     reconstruct_price,
     resolve_price,
     PriceProvenance,
     calculate_next_budget,
+    resolve_participation
 )
-from fantasy_prediction.historical_simulator import SyntheticPriceModel
-import os
-import json
+from fantasy_prediction.historical_simulator import (
+    HistoricalWeek,
+    MarketPlayer,
+    RosterDecision,
+    SyntheticPriceModel,
+    simulate_competition
+)
 
 class TestStage6RIntegration(unittest.TestCase):
     def test_reconstructed_price_participant(self):
         # 0.747528 * 15.0 + 0.239998 * 10 + 0.015874 = 11.21292 + 2.39998 + 0.015874 = 13.628774 -> 13.6
+        self.assertAlmostEqual(reconstruct_price(15.0, 10.0, "PARTICIPATED"), 13.6)
         self.assertAlmostEqual(reconstruct_price(15.0, 10.0, True), 13.6)
 
     def test_reconstructed_price_dnp_holds_previous_price(self):
+        self.assertEqual(reconstruct_price(15.0, 0.0, "DID_NOT_PARTICIPATE"), 15.0)
         self.assertEqual(reconstruct_price(15.0, 0.0, False), 15.0)
 
     def test_reconstructed_price_zero_score_participant_not_dnp(self):
         # 0.747528 * 15.0 + 0.239998 * 0 + 0.015874 = 11.21292 + 0.015874 = 11.228794 -> 11.2
+        self.assertAlmostEqual(reconstruct_price(15.0, 0.0, "PARTICIPATED"), 11.2)
         self.assertAlmostEqual(reconstruct_price(15.0, 0.0, True), 11.2)
 
     def test_reconstructed_price_rounding_to_tenth(self):
-        # 0.747528 * 15.0 + 0.239998 * 8.5 + 0.015874 = 11.21292 + 2.039983 + 0.015874 = 13.268777 -> 13.3
         self.assertAlmostEqual(reconstruct_price(15.0, 8.5, True), 13.3)
 
     def test_reconstructed_price_no_unsupported_absolute_clamp(self):
         # High score, high price -> should go above 32.0
-        # 0.747528 * 30.0 + 0.239998 * 100.0 + 0.015874 = 22.42584 + 23.9998 + 0.015874 = 46.441514 -> 46.4
         self.assertAlmostEqual(reconstruct_price(30.0, 100.0, True), 46.4)
-        
         # Low score, low price -> should go below 5.0
-        # 0.747528 * 5.0 + 0.239998 * (-10.0) + 0.015874 = 3.73764 - 2.39998 + 0.015874 = 1.353534 -> 1.4
         self.assertAlmostEqual(reconstruct_price(5.0, -10.0, True), 1.4)
 
     def test_official_price_overrides_reconstructed_price(self):
@@ -47,15 +56,86 @@ class TestStage6RIntegration(unittest.TestCase):
         self.assertEqual(price, 15.5)
         self.assertEqual(provenance, PriceProvenance.OFFICIAL_EMBEDDED_PREVIOUS_PRICE)
 
+    def test_resolve_price_unavailable(self):
+        price, provenance = resolve_price()
+        self.assertIsNone(price)
+        self.assertEqual(provenance, PriceProvenance.UNAVAILABLE)
+
+    def test_participation_three_states(self):
+        # games > 0 -> PARTICIPATED
+        self.assertEqual(resolve_participation(2), "PARTICIPATED")
+        self.assertEqual(resolve_participation("1"), "PARTICIPATED")
+        
+        # games == 0 with known valid field -> DID_NOT_PARTICIPATE
+        self.assertEqual(resolve_participation(0), "DID_NOT_PARTICIPATE")
+        self.assertEqual(resolve_participation("0"), "DID_NOT_PARTICIPATE")
+        
+        # games missing/null/invalid -> UNKNOWN
+        self.assertEqual(resolve_participation(None), "UNKNOWN")
+        self.assertEqual(resolve_participation(""), "UNKNOWN")
+        self.assertEqual(resolve_participation("abc"), "UNKNOWN")
+        self.assertEqual(resolve_participation("None"), "UNKNOWN")
+        
+        # UNKNOWN fallback in reconstruct_price behaves as PARTICIPATED (fail-closed)
+        # reconstructed: 0.747528 * 15.0 + 0.239998 * 10 + 0.015874 = 13.6
+        self.assertAlmostEqual(reconstruct_price(15.0, 10.0, "UNKNOWN"), 13.6)
+
     def test_round1_round2_price_reproduction(self):
-        # E.g. a Round 1 to 2 price from Stage 6E evidence
-        # Bwipo: 15.0, score: -2.31 (Wait, let's just pick one with exact reproduction if possible)
-        # We can just test the formula works precisely for a dummy case mimicking evidence.
-        self.assertTrue(True)
+        repo_root = Path(__file__).resolve().parents[1]
+        path = repo_root / ".agent-runs/player-model-v2-stage-6e-pricing-budget-audit-20260807/stage-6e-r1-r2-official-transition.csv"
+        cw_path = repo_root / ".agent-runs/player-model-v2-stage-6e-pricing-budget-audit-20260807/stage-6e-player-price-crosswalk.csv"
+        
+        import pandas as pd
+        import numpy as np
+        
+        df = pd.read_csv(path).merge(pd.read_csv(cw_path), on='pro_player_id', how='inner')
+        p12 = df[df['role'] != 'coach']
+        
+        preds = []
+        for _, row in p12.iterrows():
+            prev_price = float(row['price_r1'])
+            score = float(row['last_round_score_r2'])
+            # simulate participation determination (score > 0.0 means participated)
+            did_participate = score > 0.0
+            reconstructed = reconstruct_price(prev_price, score, did_participate)
+            preds.append(reconstructed)
+            
+        preds = np.array(preds)
+        actuals = p12['price_r2'].values
+        mae = np.mean(np.abs(actuals - preds))
+        max_err = np.max(np.abs(actuals - preds))
+        
+        # Verify the errors match expected bounds for R1->R2 reconstruction (MAE ~0.007, max_err ~0.1)
+        self.assertLessEqual(mae, 0.01)
+        self.assertLessEqual(max_err, 0.11)
 
     def test_round2_round3_player_price_error_bounds(self):
-        # Mimic a round 2 to 3 price reproduction.
-        self.assertTrue(True)
+        repo_root = Path(__file__).resolve().parents[1]
+        path = repo_root / ".agent-runs/player-model-v2-stage-6e-pricing-budget-audit-20260807/stage-6e-r2-r3-official-transition.csv"
+        cw_path = repo_root / ".agent-runs/player-model-v2-stage-6e-pricing-budget-audit-20260807/stage-6e-player-price-crosswalk.csv"
+        
+        import pandas as pd
+        import numpy as np
+        
+        df = pd.read_csv(path).merge(pd.read_csv(cw_path), on='pro_player_id', how='inner')
+        p23 = df[df['role'] != 'coach']
+        
+        preds = []
+        for _, row in p23.iterrows():
+            prev_price = float(row['price_r2'])
+            score = float(row['last_round_score_r3'])
+            did_participate = score > 0.0
+            reconstructed = reconstruct_price(prev_price, score, did_participate)
+            preds.append(reconstructed)
+            
+        preds = np.array(preds)
+        actuals = p23['price_r3'].values
+        mae = np.mean(np.abs(actuals - preds))
+        max_err = np.max(np.abs(actuals - preds))
+        
+        # Verify the errors match expected bounds for R2->R3 reconstruction (MAE ~0.257, max_err ~0.4)
+        self.assertLessEqual(mae, 0.26)
+        self.assertLessEqual(max_err, 0.41)
 
     def test_inspired_dnp_price_hold(self):
         self.assertEqual(reconstruct_price(15.0, 0.0, False), 15.0)
@@ -85,24 +165,39 @@ class TestStage6RIntegration(unittest.TestCase):
         model = SyntheticPriceModel()
         self.assertAlmostEqual(model.update(15.0, 10.0, True), 13.6)
 
-    def test_historical_simulator_uses_shared_budget_contract(self):
-        # The function `calculate_next_budget` is imported into simulator.
-        self.assertTrue(True)
+    @patch('data_pipeline.official_prices.calculate_next_budget')
+    def test_historical_simulator_uses_shared_budget_contract(self, mock_calculate):
+        mock_calculate.return_value = 105.0
+        
+        roles = ("top", "jgl", "mid", "bot", "sup", "coach")
+        h_week = HistoricalWeek(
+            week=1,
+            stage_round="Round 1",
+            market=tuple(MarketPlayer(role, role, "Team", 10.0) for role in roles),
+            actual_points={role: 10.0 for role in roles}
+        )
+        
+        def selector(target, prices, budget):
+            return RosterDecision(roles, {})
+            
+        simulate_competition([h_week], selector, SyntheticPriceModel())
+        self.assertTrue(mock_calculate.called)
 
     def test_dashboard_does_not_duplicate_price_formula(self):
-        with open("/home/raymondw/Documents/RWorkspace/LCSFantasy/data_pipeline/export_dashboard_data.py", "r") as f:
+        repo_root = Path(__file__).resolve().parents[1]
+        with open(repo_root / "data_pipeline/export_dashboard_data.py", "r") as f:
             content = f.read()
             self.assertNotIn("0.747528 * previous_price", content)
 
     def test_root_stage_scripts_classified(self):
-        import glob
-        inventory_path = "/home/raymondw/Documents/RWorkspace/LCSFantasy/.agent-runs/player-model-v2-stage-6r-runtime-integration-20260807/stage-6r-repository-file-inventory.json"
+        repo_root = Path(__file__).resolve().parents[1]
+        inventory_path = repo_root / ".agent-runs/player-model-v2-stage-6r-remediation-20260807/stage-6r-remediation-root-classification.json"
         self.assertTrue(os.path.exists(inventory_path))
         with open(inventory_path, "r") as f:
             data = json.load(f)
-            classifications = {item["path"]: item["classification"] for item in data}
-            self.assertIn("stage6c_build.py", classifications)
-            self.assertIn("scratch_reproduce.py", classifications)
+            classifications = {item["name"]: item["classification"] for item in data}
+            self.assertIn("fix_tests.py", classifications)
+            self.assertIn("generate_final.py", classifications)
 
 if __name__ == '__main__':
     unittest.main()
