@@ -1,0 +1,54 @@
+{
+  "Stage_6G_policy_hash": "60293781538aaa4ccc0eafe16d958a7fb034cf5c999cb9a159a23efa445f81bd",
+  "alpha": 10.0,
+  "base_architecture": "OBC",
+  "candidate_id": "G0",
+  "development_result_hash": "08acb9b158e2bcc45b26187447a03a29841a0899bc4ea3382d9ffb0e64604fab",
+  "estimator": "Ridge residual correction over M0",
+  "exact_feature_order": [
+    "m0_prediction",
+    "m0_source_count",
+    "m0_fallback_level",
+    "role",
+    "prior_player_rating",
+    "prior_residual_uncertainty",
+    "prior_effective_evidence",
+    "prior_role_relative_rating",
+    "prior_role_adjusted_kp",
+    "prior_core_state",
+    "prior_team_strength",
+    "prior_team_state",
+    "schedule_opponent_context",
+    "bo_format_context",
+    "playstyle_class_1_probability",
+    "playstyle_class_2_probability",
+    "playstyle_unknown_probability",
+    "playstyle_uncertainty",
+    "playstyle_applicable"
+  ],
+  "exact_interaction_order": [],
+  "excluded_blocks": [
+    "A"
+  ],
+  "excluded_interactions": [
+    "I1",
+    "I2",
+    "I3",
+    "I4",
+    "I5",
+    "I6"
+  ],
+  "included_blocks": [
+    "B",
+    "C"
+  ],
+  "included_registered_interactions": [],
+  "input_artifact_hashes": {
+    "stage_6d_obc_spec_json": "2a757b0bf63d0a2696fcaa75f1ea9d32d8408f0ec08eac847c85e543bca4f34c"
+  },
+  "preprocessing_contract": "Stage4A train-only",
+  "seed": "20260805",
+  "software_versions": "pandas, numpy",
+  "solver": "numpy.linalg.solve_centered_normal_equation",
+  "training_development_periods": "2022--2023 development folds"
+}

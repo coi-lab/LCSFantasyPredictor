@@ -84,7 +84,15 @@ def resolve_participation(games: Any) -> str:
         return "UNKNOWN"
 
 
-def reconstruct_price(previous_price: float, last_round_score: float, did_participate: bool | str | None) -> float:
+def reconstruct_price(
+    previous_price: float,
+    last_round_score: float,
+    did_participate: bool | str | None,
+    previous_price_weight: float | None = None,
+    score_weight: float | None = None,
+    intercept: float | None = None,
+    decimals: int = 1,
+) -> float:
     """Calculate Stage 6F piecewise reconstructed simulation price.
     
     If did_participate is False or 'DID_NOT_PARTICIPATE', the price is held constant.
@@ -94,11 +102,20 @@ def reconstruct_price(previous_price: float, last_round_score: float, did_partic
     """
     if did_participate in (False, "DID_NOT_PARTICIPATE"):
         return previous_price
+
+    p_w = previous_price_weight if previous_price_weight is not None else RECONSTRUCTED_PRICE_WEIGHT
+    s_w = score_weight if score_weight is not None else RECONSTRUCTED_SCORE_WEIGHT
+
+    if previous_price_weight is not None or score_weight is not None:
+        inc = intercept if intercept is not None else 0.0
+    else:
+        inc = intercept if intercept is not None else RECONSTRUCTED_INTERCEPT
+
     return round(
-        RECONSTRUCTED_PRICE_WEIGHT * previous_price
-        + RECONSTRUCTED_SCORE_WEIGHT * last_round_score
-        + RECONSTRUCTED_INTERCEPT,
-        1
+        p_w * previous_price
+        + s_w * last_round_score
+        + inc,
+        decimals
     )
 
 

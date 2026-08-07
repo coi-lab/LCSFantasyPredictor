@@ -55,14 +55,15 @@ class SyntheticPriceModel:
     score_weight: float | None = None
 
     def update(self, previous_price: float, actual_points: float, did_participate: bool | str | None = "UNKNOWN") -> float:
-        if self.previous_price_weight is not None or self.score_weight is not None:
-            p_w = self.previous_price_weight if self.previous_price_weight is not None else 0.747528
-            s_w = self.score_weight if self.score_weight is not None else 0.239998
-            if did_participate in (False, "DID_NOT_PARTICIPATE"):
-                return previous_price
-            return round(p_w * previous_price + s_w * actual_points, self.decimals)
         from data_pipeline.official_prices import reconstruct_price
-        return reconstruct_price(previous_price, actual_points, did_participate)
+        return reconstruct_price(
+            previous_price,
+            actual_points,
+            did_participate,
+            previous_price_weight=self.previous_price_weight,
+            score_weight=self.score_weight,
+            decimals=self.decimals
+        )
 
 
 @dataclass(frozen=True)
