@@ -1,0 +1,102 @@
+{
+  "alpha_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "arm_eligibility": {
+    "M4": "INELIGIBLE_UNQUALIFIED_PROVENANCE",
+    "M5": "INELIGIBLE_UNQUALIFIED_PROVENANCE"
+  },
+  "arms": {
+    "M0": [
+      "prior_realized_labels_strictly_before_target_cutoff"
+    ],
+    "M1": [
+      "m0_prediction",
+      "m0_source_count",
+      "m0_fallback_level",
+      "role",
+      "prior_player_rating",
+      "prior_residual_uncertainty",
+      "prior_effective_evidence",
+      "prior_role_relative_rating",
+      "prior_role_adjusted_kp"
+    ],
+    "M2": [
+      "m0_prediction",
+      "m0_source_count",
+      "m0_fallback_level",
+      "role",
+      "prior_player_rating",
+      "prior_residual_uncertainty",
+      "prior_effective_evidence",
+      "prior_role_relative_rating",
+      "prior_role_adjusted_kp",
+      "prior_core_state"
+    ],
+    "M3": [
+      "m0_prediction",
+      "m0_source_count",
+      "m0_fallback_level",
+      "role",
+      "prior_player_rating",
+      "prior_residual_uncertainty",
+      "prior_effective_evidence",
+      "prior_role_relative_rating",
+      "prior_role_adjusted_kp",
+      "prior_core_state",
+      "prior_team_strength",
+      "prior_team_state"
+    ],
+    "M4": [
+      "m0_prediction",
+      "m0_source_count",
+      "m0_fallback_level",
+      "role",
+      "prior_player_rating",
+      "prior_residual_uncertainty",
+      "prior_effective_evidence",
+      "prior_role_relative_rating",
+      "prior_role_adjusted_kp",
+      "prior_core_state",
+      "prior_team_strength",
+      "prior_team_state",
+      "canonical_matchup_probability"
+    ],
+    "M5": [
+      "m0_prediction",
+      "m0_source_count",
+      "m0_fallback_level",
+      "role",
+      "prior_player_rating",
+      "prior_residual_uncertainty",
+      "prior_effective_evidence",
+      "prior_role_relative_rating",
+      "prior_role_adjusted_kp",
+      "prior_core_state",
+      "prior_team_strength",
+      "prior_team_state",
+      "canonical_matchup_probability",
+      "schedule_opponent_context",
+      "bo_format_context"
+    ]
+  },
+  "calibration": "none",
+  "candidate_id": "player-model-v2-m5-provenance-remediated-v1-20260807-remed",
+  "estimator": "Stage4A ridge residual correction over M0; development-only selection policy",
+  "evidence_class": "STRUCTURAL_RECONCILIATION_ONLY",
+  "m6_m7_status": "OUT_OF_SCOPE",
+  "parent_chain": [
+    "player-model-v2-structural-20260805-39b2744-c735b540e14c",
+    "player-model-v2-fit-spec-v1-20260805-26176082",
+    "player-model-v2-context-fit-spec-v1-20260805-440fe82fa633",
+    "player-model-v2-m5-fit-spec-v1-20260807-805f2b69643a",
+    "player-model-v2-m5-provenance-remediated-v1-20260807-remed"
+  ],
+  "preprocessing": "Stage4A train-only",
+  "production_gates_status": "ALL_FALSE",
+  "timestamp": "2026-08-08T01:06:22.303613+00:00"
+}
