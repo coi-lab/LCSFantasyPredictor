@@ -107,7 +107,7 @@
         <span>Matchup Optimizer</span>
       </button>
       <button class="view-tab-btn" data-view="view-historical-lineups">
-        <span>Training & Test Lineups</span>
+        <span>Model Evaluation</span>
       </button>
     </div>
 
@@ -188,26 +188,159 @@
       <div id="matchupOptimizerContent"></div>
     </div>
 
-    <!-- View 5: Chronological model-training and test lineup audit -->
+    <!-- View 5: Model Evaluation -->
     <div class="view-section" id="view-historical-lineups">
-      <div class="card historical-lineup-header">
-        <div>
-          <span class="weekly-eyebrow">Chronological model audit</span>
-          <h2>Training & Test Lineups</h2>
-          <p>Inspect the exact weekly rosters, budget state, scoring comparisons, and frozen champion locks used in historical evaluation.</p>
+      <!-- Model Evaluation Sub-Tabs -->
+      <div class="eval-subtabs card" style="display: flex; gap: 10px; padding: 10px; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02);">
+        <button class="eval-subtab-btn active" data-subview="eval-development" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">Development Evidence</button>
+        <button class="eval-subtab-btn" data-subview="eval-reconstructed" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">2026 Reconstructed Evaluation</button>
+        <button class="eval-subtab-btn" data-subview="eval-archived" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">Archived Evaluations</button>
+      </div>
+
+      <!-- Subview 1: Development Evidence -->
+      <div class="eval-subview-section active" id="eval-development">
+        <div class="card" style="margin-bottom: 18px;">
+          <h2>Development Evidence</h2>
+          <p>Key evidence explaining why G0/OBC was selected as the final Player Model V2 architecture based on frozen 2022-2023 development cross-validation metrics.</p>
         </div>
-        <div class="historical-lineup-controls">
-          <label for="historicalPhaseSelect">Evaluation phase</label>
-          <select id="historicalPhaseSelect"></select>
-          <label for="historicalPolicySelect">Policy</label>
-          <select id="historicalPolicySelect"></select>
-          <label for="historicalWeekSelect">Week</label>
-          <select id="historicalWeekSelect"></select>
+
+        <div class="main-grid" style="grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px;">
+          <!-- Final Model Spec Card -->
+          <div class="card">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 class="card-title">Selected Model Identity</h3>
+            </div>
+            <div id="developmentFinalModel" style="font-size: 14px; line-height: 1.6;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Feature Conclusions Card -->
+          <div class="card">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 class="card-title">Feature-Family Decisions</h3>
+            </div>
+            <div id="developmentFeatureConclusions">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Progression & Ablation / Interaction Grid -->
+        <div class="main-grid" style="grid-template-columns: 1fr 1fr; gap: 18px;">
+          <!-- Model Progression Card -->
+          <div class="card">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 class="card-title">Model Progression (Development MAE)</h3>
+            </div>
+            <div style="margin-bottom: 15px; display: flex; justify-content: center;">
+              <canvas id="developmentProgressionChart" style="max-height: 180px; width: 100%;"></canvas>
+            </div>
+            <div id="developmentProgressionTable">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Interaction Candidates Card -->
+          <div class="card">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 class="card-title">Stage 6G Interaction Test Results</h3>
+            </div>
+            <div id="developmentInteractionTable">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
         </div>
       </div>
-      <div id="historicalLineupNotice" class="weekly-champion-notice"></div>
-      <div id="historicalLineupSummary" class="historical-summary-grid"></div>
-      <div id="historicalLineupContent"></div>
+
+      <!-- Subview 2: 2026 Reconstructed Evaluation -->
+      <div class="eval-subview-section" id="eval-reconstructed" style="display: none;">
+        <div class="card" style="margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <span class="weekly-eyebrow">Exposed evaluation stage</span>
+              <h2 style="margin: 5px 0 0;">2026 EXPOSED RETROSPECTIVE RECONSTRUCTED FANTASY SIMULATION</h2>
+            </div>
+            <div id="determinismBadge" style="font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Headline Summary Grid -->
+        <div class="historical-summary-grid" id="reconstructedHeadlineGrid" style="margin-bottom: 18px;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Weekly Summary & Detail Grid -->
+        <div style="display: grid; grid-template-columns: minmax(280px, 320px) 1fr; gap: 18px; align-items: start; margin-bottom: 18px;">
+          <!-- Weekly Selection List -->
+          <div class="card" style="padding: 15px;">
+            <div class="card-header" style="margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+              <h3 class="card-title">Fantasy Weeks</h3>
+            </div>
+            <div id="reconstructedWeeksList" style="display: flex; flex-direction: column; gap: 8px;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Selected Week Detail View -->
+          <div id="reconstructedWeekDetail">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <div class="main-grid" style="grid-template-columns: 1fr 1fr; gap: 18px;">
+          <!-- Leaderboard Comparison Card -->
+          <div class="card">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 class="card-title">🏆 Historical Leaderboard Comparison</h3>
+            </div>
+            <div id="reconstructedLeaderboardCompare">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Limitations Panel Card -->
+          <div class="card">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+              <h3 class="card-title">⚠️ Simulation Limitations & Methodology Notes</h3>
+            </div>
+            <div style="padding: 5px; font-size: 13px; line-height: 1.6; color: var(--text-muted);">
+              <ul style="margin: 0; padding-left: 20px;">
+                <li style="margin-bottom: 8px;"><strong>Retrospective Market Membership:</strong> Actual weekend participants were used retrospectively for binary market membership.</li>
+                <li style="margin-bottom: 8px;"><strong>Pricing Reconstructions:</strong> Historical official pre-lock fantasy prices were unavailable for most target periods. Prices were reconstructed with the frozen Stage 6F/6R pricing policy.</li>
+                <li style="margin-bottom: 8px;"><strong>Scoring Rules:</strong> Current/newest-split fantasy scoring rules were used.</li>
+                <li style="margin-bottom: 8px;"><strong>Exposed Retrospective:</strong> The evaluation is an exposed retrospective reconstruction, not untouched prospective testing.</li>
+                <li style="margin-bottom: 8px;"><strong>Point-in-Time Separation:</strong> Target-period realized results were used only after each simulated lineup was sealed.</li>
+                <li style="margin-bottom: 8px;"><strong>Access Order:</strong> Leaderboard contents were intended to remain sealed until the cumulative simulation result was frozen.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subview 3: Archived Evaluations (Old Training & Test Lineups) -->
+      <div class="eval-subview-section" id="eval-archived" style="display: none;">
+        <div class="card historical-lineup-header">
+          <div>
+            <span class="weekly-eyebrow">Archived model audit</span>
+            <h2>Archived Evaluations</h2>
+            <p>Inspect the exact weekly rosters, budget state, scoring comparisons, and frozen champion locks used in legacy historical evaluation phases.</p>
+          </div>
+          <div class="historical-lineup-controls">
+            <label for="historicalPhaseSelect">Evaluation phase</label>
+            <select id="historicalPhaseSelect"></select>
+            <label for="historicalPolicySelect">Policy</label>
+            <select id="historicalPolicySelect"></select>
+            <label for="historicalWeekSelect">Week</label>
+            <select id="historicalWeekSelect"></select>
+          </div>
+        </div>
+        <div id="historicalLineupNotice" class="weekly-champion-notice"></div>
+        <div id="historicalLineupSummary" class="historical-summary-grid"></div>
+        <div id="historicalLineupContent"></div>
+      </div>
     </div>
 
     <!-- View 6: Player champion tendencies and opponent ban context -->

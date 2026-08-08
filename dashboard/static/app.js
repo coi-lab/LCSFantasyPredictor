@@ -5,6 +5,11 @@ let championLabData = null;
 let weeklyChampionData = null;
 let matchupOptimizerData = null;
 let historicalLineupData = null;
+let evalDevSummary = null;
+let evalWeeklyResults = null;
+let evalLeaderboard = null;
+let evalProvenance = null;
+let selectedEvalWeekNum = 1;
 let selectedMatchupLineupRank = 1;
 let filteredPlayers = [];
 let currentPositionFilter = 'ALL';
@@ -14,6 +19,7 @@ let pointsMode = 'raw'; // 'raw' or 'adjusted'
 let trendChart = null;
 let championPoolChart = null;
 let championSplitChart = null;
+let devProgressionChart = null;
 
 const TEAM_COLORS = {
   '100 Thieves': '#e31b23',
@@ -198,7 +204,25 @@ async function loadDashboardData() {
     renderWeeklyChampionPicks();
     populateMatchupWeekSelect();
     renderMatchupOptimizer();
-    await historicalRequest;
+
+    // Fetch model evaluation data
+    const evalRequest = Promise.all([
+      fetch('../generated/current/model-development-summary.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/stage7-weekly-results.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/stage7-leaderboard-comparison.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/stage7-provenance.json').then(r => r.ok ? r.json() : null)
+    ]).then(([dev, weekly, lb, prov]) => {
+      evalDevSummary = dev;
+      evalWeeklyResults = weekly;
+      evalLeaderboard = lb;
+      evalProvenance = prov;
+      setupEvalTabs();
+      renderModelEvaluation();
+    }).catch(error => {
+      console.error('Error loading model evaluation data:', error);
+    });
+
+    await Promise.all([historicalRequest, evalRequest]);
   } catch (err) {
     console.error('Error loading dashboard data:', err);
     document.getElementById('tableContainer').innerHTML = `
@@ -207,7 +231,6 @@ async function loadDashboardData() {
       </div>
     `;
   }
-  await historicalRequest;
 }
 
 function populateFilterDropdowns() {
@@ -316,7 +339,7 @@ function setupEventListeners() {
       } else if (targetViewId === 'view-matchup-optimizer') {
         renderMatchupOptimizer();
       } else if (targetViewId === 'view-historical-lineups') {
-        renderHistoricalLineups();
+        renderModelEvaluation();
       }
     });
   });
@@ -1961,4 +1984,425 @@ function exportToCSV() {
 
 function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function setupEvalTabs() {
+  const btns = document.querySelectorAll('.eval-subtab-btn');
+  if (btns.length === 0) return;
+  btns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.eval-subtab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'none';
+        b.style.color = 'var(--text-muted)';
+        b.style.border = '1px solid transparent';
+      });
+      document.querySelectorAll('.eval-subview-section').forEach(s => s.style.display = 'none');
+
+      const targetBtn = e.currentTarget;
+      const targetSubviewId = targetBtn.dataset.subview;
+      targetBtn.classList.add('active');
+      targetBtn.style.background = 'rgba(76, 201, 240, 0.15)';
+      targetBtn.style.color = 'var(--primary-color)';
+      targetBtn.style.border = '1px solid rgba(76, 201, 240, 0.3)';
+
+      const subviewEl = document.getElementById(targetSubviewId);
+      if (subviewEl) subviewEl.style.display = 'block';
+
+      if (targetSubviewId === 'eval-development') {
+        renderEvalDevelopment();
+      } else if (targetSubviewId === 'eval-reconstructed') {
+        renderEvalReconstructed();
+      } else if (targetSubviewId === 'eval-archived') {
+        renderHistoricalLineups();
+      }
+    });
+  });
+
+  // Apply default styles to the active button
+  const activeBtn = document.querySelector('.eval-subtab-btn.active');
+  if (activeBtn) {
+    activeBtn.style.background = 'rgba(76, 201, 240, 0.15)';
+    activeBtn.style.color = 'var(--primary-color)';
+    activeBtn.style.border = '1px solid rgba(76, 201, 240, 0.3)';
+  }
+}
+
+function renderModelEvaluation() {
+  const activeBtn = document.querySelector('.eval-subtab-btn.active');
+  const activeSubviewId = activeBtn ? activeBtn.dataset.subview : 'eval-development';
+
+  if (activeSubviewId === 'eval-development') {
+    renderEvalDevelopment();
+  } else if (activeSubviewId === 'eval-reconstructed') {
+    renderEvalReconstructed();
+  } else if (activeSubviewId === 'eval-archived') {
+    renderHistoricalLineups();
+  }
+}
+
+function renderEvalDevelopment() {
+  if (!evalDevSummary) return;
+  const dev = evalDevSummary;
+  const modelInfo = dev.final_model;
+
+  // 1. Populate Selected Model Identity
+  document.getElementById('developmentFinalModel').innerHTML = `
+    <div style="display: flex; flex-direction: column; gap: 10px; color: #f0f4fc;">
+      <div><strong>Model ID:</strong> <span class="tier-chip tier-13" style="font-size: 11px;">${escapeHtml(modelInfo.candidate_id)}</span></div>
+      <div><strong>Architecture:</strong> ${escapeHtml(modelInfo.architecture)}</div>
+      <div><strong>Description:</strong> ${escapeHtml(modelInfo.description)}</div>
+      <div><strong>Regularization (Alpha):</strong> <code>${modelInfo.alpha.toFixed(1)}</code></div>
+      <div><strong>Included Feature Blocks:</strong> ${escapeHtml(modelInfo.included_blocks.join(', '))}</div>
+      <div><strong>Excluded Feature Blocks:</strong> ${escapeHtml(modelInfo.excluded_blocks.join(', '))}</div>
+      <div><strong>Registered Interactions:</strong> ${modelInfo.included_registered_interactions.length > 0 ? escapeHtml(modelInfo.included_registered_interactions.join(', ')) : '<em>none retained</em>'}</div>
+      <div><strong>Estimator:</strong> ${escapeHtml(modelInfo.estimator)}</div>
+      <div><strong>Solver:</strong> <code>${escapeHtml(modelInfo.solver)}</code></div>
+      <div style="margin-top: 5px; padding-top: 10px; border-top: 1px solid var(--border-color); font-weight: 700; color: var(--primary-color); font-size: 15px;">
+        Development MAE: ${formatHistoricalNumber(modelInfo.development_mae, 6)}
+      </div>
+      <div style="font-size: 11px; color: var(--text-muted); font-family: monospace; word-break: break-all; margin-top: 5px;">
+        Policy SHA-256: ${escapeHtml(modelInfo.policy_hash)}
+      </div>
+    </div>
+  `;
+
+  // 2. Populate Feature Family Conclusions
+  const conclusionsHtml = dev.feature_family_conclusions.map(c => `
+    <div style="margin-bottom: 12px; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.01);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <strong style="color: #fff; font-size: 13px;">Block ${escapeHtml(c.block)}: ${escapeHtml(c.name)}</strong>
+        <span class="tier-chip ${c.conclusion === 'retained' ? 'tier-13' : 'tier-15'}" style="font-size: 10px; padding: 2px 6px;">${escapeHtml(c.conclusion)}</span>
+      </div>
+      <p style="margin: 0; font-size: 12px; color: var(--text-muted);">${escapeHtml(c.evidence)}</p>
+      <small style="display: block; margin-top: 4px; font-weight: 700; color: ${c.conclusion === 'retained' ? 'var(--primary-color)' : '#ff1744'};">
+        Result: ${escapeHtml(c.language)}
+      </small>
+    </div>
+  `).join('');
+  document.getElementById('developmentFeatureConclusions').innerHTML = conclusionsHtml;
+
+  // 3. Populate Model Progression Table
+  const progTableHtml = `
+    <table class="leaderboard-table" style="width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 10px;">
+      <thead>
+        <tr style="border-bottom: 1px solid var(--border-color);">
+          <th style="text-align: left; padding: 6px;">Model</th>
+          <th style="text-align: left; padding: 6px;">Alpha</th>
+          <th style="text-align: right; padding: 6px;">MAE</th>
+          <th style="text-align: right; padding: 6px;">RMSE</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${dev.model_progression.map(m => `
+          <tr class="${m.model_id === 'OBC' ? 'swapped-row' : ''}" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+            <td style="padding: 6px;"><strong>${escapeHtml(m.model_id)}</strong></td>
+            <td style="padding: 6px;">${m.alpha !== null ? m.alpha.toFixed(1) : 'N/A'}</td>
+            <td style="text-align: right; padding: 6px; font-weight: 700; color: ${m.model_id === 'OBC' ? 'var(--primary-color)' : '#fff'};">${formatHistoricalNumber(m.mae, 5)}</td>
+            <td style="text-align: right; padding: 6px; color: var(--text-muted);">${formatHistoricalNumber(m.rmse, 5)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+  document.getElementById('developmentProgressionTable').innerHTML = progTableHtml;
+
+  // 4. Render Progression Chart
+  if (devProgressionChart) devProgressionChart.destroy();
+  const canvas = document.getElementById('developmentProgressionChart');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const chartLabels = dev.model_progression.map(m => m.model_id);
+    const chartData = dev.model_progression.map(m => m.mae);
+
+    devProgressionChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: 'MAE',
+          data: chartData,
+          backgroundColor: chartLabels.map(label => label === 'OBC' ? 'rgba(76, 201, 240, 0.6)' : 'rgba(76, 201, 240, 0.15)'),
+          borderColor: chartLabels.map(label => label === 'OBC' ? '#4cc9f0' : 'rgba(76, 201, 240, 0.4)'),
+          borderWidth: 1,
+          barThickness: 24
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { ticks: { color: '#8a99ad' }, grid: { display: false } },
+          y: {
+            min: 5.0,
+            max: 5.2,
+            ticks: { color: '#8a99ad', stepSize: 0.05 },
+            grid: { color: 'rgba(255,255,255,0.05)' }
+          }
+        }
+      }
+    });
+  }
+
+  // 5. Populate Interaction Candidates Table
+  const interactionTableHtml = `
+    <table class="leaderboard-table" style="width: 100%; font-size: 12px; border-collapse: collapse;">
+      <thead>
+        <tr style="border-bottom: 1px solid var(--border-color);">
+          <th style="text-align: left; padding: 6px;">Candidate</th>
+          <th style="text-align: left; padding: 6px;">Description</th>
+          <th style="text-align: right; padding: 6px;">MAE</th>
+          <th style="text-align: right; padding: 6px;">Delta vs G0</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${dev.stage6g_interaction_results.map(r => `
+          <tr class="${r.candidate_id === 'G0' ? 'swapped-row' : ''}" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+            <td style="padding: 6px;"><strong>${escapeHtml(r.candidate_id)}</strong></td>
+            <td style="padding: 6px; color: var(--text-muted);">${escapeHtml(r.description)}</td>
+            <td style="text-align: right; padding: 6px; font-weight: 700; color: ${r.candidate_id === 'G0' ? 'var(--primary-color)' : '#fff'};">${formatHistoricalNumber(r.mae, 5)}</td>
+            <td style="text-align: right; padding: 6px; color: ${r.delta_vs_g0 > 0 ? '#ff1744' : '#4a5b6c'};">${r.delta_vs_g0 > 0 ? '+' : ''}${formatHistoricalNumber(r.delta_vs_g0, 6)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+    <div style="margin-top: 12px; font-size: 11.5px; color: var(--text-muted); font-style: italic; line-height: 1.4;">
+      * Delta vs G0 represents the difference in MAE. No interaction term strictly improved upon the baseline OBC model (G0).
+    </div>
+  `;
+  document.getElementById('developmentInteractionTable').innerHTML = interactionTableHtml;
+}
+
+function renderEvalReconstructed() {
+  if (!evalWeeklyResults || !evalLeaderboard || !evalProvenance) return;
+  const weekly = evalWeeklyResults;
+  const lb = evalLeaderboard;
+
+  // 1. Populate Determinism Badge
+  const badgeEl = document.getElementById('determinismBadge');
+  if (badgeEl) {
+    if (weekly.determinism_passed) {
+      badgeEl.className = 'price-badge neutral';
+      badgeEl.style.background = 'rgba(0, 230, 118, 0.15)';
+      badgeEl.style.color = '#00e676';
+      badgeEl.style.border = '1px solid rgba(0, 230, 118, 0.3)';
+      badgeEl.innerHTML = `✓ Determinism check passed (${weekly.determinism_runs} runs)`;
+    } else {
+      badgeEl.className = 'price-badge down';
+      badgeEl.innerHTML = `⚠️ Determinism check failed`;
+    }
+  }
+
+  // 2. Populate Headline Summary Grid
+  document.getElementById('reconstructedHeadlineGrid').innerHTML = `
+    <div class="historical-summary-card">
+      <span>Final score</span>
+      <strong>${formatHistoricalNumber(weekly.cumulative_score, 2)}</strong>
+      <small>Realized score over 11 periods</small>
+    </div>
+    <div class="historical-summary-card">
+      <span>Leaderboard winner</span>
+      <strong>${formatHistoricalNumber(lb.winner_score, 2)}</strong>
+      <small>Cumulative points</small>
+    </div>
+    <div class="historical-summary-card" style="border: 1px solid ${lb.gap_to_winner <= 0 ? 'rgba(255,23,68,0.2)' : 'rgba(0,230,118,0.2)'};">
+      <span>Gap to winner</span>
+      <strong style="color: ${lb.gap_to_winner <= 0 ? '#ff1744' : '#00e676'};">${lb.gap_to_winner >= 0 ? '+' : ''}${formatHistoricalNumber(lb.gap_to_winner, 2)}</strong>
+      <small>Points behind winner</small>
+    </div>
+    <div class="historical-summary-card">
+      <span>Rayz actual score</span>
+      <strong>${formatHistoricalNumber(lb.rayz_score, 2)}</strong>
+      <small>User's historical entry</small>
+    </div>
+    <div class="historical-summary-card" style="border: 1px solid rgba(0,230,118,0.2);">
+      <span>Model vs Rayz</span>
+      <strong style="color: #00e676;">+${formatHistoricalNumber(lb.gap_to_rayz, 2)}</strong>
+      <small>Improvement over user</small>
+    </div>
+    <div class="historical-summary-card">
+      <span>Rounds simulated</span>
+      <strong>${weekly.period_count}</strong>
+      <small>11 consecutive periods</small>
+    </div>
+  `;
+
+  // 3. Populate Weekly Selection List
+  const listHtml = weekly.weeks.map(w => {
+    const isActive = w.week === selectedEvalWeekNum;
+    const activeStyle = isActive ? 'background: rgba(76, 201, 240, 0.15); border: 1px solid rgba(76, 201, 240, 0.4); color: #fff;' : 'background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); color: var(--text-muted);';
+    return `
+      <div class="card reconstructed-week-row" data-week="${w.week}" style="padding: 10px; cursor: pointer; border-radius: 8px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; ${activeStyle}">
+        <div>
+          <strong>Week ${w.week}: ${escapeHtml(w.stage_round)}</strong>
+        </div>
+        <div style="font-weight: 700; color: ${isActive ? 'var(--primary-color)' : '#fff'};">
+          ${formatHistoricalNumber(w.realized_score, 2)} pts
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('reconstructedWeeksList').innerHTML = listHtml;
+
+  // Add click listeners to rows
+  document.querySelectorAll('.reconstructed-week-row').forEach(row => {
+    row.addEventListener('click', (e) => {
+      selectedEvalWeekNum = parseInt(e.currentTarget.dataset.week);
+      renderEvalReconstructed();
+    });
+  });
+
+  // 4. Render Selected Week Detail
+  renderReconstructedWeekDetail(selectedEvalWeekNum);
+
+  // 5. Populate Leaderboard Comparison Card
+  document.getElementById('reconstructedLeaderboardCompare').innerHTML = `
+    <div style="font-size: 13.5px; line-height: 1.6; color: #f0f4fc;">
+      <div style="margin-bottom: 10px;"><strong>Competition:</strong> ${escapeHtml(lb.competition_label)}</div>
+      <div style="margin-bottom: 10px;"><strong>Leaderboard Source:</strong> ${escapeHtml(lb.leaderboard_source)}</div>
+      <div style="margin-bottom: 10px;"><strong>Screenshots Hash:</strong> <code style="font-size: 11.5px;">${escapeHtml(lb.leaderboard_screenshots_sha256)}</code></div>
+      <div style="margin-bottom: 10px;"><strong>Status:</strong> <span class="tier-chip tier-15" style="font-size: 11px;">${escapeHtml(lb.leaderboard_status)}</span></div>
+      <div style="margin-bottom: 12px; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); background: rgba(76, 201, 240, 0.03);">
+        <strong style="display: block; color: var(--primary-color); margin-bottom: 4px;">Rank & Percentile Claims:</strong>
+        <p style="margin: 0; font-size: 12.5px; line-height: 1.5;">${escapeHtml(lb.rank_claim_verbose)}</p>
+      </div>
+      <div>
+        <strong>Surviving entries:</strong> 2 (winner & user Rayz)<br>
+        <span style="font-size: 11px; color: var(--text-muted);">* Exact rank bound: ${escapeHtml(lb.rank_bound)}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderReconstructedWeekDetail(weekNum) {
+  if (!evalWeeklyResults || !evalProvenance) return;
+  const week = evalWeeklyResults.weeks.find(w => w.week === weekNum);
+  if (!week) return;
+
+  const prov = evalProvenance;
+
+  // Roster rendering
+  const rosterHtml = week.roster.map(r => {
+    const isCoach = r.is_coach;
+    const priceText = r.price !== null ? `${r.price.toFixed(1)}g` : 'N/A';
+
+    let championText = '';
+    if (isCoach) {
+      championText = '<span style="color: var(--text-muted);">N/A (Coach)</span>';
+    } else if (r.predicted_champion) {
+      const oc = r.champion_outcome;
+      if (oc) {
+        const outcomeClass = oc.hit ? 'hit' : 'miss';
+        const multLabel = oc.multiplier === 1.3 ? 'Comfort' : (oc.multiplier === 1.5 ? 'Adoption' : 'Novelty');
+        championText = `
+          <div style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.02); padding-top: 6px;">
+            <div class="historical-champion ${outcomeClass}" style="margin: 0;">
+              <span>Predicted Champion</span>
+              <strong>${escapeHtml(r.predicted_champion)} <small>x${oc.multiplier.toFixed(1)} (${multLabel})</small></strong>
+              <em>${oc.hit ? 'Hit' : 'Miss'}</em>
+            </div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+              Played: ${escapeHtml(oc.actual_champions.join(', ') || 'none')}
+            </div>
+            <div style="font-size: 11.5px; color: ${oc.hit ? '#00e676' : 'var(--text-muted)'}; font-weight: 700; margin-top: 2px;">
+              Champion bonus score: +${formatHistoricalNumber(oc.realized_bonus, 2)}
+            </div>
+          </div>
+        `;
+      } else {
+        championText = `
+          <div style="margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.02); padding-top: 6px;">
+            <strong style="color: var(--text-muted); font-size: 12px;">Predicted champion: ${escapeHtml(r.predicted_champion)}</strong>
+            <div style="font-size: 11px; color: var(--text-muted);">Outcomes not available</div>
+          </div>
+        `;
+      }
+    } else {
+      championText = '<div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px; font-style: italic;">No champion recommendation preserved</div>';
+    }
+
+    return `
+      <article class="card historical-roster-card" style="padding: 12px; margin-bottom: 0;">
+        <div class="optimizer-card-head" style="margin-bottom: 5px;">
+          <span class="optimizer-role">${escapeHtml(isCoach ? 'COACH' : 'ROLE PLAYER')}</span>
+          <span class="historical-slot-price" style="font-size: 12px; font-weight: 700; color: var(--primary-color);">${priceText}</span>
+        </div>
+        <h4 style="margin: 0 0 5px; font-size: 15px; color: #fff;">${escapeHtml(isCoach ? r.player.replace('coach::', '') : r.player)}</h4>
+        ${championText}
+      </article>
+    `;
+  }).join('');
+
+  // Weekly budget ledger
+  const budgetCards = [
+    ['Starting budget', week.starting_budget, 'g'],
+    ['Roster cost', week.roster_cost, 'g'],
+    ['Unspent gold', week.unused_gold, 'g'],
+    ['Held asset change', week.held_asset_change, 'g', true],
+    ['Next budget', week.next_budget, 'g']
+  ].filter(([, val]) => val !== null).map(([label, val, unit, showSign]) => {
+    const sign = showSign && val >= 0 ? '+' : '';
+    return `
+      <div style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); text-align: center;">
+        <span style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;">${escapeHtml(label)}</span>
+        <strong style="font-size: 14px; color: #fff;">${sign}${val.toFixed(1)}${unit}</strong>
+      </div>
+    `;
+  }).join('');
+
+  // Score comparison strip
+  const scoreStrip = `
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;">
+      <div><span style="font-size: 11px; color: var(--text-muted);">Roster raw points:</span> <strong style="color: #fff;">${formatHistoricalNumber(week.roster_raw_points, 2)}</strong></div>
+      <div><span style="font-size: 11px; color: var(--text-muted);">Champion bonus:</span> <strong style="color: var(--primary-color);">+${formatHistoricalNumber(week.realized_champion_bonus, 2)}</strong></div>
+      <div><span style="font-size: 11px; color: var(--text-muted);">Variety bonus:</span> <strong style="color: var(--primary-color);">+${(week.variety_bonus * 100).toFixed(0)}%</strong></div>
+      <div style="padding-left: 15px; border-left: 1px solid var(--border-color);"><span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Realized score:</span> <strong style="color: #00e676; font-size: 14px;">${formatHistoricalNumber(week.realized_score, 2)}</strong></div>
+      <div><span style="font-size: 11px; color: var(--text-muted);">Cumulative score:</span> <strong style="color: #fff; font-size: 14px;">${formatHistoricalNumber(week.cumulative_score, 2)}</strong></div>
+    </div>
+  `;
+
+  // Weekly integrity/provenance block
+  const provenanceHtml = `
+    <div class="card" style="margin-top: 15px; padding: 12px; border: 1px solid rgba(76,201,240,0.15); background: rgba(76,201,240,0.01);">
+      <h4 style="margin: 0 0 8px; font-size: 12px; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px;">✓ Chronological point-in-time safety verified</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 11.5px; color: var(--text-muted);">
+        <div><strong>Pre-lock Cutoff:</strong> <code>${escapeHtml(week.prelock_cutoff)}</code></div>
+        <div><strong>Sealed Lineup SHA-256:</strong> <code style="word-break: break-all;">${escapeHtml(week.sealed_lineup_sha256)}</code></div>
+        <div><strong>Player Model:</strong> <code>${escapeHtml(prov.player_model.candidate_id)}</code> (Alpha=${prov.player_model.alpha})</div>
+        <div><strong>Champion Predictor:</strong> <code>${escapeHtml(prov.champion_predictor.id)}</code></div>
+        <div><strong>Pricing Policy Hash:</strong> <code style="word-break: break-all;">${escapeHtml(prov.pricing_policy)}</code></div>
+        <div><strong>Budget Policy Hash:</strong> <code style="word-break: break-all;">${escapeHtml(prov.budget_policy)}</code></div>
+        <div><strong>Scoring Configuration:</strong> <code style="word-break: break-all;">${escapeHtml(prov.scoring_config)}</code></div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('reconstructedWeekDetail').innerHTML = `
+    <div class="card historical-week-heading" style="padding: 15px; margin-bottom: 12px;">
+      <div>
+        <span class="weekly-eyebrow">Period detail view</span>
+        <h3 style="margin: 4px 0 0;">Week ${week.week}: ${escapeHtml(week.stage_round)}</h3>
+        <p style="margin: 4px 0 0; font-size: 11.5px; color: var(--text-muted);">Target patch: <code>${escapeHtml(week.patch)}</code> | Period ID: <code>${escapeHtml(week.prediction_period_id)}</code></p>
+      </div>
+      <div style="text-align: right;">
+        ${scoreStrip}
+      </div>
+    </div>
+
+    <!-- Budget ledgers -->
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 12px;">
+      ${budgetCards}
+    </div>
+
+    <!-- Roster Grid -->
+    <div class="historical-roster-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+      ${rosterHtml}
+    </div>
+
+    <!-- Provenance binding block -->
+    ${provenanceHtml}
+  `;
 }

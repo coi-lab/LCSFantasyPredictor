@@ -1,0 +1,41 @@
+{
+  "generated_by": "data_pipeline/export_model_evaluation_data.py",
+  "competition": "2026_split_1",
+  "competition_label": "2026 Split 1",
+  "leaderboard_source": "OverallRanking screenshots (LCSFantasyImages/Week#/OverallRankingWeek#.png)",
+  "leaderboard_screenshot_files": [
+    "LCSFantasyImages/Week1/OverallRankingWeek1.png",
+    "LCSFantasyImages/Week10/OverallRankingWeek10.png",
+    "LCSFantasyImages/Week11/OverallRankingWeek11.png",
+    "LCSFantasyImages/Week2/OverallRankingWeek2.png",
+    "LCSFantasyImages/Week3/OverallRankingWeek3.png",
+    "LCSFantasyImages/Week4/OverallRankingWeek4.png",
+    "LCSFantasyImages/Week5/OverallRankingWeek5.png",
+    "LCSFantasyImages/Week6/OverallRankingWeek6.png",
+    "LCSFantasyImages/Week7/OverallRankingWeek7.png",
+    "LCSFantasyImages/Week8/OverallRankingWeek8.png",
+    "LCSFantasyImages/Week9/OverallRankingWeek9.png"
+  ],
+  "leaderboard_screenshots_sha256": "bb722eb0f1eb613a4fa103f7113924a909077ed08d9f860a394aebc58630c858",
+  "leaderboard_status": "screenshot-derived — full participant count and rank not independently confirmed",
+  "leaderboard_notes": [
+    "Week 7 begins the Spring stage but is not a new fantasy account or price period.",
+    "Leaderboard totals come only from OverallRankingWeek# screenshots.",
+    "Historical official prices and private roster locks were not preserved publicly."
+  ],
+  "model_score": 1445.34,
+  "winner_score": 1572.9,
+  "rayz_score": 1404.69,
+  "gap_to_winner": -127.56,
+  "gap_to_rayz": 40.65,
+  "rank_claim": "below_surviving_winner",
+  "rank_claim_verbose": "Below the surviving winner entry (1,572.90). Above the surviving Rayz entry (1,404.69). Exact historical rank unavailable from surviving leaderboard evidence — only two named entries are confirmed from screenshots.",
+  "rank_bound": "Between Rayz and winner in surviving screenshot evidence",
+  "percentile_bound": null,
+  "exact_rank_available": false,
+  "pre_leaderboard_gate": {
+    "pre_leaderboard_hash": "7070bf3084b4bddc8a0252a293a7563556c8a31f7c36870e8707cbf2412875d8",
+    "status": "AUTHORIZED"
+  },
+  "leaderboard_access_authorized": true
+}

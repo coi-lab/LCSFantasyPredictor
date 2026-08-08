@@ -1,0 +1,210 @@
+{
+  "generated_by": "data_pipeline/export_model_evaluation_data.py",
+  "source_stages": [
+    "Stage 4D",
+    "Stage 6D",
+    "Stage 6G"
+  ],
+  "evaluation_metric": "MAE on 2022-2023 development folds (cross-validated, chronological)",
+  "sample_size": 1282,
+  "final_model": {
+    "candidate_id": "G0",
+    "architecture": "OBC",
+    "description": "OBC — schedule/BO context + restricted TOP/SUP playstyle",
+    "alpha": 10.0,
+    "included_blocks": [
+      "B",
+      "C"
+    ],
+    "excluded_blocks": [
+      "A"
+    ],
+    "included_registered_interactions": [],
+    "estimator": "Ridge residual correction over M0",
+    "solver": "numpy.linalg.solve_centered_normal_equation",
+    "development_mae": 5.057221199575735,
+    "development_rmse": 6.428554413900811,
+    "policy_hash": "17e1d07677c587287cc94a690e6e53f98ae75672b29fa24d9cc747dff83fe890"
+  },
+  "model_progression": [
+    {
+      "model_id": "M0",
+      "description": "Expanding-window historical median baseline",
+      "alpha": null,
+      "mae": 5.165341992950912,
+      "rmse": 6.542480720042419,
+      "pearson": 0.2427236759306152,
+      "spearman": 0.2458000403826051
+    },
+    {
+      "model_id": "M1",
+      "description": "M0 + core player-state residual correction (Block O)",
+      "alpha": 10.0,
+      "mae": 5.077734556101584,
+      "rmse": 6.442515846294209,
+      "pearson": 0.2900841551619777,
+      "spearman": 0.29696827359929046
+    },
+    {
+      "model_id": "M2",
+      "description": "M1 + schedule opponent context (Block A partial)",
+      "alpha": 10.0,
+      "mae": 5.063271036918488,
+      "rmse": 6.445615066250958,
+      "pearson": 0.2899310278222328,
+      "spearman": 0.29960406354347935
+    },
+    {
+      "model_id": "M3",
+      "description": "M2 + best-of format context",
+      "alpha": 10.0,
+      "mae": 5.060352777227633,
+      "rmse": 6.433872576778955,
+      "pearson": 0.29052417446294676,
+      "spearman": 0.29915862815650246
+    },
+    {
+      "model_id": "OBC",
+      "description": "OBC (Block B schedule/BO + Block C restricted playstyle, no Block A)",
+      "alpha": 10.0,
+      "mae": 5.057221199575735,
+      "rmse": 6.428554413900811,
+      "pearson": 0.2948352538816218,
+      "spearman": 0.30379081248245005
+    }
+  ],
+  "feature_family_conclusions": [
+    {
+      "block": "A",
+      "name": "Canonical matchup probability",
+      "conclusion": "rejected",
+      "evidence": "Block A alone (OA) MAE was slightly worse than O0; including A with B+C (OABC) also worsened vs OBC",
+      "language": "harmful on development — small worsening"
+    },
+    {
+      "block": "B",
+      "name": "Schedule / best-of context",
+      "conclusion": "retained",
+      "evidence": "OB MAE slightly improved vs O0; retained in final OBC combination",
+      "language": "small development improvement"
+    },
+    {
+      "block": "C",
+      "name": "Restricted TOP/SUP playstyle",
+      "conclusion": "retained",
+      "evidence": "OBC (B+C combined) achieved the best development MAE among all ablation arms",
+      "language": "best development MAE in OBC combination"
+    },
+    {
+      "block": "Interactions",
+      "name": "Registered interaction terms (I1–I6)",
+      "conclusion": "none retained",
+      "evidence": "All tested interactions (G1–G6) showed slightly worse or near-neutral development MAE vs G0",
+      "language": "near-neutral to slightly worse; no interaction strictly improved"
+    }
+  ],
+  "family_ablation_results": [
+    {
+      "candidate_id": "O0",
+      "mae": 5.060352777227633,
+      "rmse": 6.433872576778955
+    },
+    {
+      "candidate_id": "OA",
+      "mae": 5.067406516859361,
+      "rmse": 6.459219551437498
+    },
+    {
+      "candidate_id": "OB",
+      "mae": 5.057281427703651,
+      "rmse": 6.427910299462339
+    },
+    {
+      "candidate_id": "OC",
+      "mae": 5.06097664920253,
+      "rmse": 6.434931640088641
+    },
+    {
+      "candidate_id": "OAB",
+      "mae": 5.07066323958913,
+      "rmse": 6.463346840471015
+    },
+    {
+      "candidate_id": "OAC",
+      "mae": 5.0681773310592515,
+      "rmse": 6.459985754436143
+    },
+    {
+      "candidate_id": "OBC",
+      "mae": 5.057221199575735,
+      "rmse": 6.428554413900811
+    },
+    {
+      "candidate_id": "OABC",
+      "mae": 5.070746683999873,
+      "rmse": 6.463764355668895
+    }
+  ],
+  "stage6g_interaction_results": [
+    {
+      "candidate_id": "G0",
+      "description": "OBC",
+      "alpha": 10.0,
+      "mae": 5.057221199575735,
+      "rmse": 6.428554413900811,
+      "pearson": 0.2948352538816218,
+      "spearman": 0.30379081248245005,
+      "delta_vs_g0": 0.0,
+      "retained": true,
+      "note": "Final selected model"
+    },
+    {
+      "candidate_id": "G1",
+      "description": "OBC + I1",
+      "alpha": 10.0,
+      "mae": 5.057534111978177,
+      "rmse": 6.428718966473993,
+      "pearson": 0.29471110745648327,
+      "spearman": 0.30355968537422306,
+      "delta_vs_g0": 0.0003129124024425778,
+      "retained": false,
+      "note": "No interaction strictly improved development MAE"
+    },
+    {
+      "candidate_id": "G2",
+      "description": "OBC + I2",
+      "alpha": 10.0,
+      "mae": 5.059337968548279,
+      "rmse": 6.4267634140495336,
+      "pearson": 0.29446478405156984,
+      "spearman": 0.30212174466082936,
+      "delta_vs_g0": 0.002116768972544314,
+      "retained": false,
+      "note": "No interaction strictly improved development MAE"
+    },
+    {
+      "candidate_id": "G5",
+      "description": "OBC + I5",
+      "alpha": 10.0,
+      "mae": 5.057221545935684,
+      "rmse": 6.428561155215869,
+      "pearson": 0.29483303633656394,
+      "spearman": 0.30378877071348104,
+      "delta_vs_g0": 3.4635994961007555e-07,
+      "retained": false,
+      "note": "No interaction strictly improved development MAE"
+    },
+    {
+      "candidate_id": "G6",
+      "description": "OBC + I6",
+      "alpha": 10.0,
+      "mae": 5.060558798921956,
+      "rmse": 6.432210258185187,
+      "pearson": 0.2935124084708021,
+      "spearman": 0.3025385189718389,
+      "delta_vs_g0": 0.0033375993462207987,
+      "retained": false,
+      "note": "No interaction strictly improved development MAE"
+    }
+  ]
+}

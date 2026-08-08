@@ -424,6 +424,14 @@ def export_dashboard_json(output_path: str = None) -> str:
         export_historical_lineup_dashboard()
     else:
         print("Historical lineup report unavailable; skipped its dashboard export.")
+
+    # Generate Model Evaluation dashboard data
+    try:
+        from data_pipeline.export_model_evaluation_data import main as export_model_evaluation_data
+        export_model_evaluation_data()
+    except Exception as e:
+        print(f"Warning: Model evaluation data export failed: {e}")
+
     return output_path
 
 

@@ -1,0 +1,1339 @@
+{
+  "generated_by": "data_pipeline/export_model_evaluation_data.py",
+  "evaluation_type": "2026 EXPOSED RETROSPECTIVE RECONSTRUCTED FANTASY SIMULATION",
+  "competition": "2026_split_1",
+  "model": "G0 (OBC Base, alpha=10.0)",
+  "period_count": 11,
+  "cumulative_score": 1445.34,
+  "pre_leaderboard_hash": "7070bf3084b4bddc8a0252a293a7563556c8a31f7c36870e8707cbf2412875d8",
+  "determinism_passed": true,
+  "determinism_runs": 2,
+  "determinism_discrepancies": [],
+  "weeks": [
+    {
+      "week": 1,
+      "stage_round": "Lock-In Round 1",
+      "starting_budget": 100.0,
+      "roster_cost": 90.0,
+      "unused_gold": 10.0,
+      "held_asset_change": 11.3,
+      "next_budget": 111.3,
+      "realized_score": 185.58,
+      "cumulative_score": 185.58,
+      "roster_raw_points": 141.1756,
+      "realized_champion_bonus": 20.2,
+      "variety_bonus": 0.15,
+      "total_points": 185.58,
+      "projected_points": 135.51,
+      "projected_base_points": 117.83,
+      "projected_champion_bonus": 15.83,
+      "prelock_cutoff": "2026-01-24T21:24:34+00:00",
+      "patch": "16.02",
+      "prediction_period_id": "period:28d589eedfce312e1ad3",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "3750eaf7d47b402b917aa13d03041bbd4169fff24a1faf5ba41eba6aa6c2cb2f",
+      "roster": [
+        {
+          "player": "Thanatos",
+          "is_coach": false,
+          "price": 15.0,
+          "predicted_champion": "Rumble",
+          "champion_outcome": {
+            "player": "Thanatos",
+            "champion": "Rumble",
+            "multiplier": 1.7,
+            "hit": false,
+            "actual_champions": [
+              "Aurora",
+              "Renekton"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 15.0,
+          "predicted_champion": "Jarvan IV",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Jarvan IV",
+            "multiplier": 1.7,
+            "hit": true,
+            "actual_champions": [
+              "Jarvan IV"
+            ],
+            "realized_bonus": 20.2
+          }
+        },
+        {
+          "player": "Quad",
+          "is_coach": false,
+          "price": 15.0,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "Quad",
+            "champion": "Azir",
+            "multiplier": 1.7,
+            "hit": false,
+            "actual_champions": [
+              "Orianna",
+              "Taliyah"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Zven",
+          "is_coach": false,
+          "price": 15.0,
+          "predicted_champion": "Yunara",
+          "champion_outcome": {
+            "player": "Zven",
+            "champion": "Yunara",
+            "multiplier": 1.7,
+            "hit": false,
+            "actual_champions": [
+              "Sivir",
+              "Varus"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 15.0,
+          "predicted_champion": "Alistar",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Alistar",
+            "multiplier": 1.7,
+            "hit": false,
+            "actual_champions": [
+              "Bard",
+              "Rakan"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "coach::Sentinels",
+          "is_coach": true,
+          "price": 15.0,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 2,
+      "stage_round": "Lock-In Round 2",
+      "starting_budget": 111.3,
+      "roster_cost": 96.4,
+      "unused_gold": 14.9,
+      "held_asset_change": -3.8,
+      "next_budget": 107.5,
+      "realized_score": 104.55,
+      "cumulative_score": 290.13,
+      "roster_raw_points": 85.13883333333334,
+      "realized_champion_bonus": 1.99,
+      "variety_bonus": 0.2,
+      "total_points": 104.55,
+      "projected_points": 131.27,
+      "projected_base_points": 109.39,
+      "projected_champion_bonus": 5.11,
+      "prelock_cutoff": "2026-01-31T21:07:01+00:00",
+      "patch": "16.02",
+      "prediction_period_id": "period:70fac0200d695853ccdc",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "5d4af45e824429472fd8f4ef9367e3335494634ef16b9e8b24b68607e9d37bc3",
+      "roster": [
+        {
+          "player": "Thanatos",
+          "is_coach": false,
+          "price": 15.4,
+          "predicted_champion": "K'Sante",
+          "champion_outcome": {
+            "player": "Thanatos",
+            "champion": "K'Sante",
+            "multiplier": 1.5,
+            "hit": true,
+            "actual_champions": [
+              "Aurora",
+              "K'Sante"
+            ],
+            "realized_bonus": 1.28
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 19.0,
+          "predicted_champion": "Xin Zhao",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Xin Zhao",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Nocturne",
+              "Vi"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Quad",
+          "is_coach": false,
+          "price": 17.1,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "Quad",
+            "champion": "Azir",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Orianna",
+              "Syndra",
+              "Taliyah"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Yeon",
+          "is_coach": false,
+          "price": 11.8,
+          "predicted_champion": "Yunara",
+          "champion_outcome": {
+            "player": "Yeon",
+            "champion": "Yunara",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Corki"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Ignar",
+          "is_coach": false,
+          "price": 15.0,
+          "predicted_champion": "Alistar",
+          "champion_outcome": {
+            "player": "Ignar",
+            "champion": "Alistar",
+            "multiplier": 1.5,
+            "hit": true,
+            "actual_champions": [
+              "Alistar",
+              "Rell"
+            ],
+            "realized_bonus": 0.7
+          }
+        },
+        {
+          "player": "coach::FlyQuest",
+          "is_coach": true,
+          "price": 18.1,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 3,
+      "stage_round": "Lock-In Round 3",
+      "starting_budget": 107.5,
+      "roster_cost": 104.2,
+      "unused_gold": 3.3,
+      "held_asset_change": -4.1,
+      "next_budget": 103.4,
+      "realized_score": 107.11,
+      "cumulative_score": 397.24,
+      "roster_raw_points": 92.37653333333333,
+      "realized_champion_bonus": 0.76,
+      "variety_bonus": 0.15,
+      "total_points": 107.11,
+      "projected_points": 130.43,
+      "projected_base_points": 113.42,
+      "projected_champion_bonus": 5.58,
+      "prelock_cutoff": "2026-02-07T21:11:32+00:00",
+      "patch": "16.03",
+      "prediction_period_id": "period:b2e5a5987eefaa30eea2",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "02b8c751889a0483ce30484f37db674a4cd9fac5d07789da0ff34d26eb68291c",
+      "roster": [
+        {
+          "player": "Impact",
+          "is_coach": false,
+          "price": 16.5,
+          "predicted_champion": "Renekton",
+          "champion_outcome": {
+            "player": "Impact",
+            "champion": "Renekton",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Aatrox",
+              "Ornn",
+              "Sion"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 17.1,
+          "predicted_champion": "Vi",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Vi",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Trundle",
+              "Vi",
+              "Xin Zhao"
+            ],
+            "realized_bonus": 0.76
+          }
+        },
+        {
+          "player": "Quad",
+          "is_coach": false,
+          "price": 18.0,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "Quad",
+            "champion": "Azir",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Orianna",
+              "Ryze"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Massu",
+          "is_coach": false,
+          "price": 18.9,
+          "predicted_champion": "Yunara",
+          "champion_outcome": {
+            "player": "Massu",
+            "champion": "Yunara",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Ezreal",
+              "Sion"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "CoreJJ",
+          "is_coach": false,
+          "price": 14.7,
+          "predicted_champion": "Rakan",
+          "champion_outcome": {
+            "player": "CoreJJ",
+            "champion": "Rakan",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Alistar",
+              "Karma",
+              "Nami"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "coach::FlyQuest",
+          "is_coach": true,
+          "price": 19.0,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 4,
+      "stage_round": "Lock-In Round 4",
+      "starting_budget": 103.4,
+      "roster_cost": 97.3,
+      "unused_gold": 6.1,
+      "held_asset_change": 6.8,
+      "next_budget": 110.2,
+      "realized_score": 147.02,
+      "cumulative_score": 544.26,
+      "roster_raw_points": 130.25373333333334,
+      "realized_champion_bonus": 3.4,
+      "variety_bonus": 0.1,
+      "total_points": 147.02,
+      "projected_points": 119.39,
+      "projected_base_points": 108.53,
+      "projected_champion_bonus": 3.91,
+      "prelock_cutoff": "2026-02-14T21:11:50+00:00",
+      "patch": "16.03",
+      "prediction_period_id": "period:0433ceb2175e1870c17a",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "8ca09d8e0825ab627b4a18a2c5ef56f704fff7ea12f77e1129bc5993caa85b94",
+      "roster": [
+        {
+          "player": "Impact",
+          "is_coach": false,
+          "price": 16.8,
+          "predicted_champion": "Sion",
+          "champion_outcome": {
+            "player": "Impact",
+            "champion": "Sion",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Galio",
+              "Gnar",
+              "Kennen",
+              "Sion",
+              "Zaahen"
+            ],
+            "realized_bonus": 0.84
+          }
+        },
+        {
+          "player": "KryRa",
+          "is_coach": false,
+          "price": 16.0,
+          "predicted_champion": "Vi",
+          "champion_outcome": {
+            "player": "KryRa",
+            "champion": "Vi",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Dr. Mundo",
+              "Ivern",
+              "Nocturne",
+              "Pantheon",
+              "Sejuani"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "APA",
+          "is_coach": false,
+          "price": 17.2,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "APA",
+            "champion": "Azir",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Galio",
+              "Orianna",
+              "Taliyah"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Zven",
+          "is_coach": false,
+          "price": 16.3,
+          "predicted_champion": "Yunara",
+          "champion_outcome": {
+            "player": "Zven",
+            "champion": "Yunara",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Corki",
+              "Sivir",
+              "Yunara"
+            ],
+            "realized_bonus": 2.56
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 15.3,
+          "predicted_champion": "Alistar",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Alistar",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Bard",
+              "Nami",
+              "Neeko"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 15.7,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 5,
+      "stage_round": "Lock-In Round 5",
+      "starting_budget": 110.2,
+      "roster_cost": 97.5,
+      "unused_gold": 12.7,
+      "held_asset_change": 11.2,
+      "next_budget": 121.4,
+      "realized_score": 168.55,
+      "cumulative_score": 712.81,
+      "roster_raw_points": 148.43123333333332,
+      "realized_champion_bonus": 4.8,
+      "variety_bonus": 0.1,
+      "total_points": 168.55,
+      "projected_points": 121.88,
+      "projected_base_points": 110.8,
+      "projected_champion_bonus": 3.64,
+      "prelock_cutoff": "2026-02-20T21:09:00+00:00",
+      "patch": "16.04",
+      "prediction_period_id": "period:d52af7b72997e89c8ea6",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "853b7cba2568ef81f1efaf8f222db04436c24fe7de2b8609a77181cc557e1786",
+      "roster": [
+        {
+          "player": "Thanatos",
+          "is_coach": false,
+          "price": 13.6,
+          "predicted_champion": "Rumble",
+          "champion_outcome": {
+            "player": "Thanatos",
+            "champion": "Rumble",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Gnar",
+              "K'Sante",
+              "Rek'Sai"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 15.3,
+          "predicted_champion": "Vi",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Vi",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Malphite",
+              "Nocturne",
+              "Wukong"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Quid",
+          "is_coach": false,
+          "price": 14.9,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "Quid",
+            "champion": "Azir",
+            "multiplier": 1.5,
+            "hit": true,
+            "actual_champions": [
+              "Ahri",
+              "Azir",
+              "Taliyah"
+            ],
+            "realized_bonus": 0.85
+          }
+        },
+        {
+          "player": "Zven",
+          "is_coach": false,
+          "price": 18.0,
+          "predicted_champion": "Yunara",
+          "champion_outcome": {
+            "player": "Zven",
+            "champion": "Yunara",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Aphelios",
+              "Varus",
+              "Yunara"
+            ],
+            "realized_bonus": 3.95
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 18.3,
+          "predicted_champion": "Alistar",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Alistar",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Lulu",
+              "Nautilus",
+              "Thresh"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 17.4,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 6,
+      "stage_round": "Lock-In Round 6",
+      "starting_budget": 121.4,
+      "roster_cost": 108.8,
+      "unused_gold": 12.6,
+      "held_asset_change": -12.3,
+      "next_budget": 109.1,
+      "realized_score": 70.59,
+      "cumulative_score": 783.4,
+      "roster_raw_points": 62.7498,
+      "realized_champion_bonus": 1.42,
+      "variety_bonus": 0.1,
+      "total_points": 70.59,
+      "projected_points": 123.39,
+      "projected_base_points": 112.17,
+      "projected_champion_bonus": 3.14,
+      "prelock_cutoff": "2026-02-27T21:09:38+00:00",
+      "patch": "16.04",
+      "prediction_period_id": "period:b628e8f047ec274b8698",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "32f10a9b26c5bcb47838a916a66c043dce19e0b07b7b9f7d26dd1e4eba412178",
+      "roster": [
+        {
+          "player": "Impact",
+          "is_coach": false,
+          "price": 13.4,
+          "predicted_champion": "Rumble",
+          "champion_outcome": {
+            "player": "Impact",
+            "champion": "Rumble",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Jax",
+              "Renekton",
+              "Sion",
+              "Yorick"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Blaber",
+          "is_coach": false,
+          "price": 19.3,
+          "predicted_champion": "Wukong",
+          "champion_outcome": {
+            "player": "Blaber",
+            "champion": "Wukong",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Malphite",
+              "Nocturne",
+              "Vi"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Quid",
+          "is_coach": false,
+          "price": 15.5,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "Quid",
+            "champion": "Azir",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Aurora",
+              "Galio",
+              "Orianna",
+              "Ryze"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Zven",
+          "is_coach": false,
+          "price": 20.6,
+          "predicted_champion": "Varus",
+          "champion_outcome": {
+            "player": "Zven",
+            "champion": "Varus",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Corki",
+              "Mel",
+              "Yunara"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 20.9,
+          "predicted_champion": "Nami",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Nami",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Nami",
+              "Nautilus",
+              "Neeko"
+            ],
+            "realized_bonus": 1.42
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 19.1,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 7,
+      "stage_round": "Spring Round 1",
+      "starting_budget": 109.1,
+      "roster_cost": 96.4,
+      "unused_gold": 12.7,
+      "held_asset_change": -3.8,
+      "next_budget": 105.3,
+      "realized_score": 101.9,
+      "cumulative_score": 885.3,
+      "roster_raw_points": 85.4692,
+      "realized_champion_bonus": 3.14,
+      "variety_bonus": 0.15,
+      "total_points": 101.9,
+      "projected_points": 122.4,
+      "projected_base_points": 106.43,
+      "projected_champion_bonus": 3.91,
+      "prelock_cutoff": "2026-04-04T20:17:46+00:00",
+      "patch": "16.07",
+      "prediction_period_id": "period:74efed7e4a28a304cc30",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "4eef644269733778384e9b56b8a3f70122c2ca97e0b39997434191fb40710860",
+      "roster": [
+        {
+          "player": "Impact",
+          "is_coach": false,
+          "price": 12.2,
+          "predicted_champion": "Sion",
+          "champion_outcome": {
+            "player": "Impact",
+            "champion": "Sion",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Galio",
+              "Gnar",
+              "Volibear"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Blaber",
+          "is_coach": false,
+          "price": 17.6,
+          "predicted_champion": "Xin Zhao",
+          "champion_outcome": {
+            "player": "Blaber",
+            "champion": "Xin Zhao",
+            "multiplier": 1.5,
+            "hit": true,
+            "actual_champions": [
+              "Poppy",
+              "Sejuani",
+              "Xin Zhao"
+            ],
+            "realized_bonus": 0.09
+          }
+        },
+        {
+          "player": "Quid",
+          "is_coach": false,
+          "price": 13.4,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "Quid",
+            "champion": "Azir",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Azir",
+              "Galio",
+              "Ryze"
+            ],
+            "realized_bonus": 0.46
+          }
+        },
+        {
+          "player": "FBI",
+          "is_coach": false,
+          "price": 17.8,
+          "predicted_champion": "Ezreal",
+          "champion_outcome": {
+            "player": "FBI",
+            "champion": "Ezreal",
+            "multiplier": 1.5,
+            "hit": false,
+            "actual_champions": [
+              "Ashe",
+              "Yunara"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 18.3,
+          "predicted_champion": "Nami",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Nami",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Bard",
+              "Lulu",
+              "Nami"
+            ],
+            "realized_bonus": 2.6
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 17.1,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 8,
+      "stage_round": "Spring Round 2",
+      "starting_budget": 105.3,
+      "roster_cost": 96.6,
+      "unused_gold": 8.7,
+      "held_asset_change": -3.1,
+      "next_budget": 102.2,
+      "realized_score": 105.45,
+      "cumulative_score": 990.75,
+      "roster_raw_points": 88.37665,
+      "realized_champion_bonus": 3.32,
+      "variety_bonus": 0.15,
+      "total_points": 105.45,
+      "projected_points": 122.0,
+      "projected_base_points": 106.09,
+      "projected_champion_bonus": 2.61,
+      "prelock_cutoff": "2026-04-11T20:08:26+00:00",
+      "patch": "16.07",
+      "prediction_period_id": "period:fc48b32f725285a09f66",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "e60bd7d102846a60b2625c5bfb726cd94ff77aedefcc602bebae8ebd9429ca72",
+      "roster": [
+        {
+          "player": "Thanatos",
+          "is_coach": false,
+          "price": 14.0,
+          "predicted_champion": "Gnar",
+          "champion_outcome": {
+            "player": "Thanatos",
+            "champion": "Gnar",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Gnar",
+              "Gwen",
+              "Renekton"
+            ],
+            "realized_bonus": 1.79
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 16.8,
+          "predicted_champion": "Pantheon",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Pantheon",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Nocturne",
+              "Vi",
+              "Wukong"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Quid",
+          "is_coach": false,
+          "price": 16.2,
+          "predicted_champion": "Orianna",
+          "champion_outcome": {
+            "player": "Quid",
+            "champion": "Orianna",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Aurora",
+              "Ryze"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Zven",
+          "is_coach": false,
+          "price": 16.9,
+          "predicted_champion": "Yunara",
+          "champion_outcome": {
+            "player": "Zven",
+            "champion": "Yunara",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Corki",
+              "Jhin",
+              "Yunara"
+            ],
+            "realized_bonus": 1.53
+          }
+        },
+        {
+          "player": "Lyonz",
+          "is_coach": false,
+          "price": 16.1,
+          "predicted_champion": "Nami",
+          "champion_outcome": {
+            "player": "Lyonz",
+            "champion": "Nami",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Anivia",
+              "Lulu"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 16.6,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 9,
+      "stage_round": "Spring Round 3",
+      "starting_budget": 102.2,
+      "roster_cost": 94.8,
+      "unused_gold": 7.4,
+      "held_asset_change": 4.5,
+      "next_budget": 106.7,
+      "realized_score": 150.81,
+      "cumulative_score": 1141.56,
+      "roster_raw_points": 118.06723333333333,
+      "realized_champion_bonus": 7.61,
+      "variety_bonus": 0.2,
+      "total_points": 150.81,
+      "projected_points": 127.55,
+      "projected_base_points": 106.29,
+      "projected_champion_bonus": 3.83,
+      "prelock_cutoff": "2026-04-18T20:07:45+00:00",
+      "patch": "16.08",
+      "prediction_period_id": "period:9ad9f360f988761d91c1",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "3aabee31cfbff5b03f1defc8f32b40458ad442670ab3f926ada202d0649d8bd8",
+      "roster": [
+        {
+          "player": "Impact",
+          "is_coach": false,
+          "price": 11.1,
+          "predicted_champion": "Gnar",
+          "champion_outcome": {
+            "player": "Impact",
+            "champion": "Gnar",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Renekton",
+              "Rumble",
+              "Shen"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 16.3,
+          "predicted_champion": "Xin Zhao",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Xin Zhao",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Vi",
+              "Wukong"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Quid",
+          "is_coach": false,
+          "price": 16.2,
+          "predicted_champion": "Aurora",
+          "champion_outcome": {
+            "player": "Quid",
+            "champion": "Aurora",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Ahri",
+              "Aurora",
+              "Azir"
+            ],
+            "realized_bonus": 0.73
+          }
+        },
+        {
+          "player": "Massu",
+          "is_coach": false,
+          "price": 16.6,
+          "predicted_champion": "Ezreal",
+          "champion_outcome": {
+            "player": "Massu",
+            "champion": "Ezreal",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Corki",
+              "Ezreal",
+              "Jhin"
+            ],
+            "realized_bonus": 1.93
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 18.0,
+          "predicted_champion": "Nami",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Nami",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Nami",
+              "Seraphine"
+            ],
+            "realized_bonus": 4.95
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 16.6,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 10,
+      "stage_round": "Spring Round 4",
+      "starting_budget": 106.7,
+      "roster_cost": 99.3,
+      "unused_gold": 7.4,
+      "held_asset_change": 7.6,
+      "next_budget": 114.3,
+      "realized_score": 166.35,
+      "cumulative_score": 1307.91,
+      "roster_raw_points": 135.36751666666666,
+      "realized_champion_bonus": 3.26,
+      "variety_bonus": 0.2,
+      "total_points": 166.35,
+      "projected_points": 126.82,
+      "projected_base_points": 105.68,
+      "projected_champion_bonus": 2.66,
+      "prelock_cutoff": "2026-04-25T20:09:02+00:00",
+      "patch": "16.08",
+      "prediction_period_id": "period:b0a60cf2f3d3558f5e56",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "06177caff12c1b63a529d6b3f47b0d890b640eb9e75ff3e6d0c378b6566dec00",
+      "roster": [
+        {
+          "player": "Impact",
+          "is_coach": false,
+          "price": 12.4,
+          "predicted_champion": "Sion",
+          "champion_outcome": {
+            "player": "Impact",
+            "champion": "Sion",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Renekton",
+              "Varus",
+              "Zaahen"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 16.4,
+          "predicted_champion": "Jarvan IV",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Jarvan IV",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Sejuani",
+              "Xin Zhao"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Quid",
+          "is_coach": false,
+          "price": 14.9,
+          "predicted_champion": "Annie",
+          "champion_outcome": {
+            "player": "Quid",
+            "champion": "Annie",
+            "multiplier": 1.5,
+            "hit": true,
+            "actual_champions": [
+              "Annie",
+              "LeBlanc",
+              "Yone"
+            ],
+            "realized_bonus": 1.26
+          }
+        },
+        {
+          "player": "Massu",
+          "is_coach": false,
+          "price": 14.6,
+          "predicted_champion": "Ezreal",
+          "champion_outcome": {
+            "player": "Massu",
+            "champion": "Ezreal",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Ezreal",
+              "Varus"
+            ],
+            "realized_bonus": 2.0
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 22.5,
+          "predicted_champion": "Bard",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Bard",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Rakan",
+              "Seraphine"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 18.5,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    },
+    {
+      "week": 11,
+      "stage_round": "Spring Round 5",
+      "starting_budget": 114.3,
+      "roster_cost": 113.1,
+      "unused_gold": 1.2,
+      "held_asset_change": -0.7,
+      "next_budget": 113.6,
+      "realized_score": 137.43,
+      "cumulative_score": 1445.34,
+      "roster_raw_points": 115.33073333333333,
+      "realized_champion_bonus": 4.17,
+      "variety_bonus": 0.15,
+      "total_points": 137.43,
+      "projected_points": 128.27,
+      "projected_base_points": 111.54,
+      "projected_champion_bonus": 3.98,
+      "prelock_cutoff": "2026-05-02T20:10:20+00:00",
+      "patch": "16.09",
+      "prediction_period_id": "period:0a890f671f8ce6bbde59",
+      "point_in_time_safety_verified": true,
+      "sealed_lineup_sha256": "8063b4b4e291d2ed5850cf9a7787ee4ffe67de5a41f3bf86b0d86819dfe0f508",
+      "roster": [
+        {
+          "player": "Thanatos",
+          "is_coach": false,
+          "price": 17.3,
+          "predicted_champion": "Gnar",
+          "champion_outcome": {
+            "player": "Thanatos",
+            "champion": "Gnar",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Gnar",
+              "Ornn",
+              "Varus"
+            ],
+            "realized_bonus": 1.43
+          }
+        },
+        {
+          "player": "Inspired",
+          "is_coach": false,
+          "price": 18.9,
+          "predicted_champion": "Xin Zhao",
+          "champion_outcome": {
+            "player": "Inspired",
+            "champion": "Xin Zhao",
+            "multiplier": 1.3,
+            "hit": true,
+            "actual_champions": [
+              "Pantheon",
+              "Xin Zhao"
+            ],
+            "realized_bonus": 2.74
+          }
+        },
+        {
+          "player": "Quid",
+          "is_coach": false,
+          "price": 14.9,
+          "predicted_champion": "Azir",
+          "champion_outcome": {
+            "player": "Quid",
+            "champion": "Azir",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Annie",
+              "Yone"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Massu",
+          "is_coach": false,
+          "price": 16.1,
+          "predicted_champion": "Ezreal",
+          "champion_outcome": {
+            "player": "Massu",
+            "champion": "Ezreal",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Ashe",
+              "Jhin",
+              "Smolder"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "Vulcan",
+          "is_coach": false,
+          "price": 25.5,
+          "predicted_champion": "Bard",
+          "champion_outcome": {
+            "player": "Vulcan",
+            "champion": "Bard",
+            "multiplier": 1.3,
+            "hit": false,
+            "actual_champions": [
+              "Alistar",
+              "Neeko",
+              "Seraphine"
+            ],
+            "realized_bonus": 0.0
+          }
+        },
+        {
+          "player": "coach::Cloud9",
+          "is_coach": true,
+          "price": 20.4,
+          "predicted_champion": null,
+          "champion_outcome": null
+        }
+      ]
+    }
+  ]
+}

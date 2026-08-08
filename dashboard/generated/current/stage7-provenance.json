@@ -1,0 +1,33 @@
+{
+  "generated_by": "data_pipeline/export_model_evaluation_data.py",
+  "stage": "7",
+  "evaluation_type": "2026 EXPOSED RETROSPECTIVE RECONSTRUCTED FANTASY SIMULATION",
+  "competition": "2026_split_1",
+  "player_model": {
+    "candidate_id": "G0",
+    "architecture": "OBC",
+    "alpha": 10.0,
+    "policy_hash": "17e1d07677c587287cc94a690e6e53f98ae75672b29fa24d9cc747dff83fe890",
+    "interaction_policy_canonical_hash": "17e1d07677c587287cc94a690e6e53f98ae75672b29fa24d9cc747dff83fe890"
+  },
+  "champion_predictor": {
+    "id": "CP00",
+    "canonical_hash": "83acf980ee71e6b8d0fca077b24d1e57fe2273dbf5cb88927614f22b304f2621"
+  },
+  "pricing_policy": "0a5b80bc07124f0ef574844764080f3a62b7c81ccd2c339666bf5532649defc2",
+  "budget_policy": "97e58d9c1adb7cd722ecd9f7a4cc0300593f34c04f6a0d4d6926f0eac5f0df2e",
+  "scoring_config": "3063a00aaf9daa64d547863e8cfc06934409ac08b315be6683ec80dc9afa0936",
+  "simulation": {
+    "determinism_passed": true,
+    "validation_runs": 2,
+    "pre_leaderboard_seal_sha256": "7070bf3084b4bddc8a0252a293a7563556c8a31f7c36870e8707cbf2412875d8",
+    "simulation_freeze_hash": null
+  },
+  "repository_state": {
+    "active_branch": "main",
+    "active_commit_hash": "4badabbe024269b82c04b315dd9f0753ea69f96c",
+    "git_status": "?? fantasy_prediction/run_stage7_simulation.py\n",
+    "git_diff_check_passed": true,
+    "git_diff_snippet": ""
+  }
+}
