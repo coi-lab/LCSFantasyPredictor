@@ -366,6 +366,172 @@ class TestM3DashboardDiagnostics(unittest.TestCase):
             self.assertNotIn("M4", progression_ids)
             self.assertNotIn("M5", progression_ids)
 
+    # Usability Patch - Player-Level Evidence Tests
+    def test_m3_rows_have_player_name(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("player_name", r)
+            self.assertTrue(isinstance(r["player_name"], str) and len(r["player_name"]) > 0)
+
+    def test_m3_rows_have_role(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        allowed = {"top", "jgl", "mid", "bot", "sup"}
+        for r in data:
+            self.assertIn("role", r)
+            self.assertIn(r["role"], allowed)
+
+    def test_m3_rows_have_team(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("player_team_at_period", r)
+            self.assertTrue(isinstance(r["player_team_at_period"], str) and len(r["player_team_at_period"]) > 0)
+
+    def test_m3_rows_have_opponent(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("opponent_team_at_period", r)
+            self.assertTrue(isinstance(r["opponent_team_at_period"], str))
+
+    def test_m3_rows_have_period(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("week_id", r)
+            self.assertTrue(isinstance(r["week_id"], str) and len(r["week_id"]) > 0)
+
+    def test_m3_rows_have_prediction(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("projection_m3", r)
+            self.assertTrue(isinstance(r["projection_m3"], (int, float)))
+
+    def test_m3_rows_have_actual_points(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("actual_player_only_points", r)
+            self.assertTrue(isinstance(r["actual_player_only_points"], (int, float)))
+
+    def test_m3_rows_have_signed_error(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("signed_error", r)
+            self.assertTrue(isinstance(r["signed_error"], (int, float)))
+
+    def test_m3_rows_have_absolute_error(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("absolute_error", r)
+            self.assertTrue(isinstance(r["absolute_error"], (int, float)))
+            self.assertTrue(r["absolute_error"] >= 0)
+
+    def test_m3_multi_opponent_display(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        multi_opps = [r for r in data if ";" in r["opponent_team_at_period"]]
+        self.assertTrue(len(multi_opps) > 0, "No multi-opponent periods found in diagnostic data.")
+        for r in multi_opps:
+            opps = r["opponent_team_at_period"].split("; ")
+            self.assertEqual(opps, sorted(opps), "Multi-opponent names must be sorted.")
+
+    def test_m3_player_table_payload(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        self.assertTrue(len(data) > 0)
+        for r in data:
+            self.assertIn("games_played_in_period", r)
+            self.assertIn("dnp_status", r)
+            self.assertIn("series_played_in_period", r)
+
+    def test_m3_period_filter(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        periods = {r["week_id"] for r in data}
+        self.assertTrue(len(periods) > 1)
+        for period in periods:
+            filtered = [r for r in data if r["week_id"] == period]
+            self.assertTrue(len(filtered) > 0)
+            self.assertTrue(all(r["week_id"] == period for r in filtered))
+
+    def test_m3_team_filter(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        teams = {r["player_team_at_period"] for r in data if r["player_team_at_period"]}
+        self.assertTrue(len(teams) > 1)
+        for team in teams:
+            filtered = [r for r in data if r["player_team_at_period"] == team]
+            self.assertTrue(len(filtered) > 0)
+            self.assertTrue(all(r["player_team_at_period"] == team for r in filtered))
+
+    def test_m3_opponent_filter(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        opponents = set()
+        for r in data:
+            for opp in r["opponent_team_at_period"].split("; "):
+                if opp and opp != "Bye/TBD":
+                    opponents.add(opp)
+        self.assertTrue(len(opponents) > 1)
+        for opp in opponents:
+            filtered = [r for r in data if opp in r["opponent_team_at_period"].split("; ")]
+            self.assertTrue(len(filtered) > 0)
+
+    def test_m3_role_filter(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        roles = {r["role"] for r in data}
+        self.assertEqual(roles, {"top", "jgl", "mid", "bot", "sup"})
+        for role in roles:
+            filtered = [r for r in data if r["role"] == role]
+            self.assertTrue(len(filtered) > 0)
+
+    def test_m3_filtered_metrics(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        filtered = [r for r in data if r["role"] == "mid"]
+        n = len(filtered)
+        self.assertTrue(n > 0)
+        mae = sum(r["absolute_error"] for r in filtered) / n
+        bias = sum(r["signed_error"] for r in filtered) / n
+        self.assertAlmostEqual(mae, sum(r["absolute_error"] for r in filtered) / n, places=4)
+        self.assertAlmostEqual(bias, sum(r["signed_error"] for r in filtered) / n, places=4)
+
+    def test_m3_detail_panel_fields(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        required_detail_fields = {
+            "player_id", "player_name", "role", "player_team_at_period", "opponent_team_at_period",
+            "week_id", "projection_m3", "actual_player_only_points", "signed_error", "absolute_error",
+            "games_played_in_period", "series_played_in_period", "dnp_status",
+            "player_history_count", "m0_source_count", "m0_fallback_level", "prior_effective_evidence",
+            "prior_player_rating", "prior_residual_uncertainty", "prior_role_relative_rating",
+            "prior_role_adjusted_kp", "prior_core_state", "prior_team_state", "prior_team_strength",
+            "recent_team_change", "previous_team_id", "periods_since_team_change",
+            "target_cutoff", "model_artifact_sha256", "data_quality_status"
+        }
+        for r in data:
+            for field in required_detail_fields:
+                self.assertIn(field, r, f"Row is missing detail field: {field}")
+
+    def test_m3_active_table_uses_m3_only(self):
+        with open(DIAG_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        for r in data:
+            self.assertIn("projection_m3", r)
+            self.assertNotIn("projection_g0", r)
+            self.assertNotIn("projection_obc", r)
+
+    def test_m3_dashboard_no_agent_runs_dependency(self):
+        script_content = (ROOT / "scripts/export_m3_diagnostics.py").read_text(encoding="utf-8")
+        self.assertNotIn(".agent-runs", script_content)
+
 
 if __name__ == "__main__":
     unittest.main()

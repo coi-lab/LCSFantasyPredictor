@@ -11,8 +11,8 @@ let evalLeaderboard = null;
 let evalProvenance = null;
 let evalM3Diagnostics = null;
 let evalM3DiagSummary = null;
-let m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', opponent: 'ALL', search: '' };
-let m3DiagSort = { col: 'absolute_error', dir: 'desc' };
+let m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', opponent: 'ALL', search: '', dnp: 'ALL' };
+let m3DiagSort = { col: 'default', dir: 'asc' };
 let selectedDiagPlayerPeriod = null;
 let m3GroupTabActive = 'week';
 let m3DiagCurrentPage = 1;
@@ -2022,11 +2022,11 @@ function setupEvalTabs() {
       if (subviewEl) subviewEl.style.display = 'block';
 
       if (targetSubviewId === 'eval-development') {
-        renderEvalDevelopment();
+        renderM3Diagnostics();
       } else if (targetSubviewId === 'eval-reconstructed') {
         renderEvalReconstructed();
       } else if (targetSubviewId === 'eval-diagnostics') {
-        renderM3Diagnostics();
+        renderEvalDevelopment();
       } else if (targetSubviewId === 'eval-archived') {
         renderHistoricalLineups();
       }
@@ -2047,11 +2047,11 @@ function renderModelEvaluation() {
   const activeSubviewId = activeBtn ? activeBtn.dataset.subview : 'eval-development';
 
   if (activeSubviewId === 'eval-development') {
-    renderEvalDevelopment();
+    renderM3Diagnostics();
   } else if (activeSubviewId === 'eval-reconstructed') {
     renderEvalReconstructed();
   } else if (activeSubviewId === 'eval-diagnostics') {
-    renderM3Diagnostics();
+    renderEvalDevelopment();
   } else if (activeSubviewId === 'eval-archived') {
     renderHistoricalLineups();
   }
@@ -2469,7 +2469,7 @@ function renderReconstructedWeekDetail(weekNum) {
 function renderM3Diagnostics() {
   if (!evalM3Diagnostics || evalM3Diagnostics.length === 0) {
     document.getElementById('m3DiagnosticsTableBody').innerHTML = `
-      <tr><td colspan="9" style="text-align: center; padding: 20px; color: var(--text-muted);">No diagnostic data loaded.</td></tr>
+      <tr><td colspan="11" style="text-align: center; padding: 20px; color: var(--text-muted);">No diagnostic data loaded.</td></tr>
     `;
     return;
   }
@@ -2548,16 +2548,29 @@ function renderM3Diagnostics() {
     });
   }
 
+  const dnpSelect = document.getElementById('m3FilterDnp');
+  if (dnpSelect && !dnpSelect.dataset.wired) {
+    dnpSelect.dataset.wired = 'true';
+    dnpSelect.value = m3DiagFilters.dnp;
+    dnpSelect.addEventListener('change', (e) => {
+      m3DiagFilters.dnp = e.target.value;
+      m3DiagCurrentPage = 1;
+      renderM3Diagnostics();
+    });
+  }
+
   const resetBtn = document.getElementById('m3ResetFiltersBtn');
   if (resetBtn && !resetBtn.dataset.wired) {
     resetBtn.dataset.wired = 'true';
     resetBtn.addEventListener('click', () => {
-      m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', opponent: 'ALL', search: '' };
+      m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', opponent: 'ALL', search: '', dnp: 'ALL' };
+      m3DiagSort = { col: 'default', dir: 'asc' };
       if (searchInput) searchInput.value = '';
       if (weekSelect) weekSelect.value = 'ALL';
       if (roleSelect) roleSelect.value = 'ALL';
       if (teamSelect) teamSelect.value = 'ALL';
       if (opponentSelect) opponentSelect.value = 'ALL';
+      if (dnpSelect) dnpSelect.value = 'ALL';
       m3DiagCurrentPage = 1;
       renderM3Diagnostics();
     });
@@ -2603,27 +2616,65 @@ function renderM3Diagnostics() {
       const s = m3DiagFilters.search.toLowerCase();
       if (!r.player_name.toLowerCase().includes(s)) return false;
     }
+    if (m3DiagFilters.dnp !== 'ALL' && r.dnp_status !== m3DiagFilters.dnp) return false;
     return true;
   });
 
   const sortCol = m3DiagSort.col;
   const sortDir = m3DiagSort.dir === 'asc' ? 1 : -1;
-  filtered.sort((a, b) => {
-    let valA = a[sortCol];
-    let valB = b[sortCol];
-    if (typeof valA === 'string') {
-      return valA.localeCompare(valB) * sortDir;
-    }
-    if (valA === null || valA === undefined) return 1;
-    if (valB === null || valB === undefined) return -1;
-    return (valA - valB) * sortDir;
-  });
+
+  if (sortCol === 'default') {
+    const roleOrder = { 'top': 0, 'jgl': 1, 'mid': 2, 'bot': 3, 'sup': 4 };
+    filtered.sort((a, b) => {
+      // 1. Period (target_cutoff) ascending
+      const periodA = a.target_cutoff || '';
+      const periodB = b.target_cutoff || '';
+      if (periodA !== periodB) {
+        return periodA.localeCompare(periodB);
+      }
+      // 2. Role order TOP -> JGL -> MID -> BOT -> SUP
+      const roleA = roleOrder[(a.role || '').toLowerCase()] ?? 5;
+      const roleB = roleOrder[(b.role || '').toLowerCase()] ?? 5;
+      if (roleA !== roleB) {
+        return roleA - roleB;
+      }
+      // 3. Player name
+      const nameA = a.player_name || '';
+      const nameB = b.player_name || '';
+      return nameA.localeCompare(nameB);
+    });
+  } else {
+    filtered.sort((a, b) => {
+      let valA = a[sortCol];
+      let valB = b[sortCol];
+      if (typeof valA === 'string') {
+        return valA.localeCompare(valB) * sortDir;
+      }
+      if (valA === null || valA === undefined) return 1;
+      if (valB === null || valB === undefined) return -1;
+      return (valA - valB) * sortDir;
+    });
+  }
 
   // 4. Global performance summary
   const sumAbsError = filtered.reduce((acc, r) => acc + r.absolute_error, 0);
   const sumSignedError = filtered.reduce((acc, r) => acc + r.signed_error, 0);
-  const globalMae = filtered.length > 0 ? (sumAbsError / filtered.length) : 0;
-  const globalMse = filtered.length > 0 ? (sumSignedError / filtered.length) : 0;
+  const sumActual = filtered.reduce((acc, r) => acc + r.actual_player_only_points, 0);
+  const sumPred = filtered.reduce((acc, r) => acc + r.projection_m3, 0);
+
+  const n = filtered.length;
+  const mae = n > 0 ? (sumAbsError / n) : 0;
+  const bias = n > 0 ? (sumSignedError / n) : 0;
+  const meanActual = n > 0 ? (sumActual / n) : 0;
+  const meanPred = n > 0 ? (sumPred / n) : 0;
+
+  function getMedian(arr) {
+    if (arr.length === 0) return 0;
+    const sorted = [...arr].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+  const medianAbsError = getMedian(filtered.map(r => r.absolute_error));
 
   let exactCount = 0;
   let overCount = 0;
@@ -2636,23 +2687,39 @@ function renderM3Diagnostics() {
 
   document.getElementById('m3DiagnosticsGlobalStats').innerHTML = `
     <div class="historical-summary-card" style="padding: 10px;">
-      <span style="font-size: 11px;">Exposed MAE</span>
-      <strong style="font-size: 18px; color: #fff;">${globalMae.toFixed(3)}</strong>
-      <small style="font-size: 10px;">on ${filtered.length} rows</small>
+      <span style="font-size: 11px;">Filtered N</span>
+      <strong style="font-size: 18px; color: #fff;">${n}</strong>
+      <small style="font-size: 10px;">evaluated players</small>
+    </div>
+    <div class="historical-summary-card" style="padding: 10px;">
+      <span style="font-size: 11px;">MAE</span>
+      <strong style="font-size: 18px; color: #fff;">${mae.toFixed(3)}</strong>
+      <small style="font-size: 10px;">Median: ${medianAbsError.toFixed(3)}</small>
     </div>
     <div class="historical-summary-card" style="padding: 10px;">
       <span style="font-size: 11px;">Bias (Mean Err)</span>
-      <strong style="font-size: 18px; color: ${globalMse >= 0 ? '#00e676' : '#ff1744'};">${globalMse >= 0 ? '+' : ''}${globalMse.toFixed(3)}</strong>
-      <small style="font-size: 10px;">${globalMse >= 0 ? 'underpredicted' : 'overpredicted'}</small>
+      <strong style="font-size: 18px; color: ${bias >= 0 ? '#00e676' : '#ff1744'};">${bias >= 0 ? '+' : ''}${bias.toFixed(3)}</strong>
+      <small style="font-size: 10px;">${bias >= 0 ? 'underpredicted' : 'overpredicted'}</small>
     </div>
-    <div class="historical-summary-card" style="padding: 10px;">
-      <span style="font-size: 11px;">Accuracy Split</span>
-      <div style="font-size: 11px; margin-top: 5px; color: var(--text-muted); font-weight: 700;">
-        <span style="color:#00e676;">${underCount} U</span> |
-        <span style="color:#fff;">${exactCount} E</span> |
-        <span style="color:#ff1744;">${overCount} O</span>
+    <div class="historical-summary-card" style="padding: 10px; grid-column: span 3; display: flex; justify-content: space-around; align-items: center; background: rgba(255,255,255,0.02);">
+      <div>
+        <span style="font-size: 10px; color: var(--text-muted);">Mean Predicted</span>
+        <strong style="display: block; font-size: 14px; color: #fff;">${meanPred.toFixed(2)}</strong>
       </div>
-      <small style="font-size: 9px; display:block; margin-top:3px;">U=Under, E=Exact, O=Over</small>
+      <div style="border-left: 1px solid var(--border-color); height: 20px;"></div>
+      <div>
+        <span style="font-size: 10px; color: var(--text-muted);">Mean Actual</span>
+        <strong style="display: block; font-size: 14px; color: #fff;">${meanActual.toFixed(2)}</strong>
+      </div>
+      <div style="border-left: 1px solid var(--border-color); height: 20px;"></div>
+      <div>
+        <span style="font-size: 10px; color: var(--text-muted);">Accuracy Split</span>
+        <span style="display: block; font-size: 11px; font-weight: 700; margin-top: 2px;">
+          <span style="color:#00e676;">${underCount} U</span> |
+          <span style="color:#fff;">${exactCount} E</span> |
+          <span style="color:#ff1744;">${overCount} O</span>
+        </span>
+      </div>
     </div>
   `;
 
@@ -2672,7 +2739,7 @@ function renderM3Diagnostics() {
           <th style="text-align: left; padding: 4px;">Role</th>
           <th style="text-align: right; padding: 4px;">n</th>
           <th style="text-align: right; padding: 4px;">MAE</th>
-          <th style="text-align: right; padding: 4px;">Bias (Mean Signed)</th>
+          <th style="text-align: right; padding: 4px;">Bias</th>
         </tr>
       </thead>
       <tbody>
@@ -2694,6 +2761,102 @@ function renderM3Diagnostics() {
   `;
   document.getElementById('m3DiagnosticsRoleStats').innerHTML = roleStatsHtml;
 
+  // Period Summary Card
+  const periodCard = document.getElementById('m3PeriodSummaryCard');
+  if (periodCard) {
+    if (m3DiagFilters.week === 'ALL') {
+      periodCard.innerHTML = `
+        <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px;">
+          <h3 class="card-title">Period Summary</h3>
+        </div>
+        <div style="height: calc(100% - 40px); display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px;">
+          Select a single Period / Round from the dropdown to see weekly matchups, teams, and largest prediction misses.
+        </div>
+      `;
+    } else {
+      const weekRows = evalM3Diagnostics.filter(r => r.week_id === m3DiagFilters.week);
+      const teamsSet = new Set();
+      weekRows.forEach(r => {
+        if (r.player_team_at_period) teamsSet.add(r.player_team_at_period);
+      });
+      const teamsPlaying = [...teamsSet].sort();
+
+      const matchups = new Set();
+      const seenMatchup = new Set();
+      weekRows.forEach(r => {
+        const team = r.player_team_at_period;
+        if (!team || team === 'Bye/TBD') return;
+        const opps = (r.opponent_team_at_period || '').split(';').map(o => o.trim());
+        opps.forEach(opp => {
+          if (!opp || opp === 'Bye/TBD') return;
+          const pair = [team, opp].sort();
+          const key = pair.join(' vs ');
+          if (!seenMatchup.has(key)) {
+            seenMatchup.add(key);
+            matchups.add(`${pair[0]} vs ${pair[1]}`);
+          }
+        });
+      });
+
+      const pAbsError = weekRows.reduce((acc, r) => acc + r.absolute_error, 0);
+      const pSignedError = weekRows.reduce((acc, r) => acc + r.signed_error, 0);
+      const pMae = weekRows.length > 0 ? (pAbsError / weekRows.length) : 0;
+      const pBias = weekRows.length > 0 ? (pSignedError / weekRows.length) : 0;
+      const pMedianAe = getMedian(weekRows.map(r => r.absolute_error));
+
+      const sortedByAbsError = [...weekRows].sort((a, b) => a.absolute_error - b.absolute_error);
+      const bestPredicted = sortedByAbsError.slice(0, 3);
+      const largestMisses = [...weekRows].sort((a, b) => b.absolute_error - a.absolute_error).slice(0, 3);
+
+      periodCard.innerHTML = `
+        <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px;">
+          <h3 class="card-title">Round Summary: ${escapeHtml(m3DiagFilters.week)}</h3>
+        </div>
+        <div style="font-size: 11.5px; line-height: 1.5; color: var(--text-muted); overflow-y: auto; max-height: 250px;">
+          <div style="margin-bottom: 10px;">
+            <strong>Teams Playing (${teamsPlaying.length}):</strong>
+            <span style="color: #fff;">${teamsPlaying.join(', ') || 'None'}</span>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <strong>Matchups:</strong>
+            <span style="color: #fff;">${[...matchups].join(' | ') || 'No scheduled games (Bye)'}</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; background: rgba(255,255,255,0.02); padding: 8px; border-radius: 4px;">
+            <div>
+              <span style="font-size: 9px; display:block;">Players</span>
+              <strong style="color: #fff; font-size: 13px;">${weekRows.length}</strong>
+            </div>
+            <div>
+              <span style="font-size: 9px; display:block;">MAE / Med.AE</span>
+              <strong style="color: #fff; font-size: 13px;">${pMae.toFixed(2)} / ${pMedianAe.toFixed(2)}</strong>
+            </div>
+            <div>
+              <span style="font-size: 9px; display:block;">Bias</span>
+              <strong style="color: ${pBias >= 0 ? '#00e676' : '#ff1744'}; font-size: 13px;">${pBias >= 0 ? '+' : ''}${pBias.toFixed(2)}</strong>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 8px;">
+            <strong>Best Predicted Players (Smallest Error):</strong>
+            <ul style="margin: 4px 0 0; padding-left: 15px; color: #fff;">
+              ${bestPredicted.map(r => `
+                <li>${escapeHtml(r.player_name)} (${escapeHtml(r.role).toUpperCase()}) - Pred: ${r.projection_m3.toFixed(1)}, Act: ${r.actual_player_only_points.toFixed(1)} (Err: ${r.signed_error >= 0 ? '+' : ''}${r.signed_error.toFixed(1)})</li>
+              `).join('')}
+            </ul>
+          </div>
+          <div>
+            <strong>Largest Misses (Largest Error):</strong>
+            <ul style="margin: 4px 0 0; padding-left: 15px; color: #fff;">
+              ${largestMisses.map(r => `
+                <li>${escapeHtml(r.player_name)} (${escapeHtml(r.role).toUpperCase()}) - Pred: ${r.projection_m3.toFixed(1)}, Act: ${r.actual_player_only_points.toFixed(1)} (Err: ${r.signed_error >= 0 ? '+' : ''}${r.signed_error.toFixed(1)})</li>
+              `).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+  }
+
   // Update Group Diagnostics table on right
   updateM3GroupDiagnosticsTable();
 
@@ -2705,11 +2868,10 @@ function renderM3Diagnostics() {
 
   if (pageRows.length === 0) {
     document.getElementById('m3DiagnosticsTableBody').innerHTML = `
-      <tr><td colspan="9" style="text-align: center; padding: 20px; color: var(--text-muted);">No player records match selected filters.</td></tr>
+      <tr><td colspan="11" style="text-align: center; padding: 20px; color: var(--text-muted);">No player records match selected filters.</td></tr>
     `;
     document.getElementById('m3DiagnosticsPagination').innerHTML = '';
   } else {
-    // Populate Default detail view on first load or filter change
     if (!selectedDiagPlayerPeriod && pageRows.length > 0) {
       selectedDiagPlayerPeriod = pageRows[0];
     }
@@ -2733,6 +2895,8 @@ function renderM3Diagnostics() {
           <td style="text-align: right; padding: 8px; font-weight: 700; color: #fff;">${r.actual_player_only_points.toFixed(2)}</td>
           <td style="text-align: right; padding: 8px; font-weight: 700; color: ${errColor};">${errSign}${r.signed_error.toFixed(2)}</td>
           <td style="text-align: right; padding: 8px; color: var(--text-muted);">${r.absolute_error.toFixed(2)}</td>
+          <td style="text-align: right; padding: 8px;">${r.games_played_in_period}</td>
+          <td style="padding: 8px; font-weight: 700; color: ${r.dnp_status === 'PLAYED' ? '#00e676' : r.dnp_status === 'DNP' ? '#ff1744' : '#ffb703'};">${escapeHtml(r.dnp_status)}</td>
         </tr>
       `;
     }).join('');
