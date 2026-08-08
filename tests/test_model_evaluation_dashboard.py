@@ -54,21 +54,21 @@ class ModelEvaluationDashboardTests(unittest.TestCase):
     def test_model_evaluation_final_g0_identity(self) -> None:
         """Verify G0 / OBC identity, alpha=10.0, and exclusions/inclusions."""
         summary = build_model_development_summary()
-        final_model = summary["final_model"]
-        self.assertEqual(final_model["candidate_id"], "G0")
-        self.assertEqual(final_model["architecture"], "OBC")
-        self.assertEqual(final_model["alpha"], 10.0)
-        self.assertIn("B", final_model["included_blocks"])
-        self.assertIn("C", final_model["included_blocks"])
-        self.assertIn("A", final_model["excluded_blocks"])
-        self.assertEqual(len(final_model["included_registered_interactions"]), 0)
+        archived = summary["archived_downstream_candidates"][0]
+        self.assertEqual(archived["candidate_id"], "G0")
+        self.assertEqual(archived["architecture"], "OBC")
+        self.assertEqual(archived["alpha"], 10.0)
+        self.assertIn("B", archived["included_blocks"])
+        self.assertIn("C", archived["included_blocks"])
+        self.assertIn("A", archived["excluded_blocks"])
+        self.assertEqual(len(archived["included_registered_interactions"]), 0)
 
     def test_model_evaluation_stage6_metrics(self) -> None:
         """Verify that Stage 6 development MAE and RMSE are present and correct."""
         summary = build_model_development_summary()
-        final_model = summary["final_model"]
-        self.assertAlmostEqual(final_model["development_mae"], 5.057221199575735, places=6)
-        self.assertAlmostEqual(final_model["development_rmse"], 6.428554413900811, places=6)
+        archived = summary["archived_downstream_candidates"][0]
+        self.assertAlmostEqual(archived["development_mae"], 5.057221199575735, places=6)
+        self.assertAlmostEqual(archived["development_rmse"], 6.428554413900811, places=6)
 
         # Check model progression table has M0, M3, OBC
         prog = summary["model_progression"]
@@ -90,7 +90,7 @@ class ModelEvaluationDashboardTests(unittest.TestCase):
         self.assertEqual(sorted(cids), ["G0", "G1", "G2", "G5", "G6"])
 
         g0_item = next(i for i in interact if i["candidate_id"] == "G0")
-        self.assertTrue(g0_item["retained"])
+        self.assertFalse(g0_item["retained"])
         self.assertAlmostEqual(g0_item["mae"], 5.057221199575735, places=6)
 
         g1_item = next(i for i in interact if i["candidate_id"] == "G1")
@@ -184,7 +184,8 @@ class ModelEvaluationDashboardTests(unittest.TestCase):
     def test_model_evaluation_dashboard_payload(self) -> None:
         """Verify that all expected keys exist in the exported JSON files."""
         dev = build_model_development_summary()
-        self.assertIn("final_model", dev)
+        self.assertIn("current_validated_model", dev)
+        self.assertIn("archived_downstream_candidates", dev)
         self.assertIn("model_progression", dev)
         self.assertIn("feature_family_conclusions", dev)
         self.assertIn("stage6g_interaction_results", dev)
@@ -217,6 +218,75 @@ class ModelEvaluationDashboardTests(unittest.TestCase):
                     name.startswith("scratch") or name.endswith(".tmp") or name == "stage6c",
                     f"Violated root hygiene: unapproved file {name} found at repository root"
                 )
+
+    # ─── New Diagnostics and Hash Clarification Tests ─────────────────────────
+
+    def test_dashboard_current_validated_model_is_m3(self) -> None:
+        """Verify M3 is the current validated model shown in JS / index."""
+        html_content = (Path(BASE_DIR) / "dashboard/static/index.html").read_text(encoding="utf-8")
+        self.assertIn('id="developmentFinalModel"', html_content)
+        self.assertIn("Current Validated Model", html_content)
+
+        js_content = (Path(BASE_DIR) / "dashboard/static/app.js").read_text(encoding="utf-8")
+        self.assertIn("current_validated_model", js_content)
+        self.assertIn("M3", js_content)
+
+    def test_dashboard_g0_not_current_final_model(self) -> None:
+        """Verify G0 / OBC is not presented as the final model anywhere."""
+        html_content = (Path(BASE_DIR) / "dashboard/static/index.html").read_text(encoding="utf-8")
+        self.assertNotIn("G0/OBC is the final selected model", html_content)
+        self.assertNotIn("OBC is the final selected model", html_content)
+
+        js_content = (Path(BASE_DIR) / "dashboard/static/app.js").read_text(encoding="utf-8")
+        self.assertNotIn("final_model", js_content)
+
+    def test_dashboard_g0_archived_invalidated(self) -> None:
+        """Verify G0 / OBC is correctly presented as archived / invalidated."""
+        js_content = (Path(BASE_DIR) / "dashboard/static/app.js").read_text(encoding="utf-8")
+        self.assertIn("Invalidated Downstream Evidence", js_content)
+        self.assertIn("ARCHIVED", js_content)
+
+    def test_development_summary_current_model_is_m3(self) -> None:
+        """Verify current_validated_model in development summary has ID M3."""
+        summary = build_model_development_summary()
+        current = summary["current_validated_model"]
+        self.assertEqual(current["candidate_id"], "M3")
+        self.assertEqual(current["status"], "CURRENT_VALIDATED_CHECKPOINT")
+
+    def test_historical_g0_metrics_preserved(self) -> None:
+        """Verify historical G0 metrics remain visible under archived candidates."""
+        summary = build_model_development_summary()
+        archived = summary["archived_downstream_candidates"][0]
+        self.assertEqual(archived["candidate_id"], "G0")
+        self.assertEqual(archived["status"], "INVALIDATED_DOWNSTREAM_EVIDENCE_CHAIN")
+        self.assertAlmostEqual(archived["historical_development_mae"], 5.057221199575735, places=6)
+
+    def test_m3_hash_fields_are_unambiguous(self) -> None:
+        """Verify the two M3 hashes are labeled with explicit, distinct meanings."""
+        summary = build_model_development_summary()
+        current = summary["current_validated_model"]
+        self.assertIn("model_identity_sha256", current)
+        self.assertIn("artifact_file_sha256", current)
+        self.assertEqual(current["model_identity_sha256"], "ac78d4c087d17263b5510fcfe4754c452ec05ee1e842dca9c90ed1c79e3d05be")
+        self.assertEqual(current["artifact_file_sha256"], "66526ac4c4b69335ef8331d5b364805e3fef5e91eebe46c9ff99a9cf588a4df7")
+
+    def test_m3_artifact_identity_unchanged(self) -> None:
+        """Verify M3 model contents (parameters/coefficients) are unchanged."""
+        m3_artifact_path = Path(BASE_DIR) / "data/predictions/player_model_v2/models/m3-model-artifact.json"
+        self.assertTrue(m3_artifact_path.exists())
+        m3_artifact = json.loads(m3_artifact_path.read_text(encoding="utf-8"))
+        self.assertEqual(m3_artifact["model_id"], "M3")
+        self.assertEqual(m3_artifact["alpha"], 10.0)
+        self.assertAlmostEqual(m3_artifact["intercept"], -0.6351286484721144, places=6)
+        self.assertEqual(len(m3_artifact["coefficients"]), 22)
+
+    def test_dashboard_model_status_consistency(self) -> None:
+        """Verify M3 status is CURRENT VALIDATED CHECKPOINT, M4/M5 ineligible, and OBC invalidated downstream."""
+        html_content = (Path(BASE_DIR) / "dashboard/static/index.html").read_text(encoding="utf-8")
+        self.assertIn("M3", html_content)
+        self.assertIn("CURRENT VALIDATED CHECKPOINT", html_content)
+        self.assertIn("M4", html_content)
+        self.assertIn("M5", html_content)
 
 
 if __name__ == "__main__":

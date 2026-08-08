@@ -94,12 +94,26 @@ def build_model_development_summary() -> Dict[str, Any]:
             "pearson": m["pearson"],
             "spearman": m["spearman"],
             "delta_vs_g0": delta,
-            "retained": cid == "G0",
-            "note": "No interaction strictly improved development MAE" if cid != "G0" else "Final selected model",
+            "retained": False,
+            "note": "No interaction strictly improved development MAE" if cid != "G0" else "Archived Candidate (Downstream Provenance Invalidated)",
         })
 
     # G0 candidate specification
     g0_spec = json.loads((G0_DIR / "candidate-specification.json").read_text())
+
+    # Load canonical M3 model artifact to get hashes
+    m3_artifact_path = BASE_DIR / "data/predictions/player_model_v2/models/m3-model-artifact.json"
+    if m3_artifact_path.exists():
+        try:
+            m3_artifact = json.loads(m3_artifact_path.read_text(encoding="utf-8"))
+            model_identity_sha256 = m3_artifact.get("model_identity_sha256", "ac78d4c087d17263b5510fcfe4754c452ec05ee1e842dca9c90ed1c79e3d05be")
+            artifact_file_sha256 = m3_artifact.get("artifact_file_sha256", "66526ac4c4b69335ef8331d5b364805e3fef5e91eebe46c9ff99a9cf588a4df7")
+        except Exception:
+            model_identity_sha256 = "ac78d4c087d17263b5510fcfe4754c452ec05ee1e842dca9c90ed1c79e3d05be"
+            artifact_file_sha256 = "66526ac4c4b69335ef8331d5b364805e3fef5e91eebe46c9ff99a9cf588a4df7"
+    else:
+        model_identity_sha256 = "ac78d4c087d17263b5510fcfe4754c452ec05ee1e842dca9c90ed1c79e3d05be"
+        artifact_file_sha256 = "66526ac4c4b69335ef8331d5b364805e3fef5e91eebe46c9ff99a9cf588a4df7"
 
     return {
         "generated_by": "data_pipeline/export_model_evaluation_data.py",
@@ -107,20 +121,37 @@ def build_model_development_summary() -> Dict[str, Any]:
         "evaluation_metric": "MAE on 2022-2023 development folds (cross-validated, chronological)",
         "sample_size": 1282,
 
-        "final_model": {
-            "candidate_id": "G0",
-            "architecture": "OBC",
-            "description": "OBC — schedule/BO context + restricted TOP/SUP playstyle",
+        "current_validated_model": {
+            "candidate_id": "M3",
+            "status": "CURRENT_VALIDATED_CHECKPOINT",
+            "architecture": "Ridge Residual Correction over M0",
+            "description": "M2 + player-derived team state / team strength",
             "alpha": 10.0,
-            "included_blocks": g0_spec["included_blocks"],
-            "excluded_blocks": g0_spec["excluded_blocks"],
-            "included_registered_interactions": g0_spec["included_registered_interactions"],
-            "estimator": g0_spec["estimator"],
-            "solver": g0_spec["solver"],
-            "development_mae": ablation.get("OBC", {}).get("mae"),
-            "development_rmse": ablation.get("OBC", {}).get("rmse"),
-            "policy_hash": g0_spec["Stage_6G_policy_hash"],
+            "development_mae": m3["mae"],
+            "development_rmse": m3["rmse"],
+            "model_identity_sha256": model_identity_sha256,
+            "artifact_file_sha256": artifact_file_sha256,
         },
+
+        "archived_downstream_candidates": [
+            {
+                "candidate_id": "G0",
+                "architecture": "OBC",
+                "status": "INVALIDATED_DOWNSTREAM_EVIDENCE_CHAIN",
+                "description": "OBC — schedule/BO context + restricted TOP/SUP playstyle",
+                "alpha": 10.0,
+                "included_blocks": g0_spec["included_blocks"],
+                "excluded_blocks": g0_spec["excluded_blocks"],
+                "included_registered_interactions": g0_spec["included_registered_interactions"],
+                "estimator": g0_spec["estimator"],
+                "solver": g0_spec["solver"],
+                "development_mae": ablation.get("OBC", {}).get("mae"),
+                "development_rmse": ablation.get("OBC", {}).get("rmse"),
+                "historical_development_mae": ablation.get("OBC", {}).get("mae"),
+                "policy_hash": g0_spec["Stage_6G_policy_hash"],
+                "note": "Downstream provenance later invalidated; not the current validated checkpoint."
+            }
+        ],
 
         "model_progression": [
             {

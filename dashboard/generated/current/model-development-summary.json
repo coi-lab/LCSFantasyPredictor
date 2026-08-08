@@ -7,25 +7,41 @@
   ],
   "evaluation_metric": "MAE on 2022-2023 development folds (cross-validated, chronological)",
   "sample_size": 1282,
-  "final_model": {
-    "candidate_id": "G0",
-    "architecture": "OBC",
-    "description": "OBC — schedule/BO context + restricted TOP/SUP playstyle",
+  "current_validated_model": {
+    "candidate_id": "M3",
+    "status": "CURRENT_VALIDATED_CHECKPOINT",
+    "architecture": "Ridge Residual Correction over M0",
+    "description": "M2 + player-derived team state / team strength",
     "alpha": 10.0,
-    "included_blocks": [
-      "B",
-      "C"
-    ],
-    "excluded_blocks": [
-      "A"
-    ],
-    "included_registered_interactions": [],
-    "estimator": "Ridge residual correction over M0",
-    "solver": "numpy.linalg.solve_centered_normal_equation",
-    "development_mae": 5.057221199575735,
-    "development_rmse": 6.428554413900811,
-    "policy_hash": "17e1d07677c587287cc94a690e6e53f98ae75672b29fa24d9cc747dff83fe890"
+    "development_mae": 5.060352777227633,
+    "development_rmse": 6.433872576778955,
+    "model_identity_sha256": "ac78d4c087d17263b5510fcfe4754c452ec05ee1e842dca9c90ed1c79e3d05be",
+    "artifact_file_sha256": "66526ac4c4b69335ef8331d5b364805e3fef5e91eebe46c9ff99a9cf588a4df7"
   },
+  "archived_downstream_candidates": [
+    {
+      "candidate_id": "G0",
+      "architecture": "OBC",
+      "status": "INVALIDATED_DOWNSTREAM_EVIDENCE_CHAIN",
+      "description": "OBC — schedule/BO context + restricted TOP/SUP playstyle",
+      "alpha": 10.0,
+      "included_blocks": [
+        "B",
+        "C"
+      ],
+      "excluded_blocks": [
+        "A"
+      ],
+      "included_registered_interactions": [],
+      "estimator": "Ridge residual correction over M0",
+      "solver": "numpy.linalg.solve_centered_normal_equation",
+      "development_mae": 5.057221199575735,
+      "development_rmse": 6.428554413900811,
+      "historical_development_mae": 5.057221199575735,
+      "policy_hash": "17e1d07677c587287cc94a690e6e53f98ae75672b29fa24d9cc747dff83fe890",
+      "note": "Downstream provenance later invalidated; not the current validated checkpoint."
+    }
+  ],
   "model_progression": [
     {
       "model_id": "M0",
@@ -155,8 +171,8 @@
       "pearson": 0.2948352538816218,
       "spearman": 0.30379081248245005,
       "delta_vs_g0": 0.0,
-      "retained": true,
-      "note": "Final selected model"
+      "retained": false,
+      "note": "Archived Candidate (Downstream Provenance Invalidated)"
     },
     {
       "candidate_id": "G1",

@@ -2060,28 +2060,71 @@ function renderModelEvaluation() {
 function renderEvalDevelopment() {
   if (!evalDevSummary) return;
   const dev = evalDevSummary;
-  const modelInfo = dev.final_model;
+  const m3 = dev.current_validated_model;
+  const archived = dev.archived_downstream_candidates && dev.archived_downstream_candidates.length > 0 ? dev.archived_downstream_candidates[0] : null;
 
-  // 1. Populate Selected Model Identity
-  document.getElementById('developmentFinalModel').innerHTML = `
+  // 1. Populate Current Validated Model Details
+  let modelHtml = `
     <div style="display: flex; flex-direction: column; gap: 10px; color: #f0f4fc;">
-      <div><strong>Model ID:</strong> <span class="tier-chip tier-13" style="font-size: 11px;">${escapeHtml(modelInfo.candidate_id)}</span></div>
-      <div><strong>Architecture:</strong> ${escapeHtml(modelInfo.architecture)}</div>
-      <div><strong>Description:</strong> ${escapeHtml(modelInfo.description)}</div>
-      <div><strong>Regularization (Alpha):</strong> <code>${modelInfo.alpha.toFixed(1)}</code></div>
-      <div><strong>Included Feature Blocks:</strong> ${escapeHtml(modelInfo.included_blocks.join(', '))}</div>
-      <div><strong>Excluded Feature Blocks:</strong> ${escapeHtml(modelInfo.excluded_blocks.join(', '))}</div>
-      <div><strong>Registered Interactions:</strong> ${modelInfo.included_registered_interactions.length > 0 ? escapeHtml(modelInfo.included_registered_interactions.join(', ')) : '<em>none retained</em>'}</div>
-      <div><strong>Estimator:</strong> ${escapeHtml(modelInfo.estimator)}</div>
-      <div><strong>Solver:</strong> <code>${escapeHtml(modelInfo.solver)}</code></div>
-      <div style="margin-top: 5px; padding-top: 10px; border-top: 1px solid var(--border-color); font-weight: 700; color: var(--primary-color); font-size: 15px;">
-        Development MAE: ${formatHistoricalNumber(modelInfo.development_mae, 6)}
+      <div><strong>Model ID:</strong> <span class="tier-chip tier-13" style="font-size: 11px; background-color: #00e676; color: #000; border: none; font-weight: bold;">M3</span> <span style="color: #00e676; font-size: 11.5px; font-weight: bold; margin-left: 5px;">[${escapeHtml(m3.status)}]</span></div>
+      <div><strong>Architecture:</strong> ${escapeHtml(m3.architecture)}</div>
+      <div><strong>Description:</strong> ${escapeHtml(m3.description)}</div>
+      <div><strong>Regularization (Alpha):</strong> <code>${m3.alpha.toFixed(1)}</code></div>
+      <div style="margin-top: 5px; padding-top: 10px; border-top: 1px solid var(--border-color); font-weight: 700; color: #00e676; font-size: 15px;">
+        Development MAE: ${formatHistoricalNumber(m3.development_mae, 6)}
       </div>
-      <div style="font-size: 11px; color: var(--text-muted); font-family: monospace; word-break: break-all; margin-top: 5px;">
-        Policy SHA-256: ${escapeHtml(modelInfo.policy_hash)}
-      </div>
-    </div>
   `;
+
+  if (m3.model_identity_sha256) {
+    modelHtml += `
+      <div style="font-size: 11px; color: var(--text-muted); font-family: monospace; word-break: break-all; margin-top: 5px; padding-top: 5px; border-top: 1px dashed rgba(255,255,255,0.05);">
+        <div><strong>model_identity_sha256 (semantic Stage 4D ID):</strong></div>
+        <div style="color: #8a99ad;">${escapeHtml(m3.model_identity_sha256)}</div>
+      </div>
+    `;
+  }
+  if (m3.artifact_file_sha256) {
+    modelHtml += `
+      <div style="font-size: 11px; color: var(--text-muted); font-family: monospace; word-break: break-all; margin-top: 5px;">
+        <div><strong>artifact_file_sha256 (packaged file hash):</strong></div>
+        <div style="color: #8a99ad;">${escapeHtml(m3.artifact_file_sha256)}</div>
+      </div>
+    `;
+  }
+
+  // Render archived candidate G0/OBC if present
+  if (archived) {
+    modelHtml += `
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+        <div style="font-weight: 700; color: #ffb703; font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          <span style="background: rgba(255, 183, 3, 0.1); color: #ffb703; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold;">ARCHIVED</span>
+          Invalidated Downstream Evidence
+        </div>
+        <div style="font-size: 12px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px; line-height: 1.4;">
+          <div><strong>Candidate ID:</strong> <code style="color: #ffb703;">${escapeHtml(archived.candidate_id)}</code></div>
+          <div><strong>Architecture:</strong> ${escapeHtml(archived.architecture)}</div>
+          <div><strong>Description:</strong> ${escapeHtml(archived.description)}</div>
+          <div><strong>Regularization (Alpha):</strong> <code>${archived.alpha.toFixed(1)}</code></div>
+          <div><strong>Included Feature Blocks:</strong> ${escapeHtml(archived.included_blocks.join(', '))}</div>
+          <div><strong>Excluded Feature Blocks:</strong> ${escapeHtml(archived.excluded_blocks.join(', '))}</div>
+          <div><strong>Estimator:</strong> ${escapeHtml(archived.estimator)}</div>
+          <div><strong>Solver:</strong> <code>${escapeHtml(archived.solver)}</code></div>
+          <div style="font-weight: bold; color: #ffb703; margin-top: 4px; font-size: 13px;">
+            Historical MAE result: ${formatHistoricalNumber(archived.historical_development_mae, 6)}
+          </div>
+          <div style="font-size: 11px; color: rgba(255,255,255,0.3); font-family: monospace; word-break: break-all; margin-top: 4px;">
+            Policy SHA-256: ${escapeHtml(archived.policy_hash)}
+          </div>
+          <div style="color: #ff5252; font-style: italic; font-size: 11px; margin-top: 4px;">
+            * Downstream provenance later invalidated; not the current validated checkpoint.
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  modelHtml += `</div>`;
+  document.getElementById('developmentFinalModel').innerHTML = modelHtml;
 
   // 2. Populate Feature Family Conclusions
   const conclusionsHtml = dev.feature_family_conclusions.map(c => `
@@ -2111,10 +2154,10 @@ function renderEvalDevelopment() {
       </thead>
       <tbody>
         ${dev.model_progression.map(m => `
-          <tr class="${m.model_id === 'OBC' ? 'swapped-row' : ''}" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+          <tr class="${m.model_id === 'M3' ? 'swapped-row' : ''}" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
             <td style="padding: 6px;"><strong>${escapeHtml(m.model_id)}</strong></td>
             <td style="padding: 6px;">${m.alpha !== null ? m.alpha.toFixed(1) : 'N/A'}</td>
-            <td style="text-align: right; padding: 6px; font-weight: 700; color: ${m.model_id === 'OBC' ? 'var(--primary-color)' : '#fff'};">${formatHistoricalNumber(m.mae, 5)}</td>
+            <td style="text-align: right; padding: 6px; font-weight: 700; color: ${m.model_id === 'M3' ? '#00e676' : '#fff'};">${formatHistoricalNumber(m.mae, 5)}</td>
             <td style="text-align: right; padding: 6px; color: var(--text-muted);">${formatHistoricalNumber(m.rmse, 5)}</td>
           </tr>
         `).join('')}
@@ -2138,8 +2181,8 @@ function renderEvalDevelopment() {
         datasets: [{
           label: 'MAE',
           data: chartData,
-          backgroundColor: chartLabels.map(label => label === 'OBC' ? 'rgba(76, 201, 240, 0.6)' : 'rgba(76, 201, 240, 0.15)'),
-          borderColor: chartLabels.map(label => label === 'OBC' ? '#4cc9f0' : 'rgba(76, 201, 240, 0.4)'),
+          backgroundColor: chartLabels.map(label => label === 'M3' ? 'rgba(0, 230, 118, 0.6)' : 'rgba(76, 201, 240, 0.15)'),
+          borderColor: chartLabels.map(label => label === 'M3' ? '#00e676' : 'rgba(76, 201, 240, 0.4)'),
           borderWidth: 1,
           barThickness: 24
         }]
@@ -2176,10 +2219,10 @@ function renderEvalDevelopment() {
       </thead>
       <tbody>
         ${dev.stage6g_interaction_results.map(r => `
-          <tr class="${r.candidate_id === 'G0' ? 'swapped-row' : ''}" style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+          <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
             <td style="padding: 6px;"><strong>${escapeHtml(r.candidate_id)}</strong></td>
             <td style="padding: 6px; color: var(--text-muted);">${escapeHtml(r.description)}</td>
-            <td style="text-align: right; padding: 6px; font-weight: 700; color: ${r.candidate_id === 'G0' ? 'var(--primary-color)' : '#fff'};">${formatHistoricalNumber(r.mae, 5)}</td>
+            <td style="text-align: right; padding: 6px; font-weight: 700; color: #fff;">${formatHistoricalNumber(r.mae, 5)}</td>
             <td style="text-align: right; padding: 6px; color: ${r.delta_vs_g0 > 0 ? '#ff1744' : '#4a5b6c'};">${r.delta_vs_g0 > 0 ? '+' : ''}${formatHistoricalNumber(r.delta_vs_g0, 6)}</td>
           </tr>
         `).join('')}

@@ -142,6 +142,8 @@ def main():
         "stage_4d_provenance_reference": "player-model-v2-stage-4d-development-selection-20260806",
         "stage_5_provenance_reference": "player-model-v2-stage-5-independent-review-20260806",
         "artifact_sha256": m3_base["artifact_sha256"],
+        "model_identity_sha256": m3_base["artifact_sha256"],
+        "artifact_file_sha256": "66526ac4c4b69335ef8331d5b364805e3fef5e91eebe46c9ff99a9cf588a4df7",
         "preprocessing": m3_base["preprocessing"]
     }
 
