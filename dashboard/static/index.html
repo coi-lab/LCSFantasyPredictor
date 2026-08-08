@@ -202,11 +202,11 @@
       <div class="eval-subview-section active" id="eval-development">
         <div class="card" style="margin-bottom: 18px;">
           <h2>Development Evidence</h2>
-          <p>Key evidence explaining why G0/OBC was selected as the final Player Model V2 architecture based on frozen 2022-2023 development cross-validation metrics.</p>
+          <p>Development evidence from 2022–2023 cross-validation. <strong style="color: #ffb703;">NOTE:</strong> G0/OBC ablation and interaction evidence is preserved below as <em>ARCHIVED / INVALIDATED EVIDENCE CHAIN — NOT CURRENT MODEL EVIDENCE</em>. The current validated checkpoint is <strong style="color: #00e676;">M3</strong> (M2 + player-derived team state / team strength), established under Stage&nbsp;5.</p>
         </div>
 
         <div class="main-grid" style="grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px;">
-          <!-- Final Model Spec Card -->
+          <!-- Model Spec Card -->
           <div class="card">
             <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
               <h3 class="card-title">Selected Model Identity</h3>
@@ -378,10 +378,17 @@
           <div class="card" style="padding: 15px;">
             <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between;">
               <h3 class="card-title">Group Diagnostics</h3>
-              <div style="display: flex; gap: 5px;">
+              <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                 <button id="m3GroupTabWeek" class="eval-subtab-btn active" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid rgba(76,201,240,0.3); background: rgba(76,201,240,0.15); color: var(--primary-color);">By Week</button>
                 <button id="m3GroupTabTeam" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Team</button>
                 <button id="m3GroupTabFallback" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Fallback</button>
+                <button id="m3GroupTabHistory" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By History</button>
+                <button id="m3GroupTabEvidence" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Evidence</button>
+                <button id="m3GroupTabUncertainty" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Uncertainty</button>
+                <button id="m3GroupTabCore" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Core</button>
+                <button id="m3GroupTabTeamCtx" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Team Ctx</button>
+                <button id="m3GroupTabTeamChange" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Team Change</button>
+                <button id="m3GroupTabDnp" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By DNP</button>
               </div>
             </div>
             <div id="m3DiagnosticsGroupTable" style="max-height: 200px; overflow-y: auto;">
@@ -414,6 +421,10 @@
           <div style="display: flex; flex-direction: column; gap: 4px;">
             <label style="font-weight: 700; font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Player Team</label>
             <select id="m3FilterTeam" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px;"></select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-weight: 700; font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Opponent <span style="font-size: 9px; color: #ffb703;">(DIAGNOSTIC)</span></label>
+            <select id="m3FilterOpponent" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px;"></select>
           </div>
           <div style="display: flex; flex-direction: column; gap: 4px; margin-left: auto;">
             <button id="m3ResetFiltersBtn" class="primary-btn" style="padding: 6px 12px; font-size: 11px; background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;">Reset Filters</button>

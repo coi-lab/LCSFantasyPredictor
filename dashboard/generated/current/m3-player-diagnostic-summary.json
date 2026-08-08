@@ -1,0 +1,342 @@
+{
+  "overall": {
+    "n": 637,
+    "mae": 6.4621,
+    "mean_signed_error": 0.7838,
+    "median_absolute_error": 5.42
+  },
+  "role": {
+    "bot": {
+      "n": 127,
+      "mae": 7.2355,
+      "mean_signed_error": 0.2146,
+      "median_absolute_error": 6.28
+    },
+    "jgl": {
+      "n": 127,
+      "mae": 7.4647,
+      "mean_signed_error": 1.7239,
+      "median_absolute_error": 6.05
+    },
+    "mid": {
+      "n": 127,
+      "mae": 5.671,
+      "mean_signed_error": -0.6581,
+      "median_absolute_error": 4.51
+    },
+    "sup": {
+      "n": 127,
+      "mae": 7.0035,
+      "mean_signed_error": 3.0587,
+      "median_absolute_error": 6.67
+    },
+    "top": {
+      "n": 129,
+      "mae": 4.9593,
+      "mean_signed_error": -0.4016,
+      "median_absolute_error": 4.71
+    }
+  },
+  "week": {
+    "Lock-In Round 1": {
+      "n": 40,
+      "mae": 8.2598,
+      "mean_signed_error": 3.3197,
+      "median_absolute_error": 7.365
+    },
+    "Lock-In Round 2": {
+      "n": 40,
+      "mae": 6.731,
+      "mean_signed_error": -1.124,
+      "median_absolute_error": 6.915
+    },
+    "Lock-In Round 3": {
+      "n": 40,
+      "mae": 6.0435,
+      "mean_signed_error": 1.0665,
+      "median_absolute_error": 5.125
+    },
+    "Lock-In Round 4": {
+      "n": 20,
+      "mae": 6.1345,
+      "mean_signed_error": -0.3245,
+      "median_absolute_error": 5.445
+    },
+    "Lock-In Round 5": {
+      "n": 30,
+      "mae": 8.1153,
+      "mean_signed_error": 0.728,
+      "median_absolute_error": 9.375
+    },
+    "Lock-In Round 6": {
+      "n": 20,
+      "mae": 4.4495,
+      "mean_signed_error": -3.1565,
+      "median_absolute_error": 4.185
+    },
+    "Spring Round 1": {
+      "n": 40,
+      "mae": 6.238,
+      "mean_signed_error": 0.7375,
+      "median_absolute_error": 4.65
+    },
+    "Spring Round 2": {
+      "n": 40,
+      "mae": 6.4692,
+      "mean_signed_error": 0.4752,
+      "median_absolute_error": 6.42
+    },
+    "Spring Round 3": {
+      "n": 40,
+      "mae": 5.8163,
+      "mean_signed_error": 1.2398,
+      "median_absolute_error": 5.655
+    },
+    "Spring Round 4": {
+      "n": 40,
+      "mae": 6.374,
+      "mean_signed_error": 1.6135,
+      "median_absolute_error": 5.755
+    },
+    "Spring Round 5": {
+      "n": 40,
+      "mae": 5.5315,
+      "mean_signed_error": 2.153,
+      "median_absolute_error": 4.605
+    },
+    "Week 1": {
+      "n": 111,
+      "mae": 5.1703,
+      "mean_signed_error": 1.1968,
+      "median_absolute_error": 3.86
+    },
+    "Week 2": {
+      "n": 71,
+      "mae": 7.2269,
+      "mean_signed_error": 0.2534,
+      "median_absolute_error": 5.8
+    },
+    "Week 3": {
+      "n": 40,
+      "mae": 7.953,
+      "mean_signed_error": 1.896,
+      "median_absolute_error": 6.72
+    },
+    "Week 4": {
+      "n": 25,
+      "mae": 7.902,
+      "mean_signed_error": -2.3556,
+      "median_absolute_error": 7.27
+    }
+  },
+  "team": {
+    "Cloud9": {
+      "n": 95,
+      "mae": 6.4801,
+      "mean_signed_error": 0.2456,
+      "median_absolute_error": 5.77
+    },
+    "Dignitas": {
+      "n": 65,
+      "mae": 5.7548,
+      "mean_signed_error": -1.4978,
+      "median_absolute_error": 4.0
+    },
+    "Disguised": {
+      "n": 65,
+      "mae": 6.6562,
+      "mean_signed_error": -1.3057,
+      "median_absolute_error": 6.53
+    },
+    "FlyQuest": {
+      "n": 85,
+      "mae": 7.4765,
+      "mean_signed_error": 0.4435,
+      "median_absolute_error": 6.48
+    },
+    "LYON": {
+      "n": 92,
+      "mae": 6.1809,
+      "mean_signed_error": 3.5559,
+      "median_absolute_error": 5.58
+    },
+    "Sentinels": {
+      "n": 75,
+      "mae": 5.6488,
+      "mean_signed_error": 1.7989,
+      "median_absolute_error": 5.15
+    },
+    "Shopify Rebellion": {
+      "n": 65,
+      "mae": 7.7171,
+      "mean_signed_error": -1.3912,
+      "median_absolute_error": 6.53
+    },
+    "Team Liquid": {
+      "n": 95,
+      "mae": 5.9434,
+      "mean_signed_error": 2.6192,
+      "median_absolute_error": 4.41
+    }
+  },
+  "fallback": {
+    "player": {
+      "n": 605,
+      "mae": 6.3863,
+      "mean_signed_error": 0.8215,
+      "median_absolute_error": 5.4
+    },
+    "role": {
+      "n": 32,
+      "mae": 7.8941,
+      "mean_signed_error": 0.0709,
+      "median_absolute_error": 7.495
+    }
+  },
+  "player_history_bucket": {
+    "0": {
+      "n": 11,
+      "mae": 10.0745,
+      "mean_signed_error": 3.8218,
+      "median_absolute_error": 10.41
+    },
+    "11\u201320": {
+      "n": 85,
+      "mae": 5.0436,
+      "mean_signed_error": 0.3011,
+      "median_absolute_error": 4.08
+    },
+    "1\u20132": {
+      "n": 21,
+      "mae": 6.7519,
+      "mean_signed_error": -1.8938,
+      "median_absolute_error": 5.84
+    },
+    "21+": {
+      "n": 429,
+      "mae": 6.6219,
+      "mean_signed_error": 1.1878,
+      "median_absolute_error": 5.65
+    },
+    "3\u20135": {
+      "n": 31,
+      "mae": 6.7932,
+      "mean_signed_error": -2.35,
+      "median_absolute_error": 5.32
+    },
+    "6\u201310": {
+      "n": 60,
+      "mae": 6.3943,
+      "mean_signed_error": 0.5777,
+      "median_absolute_error": 4.855
+    }
+  },
+  "effective_evidence_bucket": {
+    "HIGH": {
+      "n": 136,
+      "mae": 6.5928,
+      "mean_signed_error": 0.1824,
+      "median_absolute_error": 5.685
+    },
+    "LOW": {
+      "n": 181,
+      "mae": 6.673,
+      "mean_signed_error": 0.9353,
+      "median_absolute_error": 5.32
+    },
+    "MEDIUM": {
+      "n": 320,
+      "mae": 6.2873,
+      "mean_signed_error": 0.9536,
+      "median_absolute_error": 5.435
+    }
+  },
+  "uncertainty_bucket": {
+    "HIGH": {
+      "n": 209,
+      "mae": 6.2869,
+      "mean_signed_error": 0.498,
+      "median_absolute_error": 4.89
+    },
+    "LOW": {
+      "n": 185,
+      "mae": 6.6933,
+      "mean_signed_error": 0.7536,
+      "median_absolute_error": 5.77
+    },
+    "MEDIUM": {
+      "n": 243,
+      "mae": 6.4367,
+      "mean_signed_error": 1.0525,
+      "median_absolute_error": 5.64
+    }
+  },
+  "core_status": {
+    "HIGH": {
+      "n": 213,
+      "mae": 6.8447,
+      "mean_signed_error": 0.9377,
+      "median_absolute_error": 5.77
+    },
+    "LOW": {
+      "n": 211,
+      "mae": 6.6036,
+      "mean_signed_error": 0.2385,
+      "median_absolute_error": 5.37
+    },
+    "MEDIUM": {
+      "n": 201,
+      "mae": 5.9933,
+      "mean_signed_error": 1.3296,
+      "median_absolute_error": 5.3
+    },
+    "MISSING": {
+      "n": 12,
+      "mae": 5.0342,
+      "mean_signed_error": -1.5042,
+      "median_absolute_error": 4.755
+    }
+  },
+  "team_context_availability": {
+    "AVAILABLE": {
+      "n": 625,
+      "mae": 6.4895,
+      "mean_signed_error": 0.8277,
+      "median_absolute_error": 5.42
+    },
+    "MISSING": {
+      "n": 12,
+      "mae": 5.0342,
+      "mean_signed_error": -1.5042,
+      "median_absolute_error": 4.755
+    }
+  },
+  "recent_team_change": {
+    "NO_RECENT_CHANGE": {
+      "n": 616,
+      "mae": 6.3879,
+      "mean_signed_error": 0.7586,
+      "median_absolute_error": 5.395
+    },
+    "RECENT_CHANGE": {
+      "n": 21,
+      "mae": 8.6395,
+      "mean_signed_error": 1.5214,
+      "median_absolute_error": 7.11
+    }
+  },
+  "dnp_status": {
+    "PARTIAL_PARTICIPATION": {
+      "n": 4,
+      "mae": 5.175,
+      "mean_signed_error": -4.405,
+      "median_absolute_error": 4.79
+    },
+    "PLAYED": {
+      "n": 633,
+      "mae": 6.4702,
+      "mean_signed_error": 0.8165,
+      "median_absolute_error": 5.42
+    }
+  }
+}

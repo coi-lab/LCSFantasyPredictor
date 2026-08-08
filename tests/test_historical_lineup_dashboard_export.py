@@ -95,7 +95,7 @@ class HistoricalLineupDashboardExportTests(unittest.TestCase):
         budget = payload["phases"][0]["policies"][0]["weeks"][0]["budget"]
         self.assertEqual(budget["spent_gold"], 94.4)
         self.assertEqual(budget["ending_gold"], 100.5)
-        self.assertEqual(budget["source"], "reconstructed_estimated_score_price_market")
+        self.assertEqual(budget["source"], "existing_dashboard_market_history")
 
     def test_browser_page_and_consumer_use_the_exported_contract(self) -> None:
         project_root = Path(__file__).resolve().parents[1]

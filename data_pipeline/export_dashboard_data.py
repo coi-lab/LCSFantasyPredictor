@@ -432,6 +432,13 @@ def export_dashboard_json(output_path: str = None) -> str:
     except Exception as e:
         print(f"Warning: Model evaluation data export failed: {e}")
 
+    # Generate M3 Diagnostics and summary
+    try:
+        from scripts.export_m3_diagnostics import main as export_m3_diagnostics
+        export_m3_diagnostics()
+    except Exception as e:
+        print(f"Warning: M3 player diagnostics export failed: {e}")
+
     return output_path
 
 
