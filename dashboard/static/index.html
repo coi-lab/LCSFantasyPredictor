@@ -194,6 +194,7 @@
       <div class="eval-subtabs card" style="display: flex; gap: 10px; padding: 10px; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02);">
         <button class="eval-subtab-btn active" data-subview="eval-development" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">Development Evidence</button>
         <button class="eval-subtab-btn" data-subview="eval-reconstructed" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">2026 Reconstructed Evaluation</button>
+        <button class="eval-subtab-btn" data-subview="eval-diagnostics" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">Player Model Diagnostics</button>
         <button class="eval-subtab-btn" data-subview="eval-archived" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 6px; transition: all 0.2s;">Archived Evaluations</button>
       </div>
 
@@ -316,6 +317,139 @@
                 <li style="margin-bottom: 8px;"><strong>Access Order:</strong> Leaderboard contents were intended to remain sealed until the cumulative simulation result was frozen.</li>
               </ul>
             </div>
+        </div>
+      </div>
+
+      <!-- Subview: Player Model Diagnostics -->
+      <div class="eval-subview-section" id="eval-diagnostics" style="display: none;">
+        <div class="card" style="margin-bottom: 18px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <span class="weekly-eyebrow">PLAYER MODEL DIAGNOSTICS</span>
+              <h2 style="margin: 5px 0 0;">M3 — Current Validated Checkpoint</h2>
+              <p style="margin: 4px 0 0; font-size: 11.5px; color: var(--text-muted);">
+                EXPOSED RETROSPECTIVE DIAGNOSTICS — NOT FOR MODEL SELECTION
+              </p>
+            </div>
+            <div id="m3ModelStatusBadge" class="price-badge" style="background: rgba(76, 201, 240, 0.15); border: 1px solid rgba(76, 201, 240, 0.3); color: var(--primary-color); font-weight: 700; padding: 6px 12px; border-radius: 20px;">
+              M3 Checkpoint: VALIDATED
+            </div>
+          </div>
+        </div>
+
+        <!-- Misleading Status Correction Section -->
+        <div class="card" style="margin-bottom: 18px; padding: 15px; border-left: 4px solid var(--primary-color);">
+          <h3 style="margin-top: 0; font-size: 14px; text-transform: uppercase; color: var(--primary-color); letter-spacing: 0.5px;">Model Status Overview</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; font-size: 12px; line-height: 1.5;">
+            <div>
+              <strong>M3:</strong> <span style="color: #00e676; font-weight: 700;">CURRENT VALIDATED CHECKPOINT</span>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">M2 + player-derived team state / strength</div>
+            </div>
+            <div>
+              <strong>M4:</strong> <span style="color: #ff1744; font-weight: 700;">INELIGIBLE — UNQUALIFIED PRELOCK PROVENANCE</span>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">Matchup probability features blocked</div>
+            </div>
+            <div>
+              <strong>M5:</strong> <span style="color: #ff1744; font-weight: 700;">INELIGIBLE — UNQUALIFIED PRELOCK PROVENANCE</span>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">Schedule and BO format features blocked</div>
+            </div>
+            <div>
+              <strong>G0 / OBC:</strong> <span style="color: #ffb703; font-weight: 700;">INVALIDATED DOWNSTREAM EVIDENCE CHAIN</span>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">Archived context only; not a validated model</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aggregate Diagnostics Grid -->
+        <div class="main-grid" style="grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px;">
+          <!-- Left: Error summary counts and MAE -->
+          <div class="card" style="padding: 15px;">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px;">
+              <h3 class="card-title">Performance Summary</h3>
+            </div>
+            <div id="m3DiagnosticsGlobalStats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; margin-bottom: 15px;">
+              <!-- Dynamically populated -->
+            </div>
+            <div id="m3DiagnosticsRoleStats">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+          <!-- Right: Summary tables -->
+          <div class="card" style="padding: 15px;">
+            <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between;">
+              <h3 class="card-title">Group Diagnostics</h3>
+              <div style="display: flex; gap: 5px;">
+                <button id="m3GroupTabWeek" class="eval-subtab-btn active" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid rgba(76,201,240,0.3); background: rgba(76,201,240,0.15); color: var(--primary-color);">By Week</button>
+                <button id="m3GroupTabTeam" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Team</button>
+                <button id="m3GroupTabFallback" class="eval-subtab-btn" style="font-size: 10px; padding: 3px 6px; height: auto; border: 1px solid transparent; background: none; color: var(--text-muted);">By Fallback</button>
+              </div>
+            </div>
+            <div id="m3DiagnosticsGroupTable" style="max-height: 200px; overflow-y: auto;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Controls Toolbar -->
+        <div class="card" style="padding: 15px; margin-bottom: 18px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; font-size: 13px;">
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-weight: 700; font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Search Player</label>
+            <input type="text" id="m3FilterSearch" placeholder="Player name..." style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px; width: 130px;" />
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-weight: 700; font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Week</label>
+            <select id="m3FilterWeek" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px;"></select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-weight: 700; font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Role</label>
+            <select id="m3FilterRole" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px;">
+              <option value="ALL">All Roles</option>
+              <option value="TOP">Top</option>
+              <option value="JGL">Jungle</option>
+              <option value="MID">Mid</option>
+              <option value="BOT">Bot</option>
+              <option value="SUP">Support</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-weight: 700; font-size: 10px; text-transform: uppercase; color: var(--text-muted);">Player Team</label>
+            <select id="m3FilterTeam" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 6px 10px; border-radius: 4px; font-size: 12px;"></select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-left: auto;">
+            <button id="m3ResetFiltersBtn" class="primary-btn" style="padding: 6px 12px; font-size: 11px; background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;">Reset Filters</button>
+          </div>
+        </div>
+
+        <!-- Main Diagnostics Table & Player Detail Panel -->
+        <div style="display: grid; grid-template-columns: 2fr 1.1fr; gap: 18px; align-items: start;">
+          <!-- Diagnostics Table -->
+          <div class="card" style="padding: 15px; overflow-x: auto;">
+            <table class="leaderboard-table" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); background: rgba(255,255,255,0.02);">
+                  <th style="text-align: left; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="week_id">Week ↕</th>
+                  <th style="text-align: left; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="player_name">Player ↕</th>
+                  <th style="text-align: left; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="role">Role ↕</th>
+                  <th style="text-align: left; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="player_team_at_period">Team ↕</th>
+                  <th style="text-align: left; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="opponent_team_at_period">Opponent ↕</th>
+                  <th style="text-align: right; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="projection_m3">M3 Pred ↕</th>
+                  <th style="text-align: right; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="actual_player_only_points">Actual ↕</th>
+                  <th style="text-align: right; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="signed_error">Error ↕</th>
+                  <th style="text-align: right; padding: 8px; cursor: pointer; color: var(--primary-color);" data-sort="absolute_error">MAE ↕</th>
+                </tr>
+              </thead>
+              <tbody id="m3DiagnosticsTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+            <div id="m3DiagnosticsPagination" style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted);">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Player Detail Panel -->
+          <div class="card" id="m3DiagnosticsDetailPanel" style="padding: 15px; min-height: 400px; background: rgba(255,255,255,0.01); border: 1px solid var(--border-color);">
+            <!-- Dynamically populated on row click -->
           </div>
         </div>
       </div>

@@ -29,7 +29,7 @@
   "model_progression": [
     {
       "model_id": "M0",
-      "description": "Expanding-window historical median baseline",
+      "description": "historical player/role expanding MEAN baseline",
       "alpha": null,
       "mae": 5.165341992950912,
       "rmse": 6.542480720042419,
@@ -38,7 +38,7 @@
     },
     {
       "model_id": "M1",
-      "description": "M0 + core player-state residual correction (Block O)",
+      "description": "M0 + player rating / uncertainty features",
       "alpha": 10.0,
       "mae": 5.077734556101584,
       "rmse": 6.442515846294209,
@@ -47,7 +47,7 @@
     },
     {
       "model_id": "M2",
-      "description": "M1 + schedule opponent context (Block A partial)",
+      "description": "M1 + Core V2 context",
       "alpha": 10.0,
       "mae": 5.063271036918488,
       "rmse": 6.445615066250958,
@@ -56,7 +56,7 @@
     },
     {
       "model_id": "M3",
-      "description": "M2 + best-of format context",
+      "description": "M2 + player-derived team state / team strength",
       "alpha": 10.0,
       "mae": 5.060352777227633,
       "rmse": 6.433872576778955,

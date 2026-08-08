@@ -125,7 +125,7 @@ def build_model_development_summary() -> Dict[str, Any]:
         "model_progression": [
             {
                 "model_id": "M0",
-                "description": "Expanding-window historical median baseline",
+                "description": "historical player/role expanding MEAN baseline",
                 "alpha": None,
                 "mae": m0["mae"],
                 "rmse": m0["rmse"],
@@ -134,7 +134,7 @@ def build_model_development_summary() -> Dict[str, Any]:
             },
             {
                 "model_id": "M1",
-                "description": "M0 + core player-state residual correction (Block O)",
+                "description": "M0 + player rating / uncertainty features",
                 "alpha": 10.0,
                 "mae": m1["mae"],
                 "rmse": m1["rmse"],
@@ -143,7 +143,7 @@ def build_model_development_summary() -> Dict[str, Any]:
             },
             {
                 "model_id": "M2",
-                "description": "M1 + schedule opponent context (Block A partial)",
+                "description": "M1 + Core V2 context",
                 "alpha": 10.0,
                 "mae": m2["mae"],
                 "rmse": m2["rmse"],
@@ -152,7 +152,7 @@ def build_model_development_summary() -> Dict[str, Any]:
             },
             {
                 "model_id": "M3",
-                "description": "M2 + best-of format context",
+                "description": "M2 + player-derived team state / team strength",
                 "alpha": 10.0,
                 "mae": m3["mae"],
                 "rmse": m3["rmse"],

@@ -9,6 +9,13 @@ let evalDevSummary = null;
 let evalWeeklyResults = null;
 let evalLeaderboard = null;
 let evalProvenance = null;
+let evalM3Diagnostics = null;
+let m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', search: '' };
+let m3DiagSort = { col: 'absolute_error', dir: 'desc' };
+let selectedDiagPlayerPeriod = null;
+let m3GroupTabActive = 'week';
+let m3DiagCurrentPage = 1;
+const m3DiagPageSize = 15;
 let selectedEvalWeekNum = 1;
 let selectedMatchupLineupRank = 1;
 let filteredPlayers = [];
@@ -210,12 +217,14 @@ async function loadDashboardData() {
       fetch('../generated/current/model-development-summary.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/stage7-weekly-results.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/stage7-leaderboard-comparison.json').then(r => r.ok ? r.json() : null),
-      fetch('../generated/current/stage7-provenance.json').then(r => r.ok ? r.json() : null)
-    ]).then(([dev, weekly, lb, prov]) => {
+      fetch('../generated/current/stage7-provenance.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/m3-player-diagnostics.json').then(r => r.ok ? r.json() : null)
+    ]).then(([dev, weekly, lb, prov, diag]) => {
       evalDevSummary = dev;
       evalWeeklyResults = weekly;
       evalLeaderboard = lb;
       evalProvenance = prov;
+      evalM3Diagnostics = diag;
       setupEvalTabs();
       renderModelEvaluation();
     }).catch(error => {
@@ -240,7 +249,7 @@ function populateFilterDropdowns() {
   // Populate Leagues
   const leagues = ['ALL', ...rawData.leagues];
   leagueSelect.innerHTML = leagues.map(l => `<option value="${l}">${l === 'ALL' ? 'All Leagues' : l}</option>`).join('');
-  
+
   // Default to LCS if present
   if (rawData.leagues.includes('LCS')) {
     leagueSelect.value = 'LCS';
@@ -374,7 +383,7 @@ function setupEventListeners() {
       btn.addEventListener('click', (e) => {
         document.querySelectorAll('.rules-tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.rules-tab-content').forEach(c => c.classList.remove('active'));
-        
+
         const targetTab = e.target.dataset.tab;
         e.target.classList.add('active');
         const contentEl = document.getElementById(targetTab);
@@ -1093,7 +1102,7 @@ function applyFilters() {
 
 function updateKPICards() {
   document.getElementById('totalPlayersKpi').innerText = filteredPlayers.length;
-  
+
   if (filteredPlayers.length > 0) {
     const topPlayer = filteredPlayers[0];
     document.getElementById('topPlayerKpi').innerText = topPlayer.playername;
@@ -1500,7 +1509,7 @@ function renderTrendChart() {
   const ctx = document.getElementById('trendChart').getContext('2d');
   const selectedSplit = document.getElementById('splitSelect').value;
   const selectedYear = document.getElementById('yearSelect').value;
-  
+
   if (trendChart) {
     trendChart.destroy();
   }
@@ -1618,7 +1627,7 @@ function openPlayerModal(pname, year, league) {
 
   const selectedSplit = document.getElementById('splitSelect').value;
   const content = document.getElementById('modalDetails');
-  
+
   let swapNotice = '';
   if (player.is_swapped) {
     swapNotice = `
@@ -2013,6 +2022,8 @@ function setupEvalTabs() {
         renderEvalDevelopment();
       } else if (targetSubviewId === 'eval-reconstructed') {
         renderEvalReconstructed();
+      } else if (targetSubviewId === 'eval-diagnostics') {
+        renderM3Diagnostics();
       } else if (targetSubviewId === 'eval-archived') {
         renderHistoricalLineups();
       }
@@ -2036,6 +2047,8 @@ function renderModelEvaluation() {
     renderEvalDevelopment();
   } else if (activeSubviewId === 'eval-reconstructed') {
     renderEvalReconstructed();
+  } else if (activeSubviewId === 'eval-diagnostics') {
+    renderM3Diagnostics();
   } else if (activeSubviewId === 'eval-archived') {
     renderHistoricalLineups();
   }
@@ -2404,5 +2417,445 @@ function renderReconstructedWeekDetail(weekNum) {
 
     <!-- Provenance binding block -->
     ${provenanceHtml}
+  `;
+}
+
+function renderM3Diagnostics() {
+  if (!evalM3Diagnostics || evalM3Diagnostics.length === 0) {
+    document.getElementById('m3DiagnosticsTableBody').innerHTML = `
+      <tr><td colspan="9" style="text-align: center; padding: 20px; color: var(--text-muted);">No diagnostic data loaded.</td></tr>
+    `;
+    return;
+  }
+
+  // 1. Populate Dropdowns once if empty
+  const weekSelect = document.getElementById('m3FilterWeek');
+  if (weekSelect && weekSelect.children.length === 0) {
+    const weeks = [...new Set(evalM3Diagnostics.map(r => r.week_id))].sort((a, b) => {
+      const numA = parseInt(a.replace(/\D/g, '')) || 0;
+      const numB = parseInt(b.replace(/\D/g, '')) || 0;
+      return numA - numB;
+    });
+    weekSelect.innerHTML = '<option value="ALL">All Weeks</option>' +
+      weeks.map(w => `<option value="${escapeHtml(w)}">${escapeHtml(w)}</option>`).join('');
+    weekSelect.value = m3DiagFilters.week;
+    weekSelect.addEventListener('change', (e) => {
+      m3DiagFilters.week = e.target.value;
+      m3DiagCurrentPage = 1;
+      renderM3Diagnostics();
+    });
+  }
+
+  const teamSelect = document.getElementById('m3FilterTeam');
+  if (teamSelect && teamSelect.children.length === 0) {
+    const teams = [...new Set(evalM3Diagnostics.map(r => r.player_team_at_period))].sort();
+    teamSelect.innerHTML = '<option value="ALL">All Teams</option>' +
+      teams.map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+    teamSelect.value = m3DiagFilters.team;
+    teamSelect.addEventListener('change', (e) => {
+      m3DiagFilters.team = e.target.value;
+      m3DiagCurrentPage = 1;
+      renderM3Diagnostics();
+    });
+  }
+
+  const searchInput = document.getElementById('m3FilterSearch');
+  if (searchInput && !searchInput.dataset.wired) {
+    searchInput.dataset.wired = 'true';
+    searchInput.value = m3DiagFilters.search;
+    searchInput.addEventListener('input', (e) => {
+      m3DiagFilters.search = e.target.value.trim();
+      m3DiagCurrentPage = 1;
+      renderM3Diagnostics();
+    });
+  }
+
+  const roleSelect = document.getElementById('m3FilterRole');
+  if (roleSelect && !roleSelect.dataset.wired) {
+    roleSelect.dataset.wired = 'true';
+    roleSelect.value = m3DiagFilters.role;
+    roleSelect.addEventListener('change', (e) => {
+      m3DiagFilters.role = e.target.value;
+      m3DiagCurrentPage = 1;
+      renderM3Diagnostics();
+    });
+  }
+
+  const resetBtn = document.getElementById('m3ResetFiltersBtn');
+  if (resetBtn && !resetBtn.dataset.wired) {
+    resetBtn.dataset.wired = 'true';
+    resetBtn.addEventListener('click', () => {
+      m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', search: '' };
+      if (searchInput) searchInput.value = '';
+      if (weekSelect) weekSelect.value = 'ALL';
+      if (roleSelect) roleSelect.value = 'ALL';
+      if (teamSelect) teamSelect.value = 'ALL';
+      m3DiagCurrentPage = 1;
+      renderM3Diagnostics();
+    });
+  }
+
+  // 2. Wire Group Tabs
+  const tabWeek = document.getElementById('m3GroupTabWeek');
+  const tabTeam = document.getElementById('m3GroupTabTeam');
+  const tabFallback = document.getElementById('m3GroupTabFallback');
+
+  const setupGroupTab = (btn, mode) => {
+    if (btn && !btn.dataset.wired) {
+      btn.dataset.wired = 'true';
+      btn.addEventListener('click', () => {
+        [tabWeek, tabTeam, tabFallback].forEach(b => {
+          if (b) {
+            b.classList.remove('active');
+            b.style.background = 'none';
+            b.style.color = 'var(--text-muted)';
+            b.style.border = '1px solid transparent';
+          }
+        });
+        btn.classList.add('active');
+        btn.style.background = 'rgba(76, 201, 240, 0.15)';
+        btn.style.color = 'var(--primary-color)';
+        btn.style.border = '1px solid rgba(76, 201, 240, 0.3)';
+        m3GroupTabActive = mode;
+        updateM3GroupDiagnosticsTable();
+      });
+    }
+  };
+  setupGroupTab(tabWeek, 'week');
+  setupGroupTab(tabTeam, 'team');
+  setupGroupTab(tabFallback, 'fallback');
+
+  // 3. Filter and Sort
+  let filtered = evalM3Diagnostics.filter(r => {
+    if (m3DiagFilters.week !== 'ALL' && r.week_id !== m3DiagFilters.week) return false;
+    if (m3DiagFilters.role !== 'ALL' && r.role.toUpperCase() !== m3DiagFilters.role) return false;
+    if (m3DiagFilters.team !== 'ALL' && r.player_team_at_period !== m3DiagFilters.team) return false;
+    if (m3DiagFilters.search) {
+      const s = m3DiagFilters.search.toLowerCase();
+      if (!r.player_name.toLowerCase().includes(s)) return false;
+    }
+    return true;
+  });
+
+  const sortCol = m3DiagSort.col;
+  const sortDir = m3DiagSort.dir === 'asc' ? 1 : -1;
+  filtered.sort((a, b) => {
+    let valA = a[sortCol];
+    let valB = b[sortCol];
+    if (typeof valA === 'string') {
+      return valA.localeCompare(valB) * sortDir;
+    }
+    if (valA === null || valA === undefined) return 1;
+    if (valB === null || valB === undefined) return -1;
+    return (valA - valB) * sortDir;
+  });
+
+  // 4. Global performance summary
+  const sumAbsError = filtered.reduce((acc, r) => acc + r.absolute_error, 0);
+  const sumSignedError = filtered.reduce((acc, r) => acc + r.signed_error, 0);
+  const globalMae = filtered.length > 0 ? (sumAbsError / filtered.length) : 0;
+  const globalMse = filtered.length > 0 ? (sumSignedError / filtered.length) : 0;
+
+  let exactCount = 0;
+  let overCount = 0;
+  let underCount = 0;
+  filtered.forEach(r => {
+    if (r.absolute_error < 0.5) exactCount++;
+    else if (r.signed_error < 0) overCount++;
+    else underCount++;
+  });
+
+  document.getElementById('m3DiagnosticsGlobalStats').innerHTML = `
+    <div class="historical-summary-card" style="padding: 10px;">
+      <span style="font-size: 11px;">Exposed MAE</span>
+      <strong style="font-size: 18px; color: #fff;">${globalMae.toFixed(3)}</strong>
+      <small style="font-size: 10px;">on ${filtered.length} rows</small>
+    </div>
+    <div class="historical-summary-card" style="padding: 10px;">
+      <span style="font-size: 11px;">Bias (Mean Err)</span>
+      <strong style="font-size: 18px; color: ${globalMse >= 0 ? '#00e676' : '#ff1744'};">${globalMse >= 0 ? '+' : ''}${globalMse.toFixed(3)}</strong>
+      <small style="font-size: 10px;">${globalMse >= 0 ? 'underpredicted' : 'overpredicted'}</small>
+    </div>
+    <div class="historical-summary-card" style="padding: 10px;">
+      <span style="font-size: 11px;">Accuracy Split</span>
+      <div style="font-size: 11px; margin-top: 5px; color: var(--text-muted); font-weight: 700;">
+        <span style="color:#00e676;">${underCount} U</span> |
+        <span style="color:#fff;">${exactCount} E</span> |
+        <span style="color:#ff1744;">${overCount} O</span>
+      </div>
+      <small style="font-size: 9px; display:block; margin-top:3px;">U=Under, E=Exact, O=Over</small>
+    </div>
+  `;
+
+  // Role Breakdown Table
+  const rolesGrouped = {};
+  filtered.forEach(r => {
+    rolesGrouped[r.role] = rolesGrouped[r.role] || { abs: 0, sign: 0, count: 0 };
+    rolesGrouped[r.role].abs += r.absolute_error;
+    rolesGrouped[r.role].sign += r.signed_error;
+    rolesGrouped[r.role].count++;
+  });
+
+  const roleStatsHtml = `
+    <table style="width: 100%; font-size: 11px; border-collapse: collapse; margin-top: 5px;">
+      <thead>
+        <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+          <th style="text-align: left; padding: 4px;">Role</th>
+          <th style="text-align: right; padding: 4px;">n</th>
+          <th style="text-align: right; padding: 4px;">MAE</th>
+          <th style="text-align: right; padding: 4px;">Bias (Mean Signed)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${Object.keys(rolesGrouped).sort().map(rl => {
+          const g = rolesGrouped[rl];
+          const mae = g.abs / g.count;
+          const bias = g.sign / g.count;
+          return `
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+              <td style="padding: 4px; text-transform: uppercase;"><strong>${escapeHtml(rl)}</strong></td>
+              <td style="text-align: right; padding: 4px; color: var(--text-muted);">${g.count}</td>
+              <td style="text-align: right; padding: 4px; font-weight: 700; color: #fff;">${mae.toFixed(2)}</td>
+              <td style="text-align: right; padding: 4px; color: ${bias >= 0 ? '#00e676' : '#ff1744'};">${bias >= 0 ? '+' : ''}${bias.toFixed(2)}</td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+  document.getElementById('m3DiagnosticsRoleStats').innerHTML = roleStatsHtml;
+
+  // Update Group Diagnostics table on right
+  updateM3GroupDiagnosticsTable();
+
+  // 5. Paginate and Render Table
+  const totalPages = Math.ceil(filtered.length / m3DiagPageSize) || 1;
+  if (m3DiagCurrentPage > totalPages) m3DiagCurrentPage = totalPages;
+  const startIdx = (m3DiagCurrentPage - 1) * m3DiagPageSize;
+  const pageRows = filtered.slice(startIdx, startIdx + m3DiagPageSize);
+
+  if (pageRows.length === 0) {
+    document.getElementById('m3DiagnosticsTableBody').innerHTML = `
+      <tr><td colspan="9" style="text-align: center; padding: 20px; color: var(--text-muted);">No player records match selected filters.</td></tr>
+    `;
+    document.getElementById('m3DiagnosticsPagination').innerHTML = '';
+  } else {
+    // Populate Default detail view on first load or filter change
+    if (!selectedDiagPlayerPeriod && pageRows.length > 0) {
+      selectedDiagPlayerPeriod = pageRows[0];
+    }
+
+    const rowsHtml = pageRows.map(r => {
+      const isSelected = selectedDiagPlayerPeriod &&
+        selectedDiagPlayerPeriod.player_id === r.player_id &&
+        selectedDiagPlayerPeriod.prediction_period_id === r.prediction_period_id;
+      const highlightClass = isSelected ? 'swapped-row' : '';
+      const errColor = r.signed_error >= 0 ? '#00e676' : '#ff1744';
+      const errSign = r.signed_error >= 0 ? '+' : '';
+
+      return `
+        <tr class="${highlightClass}" style="border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; transition: all 0.2s;" onclick="selectM3DiagnosticsRow('${escapeHtml(r.player_id)}', '${escapeHtml(r.prediction_period_id)}')">
+          <td style="padding: 8px;">${escapeHtml(r.week_id)}</td>
+          <td style="padding: 8px; font-weight: 700; color: #fff;">${escapeHtml(r.player_name)}</td>
+          <td style="padding: 8px; text-transform: uppercase;">${escapeHtml(r.role)}</td>
+          <td style="padding: 8px;">${escapeHtml(r.player_team_at_period)}</td>
+          <td style="padding: 8px; color: var(--text-muted);">${escapeHtml(r.opponent_team_at_period)}</td>
+          <td style="text-align: right; padding: 8px;">${r.projection_m3.toFixed(2)}</td>
+          <td style="text-align: right; padding: 8px; font-weight: 700; color: #fff;">${r.actual_player_only_points.toFixed(2)}</td>
+          <td style="text-align: right; padding: 8px; font-weight: 700; color: ${errColor};">${errSign}${r.signed_error.toFixed(2)}</td>
+          <td style="text-align: right; padding: 8px; color: var(--text-muted);">${r.absolute_error.toFixed(2)}</td>
+        </tr>
+      `;
+    }).join('');
+    document.getElementById('m3DiagnosticsTableBody').innerHTML = rowsHtml;
+
+    // Render Pagination Info
+    document.getElementById('m3DiagnosticsPagination').innerHTML = `
+      <div>Showing ${startIdx + 1} - ${Math.min(startIdx + m3DiagPageSize, filtered.length)} of ${filtered.length} entries</div>
+      <div style="display: flex; gap: 8px;">
+        <button class="eval-subtab-btn" onclick="changeM3DiagPage(-1)" ${m3DiagCurrentPage === 1 ? 'disabled style="opacity: 0.5; cursor: default;"' : ''}>Previous</button>
+        <div style="padding: 6px 12px; font-weight: 700; color: #fff;">Page ${m3DiagCurrentPage} of ${totalPages}</div>
+        <button class="eval-subtab-btn" onclick="changeM3DiagPage(1)" ${m3DiagCurrentPage === totalPages ? 'disabled style="opacity: 0.5; cursor: default;"' : ''}>Next</button>
+      </div>
+    `;
+
+    // Wire Sort headers
+    document.querySelectorAll('#view-historical-lineups th[data-sort]').forEach(th => {
+      const col = th.dataset.sort;
+      const isSorted = m3DiagSort.col === col;
+      const arrow = isSorted ? (m3DiagSort.dir === 'asc' ? ' ▲' : ' ▼') : ' ↕';
+      th.innerHTML = th.innerHTML.replace(/[▲▼↕]/, arrow);
+      th.onclick = () => {
+        if (m3DiagSort.col === col) {
+          m3DiagSort.dir = m3DiagSort.dir === 'asc' ? 'desc' : 'asc';
+        } else {
+          m3DiagSort.col = col;
+          m3DiagSort.dir = 'desc';
+        }
+        renderM3Diagnostics();
+      };
+    });
+  }
+
+  // 6. Populate Player Detail Panel
+  renderM3DiagnosticsDetail();
+}
+
+window.selectM3DiagnosticsRow = function(playerId, periodId) {
+  if (!evalM3Diagnostics) return;
+  const found = evalM3Diagnostics.find(r => r.player_id === playerId && r.prediction_period_id === periodId);
+  if (found) {
+    selectedDiagPlayerPeriod = found;
+    renderM3Diagnostics();
+  }
+};
+
+window.changeM3DiagPage = function(delta) {
+  m3DiagCurrentPage += delta;
+  renderM3Diagnostics();
+};
+
+function updateM3GroupDiagnosticsTable() {
+  if (!evalM3Diagnostics) return;
+
+  const keyField = m3GroupTabActive === 'week'
+    ? 'week_id'
+    : (m3GroupTabActive === 'team' ? 'player_team_at_period' : 'fallback_level');
+
+  const grouped = {};
+  evalM3Diagnostics.forEach(r => {
+    const k = r[keyField];
+    grouped[k] = grouped[k] || { abs: 0, sign: 0, count: 0 };
+    grouped[k].abs += r.absolute_error;
+    grouped[k].sign += r.signed_error;
+    grouped[k].count++;
+  });
+
+  const headers = {
+    week: 'Week',
+    team: 'Team',
+    fallback: 'Fallback Level'
+  };
+
+  const groupRowsHtml = Object.keys(grouped).sort().map(k => {
+    const g = grouped[k];
+    const mae = g.abs / g.count;
+    const bias = g.sign / g.count;
+    return `
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+        <td style="padding: 6px;"><strong>${escapeHtml(k)}</strong></td>
+        <td style="text-align: right; padding: 6px; color: var(--text-muted);">${g.count}</td>
+        <td style="text-align: right; padding: 6px; font-weight: 700; color: #fff;">${mae.toFixed(2)}</td>
+        <td style="text-align: right; padding: 6px; color: ${bias >= 0 ? '#00e676' : '#ff1744'};">${bias >= 0 ? '+' : ''}${bias.toFixed(2)}</td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById('m3DiagnosticsGroupTable').innerHTML = `
+    <table style="width: 100%; font-size: 11px; border-collapse: collapse;">
+      <thead>
+        <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted); position: sticky; top: 0; background: #0c1017; z-index: 10;">
+          <th style="text-align: left; padding: 6px;">${headers[m3GroupTabActive]}</th>
+          <th style="text-align: right; padding: 6px;">n</th>
+          <th style="text-align: right; padding: 6px;">MAE</th>
+          <th style="text-align: right; padding: 6px;">Bias</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${groupRowsHtml}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderM3DiagnosticsDetail() {
+  const panel = document.getElementById('m3DiagnosticsDetailPanel');
+  if (!panel) return;
+  if (!selectedDiagPlayerPeriod) {
+    panel.innerHTML = `
+      <div style="height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-muted); padding: 40px;">
+        Select a player row to inspect M3 point-in-time features, target labels, and residual error.
+      </div>
+    `;
+    return;
+  }
+
+  const r = selectedDiagPlayerPeriod;
+  const errColor = r.signed_error >= 0 ? '#00e676' : '#ff1744';
+  const errSign = r.signed_error >= 0 ? '+' : '';
+
+  // Categorize error bucket
+  let bucket = '';
+  if (r.absolute_error < 0.5) bucket = '<span class="price-badge up" style="background:rgba(0,230,118,0.15); border:1px solid rgba(0,230,118,0.3); color:#00e676;">NEAR_EXACT (< 0.5)</span>';
+  else if (r.signed_error < 0) bucket = '<span class="price-badge down" style="background:rgba(255,23,68,0.15); border:1px solid rgba(255,23,68,0.3); color:#ff1744;">OVERPREDICTED (>= 0.5)</span>';
+  else bucket = '<span class="price-badge up" style="background:rgba(76,201,240,0.15); border:1px solid rgba(76,201,240,0.3); color:var(--primary-color);">UNDERPREDICTED (>= 0.5)</span>';
+
+  panel.innerHTML = `
+    <div class="card-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px;">
+      <h3 class="card-title">🔍 Diagnostic Panel: ${escapeHtml(r.player_name)}</h3>
+    </div>
+
+    <div style="font-size: 12.5px; line-height: 1.6; color: var(--text-muted);">
+      <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div><strong>Role:</strong> <span style="text-transform: uppercase; color: #fff;">${escapeHtml(r.role)}</span></div>
+        <div>${bucket}</div>
+      </div>
+
+      <!-- Key Identifiers -->
+      <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;">
+        <div><strong>Player ID:</strong> <code style="word-break: break-all; font-size: 11px;">${escapeHtml(r.player_id)}</code></div>
+        <div><strong>Period ID:</strong> <code style="word-break: break-all; font-size: 11px;">${escapeHtml(r.prediction_period_id)}</code></div>
+        <div><strong>Week:</strong> <span style="color: #fff;">${escapeHtml(r.week_id)}</span></div>
+        <div><strong>Target Cutoff:</strong> <code style="font-size: 11px;">${escapeHtml(r.target_cutoff)}</code></div>
+      </div>
+
+      <!-- Projections & Error -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.03);">
+        <div>
+          <span style="font-size: 11px; display: block;">M3 Projected Points</span>
+          <strong style="font-size: 18px; color: #fff;">${r.projection_m3.toFixed(2)}</strong>
+        </div>
+        <div>
+          <span style="font-size: 11px; display: block;">Actual Player Points</span>
+          <strong style="font-size: 18px; color: #fff;">${r.actual_player_only_points.toFixed(2)}</strong>
+        </div>
+        <div style="margin-top: 5px;">
+          <span style="font-size: 11px; display: block;">Signed Error</span>
+          <strong style="font-size: 16px; color: ${errColor};">${errSign}${r.signed_error.toFixed(2)}</strong>
+        </div>
+        <div style="margin-top: 5px;">
+          <span style="font-size: 11px; display: block;">Absolute Error (MAE)</span>
+          <strong style="font-size: 16px; color: #fff;">${r.absolute_error.toFixed(2)}</strong>
+        </div>
+      </div>
+
+      <!-- Match Context -->
+      <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+        <h4 style="margin: 0 0 6px; font-size: 12px; color: var(--primary-color);">Matchup Context</h4>
+        <div><strong>Player Team at Period:</strong> <span style="color: #fff;">${escapeHtml(r.player_team_at_period)}</span></div>
+        <div><strong>Opponent(s) at Period:</strong> <span style="color: #fff;">${escapeHtml(r.opponent_team_at_period)}</span></div>
+        <div style="font-size: 10px; color: var(--text-muted); font-style: italic; margin-top: 4px;">
+          ⚠️ Opponent context is retrospective diagnostic metadata only.
+        </div>
+      </div>
+
+      <!-- Point in time features -->
+      <div>
+        <h4 style="margin: 0 0 6px; font-size: 12px; color: var(--primary-color);">Point-in-Time Features</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11.5px;">
+          <div><strong>Fallback Level:</strong> <span style="color: #fff; text-transform: uppercase;">${escapeHtml(r.fallback_level)}</span></div>
+          <div><strong>History Count:</strong> <span style="color: #fff;">${r.history_count} games</span></div>
+          <div><strong>Uncertainty:</strong> <span style="color: #fff;">${r.uncertainty !== null ? r.uncertainty.toFixed(4) : 'N/A'}</span></div>
+          <div><strong>Core V2 Status:</strong> <span style="color: #fff;">${r.core_status !== null ? r.core_status.toFixed(4) : 'N/A'}</span></div>
+          <div style="grid-column: span 2;"><strong>Team Strength Context:</strong> <span style="color: #fff;">${r.team_context_coverage !== null ? r.team_context_coverage.toFixed(4) : 'N/A'}</span></div>
+        </div>
+      </div>
+
+      <!-- Provenance -->
+      <div style="margin-top: 15px; font-size: 10.5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; color: var(--text-muted);">
+        <div><strong>Model Spec Hash:</strong> <code style="word-break: break-all;">${escapeHtml(r.model_artifact_sha256)}</code></div>
+        <div><strong>Data Quality Status:</strong> <code style="color: #00e676;">${escapeHtml(r.data_quality_status)}</code></div>
+      </div>
+    </div>
   `;
 }
