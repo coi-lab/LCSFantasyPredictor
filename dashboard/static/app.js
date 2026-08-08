@@ -11,6 +11,7 @@ let evalLeaderboard = null;
 let evalProvenance = null;
 let evalM3Diagnostics = null;
 let evalM3DiagSummary = null;
+let evalStage8Summary = null;
 let m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', opponent: 'ALL', search: '', dnp: 'ALL' };
 let m3DiagSort = { col: 'default', dir: 'asc' };
 let selectedDiagPlayerPeriod = null;
@@ -220,14 +221,16 @@ async function loadDashboardData() {
       fetch('../generated/current/stage7-leaderboard-comparison.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/stage7-provenance.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/m3-player-diagnostics.json').then(r => r.ok ? r.json() : null),
-      fetch('../generated/current/m3-player-diagnostic-summary.json').then(r => r.ok ? r.json() : null)
-    ]).then(([dev, weekly, lb, prov, diag, diagSummary]) => {
+      fetch('../generated/current/m3-player-diagnostic-summary.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/stage-8-exposed-2026-diagnostics.json').then(r => r.ok ? r.json() : null)
+    ]).then(([dev, weekly, lb, prov, diag, diagSummary, stage8]) => {
       evalDevSummary = dev;
       evalWeeklyResults = weekly;
       evalLeaderboard = lb;
       evalProvenance = prov;
       evalM3Diagnostics = diag;
       evalM3DiagSummary = diagSummary;
+      evalStage8Summary = stage8;
       setupEvalTabs();
       renderModelEvaluation();
     }).catch(error => {
@@ -2930,6 +2933,70 @@ function renderM3Diagnostics() {
     });
   }
 
+  // Stage 8 Comparison Card
+  const s8Card = document.getElementById('m3Stage8DiagnosticsComparison');
+  if (s8Card) {
+    if (!evalStage8Summary) {
+      s8Card.innerHTML = `
+        <div style="height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--text-muted); font-size: 11px; padding: 20px;">
+          Stage 8 comparison data not loaded.
+        </div>
+      `;
+    } else {
+      const m = evalStage8Summary.metrics;
+      s8Card.innerHTML = `
+        <div style="margin-bottom: 8px; font-size: 10px; font-style: italic; color: #ffb703; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">
+          ⚠️ ${escapeHtml(evalStage8Summary.title)}
+        </div>
+        <table style="width: 100%; font-size: 11px; border-collapse: collapse; line-height: 1.5;">
+          <thead>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); font-weight: bold;">
+              <th style="text-align: left; padding: 4px 2px;">Metric</th>
+              <th style="text-align: right; padding: 4px 2px;">M3</th>
+              <th style="text-align: right; padding: 4px 2px; color: var(--primary-color);">Stage 8</th>
+              <th style="text-align: right; padding: 4px 2px; color: #fff;">Actual</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+              <td style="padding: 4px 2px;"><strong>MAE</strong></td>
+              <td style="text-align: right; padding: 4px 2px; color: #fff;">${m.mae.m3.toFixed(3)}</td>
+              <td style="text-align: right; padding: 4px 2px; color: #00e676; font-weight: bold;">${m.mae.stage8.toFixed(3)} (${m.mae.delta.toFixed(2)})</td>
+              <td style="text-align: right; padding: 4px 2px; color: var(--text-muted);">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+              <td style="padding: 4px 2px;"><strong>Score SD</strong></td>
+              <td style="text-align: right; padding: 4px 2px; color: #fff;">${m.sd.m3.toFixed(2)}</td>
+              <td style="text-align: right; padding: 4px 2px; color: var(--primary-color); font-weight: bold;">${m.sd.stage8.toFixed(2)}</td>
+              <td style="text-align: right; padding: 4px 2px; color: #fff;">${m.sd.actual.toFixed(2)}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+              <td style="padding: 4px 2px;"><strong>SD Ratio</strong></td>
+              <td style="text-align: right; padding: 4px 2px; color: #fff;">${m.sd_ratio.m3.toFixed(3)}</td>
+              <td style="text-align: right; padding: 4px 2px; color: #00e676; font-weight: bold;">${m.sd_ratio.stage8.toFixed(3)}</td>
+              <td style="text-align: right; padding: 4px 2px; color: var(--text-muted);">-</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+              <td style="padding: 4px 2px;"><strong>W/L Gap</strong></td>
+              <td style="text-align: right; padding: 4px 2px; color: #fff;">${m.winner_loser_gap.m3.toFixed(2)}</td>
+              <td style="text-align: right; padding: 4px 2px; color: #00e676; font-weight: bold;">${m.winner_loser_gap.stage8.toFixed(2)}</td>
+              <td style="text-align: right; padding: 4px 2px; color: #fff;">${m.winner_loser_gap.actual.toFixed(2)}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.03);">
+              <td style="padding: 4px 2px;"><strong>Top-20% Recall</strong></td>
+              <td style="text-align: right; padding: 4px 2px; color: #fff;">${(m.top20_recall.m3 * 100).toFixed(1)}%</td>
+              <td style="text-align: right; padding: 4px 2px; color: #00e676; font-weight: bold;">${(m.top20_recall.stage8 * 100).toFixed(1)}%</td>
+              <td style="text-align: right; padding: 4px 2px; color: var(--text-muted);">-</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size: 9px; color: var(--text-muted); margin-top: 6px; font-style: italic;">
+          * Candidate: T3_240d (matchup diff + win prob + decayed role interactions)
+        </div>
+      `;
+    }
+  }
+
   // 6. Populate Player Detail Panel
   renderM3DiagnosticsDetail();
 }
@@ -3078,7 +3145,7 @@ function renderM3DiagnosticsDetail() {
       </div>
 
       <!-- Projections & Error -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.03);">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.03);">
         <div>
           <span style="font-size: 11px; display: block;">M3 Projected Points</span>
           <strong style="font-size: 18px; color: #fff;">${r.projection_m3.toFixed(2)}</strong>
@@ -3088,14 +3155,39 @@ function renderM3DiagnosticsDetail() {
           <strong style="font-size: 18px; color: #fff;">${r.actual_player_only_points.toFixed(2)}</strong>
         </div>
         <div style="margin-top: 5px;">
-          <span style="font-size: 11px; display: block;">Signed Error</span>
+          <span style="font-size: 11px; display: block;">Signed Error (M3)</span>
           <strong style="font-size: 16px; color: ${errColor};">${errSign}${r.signed_error.toFixed(2)}</strong>
         </div>
         <div style="margin-top: 5px;">
-          <span style="font-size: 11px; display: block;">Absolute Error</span>
+          <span style="font-size: 11px; display: block;">Absolute Error (M3)</span>
           <strong style="font-size: 16px; color: #fff;">${r.absolute_error.toFixed(2)}</strong>
         </div>
       </div>
+
+      <!-- Stage 8 Comparative Projections & Error -->
+      ${r.projection_stage8 != null ? `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; background: rgba(76, 201, 240, 0.05); padding: 10px; border-radius: 6px; border: 1px solid rgba(76, 201, 240, 0.15);">
+        <div style="grid-column: span 2; font-size: 10.5px; font-weight: 700; color: var(--primary-color); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">
+          🚀 Stage 8 Candidate (T3_240d)
+        </div>
+        <div>
+          <span style="font-size: 11px; display: block;">Stage 8 Projected</span>
+          <strong style="font-size: 18px; color: #fff;">${r.projection_stage8.toFixed(2)}</strong>
+        </div>
+        <div>
+          <span style="font-size: 11px; display: block;">Actual Points</span>
+          <strong style="font-size: 18px; color: #fff;">${r.actual_player_only_points.toFixed(2)}</strong>
+        </div>
+        <div style="margin-top: 5px;">
+          <span style="font-size: 11px; display: block;">Signed Error (S8)</span>
+          <strong style="font-size: 16px; color: ${r.signed_error_stage8 >= 0 ? '#00e676' : '#ff1744'};">${r.signed_error_stage8 >= 0 ? '+' : ''}${r.signed_error_stage8.toFixed(2)}</strong>
+        </div>
+        <div style="margin-top: 5px;">
+          <span style="font-size: 11px; display: block;">Absolute Error (S8)</span>
+          <strong style="font-size: 16px; color: #fff;">${r.absolute_error_stage8.toFixed(2)}</strong>
+        </div>
+      </div>
+      ` : ''}
 
       <!-- Match Context -->
       <div style="margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">

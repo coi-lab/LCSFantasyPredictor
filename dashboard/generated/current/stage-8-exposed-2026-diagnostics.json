@@ -1,0 +1,30 @@
+{
+  "title": "EXPOSED DIAGNOSTIC COMPARISON \u2014 NOT MODEL SELECTION DATA",
+  "description": "Comparative performance metrics between baseline M3 and Stage 8 Candidate (T3_240d) on the 2026 exposed retrospective evaluation dataset.",
+  "metrics": {
+    "n_observations": 637,
+    "mae": {
+      "m3": 6.462105672660672,
+      "stage8": 6.066832770033163,
+      "delta": -0.395272902627509
+    },
+    "sd": {
+      "actual": 8.255389003330794,
+      "m3": 2.2133629251938043,
+      "stage8": 3.081069926364759
+    },
+    "sd_ratio": {
+      "m3": 0.2681112815278336,
+      "stage8": 0.3732192299020243
+    },
+    "winner_loser_gap": {
+      "actual": 12.020588422973844,
+      "m3": 1.0673924464300502,
+      "stage8": 2.6063081493431692
+    },
+    "top20_recall": {
+      "m3": 0.25196850393700787,
+      "stage8": 0.4094488188976378
+    }
+  }
+}
