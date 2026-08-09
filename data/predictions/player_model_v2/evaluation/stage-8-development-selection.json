@@ -1,0 +1,111 @@
+{
+  "compression_diagnosis": {
+    "m3_predicted_std": 2.2187908960151073,
+    "actual_std": 6.675077303385143,
+    "sd_ratio": 0.3323992809626172,
+    "m3_winner_loser_gap": 1.259954758065776,
+    "actual_winner_loser_gap": 9.81317977375607,
+    "compression_verdict": "COMPRESSION_CONFIRMED"
+  },
+  "matchup_model": {
+    "matchup_strength_diff_definition": "prior_team_strength - prior_opponent_team_strength",
+    "win_probability_model_coefficient": 3.6656880807869077,
+    "coach_signal_audit_result": {
+      "verdict": "QUALIFIED_BUT_REDUNDANT",
+      "correlation_with_prior_team_strength": 0.7878467010806987,
+      "correlation_with_predicted_team_win_probability": 0.9627139198860157,
+      "correlation_with_matchup_strength_diff": 0.9617322590158008
+    }
+  },
+  "candidate_comparison": [
+    {
+      "candidate": "T0_M3",
+      "half_life": null,
+      "MAE": 5.060352777227627,
+      "RMSE": 6.433872576778946,
+      "prediction_std": 2.218790896015092,
+      "sd_ratio": 0.33239928096261495,
+      "top20_recall": 0.3046875,
+      "winner_loser_gap": 1.259954758065776,
+      "matchup_differential_mae": 36.09801578366134,
+      "selection_gate_result": "PASS"
+    },
+    {
+      "candidate": "T1",
+      "half_life": null,
+      "MAE": 5.0550273797552085,
+      "RMSE": 6.443355023977753,
+      "prediction_std": 2.69089625527631,
+      "sd_ratio": 0.40312585652179206,
+      "top20_recall": 0.3125,
+      "winner_loser_gap": 2.044403671827528,
+      "matchup_differential_mae": 35.776437168974944,
+      "selection_gate_result": "PASS"
+    },
+    {
+      "candidate": "T2",
+      "half_life": null,
+      "MAE": 5.056136683093843,
+      "RMSE": 6.444917250174995,
+      "prediction_std": 2.7035683632218985,
+      "sd_ratio": 0.4050242776740329,
+      "top20_recall": 0.3125,
+      "winner_loser_gap": 2.058172314187747,
+      "matchup_differential_mae": 35.771343226852075,
+      "selection_gate_result": "PASS"
+    },
+    {
+      "candidate": "T3_uniform",
+      "half_life": null,
+      "MAE": 5.051562950202627,
+      "RMSE": 6.4456699624127165,
+      "prediction_std": 2.7139676732296425,
+      "sd_ratio": 0.4065822086964152,
+      "top20_recall": 0.3125,
+      "winner_loser_gap": 2.0521852913786542,
+      "matchup_differential_mae": 35.76602070888464,
+      "selection_gate_result": "PASS"
+    },
+    {
+      "candidate": "T3_60d",
+      "half_life": 60.0,
+      "MAE": 5.0248123624115495,
+      "RMSE": 6.4070884455324215,
+      "prediction_std": 2.586836190499126,
+      "sd_ratio": 0.3875365142493945,
+      "top20_recall": 0.30078125,
+      "winner_loser_gap": 1.9384277055554051,
+      "matchup_differential_mae": 35.97704443773965,
+      "selection_gate_result": "PASS"
+    },
+    {
+      "candidate": "T3_120d",
+      "half_life": 120.0,
+      "MAE": 5.019841310619452,
+      "RMSE": 6.401157728838958,
+      "prediction_std": 2.6178641459739316,
+      "sd_ratio": 0.3921848432596174,
+      "top20_recall": 0.30859375,
+      "winner_loser_gap": 2.012104790202189,
+      "matchup_differential_mae": 35.80909503848336,
+      "selection_gate_result": "PASS"
+    },
+    {
+      "candidate": "T3_240d",
+      "half_life": 240.0,
+      "MAE": 5.029391717705868,
+      "RMSE": 6.412748171989213,
+      "prediction_std": 2.65381537591307,
+      "sd_ratio": 0.3975707329362667,
+      "top20_recall": 0.3125,
+      "winner_loser_gap": 2.039675997119213,
+      "matchup_differential_mae": 35.75870787469382,
+      "selection_gate_result": "PASS"
+    }
+  ],
+  "selection_decision": {
+    "selected_candidate": "T3_240d",
+    "stage_8d_required": false,
+    "status": "STAGE_8D_NOT_REQUIRED"
+  }
+}

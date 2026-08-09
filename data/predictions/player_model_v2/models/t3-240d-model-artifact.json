@@ -1,0 +1,70 @@
+{
+  "candidate_id": "T3_240d",
+  "parent_model": "M3",
+  "parent_model_hash": "2956aa38a60e93af15a83e66ecaf1bc325ef9c0209f6d1052c5d9970ac5033e7",
+  "architecture": {
+    "base": "M3",
+    "added_features": [
+      "matchup_strength_diff",
+      "predicted_team_win_probability",
+      "role-sensitive matchup response"
+    ]
+  },
+  "time_decay_half_life_days": 240.0,
+  "patch_decay": {
+    "status": "PATCH_DECAY_NOT_ELIGIBLE"
+  },
+  "team-change treatment": {
+    "rule": "Restart/blend player component via M0 fallback baseline"
+  },
+  "effective-evidence shrinkage": {
+    "rule": "continuous M0/M1 prior core state shrinkage"
+  },
+  "matchup win-probability model": {
+    "type": "Logistic Win Probability without intercept",
+    "beta": 3.6656880807869077,
+    "intercept": 0.0,
+    "input_definition": "matchup_strength_diff = prior_team_strength - prior_opponent_team_strength"
+  },
+  "feature_order": [
+    "m0_prediction",
+    "m0_source_count",
+    "prior_player_rating",
+    "prior_residual_uncertainty",
+    "prior_effective_evidence",
+    "prior_role_relative_rating",
+    "prior_role_adjusted_kp",
+    "prior_core_state",
+    "prior_team_strength",
+    "prior_team_state",
+    "matchup_strength_diff",
+    "predicted_team_win_probability"
+  ],
+  "preprocessing_contract": {
+    "standardization_state": "means and scales (Z-score)",
+    "numeric_features": [
+      "m0_prediction",
+      "m0_source_count",
+      "prior_player_rating",
+      "prior_residual_uncertainty",
+      "prior_effective_evidence",
+      "prior_role_relative_rating",
+      "prior_role_adjusted_kp",
+      "prior_core_state",
+      "prior_team_strength",
+      "prior_team_state",
+      "matchup_strength_diff",
+      "predicted_team_win_probability"
+    ],
+    "missing_indicator_features": [
+      "prior_core_state",
+      "prior_team_strength",
+      "prior_team_state",
+      "matchup_strength_diff"
+    ],
+    "imputation_state": "medians"
+  },
+  "training_development_period": "Warmup & development partitions 2020-2023",
+  "selection_policy_identity_hash": "3892bdd365faa9524e12717998484b247fff2465cb44f03606c06c8d994e533a",
+  "final_candidate_identity_hash": "56b028ba94ca4883f026c0d6e7f4eebd4906e9030708b1597c2734d5ea55ade4"
+}

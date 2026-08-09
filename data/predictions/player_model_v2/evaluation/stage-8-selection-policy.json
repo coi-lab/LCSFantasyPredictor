@@ -1,0 +1,13 @@
+{
+  "accuracy_guardrail_mae_degradation_pct_limit": 0.5,
+  "mae_degradation_limit": 5.085654541113764,
+  "m3_baseline_mae": 5.060352777227627,
+  "required_improvements_count": 2,
+  "improvement_metrics": [
+    "prediction/actual SD ratio",
+    "Winner-loser gap error",
+    "Top-20% Recall",
+    "Matchup team-total differential MAE"
+  ],
+  "selection_priority": "Among candidates passing the guardrail, choose the candidate that minimizes matchup_diff_mae and maximizes top20_recall."
+}

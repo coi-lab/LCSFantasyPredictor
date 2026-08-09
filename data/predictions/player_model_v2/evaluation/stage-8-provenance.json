@@ -1,0 +1,26 @@
+{
+  "parent_model_m3": {
+    "path": "data/predictions/player_model_v2/models/m3-model-artifact.json",
+    "sha256": "2956aa38a60e93af15a83e66ecaf1bc325ef9c0209f6d1052c5d9970ac5033e7"
+  },
+  "candidate_model_t3_240d": {
+    "path": "data/predictions/player_model_v2/models/t3-240d-model-artifact.json",
+    "sha256": "c08aa72a5eabd5563ce45af27ccd4fa5f6a7a2be9e04735a18049d895cee8b9b"
+  },
+  "stage_8_development_selection_summary": {
+    "path": "data/predictions/player_model_v2/evaluation/stage-8-development-selection.json",
+    "sha256": "47c69d3b1f1e7f3b1bc1307fd104464552fe16f92af2aff6d63733f5c643c376"
+  },
+  "stage_8_exposed_2026_diagnostics": {
+    "path": "data/predictions/player_model_v2/evaluation/stage-8-exposed-2026-diagnostics.json",
+    "sha256": "e15d971a0ab1e301394e966b930c0602ee6d09737d78169fdf9dbec0cc0e5467"
+  },
+  "evaluation_dataset_637_rows": {
+    "path": "data/predictions/player_model_v2/evaluation/m3-player-diagnostics.json",
+    "sha256": "f1bb96e4d935d85294e0c98e0f0f00751671d419fb6af37892f52a99523bab17"
+  },
+  "selection_policy": {
+    "path": "data/predictions/player_model_v2/evaluation/stage-8-selection-policy.json",
+    "sha256": "1c26865f25c762c4c8d49b25fc063fbe8dea6867e7e1174df606f7467a241404"
+  }
+}

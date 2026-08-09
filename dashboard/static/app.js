@@ -3186,6 +3186,11 @@ function renderM3DiagnosticsDetail() {
           <span style="font-size: 11px; display: block;">Absolute Error (S8)</span>
           <strong style="font-size: 16px; color: #fff;">${r.absolute_error_stage8.toFixed(2)}</strong>
         </div>
+        <div style="grid-column: span 2; margin-top: 5px; border-top: 1px solid rgba(76, 201, 240, 0.15); padding-top: 5px; font-size: 11px; display: flex; flex-direction: column; gap: 2px;">
+          <div><strong>Matchup Strength Diff:</strong> <span style="color: #fff;">${r.matchup_strength_diff_stage8 != null ? r.matchup_strength_diff_stage8.toFixed(4) : 'N/A'}</span></div>
+          <div><strong>Predicted Win Prob:</strong> <span style="color: #fff;">${r.predicted_team_win_probability_stage8 != null ? (r.predicted_team_win_probability_stage8 * 100).toFixed(2) + '%' : 'N/A'}</span></div>
+          <div><strong>Decay Half-Life:</strong> <span style="color: #fff;">${r.stage8_time_decay_half_life_days != null ? r.stage8_time_decay_half_life_days + ' days' : 'N/A'}</span></div>
+        </div>
       </div>
       ` : ''}
 
