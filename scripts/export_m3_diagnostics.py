@@ -22,6 +22,8 @@ sys.path.insert(0, str(ROOT))
 
 from data_pipeline.ingest import LCSDataIngestor
 
+from fantasy_prediction.player_model_t3_predictor import predict_t3_240d
+
 S3 = ROOT / "data/processed/player_model_v2/stage_3e_03"
 CTX = ROOT / "data/processed/player_model_v2/stage_4c_context_03"
 CANONICAL_MODEL_PATH = ROOT / "data/predictions/player_model_v2/models/m3-model-artifact.json"
@@ -235,6 +237,18 @@ def main() -> None:
                     "periods_since_team_change": periods_since
                 }
 
+    # Load matchup features
+    matchup_feat_path = EVAL_DIR / "stage-8-matchup-features.csv"
+    if matchup_feat_path.exists():
+        matchup_feat_df = pd.read_csv(matchup_feat_path)
+        universe_with_m0 = universe_with_m0.merge(
+            matchup_feat_df[[
+                "player_id", "prediction_period_id", "matchup_strength_diff", "predicted_team_win_probability"
+            ]],
+            on=["player_id", "prediction_period_id"],
+            how="left"
+        )
+
     # Extract only the 2026 exposed evaluation targets
     target = universe_with_m0[universe_with_m0.chronological_partition.eq("exposed_evaluation_2026")].reset_index(drop=True)
 
@@ -244,6 +258,15 @@ def main() -> None:
     # Predict using M3
     m3_predictions = predict(target, m3_model["preprocessing"], m3_model)
     target["projection_m3"] = m3_predictions
+
+    # Predict using Stage 8 Candidate (T3_240d)
+    train_base = universe_with_m0[universe_with_m0.chronological_partition.isin([
+        "development_2022_2023", "protected_selection_2024"
+    ])].reset_index(drop=True)
+    target["projection_stage8"] = np.nan
+    for cutoff_dt, grp in target.groupby("target_cutoff"):
+        preds = predict_t3_240d(train_base, grp, cutoff_dt, alpha=10.0, half_life=240.0)
+        target.loc[grp.index, "projection_stage8"] = preds
 
     # Load friendly prediction period week names
     pred_periods = pd.read_csv(S3 / "prediction_periods.csv")
@@ -318,6 +341,13 @@ def main() -> None:
         signed_err = actual - proj
         abs_err = abs(signed_err)
 
+        # Stage 8 predictions and error calculations
+        proj_s8 = float(r.projection_stage8) if pd.notna(r.projection_stage8) else None
+        signed_err_s8 = (actual - proj_s8) if (proj_s8 is not None and pd.notna(r.realized_fantasy_points)) else None
+        abs_err_s8 = abs(signed_err_s8) if signed_err_s8 is not None else None
+        diff_s8 = float(r.matchup_strength_diff) if hasattr(r, "matchup_strength_diff") and pd.notna(r.matchup_strength_diff) else None
+        win_prob_s8 = float(r.predicted_team_win_probability) if hasattr(r, "predicted_team_win_probability") and pd.notna(r.predicted_team_win_probability) else 0.5
+
         # Context features availability checks
         prior_core = float(r.prior_core_state) if pd.notna(r.prior_core_state) else None
         prior_team_st = float(r.prior_team_state) if pd.notna(r.prior_team_state) else None
@@ -341,6 +371,15 @@ def main() -> None:
             "actual_player_only_points": round(actual, 2),
             "signed_error": round(signed_err, 2),
             "absolute_error": round(abs_err, 2),
+
+            # Stage 8 Candidate (T3_240d) Fields
+            "projection_stage8": round(proj_s8, 2) if proj_s8 is not None else None,
+            "signed_error_stage8": round(signed_err_s8, 2) if signed_err_s8 is not None else None,
+            "absolute_error_stage8": round(abs_err_s8, 2) if abs_err_s8 is not None else None,
+            "stage8_candidate_id": "T3_240d",
+            "matchup_strength_diff_stage8": round(diff_s8, 4) if diff_s8 is not None else None,
+            "predicted_team_win_probability_stage8": round(win_prob_s8, 4) if win_prob_s8 is not None else 0.5,
+            "stage8_time_decay_half_life_days": 240.0,
 
             # History Count Semantics
             "player_history_count": int(r.player_history_count),

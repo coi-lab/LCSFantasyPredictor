@@ -290,11 +290,8 @@ class TestM3DashboardDiagnostics(unittest.TestCase):
 
     def test_m3_dashboard_fresh_clone_regeneration(self):
         # Verify fresh-clone regeneration executes from git-tracked files only
-        temp_dir = ROOT / "data/processed/fresh_clone_temp"
-        if temp_dir.exists():
-            import shutil
-            shutil.rmtree(temp_dir)
-        temp_dir.mkdir(parents=True, exist_ok=True)
+        import tempfile
+        temp_dir = Path(tempfile.mkdtemp(prefix="lcs_fresh_clone_"))
         try:
             import subprocess
             subprocess.run(
@@ -307,14 +304,21 @@ class TestM3DashboardDiagnostics(unittest.TestCase):
                 tar.extractall(path=temp_dir)
             (temp_dir / "archive.tar").unlink()
 
-            # Copy untracked model artifact and modified scripts to simulate clone state with working tree edits
-            model_canon_src = ROOT / "data/predictions/player_model_v2/models/m3-model-artifact.json"
-            model_canon_dst = temp_dir / "data/predictions/player_model_v2/models/m3-model-artifact.json"
-            model_canon_dst.parent.mkdir(parents=True, exist_ok=True)
-            import shutil
-            shutil.copy2(model_canon_src, model_canon_dst)
-            shutil.copy2(ROOT / "data_pipeline/export_dashboard_data.py", temp_dir / "data_pipeline/export_dashboard_data.py")
-            shutil.copy2(ROOT / "scripts/export_m3_diagnostics.py", temp_dir / "scripts/export_m3_diagnostics.py")
+            # Copy working tree model artifacts, scripts, and predictor files to simulate clone state with working tree edits
+            for rel in [
+                "data/predictions/player_model_v2/models/m3-model-artifact.json",
+                "data/predictions/player_model_v2/models/t3-240d-model-artifact.json",
+                "data/predictions/player_model_v2/evaluation/stage-8-matchup-features.csv",
+                "fantasy_prediction/player_model_t3_predictor.py",
+                "data_pipeline/export_dashboard_data.py",
+                "scripts/export_m3_diagnostics.py"
+            ]:
+                src = ROOT / rel
+                if src.exists():
+                    dst = temp_dir / rel
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    import shutil
+                    shutil.copy2(src, dst)
 
             env = dict(os.environ)
             env["PYTHONPATH"] = str(temp_dir)
@@ -332,7 +336,7 @@ class TestM3DashboardDiagnostics(unittest.TestCase):
         finally:
             import shutil
             if temp_dir.exists():
-                shutil.rmtree(temp_dir)
+                shutil.rmtree(temp_dir, ignore_errors=True)
 
     def test_m3_dashboard_deterministic_regeneration(self):
         # Regenerating twice produces byte-by-byte identical output

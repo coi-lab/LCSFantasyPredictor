@@ -72,6 +72,22 @@ class TestStage8Integration(unittest.TestCase):
             diag = json.load(f)
         self.assertEqual(diag["title"], "EXPOSED DIAGNOSTIC COMPARISON — NOT MODEL SELECTION DATA")
 
+    def test_stage8_reproduce_exposed_summary(self):
+        import numpy as np
+        with open(EVAL_DIR / "m3-player-diagnostics.json", "r", encoding="utf-8") as f:
+            data = json.load(f)
+        y_true = np.array([float(r["actual_player_only_points"]) for r in data])
+        y_s8 = np.array([float(r["projection_stage8"]) for r in data])
+
+        mae_s8 = float(np.mean(np.abs(y_true - y_s8)))
+        sd_s8 = float(np.std(y_s8, ddof=1))
+        sd_true = float(np.std(y_true, ddof=1))
+        sd_ratio_s8 = sd_s8 / sd_true
+
+        self.assertAlmostEqual(mae_s8, 6.0668, places=3)
+        self.assertAlmostEqual(sd_s8, 3.0811, places=3)
+        self.assertAlmostEqual(sd_ratio_s8, 0.3732, places=3)
+
     def test_stage8_row_count_637(self):
         for path in [EVAL_DIR / "m3-player-diagnostics.json", DASH_DIR / "m3-player-diagnostics.json"]:
             with open(path, "r", encoding="utf-8") as f:
