@@ -2,6 +2,8 @@
   "candidate_id": "T3_240d",
   "parent_model": "M3",
   "parent_model_hash": "2956aa38a60e93af15a83e66ecaf1bc325ef9c0209f6d1052c5d9970ac5033e7",
+  "model_freeze_semantics": "frozen_specification_with_deterministic_chronological_refit",
+  "coefficient_policy": "deterministic_chronological_refit",
   "architecture": {
     "base": "M3",
     "added_features": [
@@ -64,7 +66,12 @@
     ],
     "imputation_state": "medians"
   },
-  "training_development_period": "Warmup & development partitions 2020-2023",
+  "candidate_selection_period": "2022-2023 development",
+  "candidate_selection_data_policy": "2022-2023 development partitions (D1-D3 validation folds)",
+  "consumed_protected_evidence": "2024 protected selection",
+  "consumed_protected_evidence_usage": "Consumed historical evidence; not used to choose T3_240d or tune Stage 8 hyperparameters",
+  "post_selection_refit_history": "2022-2023 development + 2024 post-selection refit history available chronologically before each target cutoff",
+  "post_selection_refit_policy": "Deterministic chronological refitting using historical rows prior to target cutoff",
   "selection_policy_identity_hash": "3892bdd365faa9524e12717998484b247fff2465cb44f03606c06c8d994e533a",
   "final_candidate_identity_hash": "56b028ba94ca4883f026c0d6e7f4eebd4906e9030708b1597c2734d5ea55ade4"
 }

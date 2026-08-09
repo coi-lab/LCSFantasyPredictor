@@ -5,7 +5,7 @@
   },
   "candidate_model_t3_240d": {
     "path": "data/predictions/player_model_v2/models/t3-240d-model-artifact.json",
-    "sha256": "c08aa72a5eabd5563ce45af27ccd4fa5f6a7a2be9e04735a18049d895cee8b9b"
+    "sha256": "da912c6f17579738e56ae9af8bfbe64ef03ca62d6276aa32b0f3a3f25a703e90"
   },
   "stage_8_development_selection_summary": {
     "path": "data/predictions/player_model_v2/evaluation/stage-8-development-selection.json",

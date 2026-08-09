@@ -142,3 +142,62 @@ def predict_t3_240d(
     # Predict
     preds = score.m0_prediction.to_numpy(float) + float(model["intercept"]) + X_score @ np.asarray(model["coefficients"], float)
     return preds
+
+def calculate_top_k_recall(
+    y_true: np.ndarray | pd.Series | list[float],
+    y_pred: np.ndarray | pd.Series | list[float],
+    k_pct: float = 0.20
+) -> float:
+    """Canonical Top-K% Recall calculation using nlargest index intersection."""
+    s_true = pd.Series(y_true).dropna()
+    s_pred = pd.Series(y_pred).dropna()
+    common_idx = s_true.index.intersection(s_pred.index)
+    if len(common_idx) == 0:
+        return 0.0
+    s_true = s_true.loc[common_idx]
+    s_pred = s_pred.loc[common_idx]
+
+    k = int(round(len(common_idx) * k_pct))
+    if k == 0:
+        return 0.0
+
+    top_true = set(s_true.nlargest(k).index)
+    top_pred = set(s_pred.nlargest(k).index)
+    return len(top_true & top_pred) / k
+
+def calculate_winner_loser_gap(
+    df: pd.DataFrame,
+    y_pred_col: str,
+    period_games: dict[str, list[str]],
+    game_results: dict[tuple[str, str], float]
+) -> float:
+    """Canonical Winner-Loser Gap calculation across team matchups in periods."""
+    winner_pts = []
+    loser_pts = []
+
+    for (period_id, team_name), grp in df.groupby(["prediction_period_id", "player_team_at_period"]):
+        games = period_games.get(str(period_id), [])
+        team_wins = 0.0
+        opp_wins = 0.0
+        for g in games:
+            if (str(g), str(team_name)) in game_results:
+                team_wins += game_results.get((str(g), str(team_name)), 0.0)
+                for (k_g, k_team), res in game_results.items():
+                    if k_g == str(g) and k_team != str(team_name):
+                        opp_wins += res
+
+        is_winner = None
+        if team_wins > opp_wins:
+            is_winner = True
+        elif team_wins < opp_wins:
+            is_winner = False
+
+        pts = grp[y_pred_col].dropna().to_numpy(float)
+        if is_winner is True:
+            winner_pts.extend(pts)
+        elif is_winner is False:
+            loser_pts.extend(pts)
+
+    if len(winner_pts) == 0 or len(loser_pts) == 0:
+        return 0.0
+    return float(np.mean(winner_pts) - np.mean(loser_pts))

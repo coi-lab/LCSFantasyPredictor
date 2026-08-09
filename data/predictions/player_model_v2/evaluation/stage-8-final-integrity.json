@@ -1,0 +1,35 @@
+{
+  "candidate_id": "T3_240d",
+  "model_freeze_semantics": "frozen_specification_with_deterministic_chronological_refit",
+  "candidate_selection_period": "2022-2023 development",
+  "consumed_protected_evidence": "2024 protected selection (not used for Stage 8 tuning or selection)",
+  "post_selection_refit_history": "2022-2023 development + 2024 post-selection refit history available chronologically before each target cutoff",
+  "top20_recall_definition": "intersection(nlargest(round(0.20 * n), actual), nlargest(round(0.20 * n), predicted)) / round(0.20 * n)",
+  "winner_loser_gap_definition": "mean(winner_team_player_points) - mean(loser_team_player_points) across all evaluated periods",
+  "row_derived_metrics": {
+    "n_observations": 637,
+    "mae": 6.066832770033163,
+    "sd_actual": 8.255389003330794,
+    "sd_stage8": 3.081162453664057,
+    "sd_ratio": 0.37323043831411545,
+    "winner_loser_gap": 2.6063081493431692,
+    "top20_recall": 0.4094488188976378
+  },
+  "tracked_exposed_metrics": {
+    "n_observations": 637,
+    "mae": 6.066832770033163,
+    "sd_actual": 8.255389003330794,
+    "sd_stage8": 3.081069926364759,
+    "sd_ratio": 0.3732192299020243,
+    "winner_loser_gap": 2.6063081493431692,
+    "top20_recall": 0.4094488188976378
+  },
+  "metric_match_status": {
+    "mae_match": true,
+    "sd_match": true,
+    "sd_ratio_match": true,
+    "winner_loser_gap_match": true,
+    "top20_recall_match": true
+  },
+  "stage8_selection_affected": false
+}
