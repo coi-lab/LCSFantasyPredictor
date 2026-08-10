@@ -1,0 +1,71 @@
+{
+  "diagnostic_status": "STAGE_9B_A_ELO_SYSTEM_DIAGNOSIS_COMPLETE",
+  "rating_authority": "persistent_player_rating_v1; NOT_CLASSIC_ELO",
+  "initial_rating": 1500.0,
+  "rating_formula_hash": "a8adf44dbf62e352f5d1d222d9fd534d58b2201a306b0efbc695313d649362d6",
+  "evaluated_players": 210,
+  "evaluated_updates": 5869,
+  "evaluated_locks": 161,
+  "population_mean": 1502.2761,
+  "population_sd": 14.3962,
+  "median_P95_minus_P05": 43.9215,
+  "median_P90_minus_P10": 36.431,
+  "median_abs_distance_from_initial": 11.1473,
+  "rating_update_median_abs": 3.0499,
+  "rating_update_P90_abs": 9.7256,
+  "mean_reversion_classification": "MODERATE",
+  "team_change_behavior": "rating persists; no explicit reset",
+  "inactivity_behavior": "history is downweighted only when a later cutoff is queried; no direct reset",
+  "forward_overall_spearman": 0.257799,
+  "median_weekly_spearman": 0.251428,
+  "role_forward_summary": [
+    {
+      "role": "BOT",
+      "rows": 401,
+      "rating_mean": 1500.0250345134134,
+      "rating_sd": 14.822651117788793,
+      "P95_minus_P05": 44.84949836697092,
+      "forward_spearman": 0.296395
+    },
+    {
+      "role": "JGL",
+      "rows": 397,
+      "rating_mean": 1500.9564042139436,
+      "rating_sd": 13.939401812097184,
+      "P95_minus_P05": 46.41419570616222,
+      "forward_spearman": 0.223148
+    },
+    {
+      "role": "MID",
+      "rows": 398,
+      "rating_mean": 1501.525675313886,
+      "rating_sd": 13.082596482642707,
+      "P95_minus_P05": 43.80804324333258,
+      "forward_spearman": 0.127156
+    },
+    {
+      "role": "SUP",
+      "rows": 398,
+      "rating_mean": 1505.4410778516078,
+      "rating_sd": 13.871233861791259,
+      "P95_minus_P05": 43.76390007740133,
+      "forward_spearman": 0.298951
+    },
+    {
+      "role": "TOP",
+      "rows": 398,
+      "rating_mean": 1497.4088867689982,
+      "rating_sd": 16.85814547241548,
+      "P95_minus_P05": 53.15851877426758,
+      "forward_spearman": 0.287344
+    }
+  ],
+  "scale_health": "SCALE_MILDLY_COMPRESSED",
+  "ranking_health": "RANKING_PARTIALLY_USEFUL",
+  "primary_architecture_diagnosis": "ELO_SCALE_COMPRESSED_RANKING_USEFUL",
+  "recommended_next_action": "RECALIBRATE_ELO_SCALE_OR_UPDATE_RATE",
+  "berserker_peak_rating": 1526.0114738094458,
+  "berserker_peak_percentile": 100.0,
+  "berserker_end_rating": 1521.3343862994748,
+  "berserker_end_percentile": 97.5
+}

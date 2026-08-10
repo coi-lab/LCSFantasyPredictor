@@ -1,0 +1,22 @@
+{
+  "dashboard_status": "DIAGNOSTIC_ONLY",
+  "history_rows": 6079,
+  "players": 210,
+  "locks": 161,
+  "rating_field": "prelock_rating",
+  "rating_percentile_field": "league_rating_percentile",
+  "role_percentile_field": "role_rating_percentile",
+  "price_field": "fantasy_price",
+  "price_percentile_field": "fantasy_price_percentile_overall",
+  "rating_price_gap_definition": "league_rating_percentile - fantasy_price_percentile_overall",
+  "T3_field": "t3_prediction",
+  "actual_points_field": "actual_fantasy_points",
+  "coverage": {
+    "rating_price": 5901,
+    "rating_price_percentiles": 5901,
+    "t3": 637,
+    "actual": 6079
+  },
+  "runtime_agent_runs_dependency": false,
+  "validation_status": "PASS"
+}

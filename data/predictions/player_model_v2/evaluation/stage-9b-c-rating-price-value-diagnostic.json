@@ -1,0 +1,16 @@
+{
+  "diagnostic_status": "STAGE_9B_C_RATING_PRICE_VALUE_DIAGNOSTIC_COMPLETE",
+  "development_rows": 1960,
+  "development_locks": 48,
+  "price_baseline_spearman": 0.215457,
+  "rating_baseline_spearman": 0.25925,
+  "rating_price_redundancy_spearman": 0.647352,
+  "gap_actual_spearman": 0.057817,
+  "gap_price_relative_spearman": 0.32112,
+  "median_weekly_gap_spearman": 0.33043900000000004,
+  "t3_residual_rows": 0,
+  "gap_t3_residual_spearman": null,
+  "recommendation": "RATING_PRICE_SIGNAL_WEAK_OR_REDUNDANT",
+  "reason": "Development gap association with price-relative rank is assessed without model fitting; no stable production integration claim is made.",
+  "runtime_agent_runs_dependency": false
+}

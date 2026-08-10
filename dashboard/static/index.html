@@ -100,6 +100,9 @@
       <button class="view-tab-btn" data-view="view-prices">
         <span>💰 Player Market Prices & Trends</span>
       </button>
+      <button class="view-tab-btn" data-view="view-player-strength">
+        <span>⚡ Player Strength History</span>
+      </button>
       <button class="view-tab-btn" data-view="view-weekly-champions">
         <span>Weekly Champion Picks</span>
       </button>
@@ -134,6 +137,23 @@
           <div id="tableContainer">
             <!-- Dynamically populated table -->
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View: Player Strength History -->
+    <div class="view-section" id="view-player-strength">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">⚡ Player Strength History</h2>
+          <span style="font-size:12px;color:var(--text-muted);">Pre-lock rating alongside post-lock fantasy points</span>
+        </div>
+        <div style="padding:0 16px 16px;">
+          <label for="leaderboardEloPlayerSelect" style="font-size:12px;color:var(--text-muted);">Player</label>
+          <select id="leaderboardEloPlayerSelect" style="margin-left:8px;"></select>
+          <label for="leaderboardMetricSelect" style="font-size:12px;color:var(--text-muted);margin-left:12px;">Primary metric</label>
+          <select id="leaderboardMetricSelect" style="margin-left:8px;"><option value="league_rating_percentile">Rating percentile</option><option value="prelock_rating">Raw rating</option><option value="fantasy_price">Fantasy price</option><option value="fantasy_price_percentile_overall">Price percentile</option><option value="actual_fantasy_points">Actual fantasy points</option><option value="t3_prediction">T3 prediction</option></select>
+          <div id="leaderboardEloHistory" style="margin-top:12px;"></div>
         </div>
       </div>
     </div>

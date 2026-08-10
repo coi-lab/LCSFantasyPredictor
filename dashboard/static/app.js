@@ -12,6 +12,9 @@ let evalProvenance = null;
 let evalM3Diagnostics = null;
 let evalM3DiagSummary = null;
 let evalStage8Summary = null;
+let evalStage9BEloSummary = null;
+let evalStage9BEloHistory = null;
+let evalRatingPriceHistory = null;
 let m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', opponent: 'ALL', search: '', dnp: 'ALL' };
 let m3DiagSort = { col: 'default', dir: 'asc' };
 let selectedDiagPlayerPeriod = null;
@@ -222,8 +225,11 @@ async function loadDashboardData() {
       fetch('../generated/current/stage7-provenance.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/m3-player-diagnostics.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/m3-player-diagnostic-summary.json').then(r => r.ok ? r.json() : null),
-      fetch('../generated/current/stage-8-exposed-2026-diagnostics.json').then(r => r.ok ? r.json() : null)
-    ]).then(([dev, weekly, lb, prov, diag, diagSummary, stage8]) => {
+      fetch('../generated/current/stage-8-exposed-2026-diagnostics.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/stage-9b-player-elo-weekly-validity.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/stage-9b-player-elo-history.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/player-rating-price-history.json').then(r => r.ok ? r.json() : null)
+    ]).then(([dev, weekly, lb, prov, diag, diagSummary, stage8, eloSummary, eloHistory, ratingPriceHistory]) => {
       evalDevSummary = dev;
       evalWeeklyResults = weekly;
       evalLeaderboard = lb;
@@ -231,6 +237,10 @@ async function loadDashboardData() {
       evalM3Diagnostics = diag;
       evalM3DiagSummary = diagSummary;
       evalStage8Summary = stage8;
+      evalStage9BEloSummary = eloSummary;
+      evalStage9BEloHistory = eloHistory;
+      evalRatingPriceHistory = ratingPriceHistory;
+      renderLeaderboardEloHistory();
       setupEvalTabs();
       renderModelEvaluation();
     }).catch(error => {
@@ -3116,6 +3126,24 @@ function renderM3DiagnosticsDetail() {
   }
 
   const r = selectedDiagPlayerPeriod;
+  const elo = evalStage9BEloHistory && evalStage9BEloHistory.find(x => x.player_id === r.player_id && x.prediction_period_id === r.prediction_period_id);
+  const eloHistory = (evalStage9BEloHistory || []).filter(x => x.player_id === r.player_id)
+    .sort((a, b) => String(a.target_cutoff).localeCompare(String(b.target_cutoff))).slice(-15);
+  const eloHistoryHtml = eloHistory.map(x => `<tr><td>${escapeHtml(String(x.date))}</td><td>${escapeHtml(String(x.role))}</td><td>${Number(x.prelock_player_elo).toFixed(1)}</td><td>${x.actual_fantasy_points == null ? 'N/A' : Number(x.actual_fantasy_points).toFixed(1)}</td></tr>`).join('');
+  const historyLine = (field) => {
+    const values = eloHistory.map(x => Number(x[field])).filter(Number.isFinite);
+    if (values.length < 2) return '';
+    const lo = Math.min(...values), hi = Math.max(...values), span = hi - lo || 1;
+    return eloHistory.map((x, i) => {
+      const value = Number(x[field]);
+      if (!Number.isFinite(value)) return null;
+      const px = 10 + (i * 280 / Math.max(1, eloHistory.length - 1));
+      const py = 80 - ((value - lo) / span * 65);
+      return `${px.toFixed(1)},${py.toFixed(1)}`;
+    }).filter(Boolean).join(' ');
+  };
+  const eloLine = historyLine('prelock_player_elo');
+  const pointsLine = historyLine('actual_fantasy_points');
   const errColor = r.signed_error >= 0 ? '#00e676' : '#ff1744';
   const errSign = r.signed_error >= 0 ? '+' : '';
 
@@ -3145,6 +3173,13 @@ function renderM3DiagnosticsDetail() {
       </div>
 
       <!-- Projections & Error -->
+      ${elo ? `<div style="margin-bottom:15px; padding:10px; border:1px solid rgba(76,201,240,.25); background:rgba(76,201,240,.04); border-radius:6px;">
+        <h4 style="margin:0 0 6px; font-size:12px; color:var(--primary-color);">Pre-lock Player Rating — Diagnostic Only</h4>
+        <div><strong>Pre-lock rating:</strong> <span style="color:#fff;">${Number(elo.prelock_player_elo).toFixed(2)}</span> · <strong>Role percentile:</strong> ${Number(elo.prelock_role_percentile).toFixed(1)}% · <strong>Overall:</strong> ${Number(elo.prelock_overall_percentile).toFixed(1)}%</div>
+        <div><strong>1-lock change:</strong> ${elo.elo_delta_1_lock == null ? 'N/A' : Number(elo.elo_delta_1_lock).toFixed(2)} · <strong>3-lock change:</strong> ${elo.elo_delta_3_lock == null ? 'N/A' : Number(elo.elo_delta_3_lock).toFixed(2)}</div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Pre-lock state; actual fantasy points below are post-lock outcomes.</div>
+      </div>` : ''}
+      ${eloHistory.length ? `<div style="margin-bottom:15px; font-size:11px;"><h4 style="margin:0 0 6px;color:var(--primary-color);">Player Rating History (chronological)</h4><div style="color:var(--text-muted);margin-bottom:4px;">Normalized trajectories: <span style="color:#4cc9f0;">— pre-lock rating</span> <span style="color:#00e676;">— post-lock fantasy points</span></div><svg viewBox="0 0 300 90" role="img" aria-label="Chronological pre-lock player rating and post-lock fantasy points" style="width:100%;max-width:420px;background:rgba(255,255,255,.02);border:1px solid var(--border-color);border-radius:4px;"><line x1="10" y1="80" x2="290" y2="80" stroke="rgba(255,255,255,.2)"/><polyline points="${eloLine}" fill="none" stroke="#4cc9f0" stroke-width="2"/><polyline points="${pointsLine}" fill="none" stroke="#00e676" stroke-width="2" stroke-dasharray="4 2"/></svg><div style="font-size:10px;color:var(--text-muted);margin:3px 0 6px;">Each line uses its own scale; this shows direction over locks, not equal point units.</div><table style="width:100%;border-collapse:collapse;"><thead><tr><th>Date / lock</th><th>Role</th><th>Pre-lock rating</th><th>Post-lock points</th></tr></thead><tbody>${eloHistoryHtml}</tbody></table></div>` : ''}
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.03);">
         <div>
           <span style="font-size: 11px; display: block;">M3 Projected Points</span>
@@ -3261,4 +3296,29 @@ function renderM3DiagnosticsDetail() {
       </div>
     </div>
   `;
+}
+
+function renderLeaderboardEloHistory() {
+  const select = document.getElementById('leaderboardEloPlayerSelect');
+  const target = document.getElementById('leaderboardEloHistory');
+  const history = Array.isArray(evalRatingPriceHistory) && evalRatingPriceHistory.length ? evalRatingPriceHistory : evalStage9BEloHistory;
+  if (!select || !target || !Array.isArray(history) || !history.length) return;
+  const metric = document.getElementById('leaderboardMetricSelect');
+  const primary = metric ? metric.value : 'league_rating_percentile';
+  const players = [...new Map(history.map(row => [row.player_id, row.player_name])).entries()]
+    .sort((a, b) => String(a[1]).localeCompare(String(b[1])));
+  if (!select.options.length) {
+    select.innerHTML = players.map(([id, name]) => `<option value="${escapeHtml(id)}">${escapeHtml(name)}</option>`).join('');
+    select.addEventListener('change', renderLeaderboardEloHistory);
+    metric?.addEventListener('change', renderLeaderboardEloHistory);
+  }
+  const rows = history.filter(row => row.player_id === select.value)
+    .sort((a, b) => String(a.target_cutoff).localeCompare(String(b.target_cutoff)));
+  const line = field => {
+    const values = rows.map(x => Number(x[field])).filter(Number.isFinite);
+    const lo = Math.min(...values), span = Math.max(...values) - lo || 1;
+    return rows.map((x, i) => `${10 + i * 280 / Math.max(1, rows.length - 1)},${80 - (Number(x[field]) - lo) / span * 65}`).join(' ');
+  };
+  const label = metric?.selectedOptions[0]?.textContent || 'Rating percentile';
+  target.innerHTML = `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;"><span style="color:#4cc9f0;">— ${escapeHtml(label)}</span> <span style="color:#00e676;">— Price percentile</span>; normalized lines use separate scales.</div><svg viewBox="0 0 300 90" role="img" aria-label="Chronological player metric and price percentile" style="width:100%;max-width:620px;background:rgba(255,255,255,.02);border:1px solid var(--border-color);border-radius:4px;"><line x1="10" y1="80" x2="290" y2="80" stroke="rgba(255,255,255,.2)"/><polyline points="${line(primary)}" fill="none" stroke="#4cc9f0" stroke-width="2"/><polyline points="${line('fantasy_price_percentile_overall')}" fill="none" stroke="#00e676" stroke-width="2" stroke-dasharray="4 2"/></svg><table class="leaderboard-table" style="width:100%;font-size:12px;margin-top:8px;"><thead><tr><th>Date</th><th>Team</th><th>Role</th><th>Rating / League %</th><th>Price / %</th><th>Gap</th><th>T3 Pred.</th><th>Actual FP</th></tr></thead><tbody>${rows.map(x => `<tr><td>${escapeHtml(String(x.date))}</td><td>${escapeHtml(String(x.team))}</td><td>${escapeHtml(String(x.role))}</td><td>${Number(x.prelock_rating ?? x.prelock_player_elo).toFixed(1)} / ${Number(x.league_rating_percentile ?? x.prelock_overall_percentile).toFixed(1)}%</td><td>${x.fantasy_price == null ? 'N/A' : Number(x.fantasy_price).toFixed(1)} / ${x.fantasy_price_percentile_overall == null ? 'N/A' : Number(x.fantasy_price_percentile_overall).toFixed(1)+'%'}</td><td>${x.rating_price_gap_overall == null ? 'N/A' : Number(x.rating_price_gap_overall).toFixed(1)+' pp'}</td><td>${x.t3_prediction == null ? 'N/A' : Number(x.t3_prediction).toFixed(1)}</td><td>${x.actual_fantasy_points == null ? 'N/A' : Number(x.actual_fantasy_points).toFixed(1)}</td></tr>`).join('')}</tbody></table><div style="font-size:10px;color:var(--text-muted);margin-top:5px;">Rating and price are pre-lock information; fantasy points are post-lock outcomes. Rating-price gap is diagnostic only.</div>`;
 }

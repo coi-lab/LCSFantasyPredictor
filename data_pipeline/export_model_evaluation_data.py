@@ -483,6 +483,10 @@ def main() -> None:
         "stage7-weekly-results.json",
         "stage7-leaderboard-comparison.json",
         "stage7-provenance.json",
+        "stage-9b-player-elo-weekly-validity.json",
+        "stage-9b-player-elo-history.json",
+        "player-rating-price-history.json",
+        "stage-9b-b-rating-price-dashboard-summary.json",
     ]:
         src = EVAL_DIR / fname
         dst = dashboard_eval_dir / fname

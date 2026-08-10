@@ -1,0 +1,146 @@
+{
+  "evaluation_status": "DIAGNOSTIC_ONLY_NOT_MODEL_SELECTION",
+  "elo_authority": "persistent_player_rating_v1 (not a head-to-head Elo)",
+  "elo_definition_hash": "a8adf44dbf62e352f5d1d222d9fd534d58b2201a306b0efbc695313d649362d6",
+  "development_rows": 1992,
+  "development_locks": 48,
+  "join_coverage": {
+    "expected_player_lock_rows": 6079,
+    "matched_rows": 6079,
+    "unmatched_rows": 0,
+    "coverage_percentage": 100.0
+  },
+  "cutoff_violations": 0,
+  "same_lock_violations": 0,
+  "overall_pearson": 0.251089,
+  "overall_spearman": 0.257799,
+  "mean_weekly_spearman": 0.22855,
+  "median_weekly_spearman": 0.251428,
+  "weekly_top20_recall": 0.304367,
+  "weekly_top10_recall": 0.184722,
+  "role_metrics": [
+    {
+      "role": "BOT",
+      "rows": 401,
+      "locks": 48,
+      "spearman": 0.296395,
+      "top1_hit_rate": 0.291667,
+      "top2_recall": 0.604167,
+      "highest_elo_mean_actual": 19.19314,
+      "mean_regret": 8.333999
+    },
+    {
+      "role": "JGL",
+      "rows": 397,
+      "locks": 48,
+      "spearman": 0.223148,
+      "top1_hit_rate": 0.270833,
+      "top2_recall": 0.666667,
+      "highest_elo_mean_actual": 17.686599,
+      "mean_regret": 7.812168
+    },
+    {
+      "role": "MID",
+      "rows": 398,
+      "locks": 48,
+      "spearman": 0.127156,
+      "top1_hit_rate": 0.229167,
+      "top2_recall": 0.520833,
+      "highest_elo_mean_actual": 17.890217,
+      "mean_regret": 7.612965
+    },
+    {
+      "role": "SUP",
+      "rows": 398,
+      "locks": 48,
+      "spearman": 0.298951,
+      "top1_hit_rate": 0.208333,
+      "top2_recall": 0.6875,
+      "highest_elo_mean_actual": 17.577734,
+      "mean_regret": 6.541386
+    },
+    {
+      "role": "TOP",
+      "rows": 398,
+      "locks": 48,
+      "spearman": 0.287344,
+      "top1_hit_rate": 0.208333,
+      "top2_recall": 0.645833,
+      "highest_elo_mean_actual": 16.346449,
+      "mean_regret": 5.494572
+    }
+  ],
+  "era_stability_summary": [
+    {
+      "year": 2022,
+      "split": "LCS:2022:spring",
+      "rows": 535,
+      "spearman": 0.306998,
+      "top20_recall": 0.28972,
+      "patch": "UNAVAILABLE"
+    },
+    {
+      "year": 2022,
+      "split": "LCS:2022:summer",
+      "rows": 507,
+      "spearman": 0.319679,
+      "top20_recall": 0.294118,
+      "patch": "UNAVAILABLE"
+    },
+    {
+      "year": 2022,
+      "split": "LCS:2022:unknown",
+      "rows": 75,
+      "spearman": 0.004239,
+      "top20_recall": 0.133333,
+      "patch": "UNAVAILABLE"
+    },
+    {
+      "year": 2023,
+      "split": "LCS:2023:spring",
+      "rows": 467,
+      "spearman": 0.230486,
+      "top20_recall": 0.244681,
+      "patch": "UNAVAILABLE"
+    },
+    {
+      "year": 2023,
+      "split": "LCS:2023:summer",
+      "rows": 408,
+      "spearman": 0.139109,
+      "top20_recall": 0.195122,
+      "patch": "UNAVAILABLE"
+    }
+  ],
+  "elo_trend_summary": [
+    {
+      "feature": "elo_delta_1_lock",
+      "development_points_spearman": 0.01894,
+      "development_rank_spearman": -0.023646,
+      "exposed_t3_residual_spearman": 0.087158
+    },
+    {
+      "feature": "elo_delta_3_lock",
+      "development_points_spearman": 0.055304,
+      "development_rank_spearman": -0.060449,
+      "exposed_t3_residual_spearman": 0.038532
+    },
+    {
+      "feature": "elo_delta_5_lock",
+      "development_points_spearman": 0.051004,
+      "development_rank_spearman": -0.083705,
+      "exposed_t3_residual_spearman": 0.055402
+    }
+  ],
+  "elo_vs_t3_residual_summary": {
+    "scope": "2026 exposed only; not used for selection",
+    "elo_residual_spearman": 0.075398,
+    "rows": 637
+  },
+  "elo_redundancy_classification": "HIGHLY_REDUNDANT",
+  "redundancy_reason": "The evaluated signal is exactly the prelock feature named prior_player_rating; its value is already a T3 feature-family input artifact, though player_rating is disabled in the runtime gate.",
+  "incremental_diagnostic": "NOT_RUN_NO_PREDECLARED_COMBINATION",
+  "dnp_policy": "DNP rows have no realized player outcome in the canonical modeling table and are excluded; no scores were imputed.",
+  "recommendation": "ELO_SIGNAL_WEAK_OR_REDUNDANT",
+  "recommendation_reason": "This is the same persistent-rating feature recorded in the canonical prelock table; standalone association does not establish distinct incremental value."
+}
