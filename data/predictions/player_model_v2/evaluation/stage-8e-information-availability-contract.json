@@ -1,0 +1,12 @@
+{
+  "title": "SCHEDULE INFORMATION AVAILABILITY CONTRACT",
+  "scope": "Stage 8E shared-lock canonical head-to-head evaluation",
+  "schedule_identity_classification": "KNOWN_PRELOCK_STRUCTURAL_INFORMATION",
+  "statement": "For historical modeling and evaluation, scheduled series identity and opponent identity may be determined retrospectively from the canonical historical schedule because the relevant matchup is available before roster lock under the LCS fantasy workflow.",
+  "publication_timestamp_required_for_schedule_identity": false,
+  "supersedes": "Earlier Stage 8E requirement for archived schedule-publication timestamps, only for structural schedule identity.",
+  "forbidden_retrospective_information": [
+    "match outcomes", "actual game count", "actual game statistics", "actual player fantasy scores", "post-match ratings", "target-period champion selections", "other post-lock outcome information"
+  ],
+  "dynamic_feature_boundary": "All dynamic features must use source timestamps strictly before the shared target cutoff."
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "purpose": "Exclude structural schedule rows whose assigned fantasy lock does not match the scheduled event at that lock.",
+  "policy": "The raw structural schedule remains immutable. Stage 8E canonical construction must ignore an excluded (prediction_period_id, series_id) pair rather than infer or substitute an opponent from results.",
+  "exclusions": [
+    {"prediction_period_id": "period:3b01aa4d9786587a33b3", "series_id": "oe_structural:2022:2022-02-05:6459612109fa", "reason": "TSM was not EG's scheduled opponent at this lock."},
+    {"prediction_period_id": "period:3b01aa4d9786587a33b3", "series_id": "oe_structural:2022:2022-02-05:7f1323d596fa", "reason": "100 Thieves was not Team Liquid's scheduled opponent at this lock."},
+    {"prediction_period_id": "period:95c58b937c0fcc3e92b9", "series_id": "oe_structural:2022:2022-04-09:48d017afc351", "reason": "Golden Guardians was not Cloud9's scheduled opponent at this lock."},
+    {"prediction_period_id": "period:8036ed58940a8d2ab607", "series_id": "oe_structural:2022:2022-06-17:34591d87f25c", "reason": "Cloud9 was not Evil Geniuses' scheduled opponent at this lock."},
+    {"prediction_period_id": "period:8036ed58940a8d2ab607", "series_id": "oe_structural:2022:2022-06-17:6702013fbf87", "reason": "TSM was not 100 Thieves' scheduled opponent at this lock."},
+    {"prediction_period_id": "period:fcd21c282bb6eb984919", "series_id": "oe_structural:2022:2022-08-25:df0eea366d83", "reason": "TSM was not FlyQuest's scheduled opponent at this lock."},
+    {"prediction_period_id": "period:67a5ff4d5b051b402092", "series_id": "oe_structural:2023:2023-08-03:3d9b792e44b9", "reason": "Dignitas was not TSM's scheduled opponent at this lock."}
+  ]
+}
