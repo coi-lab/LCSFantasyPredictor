@@ -31,7 +31,9 @@ from data_pipeline.official_prices import reconstruct_price
 ARMS = ("T3_240d", "H3_50", "H3_75")
 LABEL = "EXPOSED 2026 END-TO-END DIAGNOSTIC — NOT MODEL SELECTION DATA"
 VARIETY = {6: .25, 5: .20, 4: .15, 3: .10, 2: .05, 1: 0.0}
-STAGE8E = ROOT / ".agent-runs/player-model-v2-stage-8e-selection-rerun-20260810"
+CANONICAL_INPUTS = ROOT / "data/predictions/player_model_v2/evaluation/stage-9a-canonical-inputs"
+STAGE8E_DEFINITIONS = CANONICAL_INPUTS / "stage-8e-candidate-definitions-frozen.json"
+CHAMPION_PROJECTIONS = CANONICAL_INPUTS / "champion-projections"
 
 
 def canonical_hash(value: Any) -> str:
@@ -46,8 +48,23 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, indent=2, sort_keys=True, default=str) + "\n", encoding="utf-8")
 
 
+def required_runtime_input_paths() -> dict[str, Path]:
+    """Return all immutable, tracked inputs required for a Stage 9A execution."""
+    return {
+        "stage8e_candidate_definitions": STAGE8E_DEFINITIONS,
+        **{
+            f"champion_projection:{path.name.removeprefix('stage-7-period-').removesuffix('-champion-projections.csv')}": path
+            for path in sorted(CHAMPION_PROJECTIONS.glob("stage-7-period-*-champion-projections.csv"))
+        },
+    }
+
+
+def shared_pipeline_freeze() -> dict[str, str]:
+    return {"prices": "Stage 7 frozen reconstructed/official precedence", "budget": "existing chronological held-asset rule", "optimizer": "fantasy_prediction.lineup_optimizer.optimize_lineups", "champion": "CP00 production rank_weekly_opponents", "coach": "existing mean-five-player coach proxy", "scoring": str(DEFAULT_RULES_PATH.relative_to(ROOT)), "tie_break": "optimizer stable deterministic order", "only_varying_input": "player projection"}
+
+
 def frozen_arm_identities() -> dict[str, Any]:
-    definitions = STAGE8E / "stage-8e-candidate-definitions-frozen.json"
+    definitions = STAGE8E_DEFINITIONS
     if not definitions.is_file():
         raise RuntimeError("BLOCKED_BY_FROZEN_ARM_IDENTITY: missing Stage 8E frozen definitions")
     data = json.loads(definitions.read_text())
@@ -105,7 +122,7 @@ def frozen_champion_locks(period_id: str) -> dict[str, dict[str, Any]]:
     Stage 7's player arm is invalidated, but these CP00 exports are independent
     of it and retain the full candidate pool (not merely its selected roster).
     """
-    path = ROOT / ".agent-runs/player-model-v2-stage-7-2026-reconstructed-fantasy-simulation-20260807" / f"stage-7-period-{period_id}-champion-projections.csv"
+    path = CHAMPION_PROJECTIONS / f"stage-7-period-{period_id}-champion-projections.csv"
     if not path.is_file():
         raise RuntimeError(f"missing frozen shared champion export for {period_id}")
     frame = pd.read_csv(path)
@@ -166,7 +183,7 @@ def run(output_dir: Path) -> dict[str, Any]:
     identities = frozen_arm_identities(); write_json(output_dir / "task-scope.json", {"evaluation_label": LABEL, "arms": list(ARMS), "no_promotion": True, "no_retuning": True})
     write_json(output_dir / "stage-9a-arm-identities.json", identities)
     (output_dir / "stage-9a-arm-identities.sha256").write_text(file_hash(output_dir / "stage-9a-arm-identities.json") + "  stage-9a-arm-identities.json\n")
-    shared = {"prices": "Stage 7 frozen reconstructed/official precedence", "budget": "existing chronological held-asset rule", "optimizer": "fantasy_prediction.lineup_optimizer.optimize_lineups", "champion": "CP00 production rank_weekly_opponents", "coach": "existing mean-five-player coach proxy", "scoring": str(DEFAULT_RULES_PATH.relative_to(ROOT)), "tie_break": "optimizer stable deterministic order", "only_varying_input": "player projection"}
+    shared = shared_pipeline_freeze()
     write_json(output_dir / "stage-9a-shared-pipeline-freeze.json", shared)
     (output_dir / "stage-9a-shared-pipeline-freeze.sha256").write_text(file_hash(output_dir / "stage-9a-shared-pipeline-freeze.json") + "  stage-9a-shared-pipeline-freeze.json\n")
     table, periods = model_table(); id_to_name, _ = build_oe_name_mapping(); name_to_row = {v.casefold(): k for k, v in id_to_name.items()}

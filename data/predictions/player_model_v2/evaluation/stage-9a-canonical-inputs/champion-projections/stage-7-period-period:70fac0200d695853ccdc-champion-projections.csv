@@ -1,0 +1,41 @@
+player,team,champion,multiplier,expected_multiplier_bonus
+APA,Cloud9,Azir,1.3,0.8197
+Berserker,LYON,Yunara,1.3,1.7373
+Blaber,Cloud9,Jarvan IV,1.3,0.8633
+Bvoy,Shopify Rebellion,Yunara,1.5,0.4447
+Callme,Disguised,Azir,1.5,1.0657
+Castle,Disguised,K'Sante,1.5,0.5894
+Ceos,Shopify Rebellion,Alistar,1.5,0.4455
+Contractz,Shopify Rebellion,Vi,1.5,0.5283
+CoreJJ,Team Liquid,Rakan,1.5,0.6152
+Cryogen,FlyQuest,Rakan,1.5,0.6385
+DARKWINGS,Sentinels,Azir,1.3,0.8225
+Dhokla,LYON,K'Sante,1.5,0.6646
+FBI,Dignitas,Aphelios,1.5,0.8839
+Fudge,Shopify Rebellion,Sion,1.5,0.6278
+Gakgos,FlyQuest,Rumble,1.5,0.3085
+Gryffinn,FlyQuest,Jarvan IV,1.5,0.3503
+HamBak,Sentinels,Vi,1.3,0.7723
+Ignar,Dignitas,Alistar,1.5,1.2549
+Impact,Sentinels,K'Sante,1.3,0.7365
+Inspired,LYON,Xin Zhao,1.5,0.7663
+Isles,LYON,Bard,1.3,1.3938
+Josedeodo,Team Liquid,Xin Zhao,1.3,0.9028
+Kisno,Disguised,Jarvan IV,1.5,0.1969
+Lyonz,Disguised,Bard,1.3,1.3355
+Massu,FlyQuest,Yunara,1.5,0.8288
+Morgan,Team Liquid,K'Sante,1.5,0.6298
+Palafox,Dignitas,Azir,1.5,0.8292
+Photon,Dignitas,K'Sante,1.3,0.9061
+Quad,FlyQuest,Azir,1.5,1.3739
+Quid,Team Liquid,Azir,1.5,0.9443
+Rahel,Sentinels,Yunara,1.5,0.8616
+Saint,LYON,Azir,1.5,0.8661
+Thanatos,Cloud9,K'Sante,1.5,0.621
+Vulcan,Cloud9,Bard,1.3,1.5078
+Yeon,Team Liquid,Yunara,1.5,1.0946
+Zinie,Shopify Rebellion,Azir,1.3,1.6128
+Zven,Cloud9,Yunara,1.5,0.6904
+eXyu,Dignitas,Jarvan IV,1.5,0.6161
+huhi,Sentinels,Bard,1.5,1.0995
+sajed,Disguised,Aphelios,1.5,0.7151

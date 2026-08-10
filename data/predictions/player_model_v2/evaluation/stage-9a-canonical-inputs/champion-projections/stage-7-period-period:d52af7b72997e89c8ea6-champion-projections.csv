@@ -1,0 +1,31 @@
+player,team,champion,multiplier,expected_multiplier_bonus
+APA,Cloud9,Azir,1.3,0.6417
+Berserker,LYON,Yunara,1.3,1.2994
+Blaber,Cloud9,Vi,1.3,0.4872
+Callme,Disguised,Azir,1.3,0.6353
+Castle,Disguised,Sion,1.3,0.4542
+CoreJJ,Team Liquid,Rakan,1.5,0.5503
+Cryogen,FlyQuest,Alistar,1.3,0.6615
+DARKWINGS,Sentinels,Azir,1.3,0.7514
+Dhokla,LYON,Sion,1.3,0.4935
+Gakgos,FlyQuest,Rumble,1.3,0.4534
+Gryffinn,FlyQuest,Vi,1.3,0.3906
+HamBak,Sentinels,Vi,1.3,0.6758
+Impact,Sentinels,K'Sante,1.3,0.3631
+Inspired,LYON,Vi,1.3,0.5583
+Isles,LYON,Alistar,1.5,0.5478
+Josedeodo,Team Liquid,Vi,1.3,0.4971
+KryRa,Disguised,Vi,1.5,0.472
+Lyonz,Disguised,Alistar,1.5,0.5863
+Massu,FlyQuest,Yunara,1.5,0.8733
+Morgan,Team Liquid,Rumble,1.3,0.5886
+Quad,FlyQuest,Azir,1.3,0.6216
+Quid,Team Liquid,Azir,1.5,0.7768
+Rahel,Sentinels,Yunara,1.3,0.6636
+Saint,LYON,Azir,1.5,0.7305
+Thanatos,Cloud9,Rumble,1.5,0.6577
+Vulcan,Cloud9,Alistar,1.5,0.8619
+Yeon,Team Liquid,Yunara,1.3,0.9086
+Zven,Cloud9,Yunara,1.3,0.7835
+huhi,Sentinels,Alistar,1.3,0.4237
+sajed,Disguised,Yunara,1.3,0.6981

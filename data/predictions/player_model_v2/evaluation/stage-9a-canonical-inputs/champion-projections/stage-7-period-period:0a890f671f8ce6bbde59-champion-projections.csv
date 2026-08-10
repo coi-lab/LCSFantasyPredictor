@@ -1,0 +1,41 @@
+player,team,champion,multiplier,expected_multiplier_bonus
+APA,Cloud9,Azir,1.3,0.4295
+Berserker,LYON,Ezreal,1.3,0.7166
+Blaber,Cloud9,Xin Zhao,1.3,0.5481
+Bvoy,Shopify Rebellion,Ezreal,1.3,0.9756
+Callme,Disguised,Azir,1.3,0.7574
+Castle,Disguised,Gnar,1.5,0.6966
+Ceos,Shopify Rebellion,Nami,1.3,1.1763
+Contractz,Shopify Rebellion,Xin Zhao,1.3,0.6191
+CoreJJ,Team Liquid,Nami,1.3,0.8807
+Cryogen,FlyQuest,Nami,1.3,1.2113
+DARKWINGS,Sentinels,Azir,1.3,0.486
+Dhokla,LYON,Gnar,1.3,0.5631
+FBI,Dignitas,Ezreal,1.3,0.7875
+Fudge,Shopify Rebellion,Gnar,1.3,0.5147
+Gakgos,FlyQuest,Gnar,1.3,0.5056
+Gryffinn,FlyQuest,Xin Zhao,1.3,0.445
+HamBak,Sentinels,Xin Zhao,1.3,0.5889
+Ignar,Dignitas,Nami,1.3,1.0537
+Impact,Sentinels,Gnar,1.3,0.5725
+Inspired,LYON,Xin Zhao,1.3,0.6686
+Isles,LYON,Nami,1.3,0.9224
+Josedeodo,Team Liquid,Xin Zhao,1.3,0.8454
+KryRa,Disguised,Xin Zhao,1.3,0.5253
+Lyonz,Disguised,Nami,1.3,1.0027
+Massu,FlyQuest,Ezreal,1.3,0.8451
+Morgan,Team Liquid,Gnar,1.3,0.765
+Palafox,Dignitas,Azir,1.3,0.5579
+Photon,Dignitas,Gnar,1.3,0.5189
+Quad,FlyQuest,Azir,1.3,0.6688
+Quid,Team Liquid,Azir,1.3,0.527
+Rahel,Sentinels,Ezreal,1.3,0.64
+Saint,LYON,Azir,1.3,0.6999
+Thanatos,Cloud9,Gnar,1.3,0.8825
+Vulcan,Cloud9,Bard,1.3,1.0583
+Yeon,Team Liquid,Ezreal,1.3,0.7406
+Zinie,Shopify Rebellion,Azir,1.3,0.7833
+Zven,Cloud9,Ezreal,1.3,0.6115
+eXyu,Dignitas,Jarvan IV,1.3,0.6257
+huhi,Sentinels,Nami,1.3,0.7059
+sajed,Disguised,Ezreal,1.3,0.666
