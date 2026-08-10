@@ -1,0 +1,74 @@
+{
+  "arms": [
+    "T3_240d",
+    "H3_50",
+    "H3_75"
+  ],
+  "cumulative_scores": {
+    "H3_50": 1452.48,
+    "H3_75": 1410.86,
+    "T3_240d": 1438.09
+  },
+  "current_checkpoint": "T3_240d",
+  "evaluation_label": "EXPOSED_DIAGNOSTIC_ONLY",
+  "metrics": [
+    {
+      "actual_top10_selected": 6,
+      "actual_top20_selected": 11,
+      "best_week": 190.9,
+      "cumulative_fantasy_points": 1438.09,
+      "final_budget": 118.5,
+      "mean_roster_cost": 97.22,
+      "mean_weekly_points": 130.74,
+      "median_weekly_points": 141.08,
+      "model": "T3_240d",
+      "selected_player_mean_actual": 18.01,
+      "weekly_standard_deviation": 42.78,
+      "worst_week": 66.43
+    },
+    {
+      "actual_top10_selected": 6,
+      "actual_top20_selected": 11,
+      "best_week": 190.9,
+      "cumulative_fantasy_points": 1452.48,
+      "final_budget": 119.0,
+      "mean_roster_cost": 97.96,
+      "mean_weekly_points": 132.04,
+      "median_weekly_points": 136.84,
+      "model": "H3_50",
+      "selected_player_mean_actual": 18.08,
+      "weekly_standard_deviation": 39.61,
+      "worst_week": 66.43
+    },
+    {
+      "actual_top10_selected": 6,
+      "actual_top20_selected": 11,
+      "best_week": 190.9,
+      "cumulative_fantasy_points": 1410.86,
+      "final_budget": 105.9,
+      "mean_roster_cost": 98.46,
+      "mean_weekly_points": 128.26,
+      "median_weekly_points": 134.71,
+      "model": "H3_75",
+      "selected_player_mean_actual": 17.22,
+      "weekly_standard_deviation": 34.23,
+      "worst_week": 66.43
+    }
+  ],
+  "periods": [
+    "period:0433ceb2175e1870c17a",
+    "period:0a890f671f8ce6bbde59",
+    "period:28d589eedfce312e1ad3",
+    "period:70fac0200d695853ccdc",
+    "period:74efed7e4a28a304cc30",
+    "period:9ad9f360f988761d91c1",
+    "period:b0a60cf2f3d3558f5e56",
+    "period:b2e5a5987eefaa30eea2",
+    "period:b628e8f047ec274b8698",
+    "period:d52af7b72997e89c8ea6",
+    "period:fc48b32f725285a09f66"
+  ],
+  "pipeline_freeze_hash": "0f485c4f09d274926c458013f7dd04c8d33d861c48cc823330bdc019df52c591",
+  "promotion_authority": "NO_MODEL_PROMOTION_AUTHORITY",
+  "verdict": "STAGE_9A_EXPOSED_BENCHMARK_COMPLETE"
+}
