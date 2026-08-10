@@ -1,0 +1,191 @@
+{
+  "evaluation_status": "STAGE_9D_A_TEAM_PRODUCTION_SHARE_DIAGNOSIS_COMPLETE",
+  "recommendation": "TEAM_SHARE_SIGNAL_PARTIALLY_USEFUL",
+  "development_rows": 1992,
+  "development_team_locks": 394,
+  "development_players": 119,
+  "share_integrity_valid": true,
+  "role_share_summary": [
+    {
+      "role": "BOT",
+      "rows": 401,
+      "mean": 0.20908,
+      "median": 0.209736,
+      "sd": 0.052947,
+      "p10": 0.146302,
+      "p25": 0.176779,
+      "p75": 0.243815,
+      "p90": 0.275581
+    },
+    {
+      "role": "JGL",
+      "rows": 397,
+      "mean": 0.193564,
+      "median": 0.197453,
+      "sd": 0.049604,
+      "p10": 0.139262,
+      "p25": 0.167682,
+      "p75": 0.223149,
+      "p90": 0.248025
+    },
+    {
+      "role": "MID",
+      "rows": 398,
+      "mean": 0.211247,
+      "median": 0.20814,
+      "sd": 0.063673,
+      "p10": 0.14118,
+      "p25": 0.174028,
+      "p75": 0.242905,
+      "p90": 0.2833
+    },
+    {
+      "role": "SUP",
+      "rows": 398,
+      "mean": 0.197757,
+      "median": 0.201097,
+      "sd": 0.049411,
+      "p10": 0.138352,
+      "p25": 0.172656,
+      "p75": 0.223513,
+      "p90": 0.249948
+    },
+    {
+      "role": "TOP",
+      "rows": 398,
+      "mean": 0.177212,
+      "median": 0.171233,
+      "sd": 0.060015,
+      "p10": 0.117189,
+      "p25": 0.142798,
+      "p75": 0.205966,
+      "p90": 0.24789
+    }
+  ],
+  "share_last1_spearman": 0.118504,
+  "share_last3_spearman": 0.148367,
+  "share_last5_spearman": 0.201426,
+  "career_share_spearman": 0.216424,
+  "role_adjusted_share_persistence": 0.081986,
+  "within_team_rank_persistence": 0.144368,
+  "primary_carry_retention": 0.251371,
+  "top2_carry_retention": 0.457107,
+  "rating_vs_share_spearman": 0.087391,
+  "rating_vs_team_rank_summary": "see rating-vs-team-rank artifact",
+  "team_transfer_summary": {
+    "rows": 145,
+    "mean_first_new_team_share": 0.198756
+  },
+  "roster_continuity_summary": [
+    {
+      "roster_continuity_bin": "high",
+      "rows": 5154,
+      "share_persistence": 0.167997
+    },
+    {
+      "roster_continuity_bin": "low",
+      "rows": 212,
+      "share_persistence": 0.092999
+    },
+    {
+      "roster_continuity_bin": "medium",
+      "rows": 638,
+      "share_persistence": 0.096689
+    }
+  ],
+  "T3_implied_share_spearman": 0.233797,
+  "actual_share_sd": 0.067338,
+  "T3_implied_share_sd": 0.026559,
+  "share_compression_ratio": 0.394419,
+  "historical_share_vs_T3_residual_summary": {
+    "last3_spearman": 0.046779
+  },
+  "historical_share_vs_T3_tail_error_summary": {
+    "rows": 637
+  },
+  "later_period_stability_summary": [
+    {
+      "year": 2024,
+      "split": "LCS:2024:spring",
+      "partition": "protected_selection_2024",
+      "rows": 305,
+      "share_persistence": 0.230265,
+      "carry_primary_retention": 0.25862068965517243,
+      "actual_share_sd": 0.050915,
+      "t3_share_sd": NaN
+    },
+    {
+      "year": 2024,
+      "split": "LCS:2024:summer",
+      "partition": "protected_selection_2024",
+      "rows": 370,
+      "share_persistence": 0.301164,
+      "carry_primary_retention": 0.2972972972972973,
+      "actual_share_sd": 0.061369,
+      "t3_share_sd": NaN
+    },
+    {
+      "year": 2025,
+      "split": "LCS:2025:split1",
+      "partition": "protected_frozen_validation_2025",
+      "rows": 100,
+      "share_persistence": 0.25133,
+      "carry_primary_retention": 0.375,
+      "actual_share_sd": 0.059357,
+      "t3_share_sd": NaN
+    },
+    {
+      "year": 2025,
+      "split": "LCS:2025:split2",
+      "partition": "protected_frozen_validation_2025",
+      "rows": 356,
+      "share_persistence": 0.170722,
+      "carry_primary_retention": 0.2535211267605634,
+      "actual_share_sd": 0.057152,
+      "t3_share_sd": NaN
+    },
+    {
+      "year": 2025,
+      "split": "LCS:2025:split3",
+      "partition": "protected_frozen_validation_2025",
+      "rows": 212,
+      "share_persistence": 0.162892,
+      "carry_primary_retention": 0.16666666666666666,
+      "actual_share_sd": 0.051479,
+      "t3_share_sd": NaN
+    },
+    {
+      "year": 2026,
+      "split": "LCS:2026:lockin",
+      "partition": "exposed_evaluation_2026",
+      "rows": 240,
+      "share_persistence": 0.197092,
+      "carry_primary_retention": 0.20408163265306123,
+      "actual_share_sd": 0.076427,
+      "t3_share_sd": 0.028005
+    },
+    {
+      "year": 2026,
+      "split": "LCS:2026:spring",
+      "partition": "exposed_evaluation_2026",
+      "rows": 357,
+      "share_persistence": 0.266963,
+      "carry_primary_retention": 0.22535211267605634,
+      "actual_share_sd": 0.06344,
+      "t3_share_sd": 0.025549
+    },
+    {
+      "year": 2026,
+      "split": "LCS:2026:summer",
+      "partition": "exposed_evaluation_2026",
+      "rows": 40,
+      "share_persistence": -0.038462,
+      "carry_primary_retention": 0.125,
+      "actual_share_sd": 0.047396,
+      "t3_share_sd": 0.026853
+    }
+  ],
+  "T3_checkpoint": "T3_240d",
+  "model_changes": false,
+  "runtime_agent_runs_dependency": false
+}
