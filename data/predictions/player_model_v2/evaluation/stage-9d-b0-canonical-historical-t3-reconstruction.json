@@ -1,0 +1,21 @@
+{
+  "evaluation_status": "BLOCKED_BY_2026_T3_REPRODUCTION",
+  "T3_model_id": "T3_240d",
+  "2026_reproduction_rows": 637,
+  "2026_rows_matched": 637,
+  "2026_missing_rows": 0,
+  "2026_extra_rows": 0,
+  "2026_max_abs_diff": 0.0049956969389661765,
+  "2026_mean_abs_diff": 0.002535922859220512,
+  "2026_reproduction_pass": false,
+  "reproduction_explanation": "The exact canonical exporter recomputes all 637 row identities, but m3-player-diagnostics.json serializes projection_stage8 to two decimal places. No unrounded tracked canonical 2026 T3 prediction artifact was found, so the required <= 1e-10 value control cannot be proved.",
+  "canonical_prediction_paths": [],
+  "stage9db_required_rows": 1992,
+  "stage9db_available_rows": 0,
+  "stage9db_missing_rows": 1992,
+  "runtime_agent_runs_dependency": false,
+  "T3_changed": false,
+  "T3_retrained": false,
+  "T3_retuned": false,
+  "next_action": "Publish or recover the unrounded canonical 2026 T3 output used before dashboard rounding, then rerun Stage 9D-B0 unchanged."
+}

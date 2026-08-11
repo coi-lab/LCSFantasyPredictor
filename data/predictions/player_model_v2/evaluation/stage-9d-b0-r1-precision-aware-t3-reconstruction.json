@@ -1,0 +1,29 @@
+{
+  "evaluation_status": "STAGE_9D_B0_CANONICAL_HISTORICAL_T3_READY",
+  "T3_model_id": "T3_240d",
+  "2026_reproduction_rows": 637,
+  "2026_rounded_match_count": 637,
+  "2026_rounded_mismatch_count": 0,
+  "2026_max_abs_diff": 0.0049956969389661765,
+  "2026_reproduction_pass": true,
+  "canonical_prediction_paths": {
+    "development": "data/predictions/player_model_v2/t3_240d/development-player-predictions.csv",
+    "2024": "data/predictions/player_model_v2/t3_240d/2024-player-predictions.csv",
+    "2025": "data/predictions/player_model_v2/t3_240d/2025-player-predictions.csv",
+    "2026": "data/predictions/player_model_v2/t3_240d/2026-player-predictions.csv"
+  },
+  "canonical_prediction_hashes": {
+    "development": "2c7d7d7794ee6941a4d3c53bfbf73968b4fd48ac2e3faccc0bf60d1397c82e89",
+    "2024": "45e33c0df7e9325355acef740230e887c3aa327203960eb32d5520962f0fd85a",
+    "2025": "c0072b53acf90f803bc42e7c89af37672a4a8733edc0dfd8db5100243173c127",
+    "2026": "9b07259b453c3eb6076e20e9447d261746a62257d5a8b94987220e4c5293af01"
+  },
+  "stage9db_required_rows": 1992,
+  "stage9db_available_rows": 1992,
+  "stage9db_missing_rows": 0,
+  "runtime_agent_runs_dependency": false,
+  "T3_changed": false,
+  "T3_retrained": false,
+  "T3_retuned": false,
+  "next_action": "RESUME_STAGE_9D_B_SHARE_CORRECTION_EXPERIMENT_UNCHANGED"
+}

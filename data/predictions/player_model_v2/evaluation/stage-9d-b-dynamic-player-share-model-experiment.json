@@ -1,0 +1,198 @@
+{
+  "evaluation_status": "STAGE_9D_B_SHARE_CORRECTION_CANDIDATE_SELECTED",
+  "baseline": "T3_240d",
+  "arms": {
+    "S0_T3": 0.0,
+    "S10": 0.1,
+    "S20": 0.2,
+    "S30": 0.3
+  },
+  "development_T3_metrics": {
+    "arm": "S0_T3",
+    "MAE": 5.087846200644817,
+    "RMSE": 6.378942501814293,
+    "Spearman": 0.29893773042569216,
+    "share_MAE": 0.04008067430485263,
+    "share_Spearman": 0.2383446479232325,
+    "within_team_share_Spearman": 0.19718842816766596,
+    "share_SD_ratio": 0.3214416996042128,
+    "tail10": 0.11295180722891567,
+    "tail15": 0.01706827309236948
+  },
+  "development_metrics": [
+    {
+      "arm": "S0_T3",
+      "MAE": 5.087846200644817,
+      "RMSE": 6.378942501814293,
+      "Spearman": 0.29893773042569216,
+      "share_MAE": 0.04008067430485263,
+      "share_Spearman": 0.2383446479232325,
+      "within_team_share_Spearman": 0.19718842816766596,
+      "share_SD_ratio": 0.3214416996042128,
+      "tail10": 0.11295180722891567,
+      "tail15": 0.01706827309236948
+    },
+    {
+      "arm": "S10",
+      "MAE": 5.072955655033644,
+      "RMSE": 6.368247674374757,
+      "Spearman": 0.3050761901516111,
+      "share_MAE": 0.03979144032295831,
+      "share_Spearman": 0.2510677200686068,
+      "within_team_share_Spearman": 0.20521246842520877,
+      "share_SD_ratio": 0.3205480388343395,
+      "tail10": 0.11194779116465864,
+      "tail15": 0.018072289156626505
+    },
+    {
+      "arm": "S20",
+      "MAE": 5.062200652723078,
+      "RMSE": 6.363806043531759,
+      "Spearman": 0.3078685255391059,
+      "share_MAE": 0.03960999729987126,
+      "share_Spearman": 0.2600609368133897,
+      "within_team_share_Spearman": 0.21621627003814742,
+      "share_SD_ratio": 0.3271759415300849,
+      "tail10": 0.11244979919678715,
+      "tail15": 0.019076305220883535
+    },
+    {
+      "arm": "S30",
+      "MAE": 5.0595880658733225,
+      "RMSE": 6.365630698837963,
+      "Spearman": 0.307794398296545,
+      "share_MAE": 0.03955502036407948,
+      "share_Spearman": 0.2672267483383219,
+      "within_team_share_Spearman": 0.2190218749375103,
+      "share_SD_ratio": 0.34088696189662904,
+      "tail10": 0.11295180722891567,
+      "tail15": 0.019076305220883535
+    }
+  ],
+  "gate_results": {
+    "S10": {
+      "A": true,
+      "B": true,
+      "C": true,
+      "D": true,
+      "E": false,
+      "F": true,
+      "pass": false
+    },
+    "S20": {
+      "A": true,
+      "B": true,
+      "C": true,
+      "D": true,
+      "E": true,
+      "F": true,
+      "pass": true
+    },
+    "S30": {
+      "A": true,
+      "B": true,
+      "C": true,
+      "D": true,
+      "E": true,
+      "F": true,
+      "pass": true
+    }
+  },
+  "selected_candidate": "S30",
+  "selected_lambda": 0.3,
+  "later_period_summary": [
+    {
+      "chronological_partition": "exposed_evaluation_2026",
+      "arm": "S0_T3",
+      "0": {
+        "MAE": 6.066832770033163,
+        "RMSE": 7.5711178175404505,
+        "Spearman": 0.4031684321619555,
+        "share_MAE": 0.05061723902270974,
+        "share_Spearman": 0.20238252313724012,
+        "within_team_share_Spearman": 0.23284589426321708,
+        "share_SD_ratio": 0.3188318888415147,
+        "tail10": 0.18995290423861852,
+        "tail15": 0.05023547880690738
+      }
+    },
+    {
+      "chronological_partition": "exposed_evaluation_2026",
+      "arm": "S30",
+      "0": {
+        "MAE": 6.034845182107104,
+        "RMSE": 7.524060656677475,
+        "Spearman": 0.4180641929421122,
+        "share_MAE": 0.04940559578296336,
+        "share_Spearman": 0.26912041392941105,
+        "within_team_share_Spearman": 0.28391451068616425,
+        "share_SD_ratio": 0.31740590870248825,
+        "tail10": 0.18681318681318682,
+        "tail15": 0.04395604395604396
+      }
+    },
+    {
+      "chronological_partition": "protected_frozen_validation_2025",
+      "arm": "S0_T3",
+      "0": {
+        "MAE": 5.31611099446209,
+        "RMSE": 6.573258913581837,
+        "Spearman": 0.5299121872050568,
+        "share_MAE": 0.03976171553242291,
+        "share_Spearman": 0.31707134537239856,
+        "within_team_share_Spearman": 0.2818474758324382,
+        "share_SD_ratio": 0.42019357373870353,
+        "tail10": 0.12874251497005987,
+        "tail15": 0.02245508982035928
+      }
+    },
+    {
+      "chronological_partition": "protected_frozen_validation_2025",
+      "arm": "S30",
+      "0": {
+        "MAE": 5.308142769377787,
+        "RMSE": 6.561779037620304,
+        "Spearman": 0.5321415779789137,
+        "share_MAE": 0.03966934675618662,
+        "share_Spearman": 0.3294120105168543,
+        "within_team_share_Spearman": 0.3181525241675617,
+        "share_SD_ratio": 0.4149736522422681,
+        "tail10": 0.12574850299401197,
+        "tail15": 0.017964071856287425
+      }
+    },
+    {
+      "chronological_partition": "protected_selection_2024",
+      "arm": "S0_T3",
+      "0": {
+        "MAE": 5.290033772423042,
+        "RMSE": 6.385748604838612,
+        "Spearman": 0.3822408963164646,
+        "share_MAE": 0.039110792857426975,
+        "share_Spearman": 0.3867103283994405,
+        "within_team_share_Spearman": 0.33481481481481484,
+        "share_SD_ratio": 0.2881345667746667,
+        "tail10": 0.11851851851851852,
+        "tail15": 0.01037037037037037
+      }
+    },
+    {
+      "chronological_partition": "protected_selection_2024",
+      "arm": "S30",
+      "0": {
+        "MAE": 5.268856088296283,
+        "RMSE": 6.364425133265145,
+        "Spearman": 0.3835317853076882,
+        "share_MAE": 0.03870002063769088,
+        "share_Spearman": 0.40998242215315944,
+        "within_team_share_Spearman": 0.4081481481481481,
+        "share_SD_ratio": 0.3387094012912367,
+        "tail10": 0.10666666666666667,
+        "tail15": 0.01037037037037037
+      }
+    }
+  ],
+  "T3_checkpoint": "T3_240d",
+  "checkpoint_changed": false,
+  "model_candidate_implemented": true
+}
