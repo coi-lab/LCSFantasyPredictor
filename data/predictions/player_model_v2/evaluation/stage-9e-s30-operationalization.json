@@ -1,0 +1,17 @@
+{
+  "S30_formula_hash": "02b4500be762a486ff76bf4e8f3af2781e5fccb8952cfa533f1a0b4edad5b005",
+  "S30_lambda": 0.3,
+  "S30_reproduction_pass": true,
+  "S30_runtime_available": true,
+  "T3_reproduction_pass": true,
+  "T3_runtime_available": true,
+  "checkpoint_changed": false,
+  "dashboard_integration_complete": true,
+  "evaluation_status": "STAGE_9E_S30_OPERATIONALIZATION_COMPLETE",
+  "evidence_manifest_hash": "fe2d0ecf5d503d4a745861a09694ea061180cbf5ea5eabdf7d412132f4d0831a",
+  "operational_challenger": "S30",
+  "optimizer_equivalence_pass": true,
+  "prospective_tracking_ready": true,
+  "runtime_agent_runs_dependency": false,
+  "validated_checkpoint": "T3_240d"
+}

@@ -1,0 +1,11 @@
+{
+  "validated_checkpoint": "T3_240d",
+  "operational_challenger": "S30",
+  "default_comparison_baseline": "T3_240d",
+  "T3_status": "validated_checkpoint",
+  "S30_status": "operational_challenger",
+  "S30_development_selected": true,
+  "S30_2026_end_to_end": "strongly_supported_exposed",
+  "S30_promoted_to_validated_checkpoint": false,
+  "automatic_promotion": false
+}

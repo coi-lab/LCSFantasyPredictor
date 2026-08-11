@@ -1,0 +1,8 @@
+{
+  "model_id": "S30",
+  "lambda": 0.30,
+  "t3_authority": "data/predictions/player_model_v2/t3_240d/2026-player-predictions.csv",
+  "share_prior_authority": "fantasy_prediction/player_share_correction.py",
+  "artifact": "2026-player-predictions.csv",
+  "formula": "S30_prediction = T3_team_total * (0.70 * T3_implied_share + 0.30 * historical_share_prior)"
+}

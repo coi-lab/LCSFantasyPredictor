@@ -15,6 +15,7 @@ let evalStage8Summary = null;
 let evalStage9BEloSummary = null;
 let evalStage9BEloHistory = null;
 let evalRatingPriceHistory = null;
+let evalS30Comparison = null;
 let m3DiagFilters = { week: 'ALL', role: 'ALL', team: 'ALL', opponent: 'ALL', search: '', dnp: 'ALL' };
 let m3DiagSort = { col: 'default', dir: 'asc' };
 let selectedDiagPlayerPeriod = null;
@@ -228,8 +229,9 @@ async function loadDashboardData() {
       fetch('../generated/current/stage-8-exposed-2026-diagnostics.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/stage-9b-player-elo-weekly-validity.json').then(r => r.ok ? r.json() : null),
       fetch('../generated/current/stage-9b-player-elo-history.json').then(r => r.ok ? r.json() : null),
-      fetch('../generated/current/player-rating-price-history.json').then(r => r.ok ? r.json() : null)
-    ]).then(([dev, weekly, lb, prov, diag, diagSummary, stage8, eloSummary, eloHistory, ratingPriceHistory]) => {
+      fetch('../generated/current/player-rating-price-history.json').then(r => r.ok ? r.json() : null),
+      fetch('../generated/current/s30-player-model-comparison.json').then(r => r.ok ? r.json() : null)
+    ]).then(([dev, weekly, lb, prov, diag, diagSummary, stage8, eloSummary, eloHistory, ratingPriceHistory, s30Comparison]) => {
       evalDevSummary = dev;
       evalWeeklyResults = weekly;
       evalLeaderboard = lb;
@@ -240,7 +242,9 @@ async function loadDashboardData() {
       evalStage9BEloSummary = eloSummary;
       evalStage9BEloHistory = eloHistory;
       evalRatingPriceHistory = ratingPriceHistory;
+      evalS30Comparison = s30Comparison;
       renderLeaderboardEloHistory();
+      renderS30ModelComparison();
       setupEvalTabs();
       renderModelEvaluation();
     }).catch(error => {
@@ -3321,4 +3325,11 @@ function renderLeaderboardEloHistory() {
   };
   const label = metric?.selectedOptions[0]?.textContent || 'Rating percentile';
   target.innerHTML = `<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;"><span style="color:#4cc9f0;">— ${escapeHtml(label)}</span> <span style="color:#00e676;">— Price percentile</span>; normalized lines use separate scales.</div><svg viewBox="0 0 300 90" role="img" aria-label="Chronological player metric and price percentile" style="width:100%;max-width:620px;background:rgba(255,255,255,.02);border:1px solid var(--border-color);border-radius:4px;"><line x1="10" y1="80" x2="290" y2="80" stroke="rgba(255,255,255,.2)"/><polyline points="${line(primary)}" fill="none" stroke="#4cc9f0" stroke-width="2"/><polyline points="${line('fantasy_price_percentile_overall')}" fill="none" stroke="#00e676" stroke-width="2" stroke-dasharray="4 2"/></svg><table class="leaderboard-table" style="width:100%;font-size:12px;margin-top:8px;"><thead><tr><th>Date</th><th>Team</th><th>Role</th><th>Rating / League %</th><th>Price / %</th><th>Gap</th><th>T3 Pred.</th><th>Actual FP</th></tr></thead><tbody>${rows.map(x => `<tr><td>${escapeHtml(String(x.date))}</td><td>${escapeHtml(String(x.team))}</td><td>${escapeHtml(String(x.role))}</td><td>${Number(x.prelock_rating ?? x.prelock_player_elo).toFixed(1)} / ${Number(x.league_rating_percentile ?? x.prelock_overall_percentile).toFixed(1)}%</td><td>${x.fantasy_price == null ? 'N/A' : Number(x.fantasy_price).toFixed(1)} / ${x.fantasy_price_percentile_overall == null ? 'N/A' : Number(x.fantasy_price_percentile_overall).toFixed(1)+'%'}</td><td>${x.rating_price_gap_overall == null ? 'N/A' : Number(x.rating_price_gap_overall).toFixed(1)+' pp'}</td><td>${x.t3_prediction == null ? 'N/A' : Number(x.t3_prediction).toFixed(1)}</td><td>${x.actual_fantasy_points == null ? 'N/A' : Number(x.actual_fantasy_points).toFixed(1)}</td></tr>`).join('')}</tbody></table><div style="font-size:10px;color:var(--text-muted);margin-top:5px;">Rating and price are pre-lock information; fantasy points are post-lock outcomes. Rating-price gap is diagnostic only.</div>`;
+}
+
+function renderS30ModelComparison() {
+  const target = document.getElementById('s30ModelComparison');
+  if (!target || !Array.isArray(evalS30Comparison) || !evalS30Comparison.length) return;
+  const latest = evalS30Comparison[evalS30Comparison.length - 1];
+  target.innerHTML = `<div style="padding:10px;border:1px solid var(--border-color);border-radius:6px;font-size:12px;"><strong>T3_240d — Validated Checkpoint</strong> &nbsp; <strong>S30 — Operational Challenger</strong><br><span style="color:var(--text-muted);">Player-level comparison includes T3 Prediction, S30 Prediction, Prediction Delta, T3 Implied Share, S30 Corrected Share, Historical Share Prior, and Share Delta. Latest available row: ${escapeHtml(String(latest.player_name || latest.player_id))} (${Number(latest.T3_prediction).toFixed(2)} → ${Number(latest.S30_prediction).toFixed(2)}).</span></div>`;
 }

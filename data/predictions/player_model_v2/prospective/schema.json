@@ -1,0 +1,7 @@
+{
+  "states": ["PRELOCK_FROZEN", "POSTLOCK_SCORED"],
+  "prelock_required": ["prediction_period_id", "target_cutoff", "t3_predictions", "s30_predictions", "prices", "t3_roster", "s30_roster", "artifact_hashes"],
+  "postlock_additions": ["actual_outcomes", "player_mae", "player_spearman", "t3_roster_actual_score", "s30_roster_actual_score", "score_delta", "ending_budget", "roster_differences", "top_player_capture"],
+  "immutable_prelock_fields": true,
+  "automatic_promotion": false
+}
