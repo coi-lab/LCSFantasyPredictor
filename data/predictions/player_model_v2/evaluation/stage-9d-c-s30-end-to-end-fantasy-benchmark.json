@@ -1,0 +1,84 @@
+{
+  "2026_exposed": true,
+  "S30_cumulative_score": 1487.01,
+  "S30_final_budget": 125.4,
+  "T3_cumulative_score": 1438.09,
+  "T3_final_budget": 118.5,
+  "baseline": "T3_240d",
+  "benchmark_periods": [
+    {
+      "lock": "2026-01-24T21:24:34+00:00",
+      "period": "period:28d589eedfce312e1ad3",
+      "round": "Lock-In Round 1"
+    },
+    {
+      "lock": "2026-01-31T21:07:01+00:00",
+      "period": "period:70fac0200d695853ccdc",
+      "round": "Lock-In Round 2"
+    },
+    {
+      "lock": "2026-02-07T21:11:32+00:00",
+      "period": "period:b2e5a5987eefaa30eea2",
+      "round": "Lock-In Round 3"
+    },
+    {
+      "lock": "2026-02-14T21:11:50+00:00",
+      "period": "period:0433ceb2175e1870c17a",
+      "round": "Lock-In Round 4"
+    },
+    {
+      "lock": "2026-02-20T21:09:00+00:00",
+      "period": "period:d52af7b72997e89c8ea6",
+      "round": "Lock-In Round 5"
+    },
+    {
+      "lock": "2026-02-27T21:09:38+00:00",
+      "period": "period:b628e8f047ec274b8698",
+      "round": "Lock-In Round 6"
+    },
+    {
+      "lock": "2026-04-04T20:17:46+00:00",
+      "period": "period:74efed7e4a28a304cc30",
+      "round": "Spring Round 1"
+    },
+    {
+      "lock": "2026-04-11T20:08:26+00:00",
+      "period": "period:fc48b32f725285a09f66",
+      "round": "Spring Round 2"
+    },
+    {
+      "lock": "2026-04-18T20:07:45+00:00",
+      "period": "period:9ad9f360f988761d91c1",
+      "round": "Spring Round 3"
+    },
+    {
+      "lock": "2026-04-25T20:09:02+00:00",
+      "period": "period:b0a60cf2f3d3558f5e56",
+      "round": "Spring Round 4"
+    },
+    {
+      "lock": "2026-05-02T20:10:20+00:00",
+      "period": "period:0a890f671f8ce6bbde59",
+      "round": "Spring Round 5"
+    }
+  ],
+  "candidate": "S30",
+  "checkpoint": "T3_240d",
+  "checkpoint_changed": false,
+  "different_roster_weeks": 9,
+  "evaluation_status": "STAGE_9D_C_END_TO_END_BENCHMARK_COMPLETE",
+  "evidence_manifest_hash": "adb35dbb0b7824cc0974c3e46c49ada1071f05b762c7db56f2bd72fc1b6f7b20",
+  "final_budget_delta": 6.900000000000006,
+  "lambda": 0.3,
+  "non_player_input_equivalence_pass": true,
+  "practical_classification": "S30_END_TO_END_STRONGLY_SUPPORTED",
+  "relative_score_delta": 3.4017342447273866,
+  "same_roster_weeks": 2,
+  "score_delta": 48.92000000000007,
+  "score_delta_changed_roster_weeks": 48.919999999999995,
+  "stage9a_T3_reproduction_pass": true,
+  "team_total_preservation_pass": true,
+  "ties": 2,
+  "weeks_S30_wins": 6,
+  "weeks_T3_wins": 3
+}
