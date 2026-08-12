@@ -1,0 +1,29 @@
+{
+  "stage": "STAGE_10D_R3",
+  "verdict": "BLOCKED_SUBAGENT_MODEL_ROUTING",
+  "policy_exception_status": "inactive_after_scoped_activation",
+  "policy_restore_status": "passed",
+  "agent_routing_status": {
+    "status": "blocked",
+    "required_unavailable_route": "gpt-5.6-luna",
+    "terra_smoke": "completed",
+    "runtime_model_metadata_exposed": false
+  },
+  "general_team_result": "NOT_RUN_ROUTING_GATE",
+  "top_result": "NOT_RUN_ROUTING_GATE",
+  "jgl_result": "NOT_RUN_ROUTING_GATE",
+  "bot_result": "NOT_RUN_ROUTING_GATE",
+  "sup_result": "NOT_RUN_ROUTING_GATE",
+  "mid_status": "CONTROL_NOT_EVALUATED",
+  "combined_result": "NOT_BUILT_ROUTING_GATE",
+  "exposed_diagnostics": {
+    "2025": "NOT_RUN",
+    "2026": "NOT_RUN"
+  },
+  "s30_unchanged": true,
+  "t3_240d_unchanged": true,
+  "model_promoted": false,
+  "recursive_delegation_count": 0,
+  "default_concurrency_restored": true,
+  "unauthorized_write_capable_agents": 0
+}

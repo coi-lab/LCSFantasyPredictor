@@ -1,0 +1,24 @@
+exception_id = "stage-10d-r3-role-team-architecture"
+authorized_by_user = true
+active = false
+
+allowed_stage = "STAGE_10D_R3"
+
+max_concurrent_threads_per_session = 3
+
+write_capable_agents = ["r3_worker"]
+read_only_agents = [
+  "r3_scout",
+  "r3_team_top_analyst",
+  "r3_jgl_analyst",
+  "r3_bot_sup_analyst",
+  "r3_validator",
+]
+
+recursive_delegation_allowed = false
+
+allow_commit = false
+allow_push = false
+allow_reset = false
+allow_clean = false
+allow_rebase = false

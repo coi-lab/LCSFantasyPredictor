@@ -72,6 +72,34 @@ REQUIRED_CODEX_AGENTS = {
     "repository_mapper",
     "verification_auditor",
 }
+R3_CODEX_AGENTS = {
+    "r3_scout": ("gpt-5.6-luna", "read-only"),
+    "r3_team_top_analyst": ("gpt-5.6-terra", "read-only"),
+    "r3_jgl_analyst": ("gpt-5.6-terra", "read-only"),
+    "r3_bot_sup_analyst": ("gpt-5.6-terra", "read-only"),
+    "r3_worker": ("gpt-5.6-terra", "workspace-write"),
+    "r3_validator": ("gpt-5.6-luna", "read-only"),
+}
+R3_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r3.toml")
+R3_EXCEPTION_KEYS = {
+    "exception_id",
+    "authorized_by_user",
+    "active",
+    "allowed_stage",
+    "max_concurrent_threads_per_session",
+    "write_capable_agents",
+    "read_only_agents",
+    "recursive_delegation_allowed",
+    "allow_commit",
+    "allow_push",
+    "allow_reset",
+    "allow_clean",
+    "allow_rebase",
+}
+R3_READ_ONLY_AGENTS = sorted(
+    name for name, (_, sandbox) in R3_CODEX_AGENTS.items()
+    if sandbox == "read-only"
+)
 REQUIRED_PROMPTS = {
     "plan-repository-change.md",
     "review-agy-change.md",
@@ -390,14 +418,126 @@ def _validate_rules_and_workflows(root: Path, failures: list[str]) -> None:
                 failures.append(f"{efficiency}: missing policy {phrase!r}")
 
 
+def _load_r3_policy_exception(
+    root: Path,
+    config: dict[str, object] | None,
+    failures: list[str],
+) -> dict[str, object] | None:
+    """Load the one narrowly supported policy exception, failing closed."""
+    exception_directory = (root / ".codex" / "policy-exceptions").resolve()
+    exception_path = root / R3_EXCEPTION_PATH
+    agents = config.get("agents") if isinstance(config, dict) else None
+    reference = agents.get("policy_exception") if isinstance(agents, dict) else None
+
+    if reference is not None:
+        if not _nonempty_string(reference):
+            failures.append(
+                ".codex/config.toml: agents.policy_exception must be a nonempty "
+                "repository-relative path"
+            )
+            return None
+        candidate = root / str(reference)
+        try:
+            candidate.resolve().relative_to(exception_directory)
+        except ValueError:
+            failures.append(
+                ".codex/config.toml: policy exception is outside the allowed "
+                ".codex/policy-exceptions directory"
+            )
+            return None
+        if candidate.resolve() != exception_path.resolve():
+            failures.append(
+                f".codex/config.toml: unsupported policy exception {reference!r}"
+            )
+            return None
+
+    if not exception_path.is_file():
+        if reference is not None:
+            failures.append(f"{exception_path}: referenced policy exception is missing")
+        return None
+
+    contract_failures: list[str] = []
+    contract = _load_toml(exception_path, contract_failures)
+    failures.extend(contract_failures)
+    if contract is None:
+        return None
+
+    unexpected_keys = sorted(set(contract).difference(R3_EXCEPTION_KEYS))
+    missing_keys = sorted(R3_EXCEPTION_KEYS.difference(contract))
+    if unexpected_keys:
+        failures.append(
+            f"{exception_path}: unsupported exception keys: {unexpected_keys}"
+        )
+    if missing_keys:
+        failures.append(
+            f"{exception_path}: missing exception keys: {missing_keys}"
+        )
+
+    exact_values: tuple[tuple[str, object], ...] = (
+        ("exception_id", "stage-10d-r3-role-team-architecture"),
+        ("authorized_by_user", True),
+        ("allowed_stage", "STAGE_10D_R3"),
+        ("max_concurrent_threads_per_session", 3),
+        ("write_capable_agents", ["r3_worker"]),
+        ("read_only_agents", R3_READ_ONLY_AGENTS),
+        ("recursive_delegation_allowed", False),
+        ("allow_commit", False),
+        ("allow_push", False),
+        ("allow_reset", False),
+        ("allow_clean", False),
+        ("allow_rebase", False),
+    )
+    for key, expected in exact_values:
+        actual = contract.get(key)
+        if key == "read_only_agents" and isinstance(actual, list):
+            actual = sorted(actual)
+        if actual != expected:
+            failures.append(
+                f"{exception_path}: {key} must be exactly {expected!r}"
+            )
+    if not isinstance(contract.get("active"), bool):
+        failures.append(f"{exception_path}: active must be a boolean")
+
+    active = contract.get("active") is True
+    if active and reference != R3_EXCEPTION_PATH.as_posix():
+        failures.append(
+            f"{exception_path}: active exception must be selected by "
+            "agents.policy_exception"
+        )
+    if not active and reference is not None:
+        failures.append(
+            f"{exception_path}: inactive exception cannot be selected"
+        )
+
+    valid_contract = (
+        not unexpected_keys
+        and not missing_keys
+        and isinstance(contract.get("active"), bool)
+        and all(
+            (sorted(contract.get(key)) if key == "read_only_agents"
+             and isinstance(contract.get(key), list) else contract.get(key))
+            == expected
+            for key, expected in exact_values
+        )
+    )
+    if active and reference == R3_EXCEPTION_PATH.as_posix() and valid_contract:
+        return contract
+    return None
+
+
 def _validate_codex(root: Path, failures: list[str]) -> None:
+    config = _load_toml(root / ".codex" / "config.toml", failures)
+    active_exception = _load_r3_policy_exception(root, config, failures)
     directory = root / ".codex" / "agents"
     if not directory.is_dir():
         failures.append(f"{directory}: missing Codex agents directory")
         return
     files = sorted(path for path in directory.iterdir() if path.is_file())
+    expected_agent_names = set(REQUIRED_CODEX_AGENTS)
+    if active_exception is not None:
+        expected_agent_names.update(R3_CODEX_AGENTS)
     expected_toml_files = {
-        f"{agent_name}.toml" for agent_name in REQUIRED_CODEX_AGENTS
+        f"{agent_name}.toml" for agent_name in expected_agent_names
     }
     actual_toml_files = {
         path.name for path in files if path.suffix == ".toml"
@@ -418,6 +558,7 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
             )
 
     names: list[str] = []
+    write_capable_names: list[str] = []
     for path in (path for path in files if path.suffix == ".toml"):
         data = _load_toml(path, failures)
         if data is None:
@@ -432,17 +573,40 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
                 failures.append(
                     f"{path}: agent name {name!r} must match filename"
                 )
-        if data.get("sandbox_mode") != "read-only":
-            failures.append(f"{path}: review/exploration agent must be read-only")
+        expected_sandbox = "read-only"
+        if active_exception is not None and path.stem in R3_CODEX_AGENTS:
+            expected_model, expected_sandbox = R3_CODEX_AGENTS[path.stem]
+            if data.get("model") != expected_model:
+                failures.append(f"{path}: model must be {expected_model!r}")
+            if data.get("model_reasoning_effort") != "medium":
+                failures.append(f"{path}: model_reasoning_effort must be 'medium'")
+            instructions = str(data.get("developer_instructions", ""))
+            if "DO NOT SPAWN OR DELEGATE TO SUBAGENTS." not in instructions:
+                failures.append(
+                    f"{path}: recursive delegation prohibition is missing"
+                )
+        if data.get("sandbox_mode") == "workspace-write":
+            write_capable_names.append(path.stem)
+        if data.get("sandbox_mode") != expected_sandbox:
+            failures.append(
+                f"{path}: sandbox_mode must be {expected_sandbox!r} under the "
+                "current policy"
+            )
 
     duplicates = sorted({name for name in names if names.count(name) > 1})
     if duplicates:
         failures.append(f"{directory}: duplicate Codex agent names: {duplicates}")
-    missing = sorted(REQUIRED_CODEX_AGENTS.difference(names))
+    missing = sorted(expected_agent_names.difference(names))
     if missing:
         failures.append(f"{directory}: missing required Codex agents: {missing}")
 
-    config = _load_toml(root / ".codex" / "config.toml", failures)
+    expected_write_agents = {"r3_worker"} if active_exception is not None else set()
+    if set(write_capable_names) != expected_write_agents:
+        failures.append(
+            f"{directory}: write-capable Codex agents must be exactly "
+            f"{sorted(expected_write_agents)}; found {sorted(write_capable_names)}"
+        )
+
     if config is not None:
         if config.get("model_verbosity") != "low":
             failures.append(".codex/config.toml: model_verbosity must be low")
@@ -452,10 +616,28 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
         else:
             if agents.get("enabled") is not True:
                 failures.append(".codex/config.toml: agents must be enabled")
-            if agents.get("max_concurrent_threads_per_session") != 1:
+            concurrency = agents.get("max_concurrent_threads_per_session")
+            if active_exception is None and concurrency != 1:
                 failures.append(
                     ".codex/config.toml: spawned-agent concurrency must be 1"
                 )
+            if active_exception is not None:
+                if not isinstance(concurrency, int) or isinstance(concurrency, bool) \
+                        or not 1 <= concurrency <= 3:
+                    failures.append(
+                        ".codex/config.toml: R3 spawned-agent concurrency must "
+                        "be between 1 and 3"
+                    )
+                if agents.get("default_subagent_model") != "gpt-5.6-terra":
+                    failures.append(
+                        ".codex/config.toml: R3 default subagent model must be "
+                        "gpt-5.6-terra"
+                    )
+                if agents.get("default_subagent_reasoning_effort") != "medium":
+                    failures.append(
+                        ".codex/config.toml: R3 default subagent reasoning must "
+                        "be medium"
+                    )
 
 
 def _validate_prompts_and_schemas(root: Path, failures: list[str]) -> None:

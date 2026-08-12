@@ -1,0 +1,14 @@
+{
+  "contract": "LEFT JOIN frozen pairs; no outcome diagnostic or model fit",
+  "files": {
+    "matchup_context.csv": "3465c5416bfc33d535e5924ce071fa926aaf3c0dc7d44f1e2e262ad24810a75a",
+    "opponent_role_context.csv": "79c39a4a6ef246554b4092535319d3ffb338cdad373c4013fdcae03659204f29",
+    "patch_context.csv": "d80eb52ddb59c60364ac223f258c2b6b577676df558443f45eaa253a458e8421",
+    "player_usage_context.csv": "4a368cf99d032743da91053b8cf4895eb10507f36f17cdadbd6863dba34b5896",
+    "player_usage_richer_context.csv": "bc102517ed5787475f8ddbeb5af7128375b27e4a4852474caafbf7aea732fa66",
+    "roster_context.csv": "451a362f33b64f1fb726055617153f4dcf9599d4863b5243e671e5f1591104fe",
+    "roster_relationship_context.csv": "5736f9e54b5398be529ffc45f53ca5d30de159def0a93d66d58f1f6bcc07d2ec",
+    "series_opportunity_context.csv": "fec8ce7099007e9bcf3da5eeda9997afb244deb38a1f682ee9f1575f7f13957a",
+    "source_provenance.csv": "439bd50db69fae1ed9693a50cfa5653f32769177d1f3efffa18aef0c7166a254"
+  }
+}

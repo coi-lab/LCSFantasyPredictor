@@ -31,6 +31,12 @@ final acceptance verdict; the human owner is final authority. Codex may read
 shared `.agents/skills/` to understand or review AGY work, but does not use
 them as authority to implement AGY application tasks while acting as reviewer.
 
+Implementation remains AGY-owned by default. As a narrow exception, a Codex
+implementation worker may modify repository files only when a user-authorized,
+validator-recognized, stage-scoped policy exception is active and explicitly
+names that worker. Stage 10D-R3 authorizes only `r3_worker`. This exception does
+not transfer general implementation ownership from AGY to Codex.
+
 ## Standard verification
 
 Activate the repository `.venv` first, then use its active `python` command

@@ -1,0 +1,33 @@
+{
+  "2024_robust_signals": [],
+  "S30_changed": false,
+  "T3_changed": false,
+  "bot_calibration_result": "Tail-risk framing retained; no mean correction qualified.",
+  "deep_5_plus_pairs": 32,
+  "deep_surprise_opportunity_contribution": 362.3022,
+  "incremental_context_result": "No role context set qualified for promotion.",
+  "jgl_matchup_result": "No qualified incremental role-specific signal.",
+  "mid_calibration_result": "Diagnostic stickiness candidate not qualified.",
+  "optimizer_changed": false,
+  "optimizer_diagnostic_justified": true,
+  "pairs_2025": 99,
+  "pairs_2026": 41,
+  "primary_pairs": 140,
+  "production_model_fit": false,
+  "promotion_authority": false,
+  "recent_meta_only_signals": [],
+  "recommended_hypotheses": [],
+  "rejected_signals": [
+    "global context correction",
+    "generic uncertainty boost",
+    "global KP trend",
+    "price correction"
+  ],
+  "rerank_3_4_pairs": 45,
+  "rerank_opportunity_contribution": 339.9803227272727,
+  "sup_participation_result": "No qualified incremental role-specific signal.",
+  "top2_opportunity_contribution": 502.43489090909094,
+  "top2_pairs": 63,
+  "top_result": "NO_ROLE_SPECIFIC_CORRECTION_JUSTIFIED",
+  "verdict": "STAGE_10D_R2B_NO_INCREMENTAL_ROLE_SIGNAL"
+}

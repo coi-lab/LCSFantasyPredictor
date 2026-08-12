@@ -1,0 +1,29 @@
+{
+  "S30_changed": false,
+  "T3_changed": false,
+  "future_information_violations": 0,
+  "known_2024_exclusion_accepted": true,
+  "matchup_coverage": 0.8564102564102564,
+  "optimizer_changed": false,
+  "patch_coverage": 0.0,
+  "player_usage_coverage": 0.8564102564102564,
+  "primary_pair_count": 140,
+  "production_model_fit": false,
+  "promotion_authority": false,
+  "qualified_sources": [
+    "Stage 8 canonical matchup",
+    "Stage 9D-A production-share builder"
+  ],
+  "qualified_with_limitations": [
+    "Stage 8 canonical matchup",
+    "Stage 9D-A production-share builder"
+  ],
+  "rejected_sources": [
+    "Historical series format"
+  ],
+  "roster_context_coverage": 0.8564102564102564,
+  "secondary_pair_count": 55,
+  "series_format_coverage": 0,
+  "team_strength_coverage": 0.8564102564102564,
+  "verdict": "PROCEED_TO_STAGE_10D_R2B_CONTEXT_SIGNAL_DIAGNOSTIC"
+}

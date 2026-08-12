@@ -1,0 +1,2 @@
+source,source_entity,canonical_entity,entity_type,valid_from,valid_to,confidence,resolution_method
+repository canonical,exact player_name + target_cutoff,same,player,,,high,exact join only

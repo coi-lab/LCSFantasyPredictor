@@ -1,0 +1,9 @@
+{
+  "context_files": [
+    "matchup_context.csv",
+    "roster_context.csv",
+    "patch_context.csv",
+    "player_usage_context.csv"
+  ],
+  "contract": "cutoff-safe existing canonical sources only"
+}

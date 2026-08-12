@@ -1,0 +1,5 @@
+source,url_reference,data_family,access_result,years_covered,timestamp_semantics,identity_quality,qualification_status,reason_rejected_or_limitations
+repository schedule artifacts,data/processed/player_model_v2/stage_3d/schedule_context.csv,series opportunity,read,2025,post-event actual start / best_of UNKNOWN,OE IDs,NOT_QUALIFIED,postevent only; no realized length used
+Oracle's Elixir immutable CSV,data/raw/oracles_elixir/*,opponent role / usage / roster,read,2020-2026,completed match timestamp,OE player/team IDs,QUALIFIED_WITH_LIMITATIONS,prior-game construction only
+Leaguepedia LTA North Split 1,https://lol.fandom.com/wiki/LTA_North/2025_Season/Split_1,series format,public search accessed,2025,"current page, no historical revision tied to locks",event labels,NOT_QUALIFIED,format exists but per-lock prepublication not established
+Riot patch notes,https://www.leagueoflegends.com/en-us/news/game-updates/patch-25-s1-1-notes/,patch,public search accessed,2025,release page timestamp,patch labels,NOT_QUALIFIED,cannot establish competitive application date per target lock

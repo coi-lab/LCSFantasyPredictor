@@ -1,0 +1,4 @@
+entity_type,mapping_method,status
+team,casefold + explicit alias dictionary,DETERMINISTIC
+player,casefold exact Oracle player name,DETERMINISTIC
+GoL tournament,season/split fixed filename routing,DETERMINISTIC

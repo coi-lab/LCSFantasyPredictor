@@ -1,0 +1,14 @@
+{
+  "contract": "structural GoL + prior-only OE",
+  "files": {
+    "context_manifest.json": "7cee491d38e82336f81f467c827281f26d7e73f127cf3f998dde07293eafe609",
+    "identity_map.csv": "4700f6219c677614ea9faf87f5d91441eb625c45cdd562440df647fddc0d0846",
+    "opponent_role_context.csv": "d4265ee7e6180ce59c0d77e41e286005e060969f644bc8e43d0ad14b02796cc3",
+    "patch_context.csv": "7695d65794ce286e51ec87855a284671838c015c43cb1117b88181639b665646",
+    "player_usage_context.csv": "b1c21a4331ec58504538641874c1fb7879aa399700e3e85b8de2877932c5b47d",
+    "roster_relationship_context.csv": "ce684fb3b60cae2aa2d107ab53f41dc1e7551291a135a093293f3c50790da89b",
+    "series_opportunity_context.csv": "db37e4bab15006a1902d5f8a2fbc0c7bd1e1991e1993d32dedd61c4d5d1170f7",
+    "source_provenance.json": "b9ecae77c28c480db0733c320309ba2510d122a7c22c559f13c976f6c7b0f9f4",
+    "target_match_structure.csv": "4c5801f028f4976b6625c716fff99c0e282930990e769e2e34a9cc0e29f3780b"
+  }
+}

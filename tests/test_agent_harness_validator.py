@@ -38,6 +38,14 @@ EXPECTED_SHARED_SKILL_DIRECTORIES = {
     "refresh-weekly-predictions",
     "verify-model-change",
 }
+R3_AGENT_SETTINGS = {
+    "r3_scout": ("gpt-5.6-luna", "read-only"),
+    "r3_team_top_analyst": ("gpt-5.6-terra", "read-only"),
+    "r3_jgl_analyst": ("gpt-5.6-terra", "read-only"),
+    "r3_bot_sup_analyst": ("gpt-5.6-terra", "read-only"),
+    "r3_worker": ("gpt-5.6-terra", "workspace-write"),
+    "r3_validator": ("gpt-5.6-luna", "read-only"),
+}
 
 
 class FrontmatterParserTests(unittest.TestCase):
@@ -92,6 +100,33 @@ class HarnessMutationTests(unittest.TestCase):
         for directory in (".agents", ".codex", ".agent-runs", "docs", "tests", "scripts"):
             shutil.copytree(REPO_ROOT / directory, self.root / directory)
         shutil.copy2(REPO_ROOT / "AGENTS.md", self.root / "AGENTS.md")
+        shutil.copy2(REPO_ROOT / "README.md", self.root / "README.md")
+
+        # Mutation fixtures always start from the permanent default policy,
+        # even when the source repository is temporarily exercising R3.
+        for name in R3_AGENT_SETTINGS:
+            path = self.root / ".codex" / "agents" / f"{name}.toml"
+            if path.exists():
+                path.unlink()
+        (self.root / ".codex" / "config.toml").write_text(
+            '# Verified project defaults for Codex CLI 0.146.0-alpha.3.1.\n'
+            'model = "gpt-5.6-terra"\n'
+            'model_reasoning_effort = "medium"\n'
+            'model_verbosity = "low"\n\n'
+            '[agents]\n'
+            'enabled = true\n'
+            'max_concurrent_threads_per_session = 1\n',
+            encoding="utf-8",
+        )
+        exception = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        exception.write_text(
+            exception.read_text(encoding="utf-8").replace(
+                "active = true", "active = false", 1
+            ),
+            encoding="utf-8",
+        )
 
         actual_agents = {
             path.name
@@ -120,6 +155,46 @@ class HarnessMutationTests(unittest.TestCase):
         self.assertNotEqual(exit_code, 0)
         return failures
 
+    def activate_r3_exception(self) -> None:
+        exception = (
+            self.root
+            / ".codex"
+            / "policy-exceptions"
+            / "stage-10d-r3.toml"
+        )
+        exception.write_text(
+            exception.read_text(encoding="utf-8").replace(
+                "active = false", "active = true", 1
+            ),
+            encoding="utf-8",
+        )
+        config = self.root / ".codex" / "config.toml"
+        config.write_text(
+            config.read_text(encoding="utf-8").replace(
+                "max_concurrent_threads_per_session = 1",
+                "max_concurrent_threads_per_session = 3\n"
+                'default_subagent_model = "gpt-5.6-terra"\n'
+                'default_subagent_reasoning_effort = "medium"\n'
+                'policy_exception = '
+                '".codex/policy-exceptions/stage-10d-r3.toml"',
+                1,
+            ),
+            encoding="utf-8",
+        )
+        for name, (model, sandbox) in R3_AGENT_SETTINGS.items():
+            (self.root / ".codex" / "agents" / f"{name}.toml").write_text(
+                f'name = "{name}"\n'
+                f'description = "Temporary Stage 10D-R3 {name} profile."\n'
+                f'model = "{model}"\n'
+                'model_reasoning_effort = "medium"\n'
+                f'sandbox_mode = "{sandbox}"\n'
+                'developer_instructions = """\n'
+                "Perform only the named Stage 10D-R3 responsibility.\n"
+                "DO NOT SPAWN OR DELEGATE TO SUBAGENTS.\n"
+                '"""\n',
+                encoding="utf-8",
+            )
+
     def test_rejects_malformed_agy_yaml_frontmatter(self) -> None:
         path = self.root / ".agents" / "agents" / "bounded-debugger.md"
         text = path.read_text(encoding="utf-8")
@@ -139,6 +214,203 @@ class HarnessMutationTests(unittest.TestCase):
         )
 
         self.assert_validation_failure(f"{filename}: invalid TOML")
+
+    def test_default_policy_rejects_concurrency_three(self) -> None:
+        path = self.root / ".codex" / "config.toml"
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                "max_concurrent_threads_per_session = 1",
+                "max_concurrent_threads_per_session = 3",
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure("spawned-agent concurrency must be 1")
+
+    def test_default_policy_rejects_workspace_write_agent(self) -> None:
+        path = self.root / ".codex" / "agents" / "r3_worker.toml"
+        path.write_text(
+            'name = "r3_worker"\n'
+            'description = "Unauthorized write worker."\n'
+            'sandbox_mode = "workspace-write"\n'
+            'developer_instructions = "Remain bounded."\n',
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure("write-capable Codex agents must be exactly []")
+
+    def test_valid_r3_exception_accepts_only_named_write_worker(self) -> None:
+        self.activate_r3_exception()
+
+        self.assertEqual(VALIDATOR.validate_repository(self.root), [])
+
+    def test_r3_exception_rejects_validator_workspace_write(self) -> None:
+        self.activate_r3_exception()
+        path = self.root / ".codex" / "agents" / "r3_validator.toml"
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                'sandbox_mode = "read-only"',
+                'sandbox_mode = "workspace-write"',
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure("sandbox_mode must be 'read-only'")
+
+    def test_r3_exception_rejects_second_write_worker(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                'write_capable_agents = ["r3_worker"]',
+                'write_capable_agents = ["r3_worker", "r3_validator"]',
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure(
+            "write_capable_agents must be exactly ['r3_worker']"
+        )
+
+    def test_r3_exception_rejects_unknown_write_agent(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                'write_capable_agents = ["r3_worker"]',
+                'write_capable_agents = ["unknown_worker"]',
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure(
+            "write_capable_agents must be exactly ['r3_worker']"
+        )
+
+    def test_r3_exception_rejects_concurrency_four(self) -> None:
+        self.activate_r3_exception()
+        path = self.root / ".codex" / "config.toml"
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                "max_concurrent_threads_per_session = 3",
+                "max_concurrent_threads_per_session = 4",
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure(
+            "R3 spawned-agent concurrency must be between 1 and 3"
+        )
+
+    def test_r3_exception_rejects_recursive_delegation(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                "recursive_delegation_allowed = false",
+                "recursive_delegation_allowed = true",
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure(
+            "recursive_delegation_allowed must be exactly False"
+        )
+
+    def test_r3_exception_rejects_missing_user_authorization(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                "authorized_by_user = true", "authorized_by_user = false"
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure("authorized_by_user must be exactly True")
+
+    def test_r3_exception_rejects_malformed_contract(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        path.write_text(
+            path.read_text(encoding="utf-8") + "\nmalformed = [\n",
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure("invalid TOML")
+
+    def test_inactive_r3_exception_grants_no_permission(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                "active = true", "active = false", 1
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure("inactive exception cannot be selected")
+
+    def test_r3_exception_rejects_wrong_stage(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                'allowed_stage = "STAGE_10D_R3"',
+                'allowed_stage = "STAGE_10D_R4"',
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure(
+            "allowed_stage must be exactly 'STAGE_10D_R3'"
+        )
+
+    def test_r3_exception_rejects_path_outside_allowed_directory(self) -> None:
+        self.activate_r3_exception()
+        path = self.root / ".codex" / "config.toml"
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                ".codex/policy-exceptions/stage-10d-r3.toml",
+                "outside/stage-10d-r3.toml",
+            ),
+            encoding="utf-8",
+        )
+
+        self.assert_validation_failure("outside the allowed")
+
+    def test_r3_exception_rejects_destructive_permissions(self) -> None:
+        self.activate_r3_exception()
+        path = (
+            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
+        )
+        original = path.read_text(encoding="utf-8")
+        for key in ("allow_commit", "allow_push", "allow_reset", "allow_clean", "allow_rebase"):
+            with self.subTest(key=key):
+                path.write_text(
+                    original.replace(f"{key} = false", f"{key} = true"),
+                    encoding="utf-8",
+                )
+                failures = VALIDATOR.validate_repository(self.root)
+                self.assertTrue(
+                    any(f"{key} must be exactly False" in failure for failure in failures),
+                    failures,
+                )
+        path.write_text(original, encoding="utf-8")
 
     def test_rejects_broken_local_markdown_link(self) -> None:
         path = (

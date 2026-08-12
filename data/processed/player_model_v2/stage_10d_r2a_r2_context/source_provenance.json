@@ -1,0 +1,42 @@
+[
+  {
+    "construction": "retrospective deterministic date/team mapping",
+    "coverage": 133,
+    "field": "patch",
+    "limitations": "no target performance used",
+    "prelock_rule": "structural metadata only",
+    "raw_source_column_page_element": "patch cell",
+    "source": "GoL",
+    "source_page_type": "tournament match-list"
+  },
+  {
+    "construction": "retrospective deterministic date/team mapping",
+    "coverage": 96,
+    "field": "target opponent",
+    "limitations": "unmapped ambiguity retained",
+    "prelock_rule": "structural metadata only",
+    "raw_source_column_page_element": "team pair cell",
+    "source": "GoL",
+    "source_page_type": "tournament match-list"
+  },
+  {
+    "construction": "recent=3, long=all previous",
+    "coverage": 188,
+    "field": "usage fields",
+    "limitations": "minimum history governs nulls",
+    "prelock_rule": "timestamp < cutoff",
+    "raw_source_column_page_element": "KDA/KP/share/CS fields",
+    "source": "Oracle Elixir",
+    "source_page_type": "immutable CSV"
+  },
+  {
+    "construction": "recent=3,long=all",
+    "coverage": 181,
+    "field": "opponent role",
+    "limitations": "requires >=3 games",
+    "prelock_rule": "timestamp < cutoff",
+    "raw_source_column_page_element": "opponent same-role prior games",
+    "source": "Oracle Elixir",
+    "source_page_type": "immutable CSV"
+  }
+]
