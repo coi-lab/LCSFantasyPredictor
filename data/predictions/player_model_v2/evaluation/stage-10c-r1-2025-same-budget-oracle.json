@@ -1,0 +1,36 @@
+{
+  "year": 2025,
+  "periods": 26,
+  "split_resets": [
+    "2025-01-25",
+    "2025-04-05",
+    "2025-07-26"
+  ],
+  "split_metrics": {
+    "split_1": {
+      "S30_score": 581.66,
+      "oracle_score": 806.01,
+      "gap": 224.35
+    },
+    "split_2": {
+      "S30_score": 1474.19,
+      "oracle_score": 1870.71,
+      "gap": 396.52
+    },
+    "split_3": {
+      "S30_score": 1258.24,
+      "oracle_score": 1580.88,
+      "gap": 322.65
+    }
+  },
+  "S30_total": 3314.09,
+  "oracle_total": 4257.6,
+  "gap": 943.51,
+  "mean_gap": 36.29,
+  "final_budget_by_split": {
+    "split_1": 104.52,
+    "split_2": 154.72,
+    "split_3": 137.78
+  },
+  "provenance": "RECONSTRUCTED_S30_BUDGET; RECONSTRUCTED_MARKET; user-supplied 2025 LTA split boundaries; canonical plus reconstructed S30 extension"
+}

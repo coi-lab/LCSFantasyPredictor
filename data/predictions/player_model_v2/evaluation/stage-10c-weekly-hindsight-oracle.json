@@ -1,0 +1,17 @@
+{
+  "excluded_period_count": "all pre-2026 periods: no frozen S30 reference budget trajectory",
+  "mean_opportunity_gap": 41.01,
+  "median_opportunity_gap": 35.82,
+  "official_market_periods": 0,
+  "oracle_budget_compounding": false,
+  "oracle_definition": "SAME_S30_WEEKLY_BUDGET",
+  "reconstructed_market_periods": 11,
+  "season_level_optimization": false,
+  "supported_period_count": 11,
+  "supported_seasons": [
+    2026
+  ],
+  "total_S30_score_over_same_periods": 1487.01,
+  "total_oracle_score": 1938.11,
+  "verdict": "STAGE_10C_PARTIAL_HISTORICAL_COVERAGE"
+}

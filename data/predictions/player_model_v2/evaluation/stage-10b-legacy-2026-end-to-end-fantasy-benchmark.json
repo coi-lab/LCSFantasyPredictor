@@ -1,0 +1,27 @@
+{
+  "2026_exposed": true,
+  "S30_cumulative_score": 1487.01,
+  "S30_final_budget": 125.4,
+  "T3_cumulative_score": 1438.09,
+  "T3_final_budget": 118.5,
+  "evidence_manifest_hash": "d9fe1e1c82c87d1818eb2c43eacbf51f18bc49f2e91fea685be3129a5484df02",
+  "legacy_cumulative_score": 1428.42,
+  "legacy_final_budget": 109.3,
+  "legacy_model_id": "PRE_V2_PLAYER_BASELINE_743658C",
+  "legacy_vs_S30": 58.59,
+  "legacy_vs_T3": 9.67,
+  "promotion_authority": false,
+  "verdict": "STAGE_10B_LEGACY_2026_BENCHMARK_COMPLETE",
+  "weekly_wins_losses_ties_vs_legacy": {
+    "S30": {
+      "losses": 5,
+      "ties": 1,
+      "wins": 5
+    },
+    "T3_240d": {
+      "losses": 6,
+      "ties": 0,
+      "wins": 5
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "year": 2024,
+  "periods_total": 20,
+  "periods_scored": 15,
+  "split_resets": [
+    "2024-01-20",
+    "2024-06-15"
+  ],
+  "split_metrics": {
+    "spring": {
+      "S30_score": 411.45,
+      "oracle_score": 612.97,
+      "gap": 201.51
+    },
+    "summer": {
+      "S30_score": 1304.29,
+      "oracle_score": 1758.68,
+      "gap": 454.4
+    }
+  },
+  "terminal_infeasible_periods": [
+    {
+      "week_start": "2024-02-26T00:00:00+00:00",
+      "split": "spring",
+      "available_budget": 89.22,
+      "reason": "NO_LEGAL_ROSTER_UNDER_UNCHANGED_RECONSTRUCTED_MARKET"
+    },
+    {
+      "week_start": "2024-03-04T00:00:00+00:00",
+      "split": "spring",
+      "available_budget": 89.22,
+      "reason": "NO_LEGAL_ROSTER_UNDER_UNCHANGED_RECONSTRUCTED_MARKET"
+    },
+    {
+      "week_start": "2024-03-11T00:00:00+00:00",
+      "split": "spring",
+      "available_budget": 89.22,
+      "reason": "NO_LEGAL_ROSTER_UNDER_UNCHANGED_RECONSTRUCTED_MARKET"
+    },
+    {
+      "week_start": "2024-03-18T00:00:00+00:00",
+      "split": "spring",
+      "available_budget": 89.22,
+      "reason": "NO_LEGAL_ROSTER_UNDER_UNCHANGED_RECONSTRUCTED_MARKET"
+    },
+    {
+      "week_start": "2024-03-25T00:00:00+00:00",
+      "split": "spring",
+      "available_budget": 89.22,
+      "reason": "NO_LEGAL_ROSTER_UNDER_UNCHANGED_RECONSTRUCTED_MARKET"
+    }
+  ],
+  "S30_total": 1715.74,
+  "oracle_total": 2371.65,
+  "gap": 655.91,
+  "mean_gap": 43.73,
+  "final_budget_by_split": {
+    "spring": 89.22,
+    "summer": 110.1
+  },
+  "provenance": "RECONSTRUCTED_S30_BUDGET; RECONSTRUCTED_MARKET; no price floor; 2024 Spring/Summer split reset"
+}

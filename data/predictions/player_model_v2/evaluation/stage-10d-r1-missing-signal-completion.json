@@ -1,0 +1,87 @@
+{
+  "2024_robustness": [
+    {
+      "2024_effect": -0.017380832900422714,
+      "coverage": 45,
+      "primary_effect": -0.008324745068767923,
+      "robustness_status": "SAME_DIRECTION_WEAKER",
+      "role_consistency": "not pooled for inference",
+      "same_direction": "True",
+      "signal": "team_share_delta_short_vs_long"
+    },
+    {
+      "2024_effect": -0.022675027455212337,
+      "coverage": 45,
+      "primary_effect": -0.02091926376990358,
+      "robustness_status": "SAME_DIRECTION_WEAKER",
+      "role_consistency": "not pooled for inference",
+      "same_direction": "True",
+      "signal": "recent_share_gap_team_median"
+    },
+    {
+      "2024_effect": -0.2,
+      "coverage": 45,
+      "primary_effect": -0.2037037037037037,
+      "robustness_status": "SAME_DIRECTION_WEAKER",
+      "role_consistency": "not pooled for inference",
+      "same_direction": "True",
+      "signal": "production_rank_change"
+    },
+    {
+      "2024_effect": -0.840201652846024,
+      "coverage": 45,
+      "primary_effect": -1.7231638056206817,
+      "robustness_status": "SAME_DIRECTION_WEAKER",
+      "role_consistency": "not pooled for inference",
+      "same_direction": "True",
+      "signal": "fantasy_acceleration"
+    },
+    {
+      "2024_effect": 0.024,
+      "coverage": 50,
+      "primary_effect": -0.003801169590643275,
+      "robustness_status": "NOT_CONFIRMED",
+      "role_consistency": "not pooled for inference",
+      "same_direction": "False",
+      "signal": "roster_continuity"
+    },
+    {
+      "2024_effect": NaN,
+      "coverage": 0,
+      "primary_effect": NaN,
+      "robustness_status": "NOT_CONFIRMED",
+      "role_consistency": "not pooled for inference",
+      "same_direction": false,
+      "signal": "team_strength_delta"
+    }
+  ],
+  "2026_price_result": "EXPOSED_2026_DIAGNOSTIC_ONLY",
+  "S30_changed": false,
+  "T3_changed": false,
+  "carry_hierarchy_result": "joined transparent pre-lock rank/gap signals",
+  "contribution_acceleration_result": "joined shifted 3-lock vs expanding history",
+  "known_2024_exclusion_accepted": true,
+  "matchup_result": "canonical probability joined",
+  "optimizer_changed": false,
+  "primary_pair_count": 140,
+  "production_model_fit": false,
+  "promotion_authority": false,
+  "ranking_stickiness_result": "selection counts/streaks recorded",
+  "recommended_hypotheses": [
+    "H1",
+    "H2"
+  ],
+  "rejected_signals": [
+    "simple price difference",
+    "simple Elo delta",
+    "generic uncertainty"
+  ],
+  "role_specific_findings": "see role patterns",
+  "secondary_pair_count": 55,
+  "split_consistency": "see split CSV",
+  "team_share_signal_result": "joined cutoff-safe shifted signals",
+  "team_state_result": "joined where canonical coverage exists",
+  "top_role_reranking_result": "<=2, <=3, <=4 retained",
+  "uncertainty_interaction_result": "diagnostic only; no uncertainty boost",
+  "verdict": "STAGE_10D_R1_SIGNAL_COMPLETION_COMPLETE"
+}

@@ -1,0 +1,9 @@
+{
+  "status": "RESEARCH_ONLY_RECONSTRUCTED_S30_PERIOD_EXTENSION",
+  "year": 2024,
+  "rows": 80,
+  "locks": 2,
+  "formula": "T3_proxy_team_total * (0.70*T3_proxy_share + 0.30 strictly-prior historical_share_prior)",
+  "canonical_s30_unchanged": true,
+  "no_tuning_or_promotion": true
+}

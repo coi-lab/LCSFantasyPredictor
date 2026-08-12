@@ -1,0 +1,254 @@
+{
+  "2024_robustness_results": [
+    {
+      "2024_result": 0.6363636363636364,
+      "coverage_2024": 55,
+      "effect_size_2024": -0.6429987334386018,
+      "effect_size_primary": -2.0889483491588243,
+      "pattern": "LOWER_S30_PREDICTION",
+      "primary_2025_2026_result": 0.75,
+      "robustness_status": "SAME_DIRECTION_WEAKER",
+      "same_direction": true
+    },
+    {
+      "2024_result": 0.5111111111111111,
+      "coverage_2024": 45,
+      "effect_size_2024": -0.08064309893859191,
+      "effect_size_primary": -1.027861393700111,
+      "pattern": "POSITIVE_RECENT_ELO_TREND",
+      "primary_2025_2026_result": 0.46296296296296297,
+      "robustness_status": "SAME_DIRECTION_WEAKER",
+      "same_direction": true
+    },
+    {
+      "2024_result": 0.0,
+      "coverage_2024": 55,
+      "effect_size_2024": 0.0,
+      "effect_size_primary": -0.3028571428571429,
+      "pattern": "CHEAPER_ORACLE",
+      "primary_2025_2026_result": 0.17142857142857143,
+      "robustness_status": "NOT_CONFIRMED",
+      "same_direction": false
+    }
+  ],
+  "ORACLE_ONLY_count": 195,
+  "S30_ONLY_count": 195,
+  "S30_changed": false,
+  "incremental_signal_result": {
+    "baseline": "S30 prediction delta",
+    "features": [
+      {
+        "feature": "prediction_delta",
+        "leave_one_split_out_same_sign": 4,
+        "mean_delta": -2.0889483491588243,
+        "splits": 4,
+        "standardized_effect": -0.6046900831294215
+      },
+      {
+        "feature": "price_delta",
+        "leave_one_split_out_same_sign": 1,
+        "mean_delta": -0.3028571428571429,
+        "splits": 4,
+        "standardized_effect": -0.19748700334674535
+      },
+      {
+        "feature": "elo_delta_3_lock_delta",
+        "leave_one_split_out_same_sign": 2,
+        "mean_delta": -1.027861393700111,
+        "splits": 4,
+        "standardized_effect": -0.09160301654419756
+      },
+      {
+        "feature": "prior_role_relative_rating_delta",
+        "leave_one_split_out_same_sign": 4,
+        "mean_delta": -0.08180869448002161,
+        "splits": 4,
+        "standardized_effect": -0.39595196559781776
+      },
+      {
+        "feature": "canonical_matchup_probability_delta",
+        "leave_one_split_out_same_sign": 0,
+        "mean_delta": NaN,
+        "splits": 0,
+        "standardized_effect": null
+      }
+    ],
+    "role_handled": "same-role pairing",
+    "type": "paired standardized directional diagnostic (not a production model)",
+    "validation": "leave-one-split-out sign stability"
+  },
+  "matchup_findings": "canonical matchup deltas reported",
+  "miss_type_distribution": [
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "miss_type": "LINEUP_COMBINATION_EFFECT",
+      "opportunity_gap_contribution": 317.1194,
+      "pair_count": 33
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "miss_type": "MIXED",
+      "opportunity_gap_contribution": 415.2559636363636,
+      "pair_count": 61
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "miss_type": "PREDICTION_MISS",
+      "opportunity_gap_contribution": 104.68599999999999,
+      "pair_count": 6
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "miss_type": "RANKING_MISS",
+      "opportunity_gap_contribution": 363.11605,
+      "pair_count": 38
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "miss_type": "VALUE_MISS",
+      "opportunity_gap_contribution": 4.539999999999999,
+      "pair_count": 2
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "miss_type": "LINEUP_COMBINATION_EFFECT",
+      "opportunity_gap_contribution": 245.5014,
+      "pair_count": 20
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "miss_type": "MIXED",
+      "opportunity_gap_contribution": 111.83820000000001,
+      "pair_count": 13
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "miss_type": "RANKING_MISS",
+      "opportunity_gap_contribution": 182.12300000000002,
+      "pair_count": 22
+    }
+  ],
+  "optimizer_changed": false,
+  "price_value_findings": "paired outcome labels retained separately; no price/value change authorized",
+  "primary_periods": 37,
+  "promotion_authority": false,
+  "recent_form_findings": "cutoff-safe Elo trends reported in deltas only",
+  "recommended_hypotheses": [
+    "Test more responsive player-form/carry signals using frozen chronological evaluation.",
+    "Audit S30 role ranking responsiveness before changing optimizer value handling."
+  ],
+  "replacement_pair_count": 195,
+  "robust_primary_patterns": [],
+  "role_opportunity_gap": [
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "mean_actual_delta": 10.333868881118882,
+      "mean_prediction_delta": -2.0102782064429427,
+      "mean_price_delta": -0.6153846153846155,
+      "mean_value_delta": -0.08256448375596823,
+      "opportunity_contribution": 268.68059090909094,
+      "replacement_count": 26,
+      "role": "BOT"
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "mean_actual_delta": 5.347583333333333,
+      "mean_prediction_delta": -2.9304425720049454,
+      "mean_price_delta": -0.5033333333333333,
+      "mean_value_delta": -0.14735708430455882,
+      "opportunity_contribution": 160.42749999999998,
+      "replacement_count": 30,
+      "role": "JGL"
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "mean_actual_delta": 7.888304377104377,
+      "mean_prediction_delta": -2.588013614156885,
+      "mean_price_delta": -0.3592592592592592,
+      "mean_value_delta": -0.1431633062700138,
+      "opportunity_contribution": 212.98421818181816,
+      "replacement_count": 27,
+      "role": "MID"
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "mean_actual_delta": 12.099048076923076,
+      "mean_prediction_delta": -1.5201442208840763,
+      "mean_price_delta": -0.2961538461538463,
+      "mean_value_delta": -0.08175820913675048,
+      "opportunity_contribution": 314.57525,
+      "replacement_count": 26,
+      "role": "SUP"
+    },
+    {
+      "analysis_set": "PRIMARY_2025_2026",
+      "mean_actual_delta": 8.001608211143695,
+      "mean_prediction_delta": -1.3829722912693139,
+      "mean_price_delta": 0.19677419354838707,
+      "mean_value_delta": -0.12245404202453379,
+      "opportunity_contribution": 248.04985454545454,
+      "replacement_count": 31,
+      "role": "TOP"
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "mean_actual_delta": 13.831633333333334,
+      "mean_prediction_delta": -0.5562971898233174,
+      "mean_price_delta": 0.0,
+      "mean_value_delta": -0.03708647932155451,
+      "opportunity_contribution": 165.9796,
+      "replacement_count": 12,
+      "role": "BOT"
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "mean_actual_delta": 6.3348249999999995,
+      "mean_prediction_delta": -1.359690999038439,
+      "mean_price_delta": 0.0,
+      "mean_value_delta": -0.09064606660256262,
+      "opportunity_contribution": 76.0179,
+      "replacement_count": 12,
+      "role": "JGL"
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "mean_actual_delta": 12.712388888888889,
+      "mean_prediction_delta": 0.8455007937281542,
+      "mean_price_delta": 0.0,
+      "mean_value_delta": 0.05636671958187699,
+      "opportunity_contribution": 114.4115,
+      "replacement_count": 9,
+      "role": "MID"
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "mean_actual_delta": 10.523016666666665,
+      "mean_prediction_delta": -1.098560874573529,
+      "mean_price_delta": 0.0,
+      "mean_value_delta": -0.07323739163823527,
+      "opportunity_contribution": 126.27619999999999,
+      "replacement_count": 12,
+      "role": "SUP"
+    },
+    {
+      "analysis_set": "SECONDARY_2024_ROBUSTNESS",
+      "mean_actual_delta": 5.67774,
+      "mean_prediction_delta": -0.679984872145306,
+      "mean_price_delta": 0.0,
+      "mean_value_delta": -0.04533232480968704,
+      "opportunity_contribution": 56.7774,
+      "replacement_count": 10,
+      "role": "TOP"
+    }
+  ],
+  "role_specific_patterns": [
+    "lower S30 prediction is the primary observed mechanism"
+  ],
+  "secondary_count_note": "Stage 10C-R1B scope has 3 feasible Spring plus 11 Summer periods; its 15-period summary conflicts with its row-level scope.",
+  "secondary_periods": 14,
+  "team_share_findings": "no safely joined team-share feature had adequate source coverage",
+  "verdict": "STAGE_10D_PARTIAL_ANALYSIS_COVERAGE",
+  "weak_or_rejected_patterns": [
+    "underpriced value as a standalone explanation"
+  ]
+}
