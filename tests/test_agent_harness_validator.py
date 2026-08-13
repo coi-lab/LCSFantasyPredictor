@@ -39,12 +39,12 @@ EXPECTED_SHARED_SKILL_DIRECTORIES = {
     "verify-model-change",
 }
 R3_AGENT_SETTINGS = {
-    "r3_scout": ("gpt-5.6-luna", "read-only"),
-    "r3_team_top_analyst": ("gpt-5.6-terra", "read-only"),
-    "r3_jgl_analyst": ("gpt-5.6-terra", "read-only"),
-    "r3_bot_sup_analyst": ("gpt-5.6-terra", "read-only"),
-    "r3_worker": ("gpt-5.6-terra", "workspace-write"),
-    "r3_validator": ("gpt-5.6-luna", "read-only"),
+    "r3_scout": ("gpt-5.6-terra", "low", "read-only"),
+    "r3_team_top_analyst": ("gpt-5.6-terra", "medium", "read-only"),
+    "r3_jgl_analyst": ("gpt-5.6-terra", "medium", "read-only"),
+    "r3_bot_sup_analyst": ("gpt-5.6-terra", "medium", "read-only"),
+    "r3_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
+    "r3_validator": ("gpt-5.6-terra", "low", "read-only"),
 }
 
 
@@ -174,19 +174,19 @@ class HarnessMutationTests(unittest.TestCase):
                 "max_concurrent_threads_per_session = 1",
                 "max_concurrent_threads_per_session = 3\n"
                 'default_subagent_model = "gpt-5.6-terra"\n'
-                'default_subagent_reasoning_effort = "medium"\n'
+                'default_subagent_reasoning_effort = "low"\n'
                 'policy_exception = '
                 '".codex/policy-exceptions/stage-10d-r3.toml"',
                 1,
             ),
             encoding="utf-8",
         )
-        for name, (model, sandbox) in R3_AGENT_SETTINGS.items():
+        for name, (model, effort, sandbox) in R3_AGENT_SETTINGS.items():
             (self.root / ".codex" / "agents" / f"{name}.toml").write_text(
                 f'name = "{name}"\n'
                 f'description = "Temporary Stage 10D-R3 {name} profile."\n'
                 f'model = "{model}"\n'
-                'model_reasoning_effort = "medium"\n'
+                f'model_reasoning_effort = "{effort}"\n'
                 f'sandbox_mode = "{sandbox}"\n'
                 'developer_instructions = """\n'
                 "Perform only the named Stage 10D-R3 responsibility.\n"

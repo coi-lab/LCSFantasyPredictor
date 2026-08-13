@@ -73,12 +73,12 @@ REQUIRED_CODEX_AGENTS = {
     "verification_auditor",
 }
 R3_CODEX_AGENTS = {
-    "r3_scout": ("gpt-5.6-luna", "read-only"),
-    "r3_team_top_analyst": ("gpt-5.6-terra", "read-only"),
-    "r3_jgl_analyst": ("gpt-5.6-terra", "read-only"),
-    "r3_bot_sup_analyst": ("gpt-5.6-terra", "read-only"),
-    "r3_worker": ("gpt-5.6-terra", "workspace-write"),
-    "r3_validator": ("gpt-5.6-luna", "read-only"),
+    "r3_scout": ("gpt-5.6-terra", "low", "read-only"),
+    "r3_team_top_analyst": ("gpt-5.6-terra", "medium", "read-only"),
+    "r3_jgl_analyst": ("gpt-5.6-terra", "medium", "read-only"),
+    "r3_bot_sup_analyst": ("gpt-5.6-terra", "medium", "read-only"),
+    "r3_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
+    "r3_validator": ("gpt-5.6-terra", "low", "read-only"),
 }
 R3_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r3.toml")
 R3_EXCEPTION_KEYS = {
@@ -97,7 +97,7 @@ R3_EXCEPTION_KEYS = {
     "allow_rebase",
 }
 R3_READ_ONLY_AGENTS = sorted(
-    name for name, (_, sandbox) in R3_CODEX_AGENTS.items()
+    name for name, (_, _, sandbox) in R3_CODEX_AGENTS.items()
     if sandbox == "read-only"
 )
 REQUIRED_PROMPTS = {
@@ -575,11 +575,16 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
                 )
         expected_sandbox = "read-only"
         if active_exception is not None and path.stem in R3_CODEX_AGENTS:
-            expected_model, expected_sandbox = R3_CODEX_AGENTS[path.stem]
+            expected_model, expected_effort, expected_sandbox = (
+                R3_CODEX_AGENTS[path.stem]
+            )
             if data.get("model") != expected_model:
                 failures.append(f"{path}: model must be {expected_model!r}")
-            if data.get("model_reasoning_effort") != "medium":
-                failures.append(f"{path}: model_reasoning_effort must be 'medium'")
+            if data.get("model_reasoning_effort") != expected_effort:
+                failures.append(
+                    f"{path}: model_reasoning_effort must be "
+                    f"{expected_effort!r}"
+                )
             instructions = str(data.get("developer_instructions", ""))
             if "DO NOT SPAWN OR DELEGATE TO SUBAGENTS." not in instructions:
                 failures.append(
@@ -633,10 +638,10 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
                         ".codex/config.toml: R3 default subagent model must be "
                         "gpt-5.6-terra"
                     )
-                if agents.get("default_subagent_reasoning_effort") != "medium":
+                if agents.get("default_subagent_reasoning_effort") != "low":
                     failures.append(
                         ".codex/config.toml: R3 default subagent reasoning must "
-                        "be medium"
+                        "be low"
                     )
 
 
