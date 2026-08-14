@@ -1,13 +1,23 @@
 {
   "2026_market_tested": false,
   "B2Z_NS": {
-    "status": "NOT_SELECTED_PRE_2026"
+    "B2Z_NS_tuning_complete": true,
+    "further_L2_extension_authorized": false,
+    "predictions_authority": "R5B-R1-R2 sealed candidate artifacts",
+    "selected_L2": 80.0,
+    "selected_gamma": 0.4,
+    "selection_authority": "R5B-R2 final boundary refinement",
+    "status": "FINAL_SELECTED_PRE_2026_CHALLENGER"
   },
   "OATS_V2": {
     "status": "QUALIFIED_TEAM_STRENGTH_COMPONENT"
   },
   "P1": {
-    "status": "PENDING_R5C_TUNING"
+    "selected_alpha": 0.7,
+    "selected_patch_support_threshold": 20,
+    "selected_recent_window": 15,
+    "selection_authority": "R5C-R1 final alpha boundary extension",
+    "status": "FINAL_SELECTED_PRE_2026_CHALLENGER"
   },
   "S30": {
     "status": "OPERATIONAL_BASELINE"
