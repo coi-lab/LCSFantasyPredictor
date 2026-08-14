@@ -1,0 +1,325 @@
+{
+  "AGY_used": false,
+  "B1_advanced": false,
+  "B2Z_advanced": false,
+  "OTHER_rate_by_role": {
+    "BOT": 0.0017381228273464,
+    "JGL": 0.0257821552723059,
+    "MID": 0.0776361529548088,
+    "SUP": 0.0367902665121668,
+    "TOP": 0.0761877172653534
+  },
+  "S30_operational_status_unchanged": true,
+  "S30_reproduction_pass": true,
+  "T3_checkpoint_unchanged": true,
+  "allocation_metrics": {
+    "P0_S30": {
+      "player_share_MAE": 0.038954712235067225,
+      "player_share_Spearman": 0.22716708022757431,
+      "share_SD_ratio": 0.27917443939202924,
+      "within_role_Spearman": 0.09996328037769467,
+      "within_team_share_Spearman": 0.20895522388059698
+    },
+    "P1_DYNAMIC_PLAYSTYLE": {
+      "player_share_MAE": 0.038777446157129886,
+      "player_share_Spearman": 0.23492347246729697,
+      "share_SD_ratio": 0.26240467996661615,
+      "within_role_Spearman": 0.10376940326561501,
+      "within_team_share_Spearman": 0.22164179104477605
+    }
+  },
+  "archetype_taxonomy": {
+    "BOT": [
+      "STANDARD_MARKSMAN",
+      "HYPERCARRY_MARKSMAN",
+      "UTILITY_MARKSMAN",
+      "MAGE_AP_BOT",
+      "OTHER"
+    ],
+    "JGL": [
+      "ENGAGE_TANK",
+      "BRUISER_SKIRMISHER",
+      "ASSASSIN_CARRY",
+      "FARMING_SCALING",
+      "UTILITY",
+      "OTHER"
+    ],
+    "MID": [
+      "CONTROL_SCALING_MAGE",
+      "BURST_MAGE",
+      "ASSASSIN",
+      "MELEE_SKIRMISHER",
+      "UTILITY_SUPPORTIVE",
+      "OTHER"
+    ],
+    "SUP": [
+      "ENGAGE_TANK",
+      "ENCHANTER",
+      "POKE_RANGED",
+      "ROAM_PLAYMAKER",
+      "OTHER"
+    ],
+    "TOP": [
+      "TANK_WEAKSIDE",
+      "BRUISER_SKIRMISHER",
+      "CARRY_DUELIST",
+      "RANGED_PRESSURE",
+      "OTHER"
+    ]
+  },
+  "archive_discovery_bug_encountered": false,
+  "archive_discovery_bug_fixed": false,
+  "authoritative_s30_rows": 3972,
+  "baseline": "S30",
+  "candidate": "P1_DYNAMIC_PLAYSTYLE",
+  "champion_mapping_coverage": 17260,
+  "development_decision": "P1_DEVELOPMENT_REJECTED",
+  "development_metrics": {
+    "P0_S30": {
+      "MAE": 5.007274120449792,
+      "RMSE": 6.354377416026772,
+      "absolute_bias": 0.1014188129425827,
+      "bias": -0.1014188129425827,
+      "rows": 1340
+    },
+    "P1_DYNAMIC_PLAYSTYLE": {
+      "MAE": 5.000836413595636,
+      "RMSE": 6.345801764285405,
+      "absolute_bias": 0.1014188129425825,
+      "bias": -0.1014188129425825,
+      "rows": 1340
+    }
+  },
+  "evaluation_status": "COMPLETE",
+  "execution_mode": "direct Codex",
+  "execution_model": "Terra medium",
+  "fallback_rows": 117,
+  "future_training_violations": 0,
+  "gate_results": {
+    "gate_1_leak_safety": {
+      "status": "PASS"
+    },
+    "gate_2_coverage_mapping_team_preservation": {
+      "status": "PASS"
+    },
+    "gate_3_calibration": {
+      "role_relative_MAE_deltas": {
+        "BOT": -0.001032500064163444,
+        "JGL": -0.0013833611255447131,
+        "MID": -0.0030007220947828595,
+        "SUP": 0.0012555312948649977,
+        "TOP": -0.0024292819657846243
+      },
+      "status": "PASS"
+    },
+    "gate_4_ranking_upside": {
+      "metric_deltas": {
+        "NDCG": 0.004287058237861019,
+        "Top2_winner_recall": 0.0,
+        "Top3_winner_recall": 0.0060606060606061,
+        "actual_top20pct_recall": 0.0,
+        "actual_top2_intersection_recall": -0.0060606060606061,
+        "actual_top3_intersection_recall": -0.0020202020202021442,
+        "high_score_recall_1": 0.012121212121212144,
+        "high_score_recall_2": -0.006060606060606044
+      },
+      "positive_fold_counts": {
+        "NDCG": 2,
+        "Top2_winner_recall": 0,
+        "Top3_winner_recall": 2,
+        "actual_top20pct_recall": 1,
+        "actual_top2_intersection_recall": 0,
+        "actual_top3_intersection_recall": 1,
+        "high_score_recall_1": 2,
+        "high_score_recall_2": 1
+      },
+      "qualifying_metrics": [],
+      "status": "FAIL"
+    },
+    "gate_5_allocation": {
+      "improved_metrics": [
+        "player_share_MAE",
+        "player_share_Spearman",
+        "within_team_share_Spearman",
+        "within_role_Spearman"
+      ],
+      "status": "PASS"
+    },
+    "gate_6_role_breadth": {
+      "meaningful_roles": 1,
+      "non_worsening_roles": 5,
+      "status": "FAIL"
+    },
+    "gate_7_tail_stability": {
+      "status": "PASS"
+    }
+  },
+  "max_team_total_diff": 1.4210854715202004e-14,
+  "next_node": "REJECT_P1_AND_MOVE_TO_SERIES_OUTCOME_WIN_LOSS_ARCHITECTURE",
+  "parameter_search_performed": false,
+  "patch_meta_support_threshold": 20,
+  "playstyle_recent_window": 10,
+  "ranking_metrics": {
+    "P0_S30": {
+      "NDCG": 0.61774669119299,
+      "Top1_winner_recall": 0.2,
+      "Top2_winner_recall": 0.3575757575757576,
+      "Top3_winner_recall": 0.5515151515151515,
+      "actual_top20pct_recall": 0.30606060606060603,
+      "actual_top2_intersection_recall": 0.3575757575757576,
+      "actual_top3_intersection_recall": 0.5292929292929294,
+      "high_score_recall_1": 0.3333333333333333,
+      "high_score_recall_2": 0.3696969696969697
+    },
+    "P1_DYNAMIC_PLAYSTYLE": {
+      "NDCG": 0.622033749430851,
+      "Top1_winner_recall": 0.21212121212121213,
+      "Top2_winner_recall": 0.3575757575757576,
+      "Top3_winner_recall": 0.5575757575757576,
+      "actual_top20pct_recall": 0.30606060606060603,
+      "actual_top2_intersection_recall": 0.3515151515151515,
+      "actual_top3_intersection_recall": 0.5272727272727272,
+      "high_score_recall_1": 0.34545454545454546,
+      "high_score_recall_2": 0.36363636363636365
+    }
+  },
+  "robustness_2024_status": "NOT_RUN_DEVELOPMENT_REJECTED",
+  "role_metrics": [
+    {
+      "MAE": 5.438770736878507,
+      "RMSE": 7.058949221869992,
+      "absolute_bias": 0.5056611481760563,
+      "arm": "P0_S30",
+      "bias": -0.5056611481760563,
+      "prediction_SD_ratio": 0.2748691946893872,
+      "role": "BOT",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 5.43315520574371,
+      "RMSE": 7.050886808173194,
+      "absolute_bias": 0.48277518420444626,
+      "arm": "P1_DYNAMIC_PLAYSTYLE",
+      "bias": -0.48277518420444626,
+      "prediction_SD_ratio": 0.26865543793941815,
+      "role": "BOT",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 5.528161936686211,
+      "RMSE": 6.800936468580311,
+      "absolute_bias": 0.46218421996175363,
+      "arm": "P0_S30",
+      "bias": 0.46218421996175363,
+      "prediction_SD_ratio": 0.29540753341530523,
+      "role": "JGL",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 5.520514492367283,
+      "RMSE": 6.7885087761000635,
+      "absolute_bias": 0.41582536708982387,
+      "arm": "P1_DYNAMIC_PLAYSTYLE",
+      "bias": 0.41582536708982387,
+      "prediction_SD_ratio": 0.287516682294136,
+      "role": "JGL",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 5.099140447197438,
+      "RMSE": 6.34490265210162,
+      "absolute_bias": 0.4281177785487934,
+      "arm": "P0_S30",
+      "bias": -0.4281177785487934,
+      "prediction_SD_ratio": 0.23152614947178707,
+      "role": "MID",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 5.083839343793132,
+      "RMSE": 6.331300257153651,
+      "absolute_bias": 0.37556038102611244,
+      "arm": "P1_DYNAMIC_PLAYSTYLE",
+      "bias": -0.37556038102611244,
+      "prediction_SD_ratio": 0.23052904548207975,
+      "role": "MID",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 4.930216323511653,
+      "RMSE": 6.128149573308605,
+      "absolute_bias": 0.5662567935144504,
+      "arm": "P0_S30",
+      "bias": -0.5662567935144504,
+      "prediction_SD_ratio": 0.29181558962166326,
+      "role": "SUP",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 4.936406364396276,
+      "RMSE": 6.131502568168129,
+      "absolute_bias": 0.5943011911586744,
+      "arm": "P1_DYNAMIC_PLAYSTYLE",
+      "bias": -0.5943011911586744,
+      "prediction_SD_ratio": 0.28755883416274264,
+      "role": "SUP",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 4.040081157975152,
+      "RMSE": 5.291224234755332,
+      "absolute_bias": 0.5307574355646335,
+      "arm": "P0_S30",
+      "bias": 0.5307574355646335,
+      "prediction_SD_ratio": 0.3345220510135597,
+      "role": "TOP",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    },
+    {
+      "MAE": 4.030266661677777,
+      "RMSE": 5.278868939791384,
+      "absolute_bias": 0.5297173245864965,
+      "arm": "P1_DYNAMIC_PLAYSTYLE",
+      "bias": 0.5297173245864965,
+      "prediction_SD_ratio": 0.3239998370501361,
+      "role": "TOP",
+      "rows": 268,
+      "share_MAE": 0.0,
+      "within_role_Spearman": NaN
+    }
+  ],
+  "runtime_agent_runs_dependency": false,
+  "scientific_result": "P1_DYNAMIC_PLAYSTYLE_REJECTED_ON_DEVELOPMENT",
+  "structural_rows": 3855,
+  "subagents_used": false,
+  "tail_metrics": {
+    "P0_S30": {
+      "abs_error_ge_10": 0.11716417910447761,
+      "abs_error_ge_15": 0.019402985074626865
+    },
+    "P1_DYNAMIC_PLAYSTYLE": {
+      "abs_error_ge_10": 0.11641791044776119,
+      "abs_error_ge_15": 0.020149253731343283
+    }
+  },
+  "team_total_preservation_pass": true,
+  "unresolved_champion_rows": 0
+}

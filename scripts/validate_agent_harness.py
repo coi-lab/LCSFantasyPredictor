@@ -80,9 +80,21 @@ R3B_R1_CODEX_AGENTS = {
     "r3b_r1_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
     "r3b_r1_validator": ("gpt-5.6-terra", "low", "read-only"),
 }
+R3C2_CODEX_AGENTS = {
+    "r3c2_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
+R4A_CODEX_AGENTS = {
+    "r4a_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
 R3_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r3.toml")
 R3B_R1_EXCEPTION_PATH = Path(
     ".codex/policy-exceptions/stage-10d-r3b-r1.toml"
+)
+R3C2_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r3c-2.toml"
+)
+R4A_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r4a.toml"
 )
 R3_EXCEPTION_KEYS = {
     "exception_id",
@@ -134,6 +146,40 @@ POLICY_EXCEPTION_SPECS = {
             ("max_concurrent_threads_per_session", 1),
             ("write_capable_agents", ["r3b_r1_worker"]),
             ("read_only_agents", R3B_R1_READ_ONLY_AGENTS),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R3C2_EXCEPTION_PATH: {
+        "agents": R3C2_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r3c-2-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R3C_2_B2Z_ZERO_SUM_ALLOCATION"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r3c2_direct_codex"]),
+            ("read_only_agents", []),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R4A_EXCEPTION_PATH: {
+        "agents": R4A_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r4a-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R4A_DYNAMIC_PLAYSTYLE_ALLOCATION"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r4a_direct_codex"]),
+            ("read_only_agents", []),
             ("recursive_delegation_allowed", False),
             ("allow_commit", False),
             ("allow_push", False),

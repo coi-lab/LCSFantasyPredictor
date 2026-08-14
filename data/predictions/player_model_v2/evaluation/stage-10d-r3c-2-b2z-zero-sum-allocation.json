@@ -1,0 +1,155 @@
+{
+  "AGY_used": false,
+  "B0_reproduction_pass": true,
+  "B1_advanced": false,
+  "B3_fit": false,
+  "B4_fit": false,
+  "S30_operational_status_unchanged": true,
+  "T3_checkpoint_unchanged": true,
+  "allocation_metrics": {
+    "B0": {
+      "player_share_MAE": 0.038954712235067225,
+      "player_share_Spearman": 0.22716708022757431,
+      "share_SD_ratio": 0.27917443939202924,
+      "within_role_Spearman": 0.09996328037769467,
+      "within_team_share_Spearman": 0.20895522388059698
+    },
+    "B2Z": {
+      "player_share_MAE": 0.038878305012352024,
+      "player_share_Spearman": 0.22812534856679806,
+      "share_SD_ratio": 0.24238635319267748,
+      "within_role_Spearman": 0.04587945365690656,
+      "within_team_share_Spearman": 0.2380597014925373
+    }
+  },
+  "authoritative_s30_rows": 3972,
+  "baseline": "S30",
+  "candidate": "B2Z_S30_COUPLED_ALLOCATION",
+  "development_decision": "B2Z_DEVELOPMENT_REJECTED",
+  "development_gate_results": {
+    "development_decision": "B2Z_DEVELOPMENT_REJECTED",
+    "gate_1_leak_safety": {
+      "status": "PASS"
+    },
+    "gate_2_coverage_team_preservation": {
+      "status": "PASS"
+    },
+    "gate_3_calibration": {
+      "role_relative_MAE_deltas": {
+        "BOT": -0.0009530488202557086,
+        "JGL": -0.003100879855076011,
+        "MID": -0.011280682159593769,
+        "SUP": 0.021437905130187618,
+        "TOP": -0.006006172932314979
+      },
+      "status": "FAIL"
+    },
+    "gate_4_ranking_upside": {
+      "metric_deltas": {
+        "NDCG": 0.0020014717651543057,
+        "Top2_winner_recall": 0.0,
+        "Top3_winner_recall": 0.012121212121212088,
+        "actual_top20pct_recall": 0.015151515151515194,
+        "actual_top2_intersection_recall": 0.0030303030303029943,
+        "actual_top3_intersection_recall": 0.008080808080808022,
+        "high_score_recall_1": 0.018181818181818188,
+        "high_score_recall_2": -0.012121212121212088
+      },
+      "positive_fold_counts": {
+        "NDCG": 2,
+        "Top2_winner_recall": 1,
+        "Top3_winner_recall": 2,
+        "actual_top20pct_recall": 2,
+        "actual_top2_intersection_recall": 2,
+        "actual_top3_intersection_recall": 2,
+        "high_score_recall_1": 2,
+        "high_score_recall_2": 1
+      },
+      "qualifying_metrics": [],
+      "status": "FAIL"
+    },
+    "gate_5_allocation": {
+      "improved_metrics": [
+        "player_share_MAE",
+        "player_share_Spearman",
+        "within_team_share_Spearman"
+      ],
+      "metric_deltas": {
+        "player_share_MAE": -7.6407222715201e-05,
+        "player_share_Spearman": 0.0009582683392237445,
+        "share_SD_ratio": -0.036788086199351755,
+        "within_role_Spearman": -0.05408382672078811,
+        "within_team_share_Spearman": 0.02910447761194032
+      },
+      "status": "PASS"
+    },
+    "gate_6_tail_stability": {
+      "status": "PASS"
+    }
+  },
+  "development_metrics": {
+    "B0": {
+      "MAE": 5.007274120449792,
+      "RMSE": 6.354377416026772,
+      "absolute_bias": 0.1014188129425827,
+      "bias": -0.1014188129425827,
+      "rows": 1340
+    },
+    "B2Z": {
+      "MAE": 5.007590264655373,
+      "RMSE": 6.3439097211729605,
+      "absolute_bias": 0.10141881294258265,
+      "bias": -0.10141881294258265,
+      "rows": 1340
+    }
+  },
+  "evaluation_status": "COMPLETE",
+  "execution_mode": "direct Codex",
+  "execution_model": "Terra medium",
+  "fallback_rows": 117,
+  "future_training_violations": 0,
+  "max_team_total_diff": 1.4210854715202004e-14,
+  "next_node": "REJECT_B2Z_AND_MOVE_TO_DYNAMIC_PLAYSTYLE_ARCHITECTURE",
+  "old_B2_fit": false,
+  "parameter_tuning_performed": false,
+  "ranking_metrics": {
+    "B0": {
+      "NDCG": 0.61774669119299,
+      "Top1_winner_recall": 0.2,
+      "Top2_winner_recall": 0.3575757575757576,
+      "Top3_winner_recall": 0.5515151515151515,
+      "actual_top20pct_recall": 0.30606060606060603,
+      "actual_top2_intersection_recall": 0.3575757575757576,
+      "actual_top3_intersection_recall": 0.5292929292929294,
+      "high_score_recall_1": 0.3333333333333333,
+      "high_score_recall_2": 0.3696969696969697
+    },
+    "B2Z": {
+      "NDCG": 0.6197481629581443,
+      "Top1_winner_recall": 0.20606060606060606,
+      "Top2_winner_recall": 0.3575757575757576,
+      "Top3_winner_recall": 0.5636363636363636,
+      "actual_top20pct_recall": 0.3212121212121212,
+      "actual_top2_intersection_recall": 0.3606060606060606,
+      "actual_top3_intersection_recall": 0.5373737373737374,
+      "high_score_recall_1": 0.3515151515151515,
+      "high_score_recall_2": 0.3575757575757576
+    }
+  },
+  "robustness_2024_status": "NOT_RUN_DEVELOPMENT_REJECTED",
+  "runtime_agent_runs_dependency": false,
+  "scientific_result": "B2Z_REJECTED_ON_REPAIRED_DEVELOPMENT",
+  "structural_rows": 3855,
+  "subagents_used": false,
+  "tail_metrics": {
+    "B0": {
+      "abs_error_ge_10": 0.11716417910447761,
+      "abs_error_ge_15": 0.019402985074626865
+    },
+    "B2Z": {
+      "abs_error_ge_10": 0.11567164179104478,
+      "abs_error_ge_15": 0.018656716417910446
+    }
+  },
+  "team_total_preservation_pass": true
+}

@@ -46,6 +46,9 @@ R3B_R1_AGENT_SETTINGS = {
     "r3b_r1_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
     "r3b_r1_validator": ("gpt-5.6-terra", "low", "read-only"),
 }
+R3C2_AGENT_SETTINGS = {
+    "r3c2_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
 
 
 class FrontmatterParserTests(unittest.TestCase):
@@ -104,7 +107,7 @@ class HarnessMutationTests(unittest.TestCase):
 
         # Mutation fixtures always start from the permanent default policy,
         # even when the source repository is temporarily exercising R3.
-        for name in {**R3_AGENT_SETTINGS, **R3B_R1_AGENT_SETTINGS}:
+        for name in {**R3_AGENT_SETTINGS, **R3B_R1_AGENT_SETTINGS, **R3C2_AGENT_SETTINGS}:
             path = self.root / ".codex" / "agents" / f"{name}.toml"
             if path.exists():
                 path.unlink()
