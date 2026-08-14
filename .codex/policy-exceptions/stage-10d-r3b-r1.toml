@@ -1,13 +1,13 @@
-exception_id = "stage-10d-r3c1-b0-b1-team-pool-implementation"
+exception_id = "stage-10d-r3b-r1-s30-universe-chronology-repair"
 authorized_by_user = true
 active = false
 
-allowed_stage = "STAGE_10D_R3C_1_B0_B1"
+allowed_stage = "STAGE_10D_R3B_R1"
 
 max_concurrent_threads_per_session = 1
 
-write_capable_agents = ["r3c1_worker"]
-read_only_agents = ["r3c1_validator"]
+write_capable_agents = ["r3b_r1_worker"]
+read_only_agents = ["r3b_r1_validator"]
 
 recursive_delegation_allowed = false
 

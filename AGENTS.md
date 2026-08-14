@@ -34,8 +34,9 @@ them as authority to implement AGY application tasks while acting as reviewer.
 Implementation remains AGY-owned by default. As a narrow exception, a Codex
 implementation worker may modify repository files only when a user-authorized,
 validator-recognized, stage-scoped policy exception is active and explicitly
-names that worker. Stage 10D-R3 authorizes only `r3_worker`. This exception does
-not transfer general implementation ownership from AGY to Codex.
+names that worker. The Stage 10D-R3C-1 exception is inactive and grants no
+write permission. This exception does not transfer general implementation
+ownership from AGY to Codex.
 
 ## Standard verification
 

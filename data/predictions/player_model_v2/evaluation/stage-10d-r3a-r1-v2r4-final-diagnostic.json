@@ -1,0 +1,109 @@
+{
+  "verdict": "STAGE_10D_R3A_R1_V2R4_DIAGNOSTIC_COMPLETE",
+  "upstream_c1_reused": true,
+  "upstream_c2_reused": true,
+  "upstream_c3_reused": true,
+  "upstream_integrity_passed": true,
+  "bootstrap_fix_passed": true,
+  "bootstrap_oracle_cluster_col": "period_id_or_research_lock_id",
+  "bootstrap_canonical_cluster_col": "prediction_period_id",
+  "fresh_diagnostics_passed": true,
+  "freshness_audit_passed": true,
+  "deterministic_replay_passed": true,
+  "jgl_mid_result": {
+    "development_spearman": 0.659699,
+    "development_ci": [0.618941, 0.715295],
+    "robustness_2024_spearman": 0.656229,
+    "robustness_2024_ci": [0.538632, 0.765166],
+    "classification": "REPEATABLE_POSITIVE_COUPLING"
+  },
+  "jgl_bot_result": {
+    "development_spearman": 0.720243,
+    "development_ci": [0.658592, 0.770046],
+    "robustness_2024_spearman": 0.720666,
+    "robustness_2024_ci": [0.656967, 0.790679],
+    "classification": "REPEATABLE_POSITIVE_COUPLING"
+  },
+  "jgl_top_result": {
+    "development_spearman": 0.614533,
+    "development_ci": [0.546819, 0.669275],
+    "robustness_2024_spearman": 0.689372,
+    "robustness_2024_ci": [0.623226, 0.741138],
+    "classification": "REPEATABLE_POSITIVE_COUPLING"
+  },
+  "bot_sup_result": {
+    "development_spearman": 0.773074,
+    "development_ci": [0.711321, 0.819823],
+    "robustness_2024_spearman": 0.799702,
+    "robustness_2024_ci": [0.735616, 0.831340],
+    "classification": "REPEATABLE_POSITIVE_COUPLING"
+  },
+  "role_team_surprise_results": {
+    "TOP": {"development_spearman": 0.774021, "robustness_2024_spearman": 0.825817},
+    "JGL": {"development_spearman": 0.890432, "robustness_2024_spearman": 0.875671},
+    "MID": {"development_spearman": 0.817003, "robustness_2024_spearman": 0.815540},
+    "BOT": {"development_spearman": 0.868978, "robustness_2024_spearman": 0.903536},
+    "SUP": {"development_spearman": 0.890350, "robustness_2024_spearman": 0.871442},
+    "interpretation": "All role residuals are strongly associated with team fantasy surprise; this diagnostic is descriptive because team surprise is constructed from role outcomes."
+  },
+  "last3_vs_last6_result": "LAST6_SELECTED_MECHANICALLY_ON_DEVELOPMENT_COMMON_SUPPORT_FOR_ALL_ROLES; ONLY_SUP_HAS_POSITIVE_NONZERO_DEVELOPMENT_CI",
+  "allocation_persistence_result": "RECENT_ROLE_ALLOCATION_IS_NOT_BROADLY_POSITIVE_OR_REPEATABLE; SUP_LAST6_IS_POSITIVE, MID_IS_NEGATIVE, AND BOT/JGL/TOP_ARE_WEAK",
+  "team_surprise_allocation_result": {
+    "positive_surprise_mean_positive_contribution_share": {
+      "TOP": 0.150362,
+      "JGL": 0.209881,
+      "MID": 0.198140,
+      "BOT": 0.215865,
+      "SUP": 0.217759
+    },
+    "negative_surprise_mean_role_residual": {
+      "TOP": -4.082051,
+      "JGL": -5.179716,
+      "MID": -4.319175,
+      "BOT": -4.812102,
+      "SUP": -4.233703
+    }
+  },
+  "compression_summary": {
+    "mean_by_role": {
+      "TOP": {"sd_ratio": 0.350440, "spread_ratio": 0.352656, "gap_ratio": 0.359361},
+      "JGL": {"sd_ratio": 0.343336, "spread_ratio": 0.330968, "gap_ratio": 0.339904},
+      "MID": {"sd_ratio": 0.339935, "spread_ratio": 0.336466, "gap_ratio": 0.336170},
+      "BOT": {"sd_ratio": 0.317992, "spread_ratio": 0.300774, "gap_ratio": 0.320088},
+      "SUP": {"sd_ratio": 0.338931, "spread_ratio": 0.325897, "gap_ratio": 0.342751}
+    },
+    "most_compressed_role": "BOT"
+  },
+  "ranking_summary": {
+    "Top1_winner_recall": 0.243699,
+    "Top2_winner_recall": 0.506315,
+    "Top3_winner_recall": 0.666155,
+    "actual_top2_intersection_recall": 0.460714,
+    "actual_top3_intersection_recall": 0.595136,
+    "actual_top20pct_recall": 0.339389,
+    "high_score_recall_1": 0.396174,
+    "high_score_recall_2": 0.448353,
+    "NDCG": 0.663217,
+    "MAE": 5.351038,
+    "MAE_status": "CALIBRATION_GUARDRAIL"
+  },
+  "rerank_3_4_result": {
+    "pairs_retained": 45,
+    "clusters": 25,
+    "output_rows": 36,
+    "LAST3_joint_state_rows": 13,
+    "LAST6_joint_state_rows": 11,
+    "bootstrap_cluster_col": "period_id_or_research_lock_id",
+    "result": "VALID_DESCRIPTIVE_POSTHOC_CIS; NO_ORACLE_TUNING"
+  },
+  "performance_adjustment_feasibility": "PARTIALLY_FEASIBLE",
+  "recommended_next_node": "PROCEED_TO_STAGE_10D_R3B_TEAM_ALLOCATION_MODEL_DESIGN",
+  "S30_changed": false,
+  "T3_changed": false,
+  "budget_changed": false,
+  "prices_changed": false,
+  "Oracle_changed": false,
+  "model_fit": false,
+  "promotion": false
+}
+

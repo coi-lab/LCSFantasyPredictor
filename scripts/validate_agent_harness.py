@@ -73,14 +73,17 @@ REQUIRED_CODEX_AGENTS = {
     "verification_auditor",
 }
 R3_CODEX_AGENTS = {
-    "r3_scout": ("gpt-5.6-terra", "low", "read-only"),
-    "r3_team_top_analyst": ("gpt-5.6-terra", "medium", "read-only"),
-    "r3_jgl_analyst": ("gpt-5.6-terra", "medium", "read-only"),
-    "r3_bot_sup_analyst": ("gpt-5.6-terra", "medium", "read-only"),
-    "r3_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
-    "r3_validator": ("gpt-5.6-terra", "low", "read-only"),
+    "r3c1_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
+    "r3c1_validator": ("gpt-5.6-terra", "low", "read-only"),
+}
+R3B_R1_CODEX_AGENTS = {
+    "r3b_r1_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
+    "r3b_r1_validator": ("gpt-5.6-terra", "low", "read-only"),
 }
 R3_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r3.toml")
+R3B_R1_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r3b-r1.toml"
+)
 R3_EXCEPTION_KEYS = {
     "exception_id",
     "authorized_by_user",
@@ -100,6 +103,46 @@ R3_READ_ONLY_AGENTS = sorted(
     name for name, (_, _, sandbox) in R3_CODEX_AGENTS.items()
     if sandbox == "read-only"
 )
+R3B_R1_READ_ONLY_AGENTS = sorted(
+    name for name, (_, _, sandbox) in R3B_R1_CODEX_AGENTS.items()
+    if sandbox == "read-only"
+)
+POLICY_EXCEPTION_SPECS = {
+    R3_EXCEPTION_PATH: {
+        "agents": R3_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r3c1-b0-b1-team-pool-implementation"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R3C_1_B0_B1"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r3c1_worker"]),
+            ("read_only_agents", R3_READ_ONLY_AGENTS),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R3B_R1_EXCEPTION_PATH: {
+        "agents": R3B_R1_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r3b-r1-s30-universe-chronology-repair"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R3B_R1"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r3b_r1_worker"]),
+            ("read_only_agents", R3B_R1_READ_ONLY_AGENTS),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+}
 REQUIRED_PROMPTS = {
     "plan-repository-change.md",
     "review-agy-change.md",
@@ -423,11 +466,11 @@ def _load_r3_policy_exception(
     config: dict[str, object] | None,
     failures: list[str],
 ) -> dict[str, object] | None:
-    """Load the one narrowly supported policy exception, failing closed."""
+    """Load one selected, explicitly registered policy exception fail-closed."""
     exception_directory = (root / ".codex" / "policy-exceptions").resolve()
-    exception_path = root / R3_EXCEPTION_PATH
     agents = config.get("agents") if isinstance(config, dict) else None
     reference = agents.get("policy_exception") if isinstance(agents, dict) else None
+    selected_path: Path | None = None
 
     if reference is not None:
         if not _nonempty_string(reference):
@@ -445,84 +488,89 @@ def _load_r3_policy_exception(
                 ".codex/policy-exceptions directory"
             )
             return None
-        if candidate.resolve() != exception_path.resolve():
+        selected_path = Path(str(reference))
+        if selected_path not in POLICY_EXCEPTION_SPECS:
             failures.append(
                 f".codex/config.toml: unsupported policy exception {reference!r}"
             )
             return None
 
-    if not exception_path.is_file():
-        if reference is not None:
-            failures.append(f"{exception_path}: referenced policy exception is missing")
-        return None
+    if exception_directory.is_dir():
+        known_paths = {path.as_posix() for path in POLICY_EXCEPTION_SPECS}
+        for path in sorted(exception_directory.glob("*.toml")):
+            relative = path.relative_to(root).as_posix()
+            if relative not in known_paths:
+                failures.append(f"Unsupported policy exception file: {relative}")
 
-    contract_failures: list[str] = []
-    contract = _load_toml(exception_path, contract_failures)
-    failures.extend(contract_failures)
-    if contract is None:
-        return None
+    active_contracts: list[dict[str, object]] = []
+    for relative_path, spec in POLICY_EXCEPTION_SPECS.items():
+        exception_path = root / relative_path
+        if not exception_path.is_file():
+            if selected_path == relative_path:
+                failures.append(
+                    f"{exception_path}: referenced policy exception is missing"
+                )
+            continue
 
-    unexpected_keys = sorted(set(contract).difference(R3_EXCEPTION_KEYS))
-    missing_keys = sorted(R3_EXCEPTION_KEYS.difference(contract))
-    if unexpected_keys:
-        failures.append(
-            f"{exception_path}: unsupported exception keys: {unexpected_keys}"
-        )
-    if missing_keys:
-        failures.append(
-            f"{exception_path}: missing exception keys: {missing_keys}"
-        )
+        contract_failures: list[str] = []
+        contract = _load_toml(exception_path, contract_failures)
+        failures.extend(contract_failures)
+        if contract is None:
+            continue
 
-    exact_values: tuple[tuple[str, object], ...] = (
-        ("exception_id", "stage-10d-r3-role-team-architecture"),
-        ("authorized_by_user", True),
-        ("allowed_stage", "STAGE_10D_R3"),
-        ("max_concurrent_threads_per_session", 3),
-        ("write_capable_agents", ["r3_worker"]),
-        ("read_only_agents", R3_READ_ONLY_AGENTS),
-        ("recursive_delegation_allowed", False),
-        ("allow_commit", False),
-        ("allow_push", False),
-        ("allow_reset", False),
-        ("allow_clean", False),
-        ("allow_rebase", False),
-    )
-    for key, expected in exact_values:
-        actual = contract.get(key)
-        if key == "read_only_agents" and isinstance(actual, list):
-            actual = sorted(actual)
-        if actual != expected:
+        unexpected_keys = sorted(set(contract).difference(R3_EXCEPTION_KEYS))
+        missing_keys = sorted(R3_EXCEPTION_KEYS.difference(contract))
+        if unexpected_keys:
             failures.append(
-                f"{exception_path}: {key} must be exactly {expected!r}"
+                f"{exception_path}: unsupported exception keys: {unexpected_keys}"
             )
-    if not isinstance(contract.get("active"), bool):
-        failures.append(f"{exception_path}: active must be a boolean")
+        if missing_keys:
+            failures.append(
+                f"{exception_path}: missing exception keys: {missing_keys}"
+            )
 
-    active = contract.get("active") is True
-    if active and reference != R3_EXCEPTION_PATH.as_posix():
-        failures.append(
-            f"{exception_path}: active exception must be selected by "
-            "agents.policy_exception"
-        )
-    if not active and reference is not None:
-        failures.append(
-            f"{exception_path}: inactive exception cannot be selected"
-        )
+        exact_values = spec["exact_values"]
+        for key, expected in exact_values:
+            actual = contract.get(key)
+            if key == "read_only_agents" and isinstance(actual, list):
+                actual = sorted(actual)
+            if actual != expected:
+                failures.append(
+                    f"{exception_path}: {key} must be exactly {expected!r}"
+                )
+        if not isinstance(contract.get("active"), bool):
+            failures.append(f"{exception_path}: active must be a boolean")
 
-    valid_contract = (
-        not unexpected_keys
-        and not missing_keys
-        and isinstance(contract.get("active"), bool)
-        and all(
-            (sorted(contract.get(key)) if key == "read_only_agents"
-             and isinstance(contract.get(key), list) else contract.get(key))
-            == expected
-            for key, expected in exact_values
+        active = contract.get("active") is True
+        selected = selected_path == relative_path
+        if active and not selected:
+            failures.append(
+                f"{exception_path}: active exception must be selected by "
+                "agents.policy_exception"
+            )
+        if not active and selected:
+            failures.append(
+                f"{exception_path}: inactive exception cannot be selected"
+            )
+
+        valid_contract = (
+            not unexpected_keys
+            and not missing_keys
+            and isinstance(contract.get("active"), bool)
+            and all(
+                (sorted(contract.get(key)) if key == "read_only_agents"
+                 and isinstance(contract.get(key), list) else contract.get(key))
+                == expected
+                for key, expected in exact_values
+            )
         )
-    )
-    if active and reference == R3_EXCEPTION_PATH.as_posix() and valid_contract:
-        return contract
-    return None
+        if active and selected and valid_contract:
+            active_contracts.append(contract)
+
+    if len(active_contracts) > 1:
+        failures.append("Only one policy exception may be active")
+        return None
+    return active_contracts[0] if active_contracts else None
 
 
 def _validate_codex(root: Path, failures: list[str]) -> None:
@@ -534,8 +582,14 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
         return
     files = sorted(path for path in directory.iterdir() if path.is_file())
     expected_agent_names = set(REQUIRED_CODEX_AGENTS)
+    active_agent_settings: dict[str, tuple[str, str, str]] = {}
     if active_exception is not None:
-        expected_agent_names.update(R3_CODEX_AGENTS)
+        for spec in POLICY_EXCEPTION_SPECS.values():
+            exact_values = dict(spec["exact_values"])
+            if exact_values["allowed_stage"] == active_exception.get("allowed_stage"):
+                active_agent_settings = spec["agents"]
+                break
+        expected_agent_names.update(active_agent_settings)
     expected_toml_files = {
         f"{agent_name}.toml" for agent_name in expected_agent_names
     }
@@ -574,9 +628,9 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
                     f"{path}: agent name {name!r} must match filename"
                 )
         expected_sandbox = "read-only"
-        if active_exception is not None and path.stem in R3_CODEX_AGENTS:
+        if active_exception is not None and path.stem in active_agent_settings:
             expected_model, expected_effort, expected_sandbox = (
-                R3_CODEX_AGENTS[path.stem]
+                active_agent_settings[path.stem]
             )
             if data.get("model") != expected_model:
                 failures.append(f"{path}: model must be {expected_model!r}")
@@ -605,7 +659,10 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
     if missing:
         failures.append(f"{directory}: missing required Codex agents: {missing}")
 
-    expected_write_agents = {"r3_worker"} if active_exception is not None else set()
+    expected_write_agents = set(
+        active_exception.get("write_capable_agents", [])
+        if active_exception is not None else []
+    )
     if set(write_capable_names) != expected_write_agents:
         failures.append(
             f"{directory}: write-capable Codex agents must be exactly "
@@ -627,11 +684,10 @@ def _validate_codex(root: Path, failures: list[str]) -> None:
                     ".codex/config.toml: spawned-agent concurrency must be 1"
                 )
             if active_exception is not None:
-                if not isinstance(concurrency, int) or isinstance(concurrency, bool) \
-                        or not 1 <= concurrency <= 3:
+                if concurrency != 1:
                     failures.append(
-                        ".codex/config.toml: R3 spawned-agent concurrency must "
-                        "be between 1 and 3"
+                        ".codex/config.toml: exception-stage spawned-agent "
+                        "concurrency must be 1"
                     )
                 if agents.get("default_subagent_model") != "gpt-5.6-terra":
                     failures.append(

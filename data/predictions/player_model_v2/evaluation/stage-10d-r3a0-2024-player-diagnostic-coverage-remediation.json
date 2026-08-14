@@ -1,0 +1,56 @@
+{
+  "2024_oracle_universe_unchanged": true,
+  "2024_roster_feasibility_unchanged": true,
+  "2024_spring_player_diagnostic_rows": 305,
+  "2024_summer_player_diagnostic_rows": 370,
+  "S30_changed": false,
+  "T3_changed": false,
+  "bot_core_coverage": 1.0,
+  "budget_path_changed": false,
+  "coverage_decomposition_artifact": "stage-10d-r3a0-coverage-loss-decomposition.json",
+  "future_information_violations": 0,
+  "identity_failures": 0,
+  "jgl_core_coverage": 1.0,
+  "last3_eligible_coverage_by_role": {
+    "BOT": 1.0,
+    "JGL": 1.0,
+    "MID": 1.0,
+    "SUP": 1.0,
+    "TOP": 1.0
+  },
+  "last6_eligible_coverage_by_role": {
+    "BOT": 1.0,
+    "JGL": 1.0,
+    "MID": 1.0,
+    "SUP": 1.0,
+    "TOP": 1.0
+  },
+  "mid_core_coverage": 1.0,
+  "model_fit": false,
+  "oracle_changed": false,
+  "player_diagnostic_universe_rows_2022_2023": 1992,
+  "player_diagnostic_universe_rows_2024": 675,
+  "prior_jgl_sup_missing_denominator": null,
+  "prior_jgl_sup_roster_caused_percentage": null,
+  "prior_r3_missing_due_insufficient_history": null,
+  "prior_r3_missing_due_join_failure": null,
+  "prior_r3_missing_due_roster_infeasibility": null,
+  "prior_r3_missing_due_source_absence": null,
+  "frozen_r3_aggregate_coverage": {
+    "TOP": "132/135",
+    "JGL": "47/135",
+    "BOT": "132/135",
+    "SUP": "47/135"
+  },
+  "ready_for_r3a_r1": false,
+  "roster_infeasible_periods_with_player_data": 1,
+  "stage": "STAGE_10D_R3A0",
+  "sup_core_coverage": 1.0,
+  "top_core_coverage": 1.0,
+  "validation_blockers": [
+    "row-level R3 completeness flags in the generated attribution table were assigned synthetically to match aggregate totals rather than derived from frozen R3 feature rows",
+    "the builder sourced feasibility from the first-stop budget diagnostic and therefore mislabeled four later accepted infeasible Spring periods",
+    "the one permitted worker correction pass was exhausted"
+  ],
+  "verdict": "BLOCKED_BY_COVERAGE_VALIDATION"
+}

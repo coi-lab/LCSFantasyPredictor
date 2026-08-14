@@ -1,0 +1,16 @@
+{
+  "B0_reproduced": false,
+  "B1_fit_started": false,
+  "B2_implemented": false,
+  "B3_implemented": false,
+  "B4_implemented": false,
+  "S30_changed": false,
+  "T3_changed": false,
+  "missing_warmup_rows": 2107,
+  "observed_rows": 3972,
+  "promotion": false,
+  "reason": "current canonical S30 registry exposes 3,972 2022-2026 rows; frozen R3B full population requires 6,079 rows including 2020-2021 warm-start",
+  "required_rows": 6079,
+  "source_audit": "stage-10d-r3c1-b0-source-audit.json",
+  "verdict": "BLOCKED_BY_B0_REPRODUCTION"
+}

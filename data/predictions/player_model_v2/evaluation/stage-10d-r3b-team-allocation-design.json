@@ -1,0 +1,95 @@
+{
+  "verdict": "STAGE_10D_R3B_TEAM_ALLOCATION_DESIGN_FROZEN",
+  "stage": "Stage 10D-R3B",
+  "mode": "DESIGN_ONLY",
+  "evidence_directory": ".agent-runs/player-model-v2-stage-10d-r3b-team-allocation-design-20260813T220209Z",
+  "r3a_authority": "STAGE_10D_R3A_R1_V2R4_DIAGNOSTIC_COMPLETE",
+  "r3a_conclusions": {
+    "cross_role_coupling": "SUPPORTED",
+    "raw_LAST3_LAST6_primary_allocation": "NOT_SUPPORTED",
+    "BOT_compression": "SUPPORTED",
+    "independent_player_forecasts_sufficient": "NOT_SUPPORTED",
+    "recent_hot_team_explains_oracle_misses": "NOT_SUPPORTED",
+    "conditional_team_allocation": "SUPPORTED_AS_NEXT_MODELING_HYPOTHESIS"
+  },
+  "team_pool": "Sum of the five canonical Stage 3E player labels for one exact TOP/JGL/MID/BOT/SUP team-period; coach excluded; each label is the arithmetic mean across all eligible games in the fantasy period.",
+  "structural_support": {
+    "team_periods": 1172,
+    "rows": 5860,
+    "total_rows": 6079,
+    "overall_coverage": 0.963974,
+    "role_coverage": {
+      "TOP": 0.960656,
+      "JGL": 0.962233,
+      "MID": 0.966200,
+      "BOT": 0.963816,
+      "SUP": 0.966997
+    },
+    "full_population_policy": "S30 fallback outside structural support"
+  },
+  "input_coverage": {
+    "opponent_identity": 1.0,
+    "canonical_win_probability": 1.0,
+    "matchup_strength_diff": 0.954927,
+    "team_core_state": 0.963974,
+    "qualified_bo_format": 0.0
+  },
+  "frozen_candidates": [
+    {
+      "candidate_id": "R3B-B",
+      "decision": "FREEZE_FOR_IMPLEMENTATION",
+      "purpose": "S30 plus coherent team and zero-sum five-role residual"
+    },
+    {
+      "candidate_id": "R3B-A",
+      "decision": "FREEZE_FOR_IMPLEMENTATION",
+      "purpose": "team pool plus positive compositional allocation and signed zero-sum player adjustment"
+    },
+    {
+      "candidate_id": "R3B-C",
+      "decision": "OPTIONAL_SECONDARY",
+      "purpose": "separate bounded role-conditioned P80 upside output"
+    }
+  ],
+  "rejected_before_implementation": [
+    "realized-series/BO opportunity model",
+    "raw LAST3/LAST6 share extrapolation",
+    "hot-team boost-all logic",
+    "simple Elo momentum",
+    "independent role residual boosts",
+    "Oracle-informed training",
+    "unbounded spread multiplication"
+  ],
+  "evaluation_authority": {
+    "development_selection": "2022-2023 rolling-origin OOF",
+    "robustness": "2024 frozen one-way gate",
+    "exposed_descriptive_only": [
+      2025,
+      2026
+    ]
+  },
+  "acceptance_gate_ids": [
+    "LEAK_SAFETY",
+    "COVERAGE",
+    "DEVELOPMENT_CALIBRATION",
+    "DEVELOPMENT_RANKING_UPSIDE",
+    "DECOMPRESSION",
+    "ROBUSTNESS_2024"
+  ],
+  "candidate_count": 3,
+  "mean_candidate_count": 2,
+  "model_fit": false,
+  "hyperparameter_search": false,
+  "new_scraping": false,
+  "S30_changed": false,
+  "T3_240d_changed": false,
+  "budget_changed": false,
+  "prices_changed": false,
+  "Oracle_population_changed": false,
+  "research_candidate_promoted": false,
+  "validation_status": "PASS",
+  "focused_design_corrections": [
+    "Added the already-frozen R3B-B team_continuity and prior_role_adjusted_kp rows to the candidate feature inventory."
+  ],
+  "recommended_next_node": "PROCEED_TO_STAGE_10D_R3C_TEAM_ALLOCATION_IMPLEMENTATION"
+}

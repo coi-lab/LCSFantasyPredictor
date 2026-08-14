@@ -39,12 +39,12 @@ EXPECTED_SHARED_SKILL_DIRECTORIES = {
     "verify-model-change",
 }
 R3_AGENT_SETTINGS = {
-    "r3_scout": ("gpt-5.6-terra", "low", "read-only"),
-    "r3_team_top_analyst": ("gpt-5.6-terra", "medium", "read-only"),
-    "r3_jgl_analyst": ("gpt-5.6-terra", "medium", "read-only"),
-    "r3_bot_sup_analyst": ("gpt-5.6-terra", "medium", "read-only"),
-    "r3_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
-    "r3_validator": ("gpt-5.6-terra", "low", "read-only"),
+    "r3c1_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
+    "r3c1_validator": ("gpt-5.6-terra", "low", "read-only"),
+}
+R3B_R1_AGENT_SETTINGS = {
+    "r3b_r1_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
+    "r3b_r1_validator": ("gpt-5.6-terra", "low", "read-only"),
 }
 
 
@@ -104,7 +104,7 @@ class HarnessMutationTests(unittest.TestCase):
 
         # Mutation fixtures always start from the permanent default policy,
         # even when the source repository is temporarily exercising R3.
-        for name in R3_AGENT_SETTINGS:
+        for name in {**R3_AGENT_SETTINGS, **R3B_R1_AGENT_SETTINGS}:
             path = self.root / ".codex" / "agents" / f"{name}.toml"
             if path.exists():
                 path.unlink()
@@ -118,15 +118,15 @@ class HarnessMutationTests(unittest.TestCase):
             'max_concurrent_threads_per_session = 1\n',
             encoding="utf-8",
         )
-        exception = (
-            self.root / ".codex" / "policy-exceptions" / "stage-10d-r3.toml"
-        )
-        exception.write_text(
-            exception.read_text(encoding="utf-8").replace(
-                "active = true", "active = false", 1
-            ),
-            encoding="utf-8",
-        )
+        for exception in (
+            self.root / ".codex" / "policy-exceptions"
+        ).glob("*.toml"):
+            exception.write_text(
+                exception.read_text(encoding="utf-8").replace(
+                    "active = true", "active = false", 1
+                ),
+                encoding="utf-8",
+            )
 
         actual_agents = {
             path.name
@@ -172,7 +172,7 @@ class HarnessMutationTests(unittest.TestCase):
         config.write_text(
             config.read_text(encoding="utf-8").replace(
                 "max_concurrent_threads_per_session = 1",
-                "max_concurrent_threads_per_session = 3\n"
+                "max_concurrent_threads_per_session = 1\n"
                 'default_subagent_model = "gpt-5.6-terra"\n'
                 'default_subagent_reasoning_effort = "low"\n'
                 'policy_exception = '
@@ -184,12 +184,12 @@ class HarnessMutationTests(unittest.TestCase):
         for name, (model, effort, sandbox) in R3_AGENT_SETTINGS.items():
             (self.root / ".codex" / "agents" / f"{name}.toml").write_text(
                 f'name = "{name}"\n'
-                f'description = "Temporary Stage 10D-R3 {name} profile."\n'
+                f'description = "Temporary Stage 10D-R3C-1 {name} profile."\n'
                 f'model = "{model}"\n'
                 f'model_reasoning_effort = "{effort}"\n'
                 f'sandbox_mode = "{sandbox}"\n'
                 'developer_instructions = """\n'
-                "Perform only the named Stage 10D-R3 responsibility.\n"
+                "Perform only the named Stage 10D-R3C-1 responsibility.\n"
                 "DO NOT SPAWN OR DELEGATE TO SUBAGENTS.\n"
                 '"""\n',
                 encoding="utf-8",
@@ -246,7 +246,7 @@ class HarnessMutationTests(unittest.TestCase):
 
     def test_r3_exception_rejects_validator_workspace_write(self) -> None:
         self.activate_r3_exception()
-        path = self.root / ".codex" / "agents" / "r3_validator.toml"
+        path = self.root / ".codex" / "agents" / "r3c1_validator.toml"
         path.write_text(
             path.read_text(encoding="utf-8").replace(
                 'sandbox_mode = "read-only"',
@@ -264,14 +264,14 @@ class HarnessMutationTests(unittest.TestCase):
         )
         path.write_text(
             path.read_text(encoding="utf-8").replace(
-                'write_capable_agents = ["r3_worker"]',
-                'write_capable_agents = ["r3_worker", "r3_validator"]',
+                'write_capable_agents = ["r3c1_worker"]',
+                'write_capable_agents = ["r3c1_worker", "r3c1_validator"]',
             ),
             encoding="utf-8",
         )
 
         self.assert_validation_failure(
-            "write_capable_agents must be exactly ['r3_worker']"
+            "write_capable_agents must be exactly ['r3c1_worker']"
         )
 
     def test_r3_exception_rejects_unknown_write_agent(self) -> None:
@@ -281,14 +281,14 @@ class HarnessMutationTests(unittest.TestCase):
         )
         path.write_text(
             path.read_text(encoding="utf-8").replace(
-                'write_capable_agents = ["r3_worker"]',
+                'write_capable_agents = ["r3c1_worker"]',
                 'write_capable_agents = ["unknown_worker"]',
             ),
             encoding="utf-8",
         )
 
         self.assert_validation_failure(
-            "write_capable_agents must be exactly ['r3_worker']"
+            "write_capable_agents must be exactly ['r3c1_worker']"
         )
 
     def test_r3_exception_rejects_concurrency_four(self) -> None:
@@ -296,14 +296,14 @@ class HarnessMutationTests(unittest.TestCase):
         path = self.root / ".codex" / "config.toml"
         path.write_text(
             path.read_text(encoding="utf-8").replace(
-                "max_concurrent_threads_per_session = 3",
+                "max_concurrent_threads_per_session = 1",
                 "max_concurrent_threads_per_session = 4",
             ),
             encoding="utf-8",
         )
 
         self.assert_validation_failure(
-            "R3 spawned-agent concurrency must be between 1 and 3"
+            "exception-stage spawned-agent concurrency must be 1"
         )
 
     def test_r3_exception_rejects_recursive_delegation(self) -> None:
@@ -370,14 +370,14 @@ class HarnessMutationTests(unittest.TestCase):
         )
         path.write_text(
             path.read_text(encoding="utf-8").replace(
-                'allowed_stage = "STAGE_10D_R3"',
+                'allowed_stage = "STAGE_10D_R3C_1_B0_B1"',
                 'allowed_stage = "STAGE_10D_R4"',
             ),
             encoding="utf-8",
         )
 
         self.assert_validation_failure(
-            "allowed_stage must be exactly 'STAGE_10D_R3'"
+            "allowed_stage must be exactly 'STAGE_10D_R3C_1_B0_B1'"
         )
 
     def test_r3_exception_rejects_path_outside_allowed_directory(self) -> None:

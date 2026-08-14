@@ -1,0 +1,23 @@
+{
+  "Oracle_changed": false,
+  "S30_changed": false,
+  "T3_changed": false,
+  "budget_path_changed": false,
+  "infeasible_2024_spring_periods": 5,
+  "phase_a_passed": false,
+  "phase_b_passed": false,
+  "player_diagnostic_2024_rows": 675,
+  "player_diagnostic_development_rows": 1992,
+  "predictive_model_fit": false,
+  "promotion": false,
+  "r3_jgl_2024_complete_count": 47,
+  "r3_sup_2024_complete_count": 47,
+  "real_r3_flag_reproduction": true,
+  "recommended_next_node": "NONE_BLOCKED_PENDING_VALID_PHASE_A",
+  "rerank_3_4_joined": 13,
+  "rerank_3_4_pairs": 45,
+  "rerank_3_4_join_required": 45,
+  "outputs_after_phase_a_failure": "NOT_ACCEPTED_STALE_PARTIAL_EVIDENCE",
+  "stage": "STAGE_10D_R3A_R1_V2",
+  "verdict": "BLOCKED_BY_PHASE_A_VALIDATION"
+}

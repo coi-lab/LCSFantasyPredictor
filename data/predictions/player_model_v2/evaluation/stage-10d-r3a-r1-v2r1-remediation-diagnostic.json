@@ -1,0 +1,41 @@
+{
+  "verdict": "BLOCKED_BY_GATE_B2_ORACLE_JOIN",
+  "gate_a1": "PASS_WITH_VALIDATOR_CAVEAT",
+  "gate_a2": "PASS",
+  "gate_b1": "PASS",
+  "gate_b2": "FAIL",
+  "r3_flag_counts": {
+    "TEAM": "670/675",
+    "TOP": "132/135",
+    "JGL": "47/135",
+    "BOT": "132/135",
+    "SUP": "47/135"
+  },
+  "2024_infeasible_periods": 5,
+  "five_week_mapping_exact": true,
+  "player_diagnostic_2024_rows": null,
+  "current_team_state_rows": 3945,
+  "rank_3_4_expected": 45,
+  "rank_3_4_identity_joined": {
+    "s30": 40,
+    "oracle": 38
+  },
+  "rank_3_4_state_available": 38,
+  "jgl_mid_result": null,
+  "jgl_bot_result": null,
+  "bot_sup_result": null,
+  "last3_vs_last6_result": null,
+  "allocation_persistence_result": null,
+  "compression_summary": null,
+  "ranking_summary": null,
+  "rank_3_4_posthoc_result": null,
+  "performance_adjustment_feasibility": null,
+  "recommended_next_node": null,
+  "S30_changed": false,
+  "T3_changed": false,
+  "budget_changed": false,
+  "prices_changed": false,
+  "Oracle_changed": false,
+  "model_fit": false,
+  "promotion": false
+}
