@@ -1,0 +1,19 @@
+{
+  "2026_market_tested": false,
+  "B2Z_NS": {
+    "status": "NOT_SELECTED_PRE_2026"
+  },
+  "OATS_V2": {
+    "status": "QUALIFIED_TEAM_STRENGTH_COMPONENT"
+  },
+  "P1": {
+    "status": "PENDING_R5C_TUNING"
+  },
+  "S30": {
+    "status": "OPERATIONAL_BASELINE"
+  },
+  "S30_OATS": {
+    "note": "overall 2025 gains but prior protected slice failed",
+    "status": "RETAINED_RESEARCH_CHALLENGER_FOR_LATER_COMPARISON"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "2026_inspected": false,
+  "2026_market_run": false,
+  "AGY_used": false,
+  "B1_advanced": false,
+  "B2Z_advanced": false,
+  "P1_advanced": false,
+  "S30_OATS_2022_2023_metrics": {
+    "2022": {
+      "S30": {
+        "MAE": 4.809837842659936,
+        "RMSE": 6.028779824368925,
+        "Spearman": 0.331756229941235,
+        "bias": 0.3513150683318444,
+        "rows": 745
+      },
+      "S30_OATS": {
+        "MAE": 4.809837842659936,
+        "RMSE": 6.028779824368925,
+        "Spearman": 0.331756229941235,
+        "bias": 0.3513150683318444,
+        "rows": 745
+      }
+    },
+    "2023": {
+      "S30": {
+        "MAE": 5.0466196373449055,
+        "RMSE": 6.352450806909924,
+        "Spearman": 0.2029325967731224,
+        "bias": 0.3830218796332231,
+        "rows": 599
+      },
+      "S30_OATS": {
+        "MAE": 5.001018369921331,
+        "RMSE": 6.29462156881107,
+        "Spearman": 0.2464878266030851,
+        "bias": -0.14218258883841942,
+        "rows": 599
+      }
+    }
+  },
+  "S30_OATS_2024_metrics": {
+    "S30": {
+      "MAE": 5.132259769460078,
+      "RMSE": 6.279499335062902,
+      "Spearman": 0.34844484353358907,
+      "bias": -0.6680949686097613,
+      "rows": 380
+    },
+    "S30_OATS": {
+      "MAE": 5.141535962542298,
+      "RMSE": 6.249361062633709,
+      "Spearman": 0.35907143031706223,
+      "bias": -0.9329640902724698,
+      "rows": 380
+    }
+  },
+  "S30_OATS_2025_metrics": {
+    "S30": {
+      "MAE": 5.157655662737849,
+      "RMSE": 6.226276532403333,
+      "Spearman": 0.5321543604590322,
+      "bias": 0.8244644761625269,
+      "rows": 362
+    },
+    "S30_OATS": {
+      "MAE": 5.001101002502841,
+      "RMSE": 6.08295230749251,
+      "Spearman": 0.5659283551307231,
+      "bias": 0.8248427963442778,
+      "rows": 362
+    }
+  },
+  "S30_operational_status_unchanged": true,
+  "T3_checkpoint_unchanged": true,
+  "baseline_team_strength": "stage-8 canonical matchup probability",
+  "default_policy_restored": false,
+  "early_schedule_metrics": {
+    "MID_TIER_HARD_EARLY_SCHEDULE": {
+      "Brier": 0.2204014183092986,
+      "accuracy": 0.65,
+      "log_loss": 0.6343455203922015,
+      "rows": 20
+    },
+    "early_split": {
+      "Brier": 0.2166890706570945,
+      "accuracy": 0.628,
+      "log_loss": 0.6226771946716262,
+      "rows": 250
+    },
+    "easy_early": {
+      "Brier": 0.21729529817656468,
+      "accuracy": 0.5555555555555556,
+      "log_loss": 0.6169353472405432,
+      "rows": 9
+    },
+    "hard_early": {
+      "Brier": 0.23308652474817063,
+      "accuracy": 0.5428571428571428,
+      "log_loss": 0.659546231892663,
+      "rows": 35
+    },
+    "overall": {
+      "Brier": 0.22330235689841935,
+      "accuracy": 0.6185897435897436,
+      "log_loss": 0.6376419998286311,
+      "rows": 624
+    }
+  },
+  "evaluation_status": "COMPLETE",
+  "execution_mode": "direct Codex",
+  "execution_model": "Terra medium",
+  "next_node": "RETAIN_OATS_FOR_SERIES_MODEL_AND_RETURN_TO_ALLOCATION_OPTIMIZATION",
+  "oats_2022_2023_metrics": {
+    "2022": {
+      "Brier": 0.21966282267676018,
+      "accuracy": 0.6304347826086957,
+      "log_loss": 0.6290898633038152,
+      "rows": 230
+    },
+    "2023": {
+      "Brier": 0.2404909855721177,
+      "accuracy": 0.5658536585365853,
+      "log_loss": 0.6755837526795567,
+      "rows": 205
+    }
+  },
+  "oats_2024_metrics": {
+    "Brier": 0.22897353805621887,
+    "accuracy": 0.6213592233009708,
+    "log_loss": 0.6520485254975792,
+    "rows": 103
+  },
+  "oats_2025_metrics": {
+    "Brier": 0.18527087240562953,
+    "accuracy": 0.7093023255813954,
+    "log_loss": 0.5528171152049829,
+    "rows": 86
+  },
+  "oats_team_strength_qualified": true,
+  "player_integration_path": "PATH_B",
+  "player_integration_selected": false,
+  "policy_cleanup_valid": false,
+  "rating_scale": 400,
+  "recent_schedule_window": 5,
+  "runtime_agent_runs_dependency": false,
+  "scientific_result": "OATS_TEAM_STRENGTH_QUALIFIED_BUT_PLAYER_INTEGRATION_NOT_SELECTED",
+  "selected_K": 48,
+  "selected_carryover": 0.75,
+  "selected_oats_configuration": {
+    "frozen_before_player_integration": true,
+    "guardrails_pass": true,
+    "qualified": true,
+    "selected_K": 48,
+    "selected_carryover": 0.75,
+    "selection_year": 2025,
+    "tie_break": [
+      "Brier",
+      "log_loss",
+      "mid-tier-hard schedule",
+      "calibration"
+    ]
+  },
+  "subagents_used": false,
+  "temporal_governance": {
+    "2020-2021": "history",
+    "2022-2023": "base development",
+    "2024": "robustness guardrail",
+    "2025": "primary tuning/model selection",
+    "2026": "exposed benchmark only",
+    "future": "prospective validation"
+  }
+}

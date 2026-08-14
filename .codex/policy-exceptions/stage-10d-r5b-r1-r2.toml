@@ -1,0 +1,18 @@
+exception_id = "stage-10d-r5b-r1-r2-direct-codex"
+authorized_by_user = true
+active = false
+
+allowed_stage = "STAGE_10D_R5B_R1_R2_B2Z_NS_CLEAN_CLOSEOUT"
+
+max_concurrent_threads_per_session = 1
+
+write_capable_agents = ["r5b_r1_r2_direct_codex"]
+read_only_agents = []
+
+recursive_delegation_allowed = false
+
+allow_commit = false
+allow_push = false
+allow_reset = false
+allow_clean = false
+allow_rebase = false

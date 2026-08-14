@@ -86,6 +86,18 @@ R3C2_CODEX_AGENTS = {
 R4A_CODEX_AGENTS = {
     "r4a_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
 }
+R5A_CODEX_AGENTS = {
+    "r5a_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
+R5B_CODEX_AGENTS = {
+    "r5b_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
+R5B_R1_CODEX_AGENTS = {
+    "r5b_r1_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
+R5B_R1_R2_CODEX_AGENTS = {
+    "r5b_r1_r2_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
 R3_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r3.toml")
 R3B_R1_EXCEPTION_PATH = Path(
     ".codex/policy-exceptions/stage-10d-r3b-r1.toml"
@@ -95,6 +107,18 @@ R3C2_EXCEPTION_PATH = Path(
 )
 R4A_EXCEPTION_PATH = Path(
     ".codex/policy-exceptions/stage-10d-r4a.toml"
+)
+R5A_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r5a.toml"
+)
+R5B_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r5b.toml"
+)
+R5B_R1_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r5b-r1.toml"
+)
+R5B_R1_R2_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r5b-r1-r2.toml"
 )
 R3_EXCEPTION_KEYS = {
     "exception_id",
@@ -179,6 +203,74 @@ POLICY_EXCEPTION_SPECS = {
             ("allowed_stage", "STAGE_10D_R4A_DYNAMIC_PLAYSTYLE_ALLOCATION"),
             ("max_concurrent_threads_per_session", 1),
             ("write_capable_agents", ["r4a_direct_codex"]),
+            ("read_only_agents", []),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R5A_EXCEPTION_PATH: {
+        "agents": R5A_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r5a-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R5A_OPPONENT_ADJUSTED_TEAM_STRENGTH"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r5a_direct_codex"]),
+            ("read_only_agents", []),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R5B_EXCEPTION_PATH: {
+        "agents": R5B_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r5b-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R5B_B2Z_NS_OPTIMIZATION"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r5b_direct_codex"]),
+            ("read_only_agents", []),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R5B_R1_EXCEPTION_PATH: {
+        "agents": R5B_R1_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r5b-r1-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R5B_R1_B2Z_NS_SIGNAL_REMEDIATION"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r5b_r1_direct_codex"]),
+            ("read_only_agents", []),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R5B_R1_R2_EXCEPTION_PATH: {
+        "agents": R5B_R1_R2_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r5b-r1-r2-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R5B_R1_R2_B2Z_NS_CLEAN_CLOSEOUT"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r5b_r1_r2_direct_codex"]),
             ("read_only_agents", []),
             ("recursive_delegation_allowed", False),
             ("allow_commit", False),
