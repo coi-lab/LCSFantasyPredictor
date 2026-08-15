@@ -19,6 +19,16 @@
     "selection_authority": "R5C-R1 final alpha boundary extension",
     "status": "FINAL_SELECTED_PRE_2026_CHALLENGER"
   },
+  "R5E_pairwise": {
+    "AB": "PAIRWISE_NOT_SELECTED_PRE_2026",
+    "AC": "PAIRWISE_QUALIFIED_PRE_2026",
+    "BC": "PAIRWISE_NOT_SELECTED_PRE_2026",
+    "qualified_finalists": [
+      "AC"
+    ],
+    "three_way_evaluation_status": "THREE_WAY_EVALUATION_NOT_JUSTIFIED",
+    "tournament_champion": "AC"
+  },
   "S30": {
     "status": "OPERATIONAL_BASELINE"
   },

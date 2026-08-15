@@ -1,0 +1,283 @@
+{
+  "2025_pairwise_ranking": [
+    "AC"
+  ],
+  "2026_fit_rows": 0,
+  "2026_market_run": false,
+  "2026_metric_rows": 0,
+  "2026_pairwise_rows": 0,
+  "2026_ranking_rows": 0,
+  "AB_formula": "S30 + delta_B + delta_P",
+  "AB_full_history_guardrail": true,
+  "AB_team_total_authority": "S30",
+  "AC_formula": "S30 + delta_B + delta_O",
+  "AC_team_total_authority": "S30_OATS",
+  "AGY_used": false,
+  "B2Z_NS_parameters": {
+    "L2": 80,
+    "gamma": 0.4
+  },
+  "B2Z_NS_retuned": false,
+  "BC_formula": "S30 + delta_P + delta_O",
+  "BC_team_total_authority": "S30_OATS",
+  "FULL_PRE2026_rows": 3335,
+  "OATS_SUPPORTED_PRE2026_rows": 2086,
+  "OATS_parameters": {
+    "K": 48,
+    "carryover": 0.75
+  },
+  "OATS_retuned": false,
+  "P1_parameters": {
+    "alpha": 0.7,
+    "patch_support_threshold": 20,
+    "recent_window": 15
+  },
+  "P1_retuned": false,
+  "S30_changed": false,
+  "T3_changed": false,
+  "combination_formula": "additive_frozen_deltas_from_S30",
+  "default_policy_restored": true,
+  "evaluation_status": "COMPLETE",
+  "evidence_manifest_hash": "f99a5b79ab584abcde16bb67d4048079ab6449945138646707f5a4250a5122b9",
+  "execution_mode": "direct Codex",
+  "execution_model": "Terra medium",
+  "guardrails": {
+    "AB": {
+      "2022_2023": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": true
+      },
+      "2024": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "NDCG": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "actual_top20pct_recall": true,
+          "tail10": false,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": false
+      },
+      "2025_adds_value": {
+        "improvements": {
+          "NDCG": false,
+          "actual_top20pct_recall": false,
+          "player_share_MAE": true,
+          "within_team_share_Spearman": true
+        },
+        "pass": true
+      },
+      "2025_parent_safety": {
+        "checks": {
+          "BOT": true,
+          "JGL": false,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": false
+        },
+        "comparison": "stronger_parent",
+        "pass": false
+      },
+      "2025_s30": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": true
+      },
+      "qualified": false
+    },
+    "AC": {
+      "2022_2023": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": true
+      },
+      "2024": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "NDCG": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "actual_top20pct_recall": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": true
+      },
+      "2025_adds_value": {
+        "improvements": {
+          "NDCG": false,
+          "actual_top20pct_recall": false,
+          "player_share_MAE": false,
+          "within_team_share_Spearman": true
+        },
+        "pass": true
+      },
+      "2025_parent_safety": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "stronger_parent",
+        "pass": true
+      },
+      "2025_s30": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": true
+      },
+      "qualified": true
+    },
+    "BC": {
+      "2022_2023": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": true
+      },
+      "2024": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "NDCG": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "actual_top20pct_recall": true,
+          "tail10": false,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": false
+      },
+      "2025_adds_value": {
+        "improvements": {
+          "NDCG": true,
+          "actual_top20pct_recall": true,
+          "player_share_MAE": true,
+          "within_team_share_Spearman": true
+        },
+        "pass": true
+      },
+      "2025_parent_safety": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "stronger_parent",
+        "pass": true
+      },
+      "2025_s30": {
+        "checks": {
+          "BOT": true,
+          "JGL": true,
+          "MAE": true,
+          "MID": true,
+          "RMSE": true,
+          "SUP": true,
+          "TOP": true,
+          "tail10": true,
+          "tail15": true
+        },
+        "comparison": "S30",
+        "pass": true
+      },
+      "qualified": false
+    }
+  },
+  "next_node": "PROCEED_TO_PRE_2026_FINALIST_FREEZE_AND_2026_TOURNAMENT_PREPARATION",
+  "pairwise_formula_frozen_before_scoring": true,
+  "pairwise_tournament_champion": "AC",
+  "parameter_search_performed": false,
+  "policy_cleanup_valid": true,
+  "qualified_pairwise_finalist_count": 1,
+  "qualified_pairwise_finalists": [
+    "AC"
+  ],
+  "runtime_agent_runs_dependency": false,
+  "scientific_result": "SINGLE_PAIRWISE_FINALIST_SELECTED",
+  "stage_verdict": "STAGE_10D_R5E_PAIRWISE_COMBINATION_TOURNAMENT_COMPLETE",
+  "subagents_used": false,
+  "three_way_evaluation_status": "THREE_WAY_EVALUATION_NOT_JUSTIFIED",
+  "universe_mode": "DUAL_PRE2026"
+}

@@ -1,0 +1,13 @@
+exception_id = "stage-10d-r5e-direct-codex"
+authorized_by_user = true
+active = false
+allowed_stage = "STAGE_10D_R5E_PAIRWISE_COMBINATION_TOURNAMENT"
+max_concurrent_threads_per_session = 1
+write_capable_agents = ["r5e_direct_codex"]
+read_only_agents = []
+recursive_delegation_allowed = false
+allow_commit = false
+allow_push = false
+allow_reset = false
+allow_clean = false
+allow_rebase = false

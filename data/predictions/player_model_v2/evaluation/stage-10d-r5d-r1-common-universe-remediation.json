@@ -1,0 +1,10 @@
+{
+  "FULL_PRE2026_rows": 3335,
+  "OATS_SUPPORTED_PRE2026_rows": 2086,
+  "P1_637_row_shortfall_is_excluded_2026_population": true,
+  "advancement_result": "ALL_THREE_COMPONENTS_READY_FOR_PAIRWISE_EVALUATION",
+  "next_node": "PROCEED_TO_STAGE_10D_R5E_PAIRWISE_COMBINATION_TOURNAMENT",
+  "scientific_result": "R5D_COMMON_UNIVERSE_REMEDIATED_DUAL_PRE2026",
+  "stage_verdict": "STAGE_10D_R5D_R1_COMMON_UNIVERSE_REMEDIATION_COMPLETE",
+  "universe_mode": "DUAL_PRE2026"
+}
