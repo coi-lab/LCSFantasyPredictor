@@ -4,7 +4,10 @@ from pathlib import Path
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-RUN = sorted((ROOT / ".agent-runs").glob("player-model-v2-stage-10d-r5d-r1-r2-final-evidence-closeout-*"))[-1]
+RUN = sorted([
+    d for d in (ROOT / ".agent-runs").glob("player-model-v2-stage-10d-r5d-r1-r2-final-evidence-closeout-*")
+    if d.is_dir()
+])[-1]
 P = "stage-10d-r5d-r1-r2"
 V = json.loads((RUN / f"{P}-validation.json").read_text())
 R = json.loads((RUN / f"{P}-ranking-diversity-validation.json").read_text())

@@ -1,0 +1,63 @@
+{
+  "2026_round_count": 11,
+  "2026_transition_authority_valid": true,
+  "2026_tuning_performed": false,
+  "AC_2026_prediction_authority_valid": true,
+  "AC_pre2026_status": "OFFICIAL_FINALIST",
+  "AGY_used": true,
+  "B2Z_L2": 80.0,
+  "B2Z_gamma": 0.4,
+  "BC_2026_prediction_authority_valid": true,
+  "BC_pre2026_status": "NON_FINALIST_SENSITIVITY_COMPARATOR",
+  "Codex_used": false,
+  "OATS_K": 48,
+  "OATS_carryover": 0.75,
+  "P1_alpha": 0.7,
+  "P1_patch_threshold": 20,
+  "P1_window": 15,
+  "R5A_replay_max_prediction_diff": 2.2737367544323206e-13,
+  "R5A_replay_rows": 2086,
+  "R5E_status_changed": false,
+  "R5G_may_resume": true,
+  "R5G_resume_point": "RESTART_2026_PERFORMANCE_SCORING_FROM_VALIDATED_INPUTS",
+  "S30_OATS_2026_coverage_valid": true,
+  "blocker_basis": "MISSING_VALIDATED_2026_PRELOCK_OATS_PROVENANCE",
+  "end_2025_state_valid": true,
+  "evaluation_status": "COMPLETE",
+  "evidence_manifest_hash": "ab784d054040057fdabecd88856e9b8efd6daa9f61057bfff1399ac9b5f50654",
+  "execution_mode": "AGY",
+  "future_match_state_violations": 0,
+  "lock_to_series_map_valid": true,
+  "new_2026_market_simulation_run": false,
+  "new_2026_metric_rows": 0,
+  "next_node": "RESUME_STAGE_10D_R5G_2026_SIMULATED_MARKET_TOURNAMENT_WITH_AGY",
+  "parameter_search_performed": false,
+  "prior_2026_diagnostic_classification": {
+    "classifications": [
+      {
+        "classification": "PREAUTHORITY_DIAGNOSTIC_NOT_FOR_SCIENTIFIC_USE",
+        "justification": "OATS state at lock is unverified/invalid.",
+        "run": "player-model-v2-stage-10d-r5g-2026-simulated-market-tournament-20260814T000000Z"
+      },
+      {
+        "classification": "PREAUTHORITY_DIAGNOSTIC_NOT_FOR_SCIENTIFIC_USE",
+        "justification": "OATS state at lock is unverified/invalid.",
+        "run": "player-model-v2-stage-10d-r5g-2026-simulated-market-tournament-20260814T000001Z"
+      }
+    ]
+  },
+  "prior_2026_diagnostics_exist": true,
+  "prior_2026_outputs_scientifically_authoritative": false,
+  "prior_lineups_reused": false,
+  "prior_metrics_reused": false,
+  "recovered_blocker": "BLOCKED_BY_2026_MARKET_INPUT_AUTHORITY",
+  "runtime_agent_runs_dependency": false,
+  "same_lock_result_violations": 0,
+  "schedule_authority_valid": true,
+  "scientific_result": "R5G_PREAUTHORITY_DIAGNOSTICS_QUARANTINED_AND_2026_OATS_STATE_ESTABLISHED",
+  "team_identity_map_valid": true,
+  "team_total_algebra_valid": true,
+  "two_run_reproducibility_pass": true,
+  "worker_model": "Gemini 3.5 Flash (Medium)",
+  "worker_provider": "Google"
+}

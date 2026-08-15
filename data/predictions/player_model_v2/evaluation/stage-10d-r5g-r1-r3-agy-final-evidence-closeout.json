@@ -1,0 +1,37 @@
+{
+  "AC_BC_hashes_distinct": true,
+  "AC_pre2026_status": "OFFICIAL_FINALIST",
+  "AC_prediction_vector_hash": "4aff82fa1f20a4b4cae0057a867abcf2d21dc6e81129916680d9b44e5e9dc993",
+  "AC_predictions_changed": false,
+  "AGY_used": true,
+  "BC_pre2026_status": "NON_FINALIST_SENSITIVITY_COMPARATOR",
+  "BC_prediction_vector_hash": "25e4dbca7af3090b41685bccb574cff2df0831e3b0bafa3fd206c2292ffb9f93",
+  "BC_predictions_changed": false,
+  "Codex_used": false,
+  "OATS_state_changed": false,
+  "R5E_status_changed": false,
+  "R5G_R1_R2_scientific_authority_preserved": true,
+  "R5G_may_resume": true,
+  "R5G_resume_point": "RESTART_2026_PERFORMANCE_SCORING_FROM_VALIDATED_INPUTS",
+  "S30_OATS_predictions_changed": false,
+  "combined_AC_BC_artifact_hash": "56868a844a1a2b14293c56e36ae9c0a61e03de3cca91061177f724ca4d0371a9",
+  "evaluation_status": "COMPLETE",
+  "evidence_manifest_hash": "154ad2db41f891ec27e4c2cba65a7f5f051f2fecda0aa18d1945e3aafd936344",
+  "execution_mode": "AGY",
+  "hash_reproducibility_pass": true,
+  "new_2026_market_simulation_run": false,
+  "new_2026_metric_rows": 0,
+  "next_node": "RESUME_STAGE_10D_R5G_2026_SIMULATED_MARKET_TOURNAMENT_WITH_AGY",
+  "old_diagnostic_results_must_be_recomputed": true,
+  "restored_paths": [
+    "stage10c_r1b_replay.py",
+    "stage10d_detailed_report.py"
+  ],
+  "scientific_result": "R5G_EVIDENCE_CLOSEOUT_COMPLETE_WITH_DOCUMENTED_PRESERVATION_INCIDENT",
+  "supersedes": "R5G_R1_R2 evidence closeout fields only",
+  "unrecoverable_paths": [
+    "scratch/"
+  ],
+  "unrecoverable_preservation_incident": true,
+  "worktree_preservation_status": "WORKTREE_PRESERVATION_ACCEPTABLE_WITH_DOCUMENTED_INCIDENT"
+}

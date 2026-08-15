@@ -119,6 +119,12 @@ R5D_R1_R2_CODEX_AGENTS = {
 R5E_CODEX_AGENTS = {
     "r5e_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
 }
+R5G_R1_CODEX_AGENTS = {
+    "r5g_r1_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
+R5G_R1_R1_CODEX_AGENTS = {
+    "r5g_r1_r1_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
+}
 R3_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r3.toml")
 R3B_R1_EXCEPTION_PATH = Path(
     ".codex/policy-exceptions/stage-10d-r3b-r1.toml"
@@ -152,6 +158,12 @@ R5D_R1_R2_EXCEPTION_PATH = Path(
     ".codex/policy-exceptions/stage-10d-r5d-r1-r2.toml"
 )
 R5E_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r5e.toml")
+R5G_R1_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r5g-r1.toml"
+)
+R5G_R1_R1_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r5g-r1-r1.toml"
+)
 R3_EXCEPTION_KEYS = {
     "exception_id",
     "authorized_by_user",
@@ -429,6 +441,37 @@ POLICY_EXCEPTION_SPECS = {
             ("allow_reset", False),
             ("allow_clean", False),
             ("allow_rebase", False),
+        ),
+    },
+    R5G_R1_EXCEPTION_PATH: {
+        "agents": R5G_R1_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r5g-r1-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R5G_R1_2026_OATS_STATE_AUTHORITY_REMEDIATION"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r5g_r1_direct_codex"]),
+            ("read_only_agents", []),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
+    R5G_R1_R1_EXCEPTION_PATH: {
+        "agents": R5G_R1_R1_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r5g-r1-r1-direct-codex"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R5G_R1_R1_BLOCKER_RECOVERY_AND_2026_OATS_STATE_REMEDIATION"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r5g_r1_r1_direct_codex"]),
+            ("read_only_agents", []),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False), ("allow_push", False),
+            ("allow_reset", False), ("allow_clean", False), ("allow_rebase", False),
         ),
     },
 }

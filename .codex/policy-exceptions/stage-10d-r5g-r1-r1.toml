@@ -1,0 +1,13 @@
+exception_id = "stage-10d-r5g-r1-r1-direct-codex"
+authorized_by_user = true
+active = false
+allowed_stage = "STAGE_10D_R5G_R1_R1_BLOCKER_RECOVERY_AND_2026_OATS_STATE_REMEDIATION"
+max_concurrent_threads_per_session = 1
+write_capable_agents = ["r5g_r1_r1_direct_codex"]
+read_only_agents = []
+recursive_delegation_allowed = false
+allow_commit = false
+allow_push = false
+allow_reset = false
+allow_clean = false
+allow_rebase = false

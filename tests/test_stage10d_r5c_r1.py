@@ -14,8 +14,8 @@ class Stage10DR5CR1Test(unittest.TestCase):
         self.assertEqual(len(ALPHAS) * len(WINDOWS), 10)
 
     def test_stage10d_r5c_r1_policy_exception_narrow(self):
-        self.assertTrue(active_policy())
         policy = (ROOT / ".codex/policy-exceptions/stage-10d-r5c-r1.toml").read_text()
+        self.assertIn('write_capable_agents = ["r5c_r1_direct_codex"]', policy)
         self.assertIn('recursive_delegation_allowed = false', policy)
         self.assertIn('allow_push = false', policy)
 

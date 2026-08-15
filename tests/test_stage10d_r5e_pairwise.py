@@ -3,11 +3,22 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-RUN = sorted((ROOT / '.agent-runs').glob('player-model-v2-stage-10d-r5e-pairwise-combination-tournament-*'))[-1]
+RUN = sorted(
+    path for path in (ROOT / '.agent-runs').glob(
+        'player-model-v2-stage-10d-r5e-pairwise-combination-tournament-*'
+    ) if path.is_dir()
+)[-1]
 P = 'stage-10d-r5e'
 
 
 class R5EPairwiseTests(unittest.TestCase):
+    def test_evidence_discovery_ignores_non_directory_archives(self):
+        archives = list((ROOT / '.agent-runs').glob(
+            'player-model-v2-stage-10d-r5e-pairwise-combination-tournament-*.zip'
+        ))
+        self.assertTrue(archives)
+        self.assertTrue(RUN.is_dir())
+
     def setUp(self):
         self.validation = json.loads((RUN / f'{P}-validation.json').read_text())
         self.formula = json.loads((RUN / f'{P}-frozen-combination-formulas.json').read_text())
@@ -34,4 +45,3 @@ class R5EPairwiseTests(unittest.TestCase):
     def test_stage10d_r5e_finalist_rule(self):
         count = self.finalists['qualified_pairwise_finalist_count']
         self.assertEqual(self.finalists['three_way_evaluation_status'], 'THREE_WAY_EVALUATION_JUSTIFIED' if count >= 2 else 'THREE_WAY_EVALUATION_NOT_JUSTIFIED')
-
