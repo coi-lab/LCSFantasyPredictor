@@ -1,0 +1,52 @@
+{
+  "Tier1_parameters": [
+    "alpha_E",
+    "history_window"
+  ],
+  "Tier1_uses_2026": false,
+  "Tier1_window_candidates": [
+    3,
+    5,
+    8,
+    10
+  ],
+  "Tier2_candidates": [
+    "asymmetric_positive_negative_FE",
+    "FE_player_allocation_reassessment"
+  ],
+  "Tier3_deferred": [
+    "FE2",
+    "FE3",
+    "assists",
+    "game_duration",
+    "expected_games"
+  ],
+  "candidate_hierarchy": {
+    "Baseline_0": "AC (unadjusted parent baseline)",
+    "Baseline_1": "AC_FE (promoted baseline: alpha=1.690769, window=5)",
+    "Candidate_Tier_1": "optimized alpha/window AC_FE (pre-2026 walk-forward)",
+    "Candidate_Tier_2A": "asymmetric FE response (separate arm)",
+    "Candidate_Tier_2B": "player allocation refinement (separate arm)"
+  },
+  "future_clean_holdout_required": true,
+  "historical_tournament_score_used_for_tuning": false,
+  "primary_metric": "player_MAE",
+  "recommended_next_stage": "PROCEED_TO_STAGE_10D_R6A_PRE2026_AC_FE_ALPHA_AND_WINDOW_OPTIMIZATION",
+  "selection_method": "walk_forward_pre2026",
+  "stage": "10D-R5G-R5H",
+  "team_MAE_safety_constraint": true,
+  "walk_forward_folds": [
+    {
+      "eval_year": 2023,
+      "fit_years": "<=2022"
+    },
+    {
+      "eval_year": 2024,
+      "fit_years": "<=2023"
+    },
+    {
+      "eval_year": 2025,
+      "fit_years": "<=2024"
+    }
+  ]
+}

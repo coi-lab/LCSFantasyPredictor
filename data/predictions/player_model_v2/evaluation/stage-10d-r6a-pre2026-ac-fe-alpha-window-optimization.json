@@ -1,0 +1,48 @@
+{
+  "2026_candidate_performance_evaluated": false,
+  "2026_used_for_optimization": false,
+  "R6B_asymmetry_supported": true,
+  "best_final_alpha_E": 1.690769,
+  "best_window": 5,
+  "bootstrap_player_improvement_probability": 0.0,
+  "bootstrap_team_improvement_probability": 0.0,
+  "folds_candidate_improves": 0,
+  "folds_candidate_regresses": 0,
+  "historical_tournament_score_used_for_tuning": false,
+  "mid_tier_high_FE_preserved": true,
+  "parent_R5H_verified": true,
+  "player_MAE_delta": 0.0,
+  "pooled_baseline_player_MAE": 5.007919421429896,
+  "pooled_baseline_team_MAE": 21.76525893297087,
+  "pooled_candidate_player_MAE": 5.007919421429896,
+  "pooled_candidate_team_MAE": 21.76525893297087,
+  "promoted_alpha_E": 1.690769,
+  "promoted_baseline": "AC_FE",
+  "promoted_window": 5,
+  "recommended_next_node": "PROCEED_TO_STAGE_10D_R6B_PRE2026_ASYMMETRIC_FE_RESPONSE_EVALUATION",
+  "stage": "10D-R6A",
+  "team_MAE_delta": 0.0,
+  "tier1_candidate_advances": false,
+  "verdict": "STAGE_10D_R6A_PROMOTED_AC_FE_REMAINS_BEST_TIER1_CONFIGURATION",
+  "walk_forward_folds": [
+    {
+      "eval_year": 2023,
+      "fit_years": "<=2022"
+    },
+    {
+      "eval_year": 2024,
+      "fit_years": "<=2023"
+    },
+    {
+      "eval_year": 2025,
+      "fit_years": "<=2024"
+    }
+  ],
+  "window_candidates": [
+    3,
+    5,
+    8,
+    10
+  ],
+  "worst_fold_delta": 0.0
+}

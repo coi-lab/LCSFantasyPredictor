@@ -1,0 +1,77 @@
+{
+  "2026_allowed_for_optimization": false,
+  "2026_prediction_support": {
+    "AC_FE_player_MAE": 5.709097337877705,
+    "AC_FE_team_MAE": 24.457235106654714,
+    "AC_player_MAE": 5.738186199326034,
+    "AC_team_MAE": 25.011533054529245,
+    "partition": "2026 Split 1 Exposed",
+    "player_MAE_delta": -0.02908886144832845,
+    "player_improvement_pct": 0.507,
+    "team_MAE_delta": -0.5542979478745309,
+    "team_improvement_pct": 2.216
+  },
+  "2026_tournament_support": {
+    "AC_FE_gap_to_winner": 15.78,
+    "AC_FE_score": 1514.23,
+    "AC_FE_vs_user": 35.96,
+    "AC_score": 1454.64,
+    "cumulative_gain": 59.59,
+    "gain_pct": 4.1,
+    "leaderboard_winner": 1530.01,
+    "rounds": 11,
+    "user_actual": 1478.27
+  },
+  "AC_deleted": false,
+  "FE1_formula": "0.5 * (team_recent_kills_per_game_5 + opponent_recent_deaths_per_game_5) - cutoff_safe_league_mean_kills",
+  "alpha_E": 1.690769,
+  "development_support": {
+    "AC_FE_player_MAE": 4.956964445227267,
+    "AC_FE_team_MAE": 21.814283796996826,
+    "AC_player_MAE": 4.9965554566635335,
+    "AC_team_MAE": 22.089188131198163,
+    "player_MAE_delta": -0.039591011436266754,
+    "team_MAE_delta": -0.274904334201338,
+    "years": "2022-2023"
+  },
+  "history_window": 5,
+  "mid_tier_high_FE_support": {
+    "2026_mid_tier_AC_FE_MAE": 5.624,
+    "2026_mid_tier_AC_FE_bias": -0.985,
+    "2026_mid_tier_AC_MAE": 5.6812,
+    "2026_mid_tier_AC_bias": -1.2405,
+    "2026_mid_tier_MAE_delta": -0.0572,
+    "2026_mid_tier_bias_reduction": 0.2555,
+    "mid_tier_roster_count_AC": 7,
+    "mid_tier_roster_count_AC_FE": 11
+  },
+  "post_holdout_optimization_authorized": true,
+  "pre2026_confirmation_support": {
+    "AC_FE_player_MAE": 5.049177715162519,
+    "AC_FE_team_MAE": 21.72918500356993,
+    "AC_player_MAE": 5.074455708074092,
+    "AC_team_MAE": 22.086591625526925,
+    "bootstrap_mid_tier_prob": 1.0,
+    "bootstrap_player_prob": 0.895,
+    "bootstrap_team_prob": 0.969,
+    "player_MAE_delta": -0.0252779929115734,
+    "pooled_years": "2024-2025",
+    "team_MAE_delta": -0.3574066219569936
+  },
+  "promoted_model": "AC_FE",
+  "promotion": true,
+  "promotion_criteria_evaluations": {
+    "c1_development_positive_direction": true,
+    "c2_pooled_pre2026_confirmation_improved": true,
+    "c3_r5e2_fe_sufficiently_robust": true,
+    "c4_frozen_2026_player_mae_improved": true,
+    "c5_frozen_2026_team_mae_improved": true,
+    "c6_frozen_2026_tournament_score_improved": true,
+    "c7_targeted_mid_tier_high_combat_improved": true,
+    "c8_no_temporal_or_parent_regression": true
+  },
+  "recommended_next_node": "PROCEED_TO_STAGE_10D_R6A_PRE2026_AC_FE_ALPHA_AND_WINDOW_OPTIMIZATION",
+  "reference_baseline": "AC",
+  "stage": "10D-R5G-R5H",
+  "verdict": "STAGE_10D_R5G_R5H_AC_FE_PROMOTED_AND_OPTIMIZATION_ROADMAP_READY"
+}
