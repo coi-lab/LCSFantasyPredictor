@@ -1,0 +1,33 @@
+{
+  "AC_adaptation_classification": "PARTIALLY_CURRENT_SEASON_ADAPTIVE",
+  "AC_contains_OATS": true,
+  "AC_current_season_state_dynamic": true,
+  "AC_dynamic_feature_count": 13,
+  "AC_matchup_dynamic": true,
+  "AC_matchup_feature_count": 2,
+  "AC_parameters_frozen": true,
+  "AC_role_protection_verified": true,
+  "AC_roster_dynamic": true,
+  "AC_static_feature_count": 5,
+  "AC_team_total_preserving": true,
+  "BC_contains_OATS": true,
+  "OATS_current_season_state_dynamic": true,
+  "OATS_parameters_frozen": true,
+  "OATS_same_lock_violations": 0,
+  "can_AC_follow_emerging_role_distribution": "PARTIALLY",
+  "model_fit": false,
+  "oats_plus_ac_new_arm_needed": false,
+  "promotion": false,
+  "recommended_next_node": "PROCEED_TO_STAGE_10D_R5G_R4A_SCHEDULE_ADJUSTED_FORM_DESIGN",
+  "state_advancement_counterfactual_identifiable": true,
+  "state_advancement_effect_by_role": {
+    "BOT": 2.3443864741654705,
+    "JGL": 2.5612672096860103,
+    "MID": 3.270059954140582,
+    "SUP": 2.383303671143292,
+    "TOP": 2.49699578700538
+  },
+  "state_advancement_mean_abs_effect": 2.611202619228147,
+  "tuning": false,
+  "verdict": "STAGE_10D_R5G_R3A_AC_ALREADY_INCLUDES_OATS"
+}

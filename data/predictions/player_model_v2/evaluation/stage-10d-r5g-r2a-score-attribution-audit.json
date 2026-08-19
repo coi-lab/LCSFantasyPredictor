@@ -1,0 +1,66 @@
+{
+  "AC_vs_S30": {
+    "champion_delta": -1.14,
+    "coach_delta": -11.12,
+    "full_delta": -32.26,
+    "other_delta": 0.0,
+    "player_delta": -8.19,
+    "variety_bonus_delta": -11.81
+  },
+  "BC_vs_S30": {
+    "champion_delta": -4.06,
+    "coach_delta": -1.42,
+    "full_delta": -66.99,
+    "other_delta": 0.0,
+    "player_delta": -45.88,
+    "variety_bonus_delta": -15.63
+  },
+  "S30_OATS_vs_S30": {
+    "champion_delta": -8.09,
+    "coach_delta": -11.12,
+    "full_delta": -54.29,
+    "other_delta": 0.0,
+    "player_delta": -19.48,
+    "variety_bonus_delta": -15.6
+  },
+  "T3_vs_S30": {
+    "champion_delta": -4.11,
+    "coach_delta": -8.21,
+    "full_delta": -37.56,
+    "other_delta": 0.0,
+    "player_delta": -17.21,
+    "variety_bonus_delta": -8.03
+  },
+  "all_55_actual_scores_reconciled": true,
+  "all_55_predicted_objectives_reconciled": true,
+  "archive_action": false,
+  "champion_choices_shared": false,
+  "champion_component_can_change_due_to_lineup": true,
+  "champion_engine_shared": true,
+  "champion_raw_predictions_shared": true,
+  "coach_choice_can_change_due_to_lineup": true,
+  "coach_engine_shared": true,
+  "comparison_validity": "YES_BUT_WITH_ENDOGENOUS_NONPLAYER_EFFECTS",
+  "counterfactual_authority": "NONE",
+  "counterfactual_run": false,
+  "model_fit": false,
+  "model_totals": {
+    "AC": 1454.64,
+    "BC": 1419.91,
+    "S30": 1486.9,
+    "S30_OATS": 1432.61,
+    "T3": 1449.34
+  },
+  "promotion": false,
+  "r5g_r2_authority_reproduced": true,
+  "recommended_next_node": "RETAIN_S30_AND_ARCHIVE_AC_BC_2026_RESEARCH_EVIDENCE",
+  "selected_player_score_totals": {
+    "AC": 1000.78,
+    "BC": 963.09,
+    "S30": 1008.97,
+    "S30_OATS": 989.49,
+    "T3": 991.76
+  },
+  "tuning": false,
+  "verdict": "STAGE_10D_R5G_R2A_END_TO_END_HAS_ENDOGENOUS_NONPLAYER_EFFECTS"
+}
