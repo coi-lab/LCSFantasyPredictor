@@ -38,7 +38,5 @@
   ],
   "row_count": 6455,
   "stage_3e_modified": false,
-  "target_definition": "arithmetic mean of raw fantasy points across target-period player games; realized_fantasy_total retained for schedule aggregation",
-  "target_grain": "player \u00d7 local prediction period \u00d7 game-average",
   "version": "S30_V2_RAW_PRELOCK_V2"
 }

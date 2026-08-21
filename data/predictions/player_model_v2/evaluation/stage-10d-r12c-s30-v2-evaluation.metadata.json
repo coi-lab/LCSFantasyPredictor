@@ -1,0 +1,5 @@
+{
+  "reason": "2025 n_rows = 0 because LTA North was not normalized to LCS",
+  "replacement_stage": "Stage 10D-R12C-R1",
+  "status": "NON_FINAL_PRE_NORMALIZATION_DRAFT"
+}

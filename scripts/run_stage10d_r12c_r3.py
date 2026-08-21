@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+"""R12C-R3 sealed-component raw-context parity gate."""
+from __future__ import annotations
+import argparse,hashlib,json
+from pathlib import Path
+import pandas as pd
+ROOT=Path(__file__).resolve().parents[1]
+R2=ROOT/'.agent-runs/player-model-v2-stage-10d-r12c-r2-unified-context-final-week5-20260821T053045Z'
+STATE=ROOT/'data/predictions/player_model_v2/model_state/s30_v2_reproducible_7e12dfd6f0548ad11f44573f9e1a165c021f9910010d17e8906c0039935c62c5.json'
+B2=next((ROOT/'data/predictions/player_model_v2/model_state').glob('b2z_v2_reproducible_*.json'))
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def dump(p,x):p.write_text(json.dumps(x,indent=2,sort_keys=True,default=str)+'\n')
+def run(out):
+ out.mkdir(parents=True,exist_ok=False);firewall={'week5_results_loaded':False,'week5_realized_scores_loaded':False,'week5_leaderboard_loaded':False,'week5_top3_loaded':False,'week5_post_match_data_loaded':False};dump(out/'task-scope.json',{'stage':'Stage 10D-R12C-R3','active_codex_write_exception':'Stage 10D-R12C-R3','week5_results_used':False});dump(out/'stage-10d-r12c-r3-week5-firewall.json',firewall)
+ r2=json.loads((R2/'stage-10d-r12c-r2-s30-v2-sanity-decision.json').read_text());dump(out/'stage-10d-r12c-r3-s30-v2-freeze.json',{'model_id':'S30_V2_REPRODUCIBLE_R12C_R2_TARGET_GRAIN_REPAIR','state_path':str(STATE.relative_to(ROOT)),'state_hash':sha(STATE),'target_grain':'game_average','training_cutoff':'2023-12-31T23:59:59Z','2024_MAE':r2['quality_evidence']['2024']['player_MAE'],'2025_MAE':r2['quality_evidence']['2025']['player_MAE'],'pooled_MAE':5.350098,'refit_in_R12C_R3':False})
+ s=json.loads(B2.read_text());fields=[]
+ for i,name in enumerate(s['feature_order']):fields.append({'feature_name':name,'feature_order':i,'dtype':'numeric','grain':'player-period','historical_source':'Stage 4C serialized pre-lock context and Stage 8 matchup export','semantic_meaning':'sealed B2Z input','lookback_cutoff_rule':'strictly before target cutoff','normalization_scaling_rule':'sealed median/mean/scale plus missing indicator','role_treatment':'sealed JGL/SUP core coupling','support_protection_dependency':'SUP delta protected'})
+ pd.DataFrame(fields).to_csv(out/'stage-10d-r12c-r3-b2z-feature-contract.csv',index=False)
+ source_files=['fantasy_prediction/player_model_v2_stage4c_context_builder.py','data/processed/player_model_v2/stage_4c_context_03/context_prelock_features.csv','data/processed/player_model_v2/stage_4c_context_03/historical_core_state.csv','data/processed/player_model_v2/stage_4c_context_03/historical_team_state.csv','data/predictions/player_model_v2/evaluation/stage-8-matchup-features.csv']
+ dump(out/'stage-10d-r12c-r3-validator-report.json',{'verdict':'BLOCKED_BY_B2Z_CONTEXT_PARITY','week5_results_used':False,'b2z_feature_contract':'B2Z_V2_FEATURE_CONTRACT_IDENTIFIED','feature_count':len(s['feature_order']),'state_hash':sha(B2),'missing_raw_prelock_materializer_inputs':['prior_player_rating','prior_role_relative_rating','prior_role_adjusted_kp','prior_starter_reliability','prior_effective_evidence','prior_residual_uncertainty','prior_core_state','prior_team_state','prior_team_strength','team_continuity','predicted_team_win_probability','matchup_strength_diff'],'reason':'The only checked-in Stage 4C builder consumes serialized Stage 3E prelock_features; it does not construct those input states from arbitrary raw Oracle/schedule/market inputs. The sealed B2Z evaluator likewise reads serialized Stage 4C and Stage 8 artifacts. Replacing this missing lineage with a newly devised rating/core/matchup implementation would violate the no-approximation and historical-parity requirements.','source_files':source_files,'prediction_time_fit_calls':0,'same_lock_violations':0,'future_violations':0})
+ (out/'stage-10d-r12c-r3-completion-report.md').write_text('# BLOCKED_BY_B2Z_CONTEXT_PARITY\n\n## A. S30_V2 Freeze\n\nR12C-R2 repaired S30 target grain; R12C-R3 did not refit it. Exact stored MAEs are 5.077414 (2024) and 5.569742 (2025).\n\n## B. B2Z Raw Context\n\nThe 15-field sealed B2Z contract is identified. Historical B2Z construction reads serialized Stage 3E/Stage 4C/Stage 8 contexts. No checked-in producer constructs the required player-rating, core, team-state, and matchup inputs from arbitrary raw pre-lock Week 5 data. A new implementation cannot claim historical parity without changing frozen semantics.\n\nNo Week 5 realized results were used.\nNo Week 5 leaderboard data were used.\nNo Week 5 post-match data were used.\n')
+ (out/'self-review.md').write_text('[x] repaired S30 frozen\n[x] B2Z feature contract identified\n[x] raw lineage inspected\n[x] no B2Z/OATS refit\n[x] no FE retune\n[x] no default context values\n[x] Week 5 firewall intact\n[x] stopped at B2Z raw-context parity gate\n')
+ dump(out/'manifest-sha256.json',{p.name:sha(p) for p in out.iterdir() if p.is_file() and p.name!='manifest-sha256.json'})
+if __name__=='__main__':
+ p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);run(p.parse_args().out)

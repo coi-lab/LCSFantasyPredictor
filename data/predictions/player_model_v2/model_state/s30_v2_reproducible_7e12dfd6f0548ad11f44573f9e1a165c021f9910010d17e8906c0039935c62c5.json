@@ -1,0 +1,69 @@
+{
+  "alpha": 0.1,
+  "coefficients": [
+    1.0736697373962196,
+    -0.14930884560409496,
+    -0.0808991028796444,
+    -0.23507581544954625,
+    -0.3145867122365991,
+    0.3669330575536217,
+    -0.47539229209665895,
+    -0.4753922920967045,
+    -0.47539229209670447,
+    -0.47539229209669503,
+    -0.47539229209669487,
+    0.0,
+    -0.10006378135331963,
+    -1.6084146043658267,
+    1.285742704055692,
+    1.3617262103496515,
+    -0.9389905287214283
+  ],
+  "content_hash": "7e12dfd6f0548ad11f44573f9e1a165c021f9910010d17e8906c0039935c62c5",
+  "feature_order": [
+    "recent_fantasy_mean_5",
+    "recent_kills_mean_5",
+    "recent_deaths_mean_5",
+    "recent_assists_mean_5",
+    "recent_cs_mean_5",
+    "recent_games_count"
+  ],
+  "intercept": 13.803105875146848,
+  "mean": [
+    13.810044100516736,
+    2.403669368956351,
+    2.416670341935387,
+    5.676602620273162,
+    216.40807092881687,
+    4.655008327385201
+  ],
+  "median": [
+    13.67,
+    2.33333333333,
+    2.4,
+    5.4,
+    249.2,
+    5.0
+  ],
+  "model_id": "S30_V2_REPRODUCIBLE",
+  "repair": "R12C-R2 corrected calendar-week sum label to a per-game period target",
+  "role_encoding": [
+    "TOP",
+    "JGL",
+    "MID",
+    "BOT",
+    "SUP"
+  ],
+  "scale": [
+    4.622619012057942,
+    1.4399877783974018,
+    0.9218827695209152,
+    2.2610009736613925,
+    102.2944263746214,
+    1.1311523367873138
+  ],
+  "target": "arithmetic mean of raw fantasy points across target-period player games",
+  "target_grain": "player \u00d7 local prediction period \u00d7 game-average",
+  "training_cutoff": "2023-12-31T23:59:59Z",
+  "training_rows": 4203
+}

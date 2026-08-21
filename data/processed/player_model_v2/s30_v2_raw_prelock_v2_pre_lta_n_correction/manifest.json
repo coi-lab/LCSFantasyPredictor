@@ -10,14 +10,9 @@
   ],
   "league_normalization": {
     "LTA": "LCS",
-    "LTA N": "LCS",
     "LTA North": "LCS"
   },
   "raw_lcs_max_game_timestamp": "2026-08-17T00:02:44+00:00",
-  "raw_league_provenance_fields": [
-    "league_raw",
-    "league_model"
-  ],
   "raw_source_sha256": {
     "data/raw/oracles_elixir/2020_LoL_esports_match_data_from_OraclesElixir.csv": "7e2ad1e6c603745aaf7c32aa52b650affe3ca04581674601f97a38a31d0bc3fa",
     "data/raw/oracles_elixir/2021_LoL_esports_match_data_from_OraclesElixir.csv": "36a1495425b38eab127dd36bcf028bf372d81215f6a320475ff27a25df657adc",
@@ -36,9 +31,7 @@
     "data/raw/oracles_elixir/2025_LoL_esports_match_data_from_OraclesElixir.csv",
     "data/raw/oracles_elixir/2026_LoL_esports_match_data_from_OraclesElixir.csv"
   ],
-  "row_count": 6455,
+  "row_count": 5732,
   "stage_3e_modified": false,
-  "target_definition": "arithmetic mean of raw fantasy points across target-period player games; realized_fantasy_total retained for schedule aggregation",
-  "target_grain": "player \u00d7 local prediction period \u00d7 game-average",
   "version": "S30_V2_RAW_PRELOCK_V2"
 }
