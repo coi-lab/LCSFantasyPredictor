@@ -722,11 +722,21 @@ function renderMatchupOptimizer() {
   };
 
   const rosterCards = lineup.players.map(player => {
-    const opponentPlayer = findOpposingPlayer(player);
+    // Multi-series slates may provide role-matched opponent records directly.
+    // Retain the historical single-opponent lookup as a backwards-compatible fallback.
+    const opponentPlayers = Array.isArray(player.opponent_players) && player.opponent_players.length
+      ? player.opponent_players
+      : [findOpposingPlayer(player)].filter(Boolean);
+    const opponentPlayer = opponentPlayers[0];
     const playerPicksHtml = renderChampionPicks(player, opponentPlayer, false);
-    const opponentPicksHtml = opponentPlayer
-      ? renderChampionPicks(opponentPlayer, player, true)
-      : '<div class="optimizer-no-picks">Opponent data unavailable</div>';
+    const opponentPicksHtml = opponentPlayers.length
+      ? opponentPlayers.map(opponent => `
+          <div class="optimizer-picks-column opponent-picks-column">
+            <div class="optimizer-pick-title">${escapeHtml(opponent.player)}'s Picks (${escapeHtml(opponent.team)})</div>
+            ${renderChampionPicks(opponent, player, true)}
+          </div>
+        `).join('')
+      : '<div class="optimizer-picks-column opponent-picks-column"><div class="optimizer-no-picks">Opponent data unavailable</div></div>';
 
     return `
       <article class="card optimizer-roster-card">
@@ -759,10 +769,7 @@ function renderMatchupOptimizer() {
             <div class="optimizer-pick-title">${escapeHtml(player.player)}'s Picks</div>
             ${playerPicksHtml}
           </div>
-          <div class="optimizer-picks-column opponent-picks-column">
-            <div class="optimizer-pick-title">${opponentPlayer ? escapeHtml(opponentPlayer.player) : 'Opponent'}'s Picks (${escapeHtml(player.opponent || '')})</div>
-            ${opponentPicksHtml}
-          </div>
+          ${opponentPicksHtml}
         </div>
       </article>
     `;

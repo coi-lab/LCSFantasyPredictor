@@ -1,0 +1,22 @@
+league_model,season,split,stage,playoffs_flag,date_start,date_end,best_of,source_authority,source_title,rule_scope,notes
+LCS,2016,Summer,Regular Season,False,2016-06-02,2016-08-07,3,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,NA LCS Summer regular season/group stage BO3
+LCS,2016,Summer,Playoffs,True,2016-08-13,2016-08-28,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,NA LCS Summer playoffs BO5
+LCS,2017,Spring,Regular Season,False,2017-01-20,2017-03-12,3,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,NA LCS Spring regular season/group stage BO3
+LCS,2017,Spring,Playoffs,True,2017-03-25,2017-04-23,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,NA LCS Spring playoffs BO5
+LCS,2017,Summer,Regular Season,False,2017-06-01,2017-08-06,3,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,NA LCS Summer regular season/group stage BO3
+LCS,2017,Summer,Playoffs,True,2017-08-19,2017-09-10,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,NA LCS Summer playoffs BO5
+LCS,2018,Summer,Regular Season,False,,,1,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,LCS Summer regular season BO1
+LCS,2018,Summer,Playoffs,True,,,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,LCS Summer playoffs BO5
+LCS,2019,Summer,Regular Season,False,,,1,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,LCS Summer regular season BO1
+LCS,2019,Summer,Playoffs,True,,,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,LCS Summer playoffs BO5
+LCS,2023,Spring,Regular Season,False,,,1,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,LCS Spring regular season BO1
+LCS,2023,Spring,Playoffs,True,,,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,LCS Spring playoffs BO5
+LCS,2023,Summer,Regular Season,False,,,1,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,LCS Summer regular season BO1
+LCS,2023,Summer,Playoffs,True,,,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,LCS Summer playoffs BO5
+LCS,2024,Spring,Regular Season,False,,,1,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,LCS Spring regular season BO1
+LCS,2024,Spring,Playoffs,True,,,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,LCS Spring playoffs BO5
+LCS,2024,Summer,Regular Season,False,2024-06-15,2024-08-04,3,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,LCS Summer regular season BO3
+LCS,2024,Summer,Playoffs,True,,,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,playoffs,LCS Summer playoffs BO5
+LTA North,2025,Split 3,Pick & Play,False,2025-07-26,2025-08-10,3,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,pick-and-play,Weeks 1-3 only; later Elimination excluded
+LTA North,2025,Split 3,Elimination,True,2025-08-15,,5,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,elimination,Later stage BO5
+LCS,2026,Summer,Regular Season,False,2026-08-22,,3,Task-authorized verified external rule facts,Stage 10D-R12F-R1 prompt,regular-season,Week 5 official schedule BO3
