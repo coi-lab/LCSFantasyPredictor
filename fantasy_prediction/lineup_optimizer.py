@@ -140,6 +140,7 @@ def build_matchup_conflicts(
     players: tuple[dict[str, Any], ...],
     coach: dict[str, Any],
     penalty_points: float,
+    weekly_matchup_graph: object | None = None,
 ) -> tuple[list[dict[str, Any]], float]:
     """Describe opposing roster slots and calculate their risk penalty.
 
@@ -165,7 +166,12 @@ def build_matchup_conflicts(
 
     conflicts: list[dict[str, Any]] = []
     for first, second in itertools.combinations(slots, 2):
-        if not _are_opponents(first, second):
+        if weekly_matchup_graph is None:
+            conflicting = _are_opponents(first, second)
+        else:
+            from fantasy_prediction.multiseries_projection_adapter import teams_are_weekly_opponents
+            conflicting = teams_are_weekly_opponents(first["team"], second["team"], weekly_matchup_graph)
+        if not conflicting:
             continue
         risk_weight = min(
             MATCHUP_CONFLICT_ROLE_WEIGHTS.get(first["role"], 1.0),
@@ -188,6 +194,7 @@ def optimize_lineups(
     budget: float = 100.0,
     top_n: int = 10,
     matchup_conflict_penalty: float = DEFAULT_MATCHUP_CONFLICT_PENALTY,
+    weekly_matchup_graph: object | None = None,
 ) -> list[dict[str, Any]]:
     """Return the exact highest-projected legal lineups.
 
@@ -243,6 +250,7 @@ def optimize_lineups(
                 player_choices,
                 coach,
                 matchup_conflict_penalty,
+                weekly_matchup_graph,
             )
             risk_adjusted_points = total_points - conflict_penalty
             results.append({

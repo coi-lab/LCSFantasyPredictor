@@ -1,0 +1,45 @@
+{
+  "alpha": 1.0,
+  "coefficients": [
+    -0.22459473008513653,
+    18.47030732026693,
+    -10.208519034305688,
+    2.2593633716347186,
+    -1.7948075854578625
+  ],
+  "content_hash": "6c0f41458ccba80694004806e237a4751db1770e285cd8f1a234e55d0c169587",
+  "feature_order": [
+    "rating_delta",
+    "oats_win_probability",
+    "season_actual_minus_expected_wins",
+    "recent_schedule_strength_percentile",
+    "S30_team_total"
+  ],
+  "intercept": -4.274588879995963,
+  "mean": [
+    -26.8417420188984,
+    0.4668487639168762,
+    0.10370951927227899,
+    0.520503144654088,
+    170.5504322822122
+  ],
+  "median": [
+    -26.80434404576613,
+    0.46150179804763913,
+    0.0,
+    0.5,
+    157.7420299606294
+  ],
+  "model_id": "OATS_V2_REPRODUCIBLE",
+  "scale": [
+    141.6767345141059,
+    0.17947454521545406,
+    1.3921740038670596,
+    0.1297754813769961,
+    58.34377150041483
+  ],
+  "target_definition": "actual_team_fantasy - S30_team_total",
+  "team_strength_builder": "OATSConfiguration(K=48, carryover=0.75)",
+  "training_cutoff": "2023-12-31T23:59:59Z",
+  "training_rows": 265
+}

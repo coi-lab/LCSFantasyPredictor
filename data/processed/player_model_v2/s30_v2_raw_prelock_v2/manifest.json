@@ -1,0 +1,37 @@
+{
+  "cutoff_rule": "all feature rows use game timestamp strictly before target period lock",
+  "feature_columns": [
+    "recent_fantasy_mean_5",
+    "recent_kills_mean_5",
+    "recent_deaths_mean_5",
+    "recent_assists_mean_5",
+    "recent_cs_mean_5",
+    "recent_games_count"
+  ],
+  "league_normalization": {
+    "LTA": "LCS",
+    "LTA North": "LCS"
+  },
+  "raw_lcs_max_game_timestamp": "2026-08-17T00:02:44+00:00",
+  "raw_source_sha256": {
+    "data/raw/oracles_elixir/2020_LoL_esports_match_data_from_OraclesElixir.csv": "7e2ad1e6c603745aaf7c32aa52b650affe3ca04581674601f97a38a31d0bc3fa",
+    "data/raw/oracles_elixir/2021_LoL_esports_match_data_from_OraclesElixir.csv": "36a1495425b38eab127dd36bcf028bf372d81215f6a320475ff27a25df657adc",
+    "data/raw/oracles_elixir/2022_LoL_esports_match_data_from_OraclesElixir.csv": "febfbf453000b6ada7587f68c1b046ee4a2770ae2be4436f3cbcd03ffb11e393",
+    "data/raw/oracles_elixir/2023_LoL_esports_match_data_from_OraclesElixir.csv": "8cf6c1bbe4a4c75a73d0a38fca826ecea48dd1fb386f515e2a7986797f7c1f3a",
+    "data/raw/oracles_elixir/2024_LoL_esports_match_data_from_OraclesElixir.csv": "93b5ed6036435120d7d97541b947ffceed6c7158508df4e6cb9b0f8a35cb17ac",
+    "data/raw/oracles_elixir/2025_LoL_esports_match_data_from_OraclesElixir.csv": "c9a158b9e0a965a47d31d3674c127a26f75e6c91a324bd1858e4784b1336214a",
+    "data/raw/oracles_elixir/2026_LoL_esports_match_data_from_OraclesElixir.csv": "3ba9ee108ac2bcfb78623c707df26d15a8246bae11977cac03e0cb1d72fbda64"
+  },
+  "raw_sources": [
+    "data/raw/oracles_elixir/2020_LoL_esports_match_data_from_OraclesElixir.csv",
+    "data/raw/oracles_elixir/2021_LoL_esports_match_data_from_OraclesElixir.csv",
+    "data/raw/oracles_elixir/2022_LoL_esports_match_data_from_OraclesElixir.csv",
+    "data/raw/oracles_elixir/2023_LoL_esports_match_data_from_OraclesElixir.csv",
+    "data/raw/oracles_elixir/2024_LoL_esports_match_data_from_OraclesElixir.csv",
+    "data/raw/oracles_elixir/2025_LoL_esports_match_data_from_OraclesElixir.csv",
+    "data/raw/oracles_elixir/2026_LoL_esports_match_data_from_OraclesElixir.csv"
+  ],
+  "row_count": 5732,
+  "stage_3e_modified": false,
+  "version": "S30_V2_RAW_PRELOCK_V2"
+}

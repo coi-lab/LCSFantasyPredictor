@@ -1,0 +1,42 @@
+{
+  "aggregation_fix_required": true,
+  "aggregation_fix_validated": true,
+  "baseline_advantage_vs_conflict_free": 0.0,
+  "baseline_week5_conflict_penalty": 0.0,
+  "baseline_week5_lineup_unique_teams": 2,
+  "baseline_week5_matchup_conflicts": 0,
+  "baseline_week5_predicted_objective": 130.5515,
+  "baseline_week5_variety_multiplier": 0.05,
+  "conflict_free_lineup_exists": true,
+  "conflict_free_predicted_objective": 130.5515,
+  "conflict_penalty_sensitivity": {
+    "2x_penalty_lineup": "TOP: Srtty (DIS), JUNGLE: Gryffinn (FLY), MID: Quad (FLY), BOTTOM: Massu (FLY), SUPPORT: Cryogen (FLY), COACH: Thinkcard (FLY)",
+    "2x_penalty_obj": 130.55,
+    "current_penalty_lineup": "TOP: Srtty (DIS), JUNGLE: Gryffinn (FLY), MID: Quad (FLY), BOTTOM: Massu (FLY), SUPPORT: Cryogen (FLY), COACH: Thinkcard (FLY)",
+    "current_penalty_obj": 130.55,
+    "hard_no_conflict_lineup": "TOP: Srtty (DIS), JUNGLE: Gryffinn (FLY), MID: Quad (FLY), BOTTOM: Massu (FLY), SUPPORT: Cryogen (FLY), COACH: Thinkcard (FLY)",
+    "hard_no_conflict_obj": 130.55
+  },
+  "multi_series_supported_before_stage": false,
+  "official_week5_series": 4,
+  "official_week5_teams": [
+    "Dignitas",
+    "Disguised",
+    "FlyQuest",
+    "Sentinels"
+  ],
+  "player_model_changed": false,
+  "recommended_next_node": "PROCEED_TO_STAGE_10D_R7D_WEEK5_PROSPECTIVE_ROSTER_PREDICTION_AND_FREEZE",
+  "roster_B_definition": "CONFLICT_FREE_DIAGNOSTIC",
+  "roster_B_required": true,
+  "series_per_team": {
+    "Dignitas": 2,
+    "Disguised": 2,
+    "FlyQuest": 2,
+    "Sentinels": 2
+  },
+  "stage": "10D-R7C",
+  "verdict": "STAGE_10D_R7C_WEEK5_READINESS_CONFIRMED_WITH_CONFLICT_AWARE_COMPARISON",
+  "week5_result_firewall_passed": true,
+  "week5_results_used": false
+}
