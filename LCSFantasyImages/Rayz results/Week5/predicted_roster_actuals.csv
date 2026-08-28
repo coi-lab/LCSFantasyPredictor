@@ -1,0 +1,8 @@
+slot,player_or_coach,team,recommended_champion,actual_player_points_no_champion_or_variety_bonus,champion_pick_points,champion_pick_detail
+top,Srtty,Disguised,Gnar,12.2075,2.15625,"Gnar appeared in two of four games (20.35 and 8.40 raw points); 30% bonus averaged over four games."
+jgl,Dardoch,Dignitas,Vi,5.5575,0.00000,"Vi was not played during Round 5."
+mid,Quad,FlyQuest,Orianna,18.2275,2.25525,"Orianna appeared once (30.07 raw points); 30% bonus averaged over four games."
+bot,Rahel,Sentinels,Ezreal,25.8675,4.37250,"Ezreal appeared twice; 30% bonus averaged over four games."
+sup,Cryogen,FlyQuest,Bard,20.7175,0.62625,"Bard appeared once (8.35 raw points); 30% bonus averaged over four games."
+coach,Thinkcard,FlyQuest,,17.2170,0.00000,"Coaches do not make champion picks."
+total,,,,99.7945,9.41025,
