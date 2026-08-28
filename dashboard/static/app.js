@@ -59,14 +59,49 @@ const TEAM_ALIASES = {
   'Team Liquid Alienware': 'Team Liquid'
 };
 
+const TEAM_CODE_MAP = {
+  '100': '100 Thieves',
+  'C9': 'Cloud9',
+  'CLG': 'Counter Logic Gaming',
+  'DIG': 'Dignitas',
+  'DSG': 'Disguised',
+  'EG': 'Evil Geniuses',
+  'FLY': 'FlyQuest',
+  'GG': 'Golden Guardians',
+  'IMT': 'Immortals',
+  'LYON': 'LYON',
+  'NRG': 'NRG',
+  'SEN': 'Sentinels',
+  'SR': 'Shopify Rebellion',
+  'TL': 'Team Liquid',
+  'TLAW': 'Team Liquid',
+  'TSM': 'TSM',
+};
+
+function canonicalTeamName(name) {
+  if (!name) return '';
+  const raw = String(name).trim();
+  const upper = raw.toUpperCase();
+  if (TEAM_CODE_MAP[upper]) return TEAM_CODE_MAP[upper];
+  if (TEAM_ALIASES[raw]) return TEAM_ALIASES[raw];
+  for (const [alias, canonical] of Object.entries(TEAM_ALIASES)) {
+    if (alias.toLowerCase() === raw.toLowerCase()) return canonical;
+  }
+  for (const [code, canonical] of Object.entries(TEAM_CODE_MAP)) {
+    if (code.toLowerCase() === raw.toLowerCase() || canonical.toLowerCase() === raw.toLowerCase()) {
+      return canonical;
+    }
+  }
+  return raw;
+}
+
 const FALLBACK_TEAM_COLORS = [
   '#9b5de5', '#f15bb5', '#00bbf9', '#00f5d4', '#f97316',
   '#a3e635', '#fb7185', '#818cf8', '#22d3ee', '#c084fc'
 ];
 
 function getTeamColor(teamName) {
-  const rawName = String(teamName || 'Unknown').trim();
-  const canonicalName = TEAM_ALIASES[rawName] || rawName;
+  const canonicalName = canonicalTeamName(teamName) || 'Unknown';
   if (TEAM_COLORS[canonicalName]) return TEAM_COLORS[canonicalName];
 
   let hash = 0;
@@ -486,10 +521,26 @@ function renderWeeklyChampionPicks() {
 
   const matchupGroups = new Map();
   players.forEach(player => {
-    const teams = [String(player.team), String(player.opponent)].sort();
-    const key = teams.join(' vs ');
-    if (!matchupGroups.has(key)) matchupGroups.set(key, []);
-    matchupGroups.get(key).push(player);
+    if (!player.opponent || player.opponent === 'nan' || player.opponent === 'TBD') {
+      const key = `${canonicalTeamName(player.team)} (Bye / No Match)`;
+      if (!matchupGroups.has(key)) matchupGroups.set(key, []);
+      matchupGroups.get(key).push(player);
+      return;
+    }
+    const rawOpponents = String(player.opponent)
+      .split(/[|/,]+/)
+      .map(s => canonicalTeamName(s).trim())
+      .filter(Boolean);
+    if (rawOpponents.length === 1) {
+      const teams = [canonicalTeamName(player.team), rawOpponents[0]].sort();
+      const key = teams.join(' vs ');
+      if (!matchupGroups.has(key)) matchupGroups.set(key, []);
+      matchupGroups.get(key).push(player);
+    } else {
+      const key = `${canonicalTeamName(player.team)} vs ${rawOpponents.join(' & ')}`;
+      if (!matchupGroups.has(key)) matchupGroups.set(key, []);
+      matchupGroups.get(key).push(player);
+    }
   });
 
   const renderTier = (player, tier, cssClass) => {
@@ -583,9 +634,11 @@ function matchupChampionOptions(player, preferWeekly = false) {
     const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
       ? weeklyChampionData.players
       : [];
+    const targetPlayer = String(player.player || '').toLowerCase();
+    const targetTeam = canonicalTeamName(player.team).toLowerCase();
     const match = weeklyPlayers.find(candidate =>
-      String(candidate.player).toLowerCase() === String(player.player).toLowerCase() &&
-      String(candidate.team).toLowerCase() === String(player.team).toLowerCase()
+      String(candidate.player || '').toLowerCase() === targetPlayer &&
+      canonicalTeamName(candidate.team).toLowerCase() === targetTeam
     );
     if (match && match.picks) {
       ['1.3x', '1.5x', '1.7x'].forEach(multiplier => {
@@ -654,8 +707,9 @@ function renderMatchupOptimizer() {
     && String(selectedWeek.roster_lock) === String(weeklyChampionData?.roster_lock)
   );
   meta.textContent = `${selectedWeek.round_name} | Roster lock ${selectedWeek.roster_lock} | ${Number(selectedWeek.budget).toFixed(1)} gold budget`;
-  notice.textContent =
-    'Lineups are ranked by projected points after matchup-conflict risk. Current-week champions use the exact Weekly Champion Picks ordering; archived weeks retain their frozen recommendations. Percentages are relative ranking strength, not calibrated odds.';
+  notice.textContent = selectedWeek.status === 'PRE_RESULT_FROZEN_CORRECTED'
+    ? 'PRE_RESULT_FROZEN_CORRECTED — Player Projection Unit: Weekend Average / Game Average. Coach Projection Unit: Weekend Average / Game Average. Fantasy scoring: Average points across games played. Variety Buff: Included in final fantasy calculation. Schedule expected games are not used to multiply fantasy score.'
+    : 'Lineups are ranked by projected points after matchup-conflict risk. Current-week champions use the exact Weekly Champion Picks ordering; archived weeks retain their frozen recommendations. Percentages are relative ranking strength, not calibrated odds.';
   tabs.innerHTML = lineups.map(item => `
     <button
       class="matchup-lineup-tab ${Number(item.rank) === selectedMatchupLineupRank ? 'active' : ''}"
@@ -666,23 +720,71 @@ function renderMatchupOptimizer() {
     </button>
   `).join('');
 
-  const renderChampionPicks = (player, opponentPlayer, isOpponentColumn = false) => {
+  const findOpposingPlayers = (player) => {
+    const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
+      ? weeklyChampionData.players
+      : [];
+    if (!player || !player.opponent || player.opponent === 'nan' || player.opponent === 'TBD') {
+      return [];
+    }
+    const roleTarget = String(player.role).toLowerCase();
+    const rawOpponentTokens = String(player.opponent)
+      .split(/[|/,]+/)
+      .map(s => s.trim())
+      .filter(Boolean);
+    const opponentTeamNames = new Set(
+      rawOpponentTokens.map(tok => canonicalTeamName(tok).toLowerCase())
+    );
+
+    return weeklyPlayers.filter(candidate => {
+      if (String(candidate.role).toLowerCase() !== roleTarget) return false;
+      const candidateTeam = canonicalTeamName(candidate.team).toLowerCase();
+      return opponentTeamNames.has(candidateTeam);
+    });
+  };
+
+  const renderChampionPicks = (player, opponentPlayers, isOpponentColumn = false) => {
     const options = matchupChampionOptions(player, currentRecommendationWeek);
     if (!options.length) {
       return '<div class="optimizer-no-picks">No champion recommendations available</div>';
     }
-    const oppOptions = opponentPlayer
-      ? matchupChampionOptions(opponentPlayer, currentRecommendationWeek)
-      : [];
-    const oppChamps = new Set(oppOptions.map(o => String(o.champion).toLowerCase()));
+    const oppList = Array.isArray(opponentPlayers)
+      ? opponentPlayers
+      : (opponentPlayers ? [opponentPlayers] : []);
+
+    const oppOptionsByPlayer = oppList.map(opp => ({
+      opponent: opp,
+      options: matchupChampionOptions(opp, currentRecommendationWeek),
+    }));
 
     return `
       <div class="optimizer-champion-list">
         ${options.map(pick => {
           const champLower = String(pick.champion).toLowerCase();
-          const isConflict = oppChamps.has(champLower);
-          const oppMatchingPick = oppOptions.find(o => String(o.champion).toLowerCase() === champLower);
-          const oppChance = oppMatchingPick ? (Number(oppMatchingPick.estimated_pick_chance ?? oppMatchingPick.ranking_share) * 100).toFixed(0) : 0;
+          const matchingOpponents = [];
+          oppOptionsByPlayer.forEach(({ opponent, options: oList }) => {
+            const oppMatchingPick = oList.find(o => String(o.champion).toLowerCase() === champLower);
+            if (oppMatchingPick) {
+              const oppChance = (Number(oppMatchingPick.estimated_pick_chance ?? oppMatchingPick.ranking_share) * 100).toFixed(0);
+              matchingOpponents.push({ opponent, oppPick: oppMatchingPick, oppChance });
+            }
+          });
+          const isConflict = matchingOpponents.length > 0;
+
+          let badgeHtml = '<span class="unique-badge">✓ Uncontested</span>';
+          if (isConflict) {
+            if (matchingOpponents.length === 1) {
+              const m = matchingOpponents[0];
+              const titleText = isOpponentColumn
+                ? `High contest risk: Shared with roster pick (${m.oppChance}%)`
+                : `High contest risk: Opponent ${escapeHtml(m.opponent.player)} (${escapeHtml(m.opponent.team)}) also has ${m.oppChance}% pick chance`;
+              badgeHtml = `<span class="collision-badge" title="${titleText}">⚠️ Shared (${m.oppChance}%)</span>`;
+            } else {
+              const details = matchingOpponents.map(m => `${escapeHtml(m.opponent.player)} (${m.oppChance}%)`).join(', ');
+              const chances = matchingOpponents.map(m => `${m.oppChance}%`).join(' / ');
+              badgeHtml = `<span class="collision-badge" title="High contest risk: Shared with ${details}">⚠️ Shared (${chances})</span>`;
+            }
+          }
 
           return `
             <div class="optimizer-champion-pick ${isConflict ? 'has-collision' : 'clean-pick'}">
@@ -690,7 +792,7 @@ function renderMatchupOptimizer() {
               <div>
                 <div class="optimizer-champ-name-row">
                   <strong>${escapeHtml(pick.champion)}</strong>
-                  ${isConflict ? `<span class="collision-badge" title="High contest risk: Opponent also has ${oppChance}% pick chance">⚠️ Shared (${oppChance}%)</span>` : '<span class="unique-badge">✓ Uncontested</span>'}
+                  ${badgeHtml}
                 </div>
                 <small>${escapeHtml(pick.option_basis || '')} ${(Number(pick.estimated_pick_chance ?? pick.ranking_share) * 100).toFixed(1)}% ranking strength</small>
                 <div class="weekly-context-flags">
@@ -711,29 +813,18 @@ function renderMatchupOptimizer() {
     `;
   };
 
-  const findOpposingPlayer = (player) => {
-    const weeklyPlayers = weeklyChampionData && Array.isArray(weeklyChampionData.players)
-      ? weeklyChampionData.players
-      : [];
-    return weeklyPlayers.find(candidate =>
-      String(candidate.role).toLowerCase() === String(player.role).toLowerCase() &&
-      String(candidate.team).toLowerCase() === String(player.opponent).toLowerCase()
-    );
-  };
-
   const rosterCards = lineup.players.map(player => {
     // Multi-series slates may provide role-matched opponent records directly.
     // Retain the historical single-opponent lookup as a backwards-compatible fallback.
     const opponentPlayers = Array.isArray(player.opponent_players) && player.opponent_players.length
       ? player.opponent_players
-      : [findOpposingPlayer(player)].filter(Boolean);
-    const opponentPlayer = opponentPlayers[0];
-    const playerPicksHtml = renderChampionPicks(player, opponentPlayer, false);
+      : findOpposingPlayers(player);
+    const playerPicksHtml = renderChampionPicks(player, opponentPlayers, false);
     const opponentPicksHtml = opponentPlayers.length
       ? opponentPlayers.map(opponent => `
           <div class="optimizer-picks-column opponent-picks-column">
             <div class="optimizer-pick-title">${escapeHtml(opponent.player)}'s Picks (${escapeHtml(opponent.team)})</div>
-            ${renderChampionPicks(opponent, player, true)}
+            ${renderChampionPicks(opponent, [player], true)}
           </div>
         `).join('')
       : '<div class="optimizer-picks-column opponent-picks-column"><div class="optimizer-no-picks">Opponent data unavailable</div></div>';
@@ -792,9 +883,13 @@ function renderMatchupOptimizer() {
       </div>
     `
     : '<div class="optimizer-no-picks">No selected slots oppose one another.</div>';
+  const correctedUnitCard = selectedWeek.status === 'PRE_RESULT_FROZEN_CORRECTED'
+    ? `<div class="card optimizer-conflict-card"><div class="optimizer-pick-title">Corrected Week 5 scoring contract</div><p>Player Projection Unit: Weekend Average / Game Average<br>Coach Projection Unit: Weekend Average / Game Average<br>Fantasy scoring: Average points across games played<br>Variety Buff: Included in final fantasy calculation<br>${escapeHtml(selectedWeek.volume_context?.label || 'NOT USED TO MULTIPLY FANTASY SCORE')}</p></div>`
+    : '';
   content.innerHTML = `
+    ${correctedUnitCard}
     <div class="optimizer-summary-grid">
-      <div class="optimizer-summary-card"><span>Projected total</span><strong>${Number(lineup.projected_total_points).toFixed(2)}</strong></div>
+      <div class="optimizer-summary-card"><span>Projected fantasy total</span><strong>${Number(lineup.projected_total_points).toFixed(2)}</strong><small>Includes variety buff</small></div>
       <div class="optimizer-summary-card"><span>Risk-adjusted rank score</span><strong>${Number(lineup.risk_adjusted_points ?? lineup.projected_total_points).toFixed(2)}</strong><small>After matchup conflicts</small></div>
       <div class="optimizer-summary-card"><span>Roster cost</span><strong>${Number(lineup.total_cost).toFixed(1)}g</strong><small>${Number(lineup.remaining_gold).toFixed(1)}g left</small></div>
       <div class="optimizer-summary-card"><span>Variety buff</span><strong>+${(Number(lineup.variety_bonus) * 100).toFixed(0)}%</strong><small>${Number(lineup.unique_teams)} teams</small></div>
