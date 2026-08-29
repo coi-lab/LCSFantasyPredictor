@@ -139,3 +139,14 @@ def predict_ce(
         "delta_e": delta_e,
         "ce": ce_preds,
     }
+
+
+def filter_by_cutoff(
+    frame: pd.DataFrame,
+    cutoff: Union[str, pd.Timestamp, datetime] = FINAL_TRAINING_CUTOFF,
+    timestamp_column: str = "lock_timestamp",
+) -> pd.DataFrame:
+    """Filter candidate DataFrame to strictly include rows on or before the cutoff timestamp."""
+    cutoff_ts = pd.to_datetime(cutoff, utc=True)
+    timestamps = pd.to_datetime(frame[timestamp_column], utc=True)
+    return frame[timestamps <= cutoff_ts].copy()

@@ -229,22 +229,43 @@ class TestStage10DR14ECEFreezeAndRefit(unittest.TestCase):
                 mock_fit_ce.assert_not_called()
 
     def test_08_state_integrity_and_tamper_rejection(self):
-        """8. Verify file hash, declared content hash, and tamper rejection."""
+        """8. Verify file hash, declared content hash, byte-identity to 0550395, and all tamper modes."""
+        expected_raw_sha256 = "c8270c82cf555e57ec0fb6de58e2a7c4d7d9aedb051a6b2f0796f92fb2abe994"
+        expected_content_hash = "5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910"
+        checkpoint_commit = "05503950aa83fe61ca61b3730c29e4d2a4b2619d"
+
+        # Raw file sha256
+        import hashlib
+        actual_raw_sha = hashlib.sha256(S30_V2_REFIT_20260817_STATE_PATH.read_bytes()).hexdigest()
+        self.assertEqual(actual_raw_sha, expected_raw_sha256)
+
+        # State integrity loading
         state = load_s30_state(S30_V2_REFIT_20260817_STATE_PATH, verify_integrity=True)
         self.assertTrue(verify_sealed_state_integrity(state))
-        self.assertEqual(state["content_hash"], "5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910")
+        self.assertEqual(state["content_hash"], expected_content_hash)
+        self.assertEqual(compute_state_hash(state, method="compact"), expected_content_hash)
 
-        # Test tamper rejection on coefficients
-        tampered_coef = json.loads(json.dumps(state))
-        tampered_coef["coefficients"][0] += 0.05
-        with self.assertRaises(ValueError):
-            load_s30_state(tampered_coef, verify_integrity=True)
+        # Byte-identical to checkpoint 0550395
+        git_show_bytes = subprocess.check_output(
+            ["git", "show", f"{checkpoint_commit}:{S30_V2_REFIT_20260817_STATE_PATH.relative_to(ROOT)}"],
+            cwd=ROOT,
+        )
+        self.assertEqual(actual_raw_sha, hashlib.sha256(git_show_bytes).hexdigest())
 
-        # Test tamper rejection on preprocessing mean
-        tampered_mean = json.loads(json.dumps(state))
-        tampered_mean["mean"][0] += 0.05
-        with self.assertRaises(ValueError):
-            load_s30_state(tampered_mean, verify_integrity=True)
+        # Test tamper rejection across all 6 structural parameters
+        tamper_mutations = [
+            ("coefficients", lambda d: d["coefficients"].__setitem__(0, d["coefficients"][0] + 0.05)),
+            ("intercept", lambda d: d.__setitem__("intercept", d["intercept"] + 0.05)),
+            ("mean", lambda d: d["mean"].__setitem__(0, d["mean"][0] + 0.05)),
+            ("scale", lambda d: d["scale"].__setitem__(0, d["scale"][0] + 0.05)),
+            ("median", lambda d: d["median"].__setitem__(0, d["median"][0] + 0.05)),
+            ("feature_order", lambda d: d["feature_order"].reverse()),
+        ]
+        for field_name, mut_fn in tamper_mutations:
+            tampered = json.loads(json.dumps(state))
+            mut_fn(tampered)
+            with self.assertRaises(ValueError, msg=f"Failed to reject tamper on {field_name}"):
+                load_s30_state(tampered, verify_integrity=True)
 
     def test_09_deterministic_refit(self):
         """9. Verify 2 identical refits produce identical state dicts, coefficients, and hashes."""
@@ -273,6 +294,164 @@ class TestStage10DR14ECEFreezeAndRefit(unittest.TestCase):
             manifest_data = json.loads(manifest_file.read_text(encoding="utf-8"))
             self.assertIn("stage-10d-r14e-production-candidate-manifest.json", manifest_data)
             self.assertIn("stage-10d-r14e-training-data-manifest.csv", manifest_data)
+
+    def test_11_r14e_provenance_and_git_checkpoint_verification(self):
+        """11. Verify actual R14E implementation commit 0550395 resolves, contains all paths, and is ancestor."""
+        checkpoint = "05503950aa83fe61ca61b3730c29e4d2a4b2619d"
+        incorrect_r1_commit = "a9d4eeca8ad4a94602be637f2db4a8d7e5b3b56e"
+
+        # Checkpoint resolves
+        resolved = subprocess.check_output(["git", "rev-parse", checkpoint], cwd=ROOT, text=True).strip()
+        self.assertEqual(resolved, checkpoint)
+
+        # Required paths in 0550395
+        diff_tree_paths = subprocess.check_output(
+            ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", checkpoint],
+            cwd=ROOT,
+            text=True,
+        ).splitlines()
+
+        required_paths = [
+            "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json",
+            "fantasy_prediction/ce_model.py",
+            "scripts/run_stage10d_r14e_ce_freeze_and_refit.py",
+            "tests/test_stage10d_r14e_ce_freeze_and_refit.py",
+        ]
+        for rp in required_paths:
+            self.assertIn(rp, diff_tree_paths, msg=f"Required path {rp} missing from {checkpoint}")
+
+        # Ancestor check
+        res = subprocess.run(["git", "merge-base", "--is-ancestor", checkpoint, "HEAD"], cwd=ROOT)
+        self.assertEqual(res.returncode, 0, msg=f"{checkpoint} must be ancestor of HEAD")
+
+        # Verify a9d4eec is rejected if claimed as implementation checkpoint
+        r1_paths = subprocess.check_output(
+            ["git", "diff-tree", "--no-commit-id", "--name-only", "-r", incorrect_r1_commit],
+            cwd=ROOT,
+            text=True,
+        ).splitlines()
+        self.assertEqual(r1_paths, ["scripts/build_stage10d_r14e_r1_evidence.py"])
+        self.assertNotIn("fantasy_prediction/ce_model.py", r1_paths)
+
+    def test_12_final_training_cutoff_manifest_verification(self):
+        """12. Verify training manifest rows <= cutoff (2026-08-17), match sealed state rows, and cutoff helper."""
+        from fantasy_prediction.ce_model import filter_by_cutoff
+
+        manifest_path = ROOT / ".agent-runs/player-model-v2-stage-10d-r14e-ce-freeze-refit-20260828T210800Z/stage-10d-r14e-training-data-manifest.csv"
+        self.assertTrue(manifest_path.exists(), msg="Training data manifest must exist")
+
+        df = pd.read_csv(manifest_path)
+        state = load_s30_state(S30_V2_REFIT_20260817_STATE_PATH)
+
+        # Row count matches sealed state
+        self.assertEqual(len(df), state["training_rows"])
+        self.assertEqual(len(df), 6455)
+
+        # Parse lock timestamps
+        lock_series = df["source_event_range"].str.extract(r"lock=(.+)$")[0]
+        parsed_locks = pd.to_datetime(lock_series, utc=True)
+        self.assertEqual(parsed_locks.isna().sum(), 0, msg="All rows must have valid lock timestamps")
+
+        cutoff_ts = pd.to_datetime(FINAL_TRAINING_CUTOFF, utc=True)
+        self.assertTrue((parsed_locks <= cutoff_ts).all(), msg="All training rows must be <= cutoff")
+        self.assertEqual(int((parsed_locks > cutoff_ts).sum()), 0, msg="Zero training rows can be after cutoff")
+
+        # Synthetic post-cutoff rejection check
+        synthetic_df = pd.DataFrame({
+            "player": ["AllowedBefore", "RejectedAfter"],
+            "lock_timestamp": ["2026-08-16T12:00:00Z", "2026-08-20T12:00:00Z"],
+        })
+        filtered = filter_by_cutoff(synthetic_df, cutoff=FINAL_TRAINING_CUTOFF)
+        self.assertEqual(len(filtered), 1)
+        self.assertEqual(filtered["player"].iloc[0], "AllowedBefore")
+
+    def test_13_production_separation_executable_search(self):
+        """13. Executable search across repository ensuring zero active production exposure of CE candidate."""
+        symbols = [
+            "fantasy_prediction.ce_model",
+            "predict_ce",
+            "CE_PORTABLE_V1",
+            "CE_PRODUCTION_CANDIDATE_20260817",
+            "s30_v2_refit_20260817",
+        ]
+
+        active_matches = []
+        unknown_matches = []
+
+        for sym in symbols:
+            try:
+                raw_out = subprocess.check_output(["git", "grep", "-n", sym], cwd=ROOT, text=True)
+                lines = raw_out.splitlines() if raw_out else []
+            except subprocess.CalledProcessError:
+                lines = []
+
+            for line in lines:
+                parts = line.split(":", 2)
+                if len(parts) < 3:
+                    continue
+                file_path = parts[0]
+                if file_path.startswith("tests/") or file_path.startswith("scripts/"):
+                    continue
+                elif file_path == "fantasy_prediction/ce_model.py":
+                    continue
+                elif (
+                    file_path.startswith(("config/", "dashboard/", "data_pipeline/"))
+                    or file_path in [
+                        "fantasy_prediction/lineup_optimizer.py",
+                        "fantasy_prediction/lineup_aware_optimizer.py",
+                        "fantasy_prediction/player_model_v2.py",
+                    ]
+                ):
+                    active_matches.append(line)
+                else:
+                    unknown_matches.append(line)
+
+        self.assertEqual(len(active_matches), 0, msg=f"Active production exposure found: {active_matches}")
+        self.assertEqual(len(unknown_matches), 0, msg=f"Unknown match occurrences: {unknown_matches}")
+
+        # Active configuration file contains zero candidate references
+        config_path = ROOT / "config/player_model_v2.json"
+        if config_path.exists():
+            cfg_text = config_path.read_text(encoding="utf-8")
+            for sym in symbols:
+                self.assertNotIn(sym, cfg_text, msg=f"Config contains unexpected candidate symbol {sym}")
+
+    def test_14_evidence_manifest_integrity(self):
+        """14. Verify evidence manifest hashes, absence of self-reference, and fail-closed validation."""
+        import hashlib
+
+        r2_runs = sorted(ROOT.glob(".agent-runs/player-model-v2-stage-10d-r14e-r2-executable-audit-*"))
+        self.assertTrue(len(r2_runs) > 0, msg="R14E-R2 evidence directory must exist")
+        r2_dir = r2_runs[-1]
+
+        manifest_path = r2_dir / "manifest-sha256.json"
+        self.assertTrue(manifest_path.exists(), msg="manifest-sha256.json must exist in R14E-R2 run")
+
+        manifest_data = json.loads(manifest_path.read_text(encoding="utf-8"))
+
+        # No self-referential entry
+        self.assertNotIn("manifest-sha256.json", manifest_data)
+
+        # All required artifacts present
+        required_artifacts = [
+            "task-scope.json",
+            "stage-10d-r14e-r2-preflight.json",
+            "stage-10d-r14e-r2-provenance-correction.json",
+            "stage-10d-r14e-r2-state-integrity.json",
+            "stage-10d-r14e-r2-training-cutoff-audit.json",
+            "stage-10d-r14e-r2-production-separation-audit.json",
+            "stage-10d-r14e-r2-test-summary.json",
+            "stage-10d-r14e-r2-completion-report.md",
+        ]
+        for req in required_artifacts:
+            self.assertIn(req, manifest_data, msg=f"Required artifact {req} missing from manifest")
+
+        # Every file exists and hash matches
+        for rel_path, recorded_sha in manifest_data.items():
+            fpath = r2_dir / rel_path
+            self.assertTrue(fpath.exists(), msg=f"File {rel_path} in manifest does not exist on disk")
+            recomputed = hashlib.sha256(fpath.read_bytes()).hexdigest()
+            self.assertEqual(recomputed, recorded_sha, msg=f"Hash mismatch for {rel_path}")
 
 
 if __name__ == "__main__":
