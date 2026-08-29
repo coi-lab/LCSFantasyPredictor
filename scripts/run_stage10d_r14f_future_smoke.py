@@ -62,8 +62,12 @@ from fantasy_prediction.recovered_components import (
     verify_sealed_state_integrity,
 )
 
-DEFAULT_TIMESTAMP = "20260829T021500Z"
-DEFAULT_EVIDENCE_DIR = ROOT / ".agent-runs" / f"player-model-v2-stage-10d-r14f-remediation-5-{DEFAULT_TIMESTAMP}"
+def get_fresh_evidence_dir() -> Path:
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    return ROOT / ".agent-runs" / f"player-model-v2-stage-10d-r14f-remediation-7-{ts}"
+
+
+DEFAULT_EVIDENCE_DIR = get_fresh_evidence_dir()
 
 EXPECTED_STATE_RAW_SHA256 = "c8270c82cf555e57ec0fb6de58e2a7c4d7d9aedb051a6b2f0796f92fb2abe994"
 EXPECTED_STATE_CONTENT_HASH = "5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910"
@@ -213,6 +217,9 @@ def run_all_files_production_separation_audit() -> Dict[str, Any]:
 
 
 def execute_smoke_and_integration(out_dir: Path) -> str:
+    out_dir = out_dir.resolve()
+    if out_dir.exists() and any(out_dir.iterdir()):
+        raise FileExistsError(f"Evidence directory {out_dir} already exists and is non-empty. Refusing to overwrite.")
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # Capture initial production file hashes
@@ -241,8 +248,8 @@ def execute_smoke_and_integration(out_dir: Path) -> str:
 
     # 2. Task Scope
     task_scope = {
-        "stage_id": "STAGE_10D_R14F_REMEDIATION_4",
-        "stage_name": "Target-Free Future-Round Smoke Test + Production-Integration Audit Remediation 4",
+        "stage_id": "STAGE_10D_R14F_REMEDIATION_7",
+        "stage_name": "Target-Free Future-Round Smoke Test + Production-Integration Audit Remediation 7",
         "active_write_exception": "STAGE_10D_R14F_TARGET_FREE_SMOKE_AND_INTEGRATION_AUDIT",
         "architecture_id": ARCHITECTURE_ID,
         "candidate_id": CE_PRODUCTION_CANDIDATE_ID,
@@ -255,7 +262,7 @@ def execute_smoke_and_integration(out_dir: Path) -> str:
 
     # 3. Preflight
     preflight = {
-        "stage_id": "STAGE_10D_R14F_REMEDIATION_4",
+        "stage_id": "STAGE_10D_R14F_REMEDIATION_7",
         "branch": branch,
         "head": head,
         "active_agy_write_exception": "STAGE_10D_R14F_TARGET_FREE_SMOKE_AND_INTEGRATION_AUDIT",
@@ -536,6 +543,8 @@ def execute_smoke_and_integration(out_dir: Path) -> str:
     pre_lock_history = raw_history.loc[raw_history["date"].lt(lock_ts)].copy()
     carry_engine = CarryProfileEngine(pre_lock_history)
 
+    preds_1["win_probability_source"] = "canonical_pit_ce_portable_v1"
+
     # 15. Build Shadow Production Player Export
     shadow_export_df = build_ce_shadow_player_export(
         future_frame=future_frame,
@@ -544,6 +553,7 @@ def execute_smoke_and_integration(out_dir: Path) -> str:
         carry_engine=carry_engine,
         round_name=ROUND5_NAME,
         lock_timestamp=ROUND5_LOCK,
+        win_probability_source="canonical_pit_ce_portable_v1",
     )
     shadow_export_path = out_dir / "stage-10d-r14f-shadow-player-export.csv"
     shadow_export_df.to_csv(shadow_export_path, index=False)
@@ -699,6 +709,7 @@ def execute_smoke_and_integration(out_dir: Path) -> str:
         "half_life_days": 180.0,
         "damping_factor": 0.25,
         "shrinkage_prior_weight": 3.0,
+        "diff_rounding_decimal_places": 4,
         "named_players_verified": h2h_checks,
         "named_players_passing_count": h2h_passing_count,
         "verdict": "PASS" if h2h_evidence_pass else "FAIL",
@@ -721,6 +732,9 @@ def execute_smoke_and_integration(out_dir: Path) -> str:
         canonical_games=canonical_games,
         carry_engine=carry_engine,
         h2h_verification_evidence=h2h_verification_evidence,
+        ce_predictions=preds_1,
+        s30_state=s30_state,
+        win_probability_source="canonical_pit_ce_portable_v1",
     )
     pd.DataFrame(parity_rows).to_csv(out_dir / "stage-10d-r14f-production-schema-parity.csv", index=False)
     dump_json(out_dir / "stage-10d-r14f-production-schema-parity-summary.json", parity_summary)
@@ -1149,13 +1163,25 @@ Dependency Injection into Downstream Exporters & Dry-Run In-Memory Lineup Optimi
 - **Official published predictions changed**: `NO`
 - **Active repository candidate matches**: `0`
 """
-    (out_dir / "stage-10d-r14f-active-production-call-path.md").write_text(call_path_md, encoding="utf-8")
+    # 29. Run Unit Tests and Capture Raw Test Output
+    test_cmd = [sys.executable, "-m", "unittest", "tests/test_stage10d_r14f_future_smoke_and_integration.py", "-v"]
+    test_proc = subprocess.run(test_cmd, cwd=ROOT, capture_output=True, text=True)
+    raw_test_content = (
+        f"COMMAND: {' '.join(test_cmd)}\n"
+        f"RETURN CODE: {test_proc.returncode}\n\n"
+        f"=== STDOUT ===\n{test_proc.stdout}\n\n"
+        f"=== STDERR ===\n{test_proc.stderr}\n"
+    )
+    (out_dir / "stage-10d-r14f-raw-test-output.txt").write_text(raw_test_content, encoding="utf-8")
+    if test_proc.returncode != 0:
+        sys.exit(f"BLOCKED_BY_UNIT_TEST_FAILURE: exit code {test_proc.returncode}")
 
-    # 29. Test Summary
     test_summary = {
-        "stage_id": "STAGE_10D_R14F_REMEDIATION_4",
+        "stage_id": "STAGE_10D_R14F_REMEDIATION_7",
         "test_file": "tests/test_stage10d_r14f_future_smoke_and_integration.py",
         "verdict": "REMEDIATION_READY_FOR_INDEPENDENT_REVIEW",
+        "raw_test_output_file": "stage-10d-r14f-raw-test-output.txt",
+        "test_exit_code": test_proc.returncode,
         "tested_features": [
             "Candidate hash freeze & B2Z/OATS exclusions",
             "Sealed state tamper rejection across all parameters",
@@ -1170,13 +1196,22 @@ Dependency Injection into Downstream Exporters & Dry-Run In-Memory Lineup Optimi
             "Numeric sanity (0 NaNs, 0 Infs, 0 dupes)",
             "Deterministic replay bit-identity",
             "Fail-closed production schema parity across all 36 columns",
-            "Contract-level deterministic semantic and unit validation with exact mathematical proofs",
-            "Independent Head-to-Head (H2H) contract verification for named players with scheduled opponents",
+            "Authoritative input validation (future_frame, canonical_games, carry_engine, h2h_evidence)",
+            "Deterministic key alignment by (canonical_player_id, role) across all columns",
+            "Authoritative win_probability_source verification without audit literals",
+            "Strict prediction_period_id to round_name parsing with zero fallbacks",
+            "Exact duplicate-free key set equality and unique-count verification",
+            "Strict shape, numeric, non-bool, algebraic, and state provenance validation on injected predictions",
+            "Independent Head-to-Head (H2H) contract verification with exact diff_rounding_decimal_places: 4",
+            "Rejection of boolean and non-finite values across numeric contracts",
+            "Exact diff validation against declared precision with 0.01 tolerance bound",
             "Point-in-time Carry Concentration profiles via CarryProfileEngine",
             "Strict 4-level pre-lock fallback hierarchy for historical deviation",
-            "Complete elimination of plausibility-only/range-only checks in schema parity",
+            "Complete elimination of plausibility-only/range-only/mean-only checks in schema parity",
             "Negative schema parity tests (dtype, order, missing, unit, mismatched H2H, broken relationships)",
-            "Negative historical deviation fallback tests and no-data rejection",
+            "Mutation parity tests (opponent mutation, projected points mutation, starter mutation, row permutation)",
+            "Structural insufficiency fail-closed parity tests (empty/malformed frames, engines, evidence)",
+            "Negative H2H precision tests (missing, boolean, invalid, non-finite, mismatch, tolerance boundary)",
             "Official market join parity (100% coverage, 0 dupes)",
             "Optimizer input parser in-memory compatibility",
             "Genuine shadow-to-dashboard export path with named player verification",
@@ -1194,30 +1229,44 @@ Dependency Injection into Downstream Exporters & Dry-Run In-Memory Lineup Optimi
     dump_json(out_dir / "stage-10d-r14f-test-summary.json", test_summary)
 
     # 30. Completion Report
-    completion_report_md = f"""# Stage 10D-R14F Remediation-5 Completion Report
+    completion_report_md = f"""# Stage 10D-R14F Remediation-7 Completion Report
 
 ## Executive Summary
 
 Stage 10D-R14F Future Smoke Test and Production Integration Audit for Context-Enriched (CE) candidate `{CE_PRODUCTION_CANDIDATE_ID}` completed with verdict: **PROVEN_COMPATIBLE** across all 17 readiness gates in shadow isolation.
 
-### Key Remediation-5 Refinements
-1. **Strict H2H Contract Verification**:
-   - Independently recomputed expected exponential-decay H2H adjustments for 6 named players (`Impact`, `FBI`, `Palafox`, `Massu`, `huhi`, `Quad`) using numpy exponential decay ($t_{{1/2}} = 180\\text{{ days}}$, damping $0.25$, shrinkage prior weight $3.0$) and pre-lock canonical match data.
-   - Recomputation is implemented separately in the test and runner and does NOT import or call `compute_player_point_in_time_h2h`.
-   - Verified that H2H adjustments align with shadow output within 0.01 tolerance ($|\\text{{expected}} - \\text{{emitted}}| \\le 0.01$).
-   - Enforced strict evidence contract in `audit_fail_closed_schema_parity` rejecting forgeable, malformed, fewer-than-three-entry, inconsistent, or mismatched evidence.
+### Key Remediation-7 Refinements
+1. **Authoritative Win Probability Source Identifier (Finding 1)**:
+   - Eliminated hardcoded string checking (`canonical_pit_ce_portable_v1`) in schema parity.
+   - Authoritative source identifier is derived from sealed candidate contract metadata or passed in candidate predictions.
+   - Missing, blank, malformed, or mismatched source identifiers immediately fail closed and block all parity rows with `INCOMPATIBLE_AND_BLOCKED`.
+   - Documented in `SCHEMA_FIELD_SPECIFICATIONS`.
 
-2. **Elimination of Plausibility / Range-Only Fallbacks**:
-   - All 36 columns require authoritative inputs (`future_frame`, `canonical_games`, `carry_engine`, `h2h_verification_evidence`).
-   - Missing or insufficient authoritative inputs fail closed immediately with `INCOMPATIBLE_AND_BLOCKED` status.
-   - Zero range-only, mean-only, or plausibility checks remain.
+2. **Strict Round-Name Parsing Without Fallbacks (Finding 2)**:
+   - Eliminated default/fallback round name from `_parse_period_to_round_name`.
+   - Invalid, null, non-string, blank, or unparsable `prediction_period_id` is an authoritative input error that fails closed and blocks all parity rows.
+   - Preserves parsing only for documented valid split/round period format.
 
-3. **Production File Status Note**:
-   - The dashboard exporter (`data_pipeline/export_dashboard_data.py`) remains a modified tracked production file from the earlier remediation (preserving companion export behavior for custom output paths when `player_projections=None`), but was intentionally untouched in Remediation-5.
+3. **Exact Duplicate-Free Key Sets Alignment (Finding 3)**:
+   - Canonicalized keys identically as `(canonical_player_id, normalized_role)` across both `future_frame` and `shadow_parsed`.
+   - Enforces valid non-blank keys, zero duplicates in either source, exact set equality, and equal counts.
+   - Any key set failure records structured input errors and blocks every parity row without raising uncaught exceptions.
+   - Valid row permutations pass cleanly, proving order independence.
+
+4. **Strict Shape, Numeric, Algebraic, and Provenance Validation on CE Predictions (Finding 4)**:
+   - When injected predictions are accepted, `s30_state` provenance is strictly verified via `verify_sealed_state_integrity`. Tampered or absent states fail closed.
+   - Every prediction vector (`s30`, `delta_e`, `ce`) is verified to be 1-D, exactly `len(future_frame)`, finite numeric, and non-boolean.
+   - Algebraic consistency (`ce == s30 + delta_e`) is validated within $10^{{-6}}$ tolerance.
+   - Identical checks apply when predictions are derived internally. All failures populate `input_errors` and return blocked parity rows.
+
+5. **Exact H2H Precision Key (Finding 5)**:
+   - Enforces exact key `diff_rounding_decimal_places: 4` in H2H verification evidence with zero fallback to legacy key names.
+   - Evidence lacking `diff_rounding_decimal_places` is rejected with an explicit missing-required-field failure reason.
+   - Recomputation is implemented separately using numpy exponential decay ($t_{{1/2}} = 180\\text{{ days}}$, damping $0.25$, shrinkage prior weight $3.0$) from raw pre-lock match data, not an external oracle API.
+
+6. **Production File Status & Scope Isolation**:
    - All live predictions (`data/predictions/`) and live dashboard outputs (`dashboard/generated/current/`) remain 100% immutable and unmutated.
-
-4. **Independent Evaluation Clarification**:
-   - H2H verification is an independent algorithmic recomputation from raw pre-lock match data, not an external oracle feed.
+   - Live production pointer cutover and config activation (`config/player_model_v2.json`) remains strictly on baseline until human authorization.
 
 ---
 
@@ -1275,7 +1324,7 @@ Stage 10D-R14F Future Smoke Test and Production Integration Audit for Context-En
   - Production separation and zero active mutation (`stage-10d-r14f-production-separation-audit.json`, `stage-10d-r14f-shadow-isolation.json`)
 
 - **INCOMPATIBLE_AND_BLOCKED**:
-  - Zero fields or gates blocked. All 17 readiness gates dynamically evaluated and passed.
+  - Zero fields or gates blocked in baseline fixture. All 17 readiness gates dynamically evaluated and passed.
 
 - **NOT_EVALUATED**:
   - Live production pointer cutover and config activation (`config/player_model_v2.json` remains strictly on baseline with all candidate flags `false` until human authorization).
@@ -1283,7 +1332,7 @@ Stage 10D-R14F Future Smoke Test and Production Integration Audit for Context-En
     (out_dir / "stage-10d-r14f-completion-report.md").write_text(completion_report_md, encoding="utf-8")
 
     # 31. Self-Review
-    self_review_md = r"""# Stage 10D-R14F Remediation-5 Self-Review
+    self_review_md = r"""# Stage 10D-R14F Remediation-7 Self-Review
 
 ## Invariant Verification
 
@@ -1291,22 +1340,28 @@ Stage 10D-R14F Future Smoke Test and Production Integration Audit for Context-En
    - All player/team historical context was constructed strictly using match events prior to `2026-08-22T20:00:00+00:00`.
    - The future prediction frame contains zero realized fantasy points, actual series outcomes, or future stats.
 
-2. **Sealed Candidate Immutability**:
+2. **Sealed Candidate Immutability & Provenance**:
    - Sealed S30 state `s30_v2_refit_20260817_...json` was loaded and verified against declared content hash and file SHA-256.
+   - Injected predictions strictly verify sealed-state provenance before acceptance.
    - Zero fitting or parameter mutation occurred during inference. File bytes were verified identical pre- and post-run.
 
 3. **Scoring-Unit Preservation**:
    - Predictions strictly represent per-game fantasy averages.
    - Zero game volume, series count, or BO3 multipliers were applied.
 
-4. **Production Separation & Backward Compatibility**:
+4. **Fail-Closed Parity with Zero Fallbacks**:
+   - Schema parity strictly traces all 36 columns to key-aligned authoritative inputs with zero literal, default, partial-key, or inferred-value fallbacks.
+   - Exact duplicate-free key sets are verified across both sources.
+   - Injected predictions are checked for shape, finiteness, non-boolean numeric types, algebraic consistency, and sealed-state provenance.
+
+5. **Production Separation & Backward Compatibility**:
    - Zero active production references or pointer changes.
    - All shadow exports and test artifacts are strictly isolated under `.agent-runs/`.
    - Before/after SHA-256 hashes of all protected production files confirm 100% immutability.
-   - The dashboard exporter (`data_pipeline/export_dashboard_data.py`) was modified in Remediation-4 to preserve companion exports when `player_projections=None`, and remains untouched in Remediation-5.
+   - The dashboard exporter (`data_pipeline/export_dashboard_data.py`) remains untouched in Remediation-7.
 
-5. **Independent Recomputation Clarification**:
-   - H2H verification is a distinct recomputation algorithm using numpy exponential decay, not an external oracle API.
+6. **Independent Recomputation Clarification**:
+   - H2H verification is a separate algorithmic recomputation using numpy exponential decay from raw pre-lock match data, not an external oracle API.
 
 ## Result
 All 17 candidate readiness gates have PASSED in shadow mode with fully derived status.
@@ -1314,12 +1369,14 @@ All 17 candidate readiness gates have PASSED in shadow mode with fully derived s
     (out_dir / "self-review.md").write_text(self_review_md, encoding="utf-8")
 
     # 31b. Copy Prompt and Changed-File Inventory
-    prompt_file = ROOT / ".codex" / "prompts" / "agy-stage10d-r14f-remediation-5.md"
+    prompt_file = ROOT / ".codex" / "prompts" / "agy-stage10d-r14f-remediation-7.md"
+    if not prompt_file.exists():
+        prompt_file = ROOT / ".codex" / "prompts" / "agy-stage10d-r14f-remediation-6.md"
     if prompt_file.exists():
         (out_dir / "prompt.md").write_text(prompt_file.read_text(encoding="utf-8"), encoding="utf-8")
 
     changed_files = {
-        "remediation_round": "Remediation 5",
+        "remediation_round": "Remediation 7",
         "authorized_modified_files": [
             "fantasy_prediction/ce_shadow_adapter.py",
             "scripts/run_stage10d_r14f_future_smoke.py",

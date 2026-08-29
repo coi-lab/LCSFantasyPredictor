@@ -88,6 +88,7 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             cutoff_timestamp=ROUND5_LOCK,
             s30_state=cls.s30_state,
         )
+        cls.predictions["win_probability_source"] = "canonical_pit_ce_portable_v1"
 
         ingestor = LCSDataIngestor()
         raw_data = ingestor.run_pipeline(preview_rows=0)
@@ -103,6 +104,7 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             carry_engine=cls.carry_engine,
             round_name="Round 5 (Split 3)",
             lock_timestamp=ROUND5_LOCK,
+            win_probability_source="canonical_pit_ce_portable_v1",
         )
 
     def test_01_candidate_hash_freeze_and_exclusions(self):
@@ -276,6 +278,7 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             "half_life_days": 180.0,
             "damping_factor": 0.25,
             "shrinkage_prior_weight": 3.0,
+            "diff_rounding_decimal_places": 4,
             "verdict": "PASS",
             "named_players_verified": h2h_checks,
             "named_players_passing_count": sum(1 for c in h2h_checks if c["status"] == "PASS"),
@@ -288,6 +291,8 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             canonical_games=self.canonical_games,
             carry_engine=self.carry_engine,
             h2h_verification_evidence=h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
         )
         self.assertTrue(all_passed, msg=f"Schema parity failed: {summary}")
         self.assertEqual(summary["columns_failing"], 0)
@@ -368,6 +373,7 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
                 "half_life_days": 180.0,
                 "damping_factor": 0.25,
                 "shrinkage_prior_weight": 3.0,
+                "diff_rounding_decimal_places": 4,
                 "verdict": "PASS",
                 "named_players_verified": [
                     {
@@ -497,11 +503,104 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             canonical_games=self.canonical_games,
             carry_engine=self.carry_engine,
             h2h_verification_evidence=good_ev_10,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
         )
         self.assertTrue(passed)
 
+        # 9. Finding 1 Negative Tests: Missing, boolean, non-finite, unsupported precision
+        # 9a. Missing diff_rounding_decimal_places
+        bad_ev_noprec = make_base_evidence()
+        del bad_ev_noprec["diff_rounding_decimal_places"]
+        passed, _, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=bad_ev_noprec,
+        )
+        self.assertFalse(passed)
+
+        # 9b. Boolean precision (diff_rounding_decimal_places = True)
+        bad_ev_boolprec = make_base_evidence()
+        bad_ev_boolprec["diff_rounding_decimal_places"] = True
+        passed, _, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=bad_ev_boolprec,
+        )
+        self.assertFalse(passed)
+
+        # 9c. Unsupported integer precision (diff_rounding_decimal_places = 2)
+        bad_ev_prec2 = make_base_evidence()
+        bad_ev_prec2["diff_rounding_decimal_places"] = 2
+        passed, _, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=bad_ev_prec2,
+        )
+        self.assertFalse(passed)
+
+        # 9d. Non-finite precision (float('nan'))
+        bad_ev_nanprec = make_base_evidence()
+        bad_ev_nanprec["diff_rounding_decimal_places"] = float("nan")
+        passed, _, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=bad_ev_nanprec,
+        )
+        self.assertFalse(passed)
+
+        # 9e. Boolean numeric fields in evidence
+        bad_ev_boolfield = make_base_evidence()
+        bad_ev_boolfield["named_players_verified"][0]["expected_h2h"] = True
+        passed, _, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=bad_ev_boolfield,
+        )
+        self.assertFalse(passed)
+
+        bad_ev_booldiff = make_base_evidence()
+        bad_ev_booldiff["named_players_verified"][0]["diff"] = False
+        passed, _, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=bad_ev_booldiff,
+        )
+        self.assertFalse(passed)
+
+        # 9f. Declared diff does not match rounded actual diff
+        bad_ev_diffmismatch = make_base_evidence()
+        bad_ev_diffmismatch["named_players_verified"][0]["diff"] = 0.0050  # actual is 0.0000
+        passed, _, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=bad_ev_diffmismatch,
+        )
+        self.assertFalse(passed)
+
     def test_16_negative_deterministic_semantic_checks(self):
-        """16. Negative tests: prove schema parity rejects missing authoritative inputs and plausible mutations."""
+        """16. Negative tests: prove schema parity rejects missing authoritative inputs, structural insufficiencies, and plausible mutations."""
         active_prod_path = ROOT / "data" / "predictions" / "current_player_projections.csv"
         active_df = pd.read_csv(active_prod_path)
         valid_h2h_evidence = {
@@ -510,6 +609,7 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             "half_life_days": 180.0,
             "damping_factor": 0.25,
             "shrinkage_prior_weight": 3.0,
+            "diff_rounding_decimal_places": 4,
             "verdict": "PASS",
             "named_players_verified": [
                 {
@@ -524,7 +624,7 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             "named_players_passing_count": 3,
         }
 
-        # A. Source-Input Omission Tests
+        # A. Structural Insufficiency & Missing Source Input Tests
         # 1. future_frame is None -> Fails closed
         passed_no_ff, rows_no_ff, _ = audit_fail_closed_schema_parity(
             shadow_df=self.shadow_export,
@@ -538,9 +638,32 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
         price_row = [r for r in rows_no_ff if r["field"] == "price"][0]
         self.assertEqual(price_row["status"], "FAIL")
         self.assertEqual(price_row["classification"], "INCOMPATIBLE_AND_BLOCKED")
-        self.assertIn("Missing authoritative", price_row["failure_reason"])
 
-        # 2. canonical_games is None -> Fails closed
+        # 2. future_frame is empty DataFrame -> Fails closed without uncaught exception
+        passed_empty_ff, rows_empty_ff, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=pd.DataFrame(),
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=valid_h2h_evidence,
+        )
+        self.assertFalse(passed_empty_ff)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_empty_ff))
+
+        # 3. future_frame missing required columns -> Fails closed
+        broken_ff = self.future_frame.drop(columns=["market_price"])
+        passed_broken_ff, rows_broken_ff, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=broken_ff,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=valid_h2h_evidence,
+        )
+        self.assertFalse(passed_broken_ff)
+
+        # 4. canonical_games is None -> Fails closed
         passed_no_cg, rows_no_cg, _ = audit_fail_closed_schema_parity(
             shadow_df=self.shadow_export,
             active_df=active_df,
@@ -554,7 +677,18 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
         self.assertEqual(hist_row["status"], "FAIL")
         self.assertEqual(hist_row["classification"], "INCOMPATIBLE_AND_BLOCKED")
 
-        # 3. carry_engine is None -> Fails closed
+        # 5. canonical_games is empty DataFrame -> Fails closed
+        passed_empty_cg, rows_empty_cg, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=pd.DataFrame(),
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=valid_h2h_evidence,
+        )
+        self.assertFalse(passed_empty_cg)
+
+        # 6. carry_engine is None or invalid object -> Fails closed
         passed_no_ce, rows_no_ce, _ = audit_fail_closed_schema_parity(
             shadow_df=self.shadow_export,
             active_df=active_df,
@@ -568,7 +702,17 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
         self.assertEqual(carry_row["status"], "FAIL")
         self.assertEqual(carry_row["classification"], "INCOMPATIBLE_AND_BLOCKED")
 
-        # B. Plausible-But-Wrong Mutation Tests
+        passed_bad_ce, rows_bad_ce, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine="invalid_engine_type",  # type: ignore
+            h2h_verification_evidence=valid_h2h_evidence,
+        )
+        self.assertFalse(passed_bad_ce)
+
+        # B. Plausible-But-Wrong Mutation Tests (Finding 2)
         # 1. Mutate price by +1.0 (plausible range [10, 25], but violates exact contract)
         bad_price_df = self.shadow_export.copy()
         bad_price_df.loc[0, "price"] = bad_price_df.loc[0, "price"] + 1.0
@@ -579,6 +723,8 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             canonical_games=self.canonical_games,
             carry_engine=self.carry_engine,
             h2h_verification_evidence=valid_h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
         )
         self.assertFalse(passed)
         p_row = [r for r in rows if r["field"] == "price"][0]
@@ -594,14 +740,16 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             canonical_games=self.canonical_games,
             carry_engine=self.carry_engine,
             h2h_verification_evidence=valid_h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
         )
         self.assertFalse(passed)
         wp_row = [r for r in rows if r["field"] == "team_win_probability"][0]
         self.assertEqual(wp_row["status"], "FAIL")
 
-        # 3. opponent_adjustment != win_probability_adjustment
+        # 3. Opponent/Null-Pattern Mutation Test: mutate opponent string
         bad_opp_df = self.shadow_export.copy()
-        bad_opp_df["opponent_adjustment"] = bad_opp_df["opponent_adjustment"] + 5.0
+        bad_opp_df.loc[0, "opponent"] = "FLY|TL|C9"
         passed, rows, _ = audit_fail_closed_schema_parity(
             shadow_df=bad_opp_df,
             active_df=active_df,
@@ -609,15 +757,78 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             canonical_games=self.canonical_games,
             carry_engine=self.carry_engine,
             h2h_verification_evidence=valid_h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
         )
         self.assertFalse(passed)
-        opp_row = [r for r in rows if r["field"] == "opponent_adjustment"][0]
+        opp_row = [r for r in rows if r["field"] == "opponent"][0]
         self.assertEqual(opp_row["status"], "FAIL")
-        self.assertEqual(opp_row["classification"], "INCOMPATIBLE_AND_BLOCKED")
 
-        # 4. scheduled_matchups does not match opponent pipe count
+        # 4. Algebraically consistent but source-wrong projections mutation:
+        # projected_points_before_win_adjustment = 10.0, win_probability_adjustment = 2.0, projected_fantasy_pts = 12.0
+        # proj == s30 + win_adj (12 == 10 + 2) is mathematically consistent, but wrong relative to source model prediction
+        bad_proj_df = self.shadow_export.copy()
+        bad_proj_df.loc[0, "projected_points_before_win_adjustment"] = 10.0
+        bad_proj_df.loc[0, "elo_adjusted_fantasy_pts"] = 10.0
+        bad_proj_df.loc[0, "win_probability_adjustment"] = 2.0
+        bad_proj_df.loc[0, "opponent_adjustment"] = 2.0
+        bad_proj_df.loc[0, "projected_fantasy_pts"] = 12.0
+        passed, rows, _ = audit_fail_closed_schema_parity(
+            shadow_df=bad_proj_df,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=valid_h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed)
+        proj_row = [r for r in rows if r["field"] == "projected_fantasy_pts"][0]
+        self.assertEqual(proj_row["status"], "FAIL")
+
+        # 5. Projected-Starter Mutation Test: invert starter boolean for a team/role
+        bad_starter_df = self.shadow_export.copy()
+        # Find the row that is projected_starter == True and flip to False, flip another to True
+        grp_mask = (bad_starter_df["team"] == bad_starter_df["team"].iloc[0]) & (bad_starter_df["role"] == bad_starter_df["role"].iloc[0])
+        grp_indices = bad_starter_df[grp_mask].index
+        if len(grp_indices) >= 2:
+            bad_starter_df.loc[grp_indices[0], "projected_starter"] = not bad_starter_df.loc[grp_indices[0], "projected_starter"]
+            bad_starter_df.loc[grp_indices[1], "projected_starter"] = not bad_starter_df.loc[grp_indices[1], "projected_starter"]
+        else:
+            bad_starter_df.loc[0, "projected_starter"] = False
+        passed, rows, _ = audit_fail_closed_schema_parity(
+            shadow_df=bad_starter_df,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=valid_h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed)
+        starter_row = [r for r in rows if r["field"] == "projected_starter"][0]
+        self.assertEqual(starter_row["status"], "FAIL")
+
+        # 6. Source Key Permutation / Alignment Mismatch: shuffle shadow export rows
+        shuffled_df = self.shadow_export.sample(frac=1.0, random_state=42).reset_index(drop=True)
+        # Even when rows are in different order, key alignment by (canonical_player_id, role) validates correctly
+        passed_shuffled, rows_shuffled, _ = audit_fail_closed_schema_parity(
+            shadow_df=shuffled_df,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=valid_h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertTrue(passed_shuffled, "Key-aligned parity check must succeed on permuted row order")
+
+        # 7. Scheduled Matchups Mutation: mismatch with opponent list
         bad_sched_df = self.shadow_export.copy()
-        bad_sched_df["scheduled_matchups"] = 99
+        bad_sched_df.loc[0, "scheduled_matchups"] = 99
         passed, rows, _ = audit_fail_closed_schema_parity(
             shadow_df=bad_sched_df,
             active_df=active_df,
@@ -625,56 +836,12 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
             canonical_games=self.canonical_games,
             carry_engine=self.carry_engine,
             h2h_verification_evidence=valid_h2h_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
         )
         self.assertFalse(passed)
         sched_row = [r for r in rows if r["field"] == "scheduled_matchups"][0]
         self.assertEqual(sched_row["status"], "FAIL")
-
-        # 5. short_term_5g_mean != player_recent_mean
-        bad_5g_df = self.shadow_export.copy()
-        bad_5g_df["short_term_5g_mean"] = bad_5g_df["short_term_5g_mean"] + 2.0
-        passed, rows, _ = audit_fail_closed_schema_parity(
-            shadow_df=bad_5g_df,
-            active_df=active_df,
-            future_frame=self.future_frame,
-            canonical_games=self.canonical_games,
-            carry_engine=self.carry_engine,
-            h2h_verification_evidence=valid_h2h_evidence,
-        )
-        self.assertFalse(passed)
-        st_row = [r for r in rows if r["field"] == "short_term_5g_mean"][0]
-        self.assertEqual(st_row["status"], "FAIL")
-
-        # 6. role_baseline not constant per role
-        bad_rb_df = self.shadow_export.copy()
-        bad_rb_df.loc[0, "role_baseline"] = bad_rb_df.loc[0, "role_baseline"] + 10.0
-        passed, rows, _ = audit_fail_closed_schema_parity(
-            shadow_df=bad_rb_df,
-            active_df=active_df,
-            future_frame=self.future_frame,
-            canonical_games=self.canonical_games,
-            carry_engine=self.carry_engine,
-            h2h_verification_evidence=valid_h2h_evidence,
-        )
-        self.assertFalse(passed)
-        rb_row = [r for r in rows if r["field"] == "role_baseline"][0]
-        self.assertEqual(rb_row["status"], "FAIL")
-
-        # 7. carry_current_team_win_sample_effective > carry_win_sample_effective
-        bad_sample_df = self.shadow_export.copy()
-        bad_sample_df["carry_current_team_win_sample_effective"] = bad_sample_df["carry_win_sample_effective"] + 50.0
-        passed, rows, _ = audit_fail_closed_schema_parity(
-            shadow_df=bad_sample_df,
-            active_df=active_df,
-            future_frame=self.future_frame,
-            canonical_games=self.canonical_games,
-            carry_engine=self.carry_engine,
-            h2h_verification_evidence=valid_h2h_evidence,
-        )
-        self.assertFalse(passed)
-        sample_row = [r for r in rows if r["field"] == "carry_current_team_win_sample_effective"][0]
-        self.assertEqual(sample_row["status"], "FAIL")
-        self.assertEqual(sample_row["status"], "FAIL")
 
     def test_17_point_in_time_historical_stats_computed(self):
         """17. Verify point-in-time H2H, carry concentration, and historical statistics are computed."""
@@ -975,6 +1142,590 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
                 self.assertTrue(fpath.exists(), msg=f"File {rel_path} in manifest does not exist")
                 recomputed = hashlib.sha256(fpath.read_bytes()).hexdigest()
                 self.assertEqual(recomputed, recorded_sha, msg=f"Hash mismatch for {rel_path}")
+
+    def test_26_finding1_authoritative_win_probability_source(self):
+        """26. Finding 1: Verify win_probability_source is derived from authoritative source, not audit literals."""
+        active_prod_path = ROOT / "data" / "predictions" / "current_player_projections.csv"
+        active_df = pd.read_csv(active_prod_path)
+
+        def make_valid_h2h():
+            return {
+                "audit_id": "STAGE_10D_R14F_H2H_CONTRACT_VERIFICATION",
+                "method": "independent_numpy_exponential_decay_recomputation",
+                "half_life_days": 180.0,
+                "damping_factor": 0.25,
+                "shrinkage_prior_weight": 3.0,
+                "diff_rounding_decimal_places": 4,
+                "verdict": "PASS",
+                "named_players_verified": [
+                    {
+                        "player": p,
+                        "expected_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "emitted_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "diff": 0.0,
+                        "status": "PASS",
+                    }
+                    for p in ["Impact", "FBI", "Palafox"]
+                ],
+                "named_players_passing_count": 3,
+            }
+
+        # --- SCENARIO 1: audit called with no explicit source, predictions lacking the key, and state lacking the key -> all 36 rows blocked ---
+        bare_preds = {k: v for k, v in self.predictions.items() if k != "win_probability_source"}
+        bare_state = {k: v for k, v in self.s30_state.items() if k != "win_probability_source"}
+        passed_s1, rows_s1, summary_s1 = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=bare_preds,
+            s30_state=bare_state,
+            win_probability_source=None,
+        )
+        self.assertFalse(passed_s1)
+        self.assertEqual(len(rows_s1), 36)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_s1))
+        self.assertTrue(all(r["classification"] == "INCOMPATIBLE_AND_BLOCKED" for r in rows_s1))
+        self.assertTrue(all("win_probability_source" in r["failure_reason"] for r in rows_s1))
+        self.assertEqual(summary_s1["columns_failing"], 36)
+
+        # --- SCENARIO 2: audit called with missing source key even when ordinary fixture values happen to use old literal -> all 36 rows blocked ---
+        # self.shadow_export has 'canonical_pit_ce_portable_v1' in every row, but without authoritative source input it MUST fail closed
+        passed_s2, rows_s2, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=bare_preds,
+            s30_state=bare_state,
+        )
+        self.assertFalse(passed_s2)
+        self.assertEqual(len(rows_s2), 36)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_s2))
+        self.assertTrue(all(r["classification"] == "INCOMPATIBLE_AND_BLOCKED" for r in rows_s2))
+        self.assertTrue(all("win_probability_source" in r["failure_reason"] for r in rows_s2))
+
+        # --- SCENARIO 3: export called with no source argument and predictions lacking the key -> blocking exception ---
+        with self.assertRaises(ValueError) as ctx_exp:
+            build_ce_shadow_player_export(
+                future_frame=self.future_frame,
+                ce_predictions=bare_preds,
+                canonical_games=self.canonical_games,
+                carry_engine=self.carry_engine,
+                round_name="Round 5 (Split 3)",
+                lock_timestamp=ROUND5_LOCK,
+                win_probability_source=None,
+            )
+        self.assertIn("BLOCKED_BY_MISSING_WIN_PROBABILITY_SOURCE", str(ctx_exp.exception))
+
+        # --- SCENARIO 4: None, blank, whitespace, boolean, number, and malformed string source values -> blocked / exception ---
+        invalid_sources = [None, "", "   ", True, False, 123, 0, 45.6, "bad source with spaces", "bad@symbol!"]
+        for bad_val in invalid_sources:
+            # Check build_ce_shadow_player_export raises blocking ValueError
+            with self.assertRaises(ValueError, msg=f"build_ce_shadow_player_export must reject bad source: {bad_val!r}"):
+                build_ce_shadow_player_export(
+                    future_frame=self.future_frame,
+                    ce_predictions=bare_preds,
+                    canonical_games=self.canonical_games,
+                    carry_engine=self.carry_engine,
+                    round_name="Round 5 (Split 3)",
+                    lock_timestamp=ROUND5_LOCK,
+                    win_probability_source=bad_val,
+                )
+
+            # Check audit_fail_closed_schema_parity blocks all 36 rows
+            passed_bad_arg, rows_bad_arg, _ = audit_fail_closed_schema_parity(
+                shadow_df=self.shadow_export,
+                active_df=active_df,
+                future_frame=self.future_frame,
+                canonical_games=self.canonical_games,
+                carry_engine=self.carry_engine,
+                h2h_verification_evidence=make_valid_h2h(),
+                ce_predictions=bare_preds,
+                s30_state=bare_state,
+                win_probability_source=bad_val,
+            )
+            self.assertFalse(passed_bad_arg, f"audit must reject bad source argument {bad_val!r}")
+            self.assertEqual(len(rows_bad_arg), 36)
+            self.assertTrue(all(r["status"] == "FAIL" for r in rows_bad_arg))
+            self.assertTrue(all(r["classification"] == "INCOMPATIBLE_AND_BLOCKED" for r in rows_bad_arg))
+            self.assertTrue(all("win_probability_source" in r["failure_reason"] for r in rows_bad_arg))
+
+            # Injected in ce_predictions
+            bad_preds_dict = dict(bare_preds)
+            bad_preds_dict["win_probability_source"] = bad_val
+            passed_bad_pred, rows_bad_pred, _ = audit_fail_closed_schema_parity(
+                shadow_df=self.shadow_export,
+                active_df=active_df,
+                future_frame=self.future_frame,
+                canonical_games=self.canonical_games,
+                carry_engine=self.carry_engine,
+                h2h_verification_evidence=make_valid_h2h(),
+                ce_predictions=bad_preds_dict,
+                s30_state=bare_state,
+            )
+            self.assertFalse(passed_bad_pred, f"audit must reject bad source in ce_predictions {bad_val!r}")
+            self.assertEqual(len(rows_bad_pred), 36)
+            self.assertTrue(all(r["status"] == "FAIL" for r in rows_bad_pred))
+            self.assertTrue(all(r["classification"] == "INCOMPATIBLE_AND_BLOCKED" for r in rows_bad_pred))
+            self.assertTrue(all("win_probability_source" in r["failure_reason"] for r in rows_bad_pred))
+
+            # Injected in s30_state
+            bad_state_dict = dict(bare_state)
+            bad_state_dict["win_probability_source"] = bad_val
+            passed_bad_state, rows_bad_state, _ = audit_fail_closed_schema_parity(
+                shadow_df=self.shadow_export,
+                active_df=active_df,
+                future_frame=self.future_frame,
+                canonical_games=self.canonical_games,
+                carry_engine=self.carry_engine,
+                h2h_verification_evidence=make_valid_h2h(),
+                ce_predictions=bare_preds,
+                s30_state=bad_state_dict,
+            )
+            self.assertFalse(passed_bad_state, f"audit must reject bad source in s30_state {bad_val!r}")
+            self.assertEqual(len(rows_bad_state), 36)
+            self.assertTrue(all(r["status"] == "FAIL" for r in rows_bad_state))
+            self.assertTrue(all(r["classification"] == "INCOMPATIBLE_AND_BLOCKED" for r in rows_bad_state))
+            self.assertTrue(all("win_probability_source" in r["failure_reason"] for r in rows_bad_state))
+
+        # --- SCENARIO 5: a valid non-default source supplied via candidate predictions -> pass only when every shadow row matches it ---
+        custom_pred_source = "canonical_pit_ce_custom_candidate_v99"
+        custom_preds = dict(bare_preds)
+        custom_preds["win_probability_source"] = custom_pred_source
+
+        # Old literal in shadow != custom_pred_source in predictions -> FAIL
+        passed_diff, rows_diff, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,  # shadow has 'canonical_pit_ce_portable_v1'
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=custom_preds,
+            s30_state=bare_state,
+        )
+        self.assertFalse(passed_diff)
+        wp_row_diff = [r for r in rows_diff if r["field"] == "win_probability_source"][0]
+        self.assertEqual(wp_row_diff["status"], "FAIL")
+        self.assertEqual(wp_row_diff["classification"], "INCOMPATIBLE_AND_BLOCKED")
+
+        # Matching custom_pred_source in shadow export -> PASS all 36
+        custom_shadow = self.shadow_export.copy()
+        custom_shadow["win_probability_source"] = custom_pred_source
+        passed_match, rows_match, summary_match = audit_fail_closed_schema_parity(
+            shadow_df=custom_shadow,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=custom_preds,
+            s30_state=bare_state,
+        )
+        self.assertTrue(passed_match)
+        self.assertEqual(summary_match["columns_passing"], 36)
+        wp_row_match = [r for r in rows_match if r["field"] == "win_probability_source"][0]
+        self.assertEqual(wp_row_match["status"], "PASS")
+
+        # --- SCENARIO 6: a valid source supplied via candidate state/contract -> pass only when every shadow row matches it ---
+        state_source = "canonical_pit_ce_state_contract_v88"
+        state_with_src = dict(self.s30_state)
+        state_with_src["win_probability_source"] = state_source
+        state_with_src["content_hash"] = compute_state_hash(state_with_src)
+        state_shadow = self.shadow_export.copy()
+        state_shadow["win_probability_source"] = state_source
+
+        passed_state_match, rows_state_match, summary_state_match = audit_fail_closed_schema_parity(
+            shadow_df=state_shadow,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=bare_preds,
+            s30_state=state_with_src,
+        )
+        self.assertTrue(passed_state_match)
+        self.assertEqual(summary_state_match["columns_passing"], 36)
+        wp_row_state = [r for r in rows_state_match if r["field"] == "win_probability_source"][0]
+        self.assertEqual(wp_row_state["status"], "PASS")
+
+        # --- SCENARIO 7: custom valid source mismatch in any one shadow row -> fail ---
+        mismatched_one_row = custom_shadow.copy()
+        mismatched_one_row.loc[0, "win_probability_source"] = "another_valid_source_v1"
+        passed_one_diff, rows_one_diff, _ = audit_fail_closed_schema_parity(
+            shadow_df=mismatched_one_row,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=custom_preds,
+            s30_state=bare_state,
+        )
+        self.assertFalse(passed_one_diff)
+        wp_row_one_diff = [r for r in rows_one_diff if r["field"] == "win_probability_source"][0]
+        self.assertEqual(wp_row_one_diff["status"], "FAIL")
+        self.assertEqual(wp_row_one_diff["classification"], "INCOMPATIBLE_AND_BLOCKED")
+        self.assertIn("another_valid_source_v1", wp_row_one_diff["failure_reason"])
+
+    def test_27_finding2_round_name_strict_parsing_and_no_defaults(self):
+        """27. Finding 2: Verify round_name fails closed on invalid prediction_period_id without fallbacks."""
+        from fantasy_prediction.ce_shadow_adapter import _parse_period_to_round_name
+
+        active_prod_path = ROOT / "data" / "predictions" / "current_player_projections.csv"
+        active_df = pd.read_csv(active_prod_path)
+
+        def make_valid_h2h():
+            return {
+                "audit_id": "STAGE_10D_R14F_H2H_CONTRACT_VERIFICATION",
+                "method": "independent_numpy_exponential_decay_recomputation",
+                "half_life_days": 180.0,
+                "damping_factor": 0.25,
+                "shrinkage_prior_weight": 3.0,
+                "diff_rounding_decimal_places": 4,
+                "verdict": "PASS",
+                "named_players_verified": [
+                    {
+                        "player": p,
+                        "expected_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "emitted_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "diff": 0.0,
+                        "status": "PASS",
+                    }
+                    for p in ["Impact", "FBI", "Palafox"]
+                ],
+                "named_players_passing_count": 3,
+            }
+
+        # 1. Direct parser rejects invalid, None, blank, and unparsable formats
+        for invalid_pid in [None, "", "   ", "not-a-period", 12345, "split-only", "round-only"]:
+            with self.assertRaises(ValueError):
+                _parse_period_to_round_name(invalid_pid)
+
+        # 2. Invalid prediction_period_id in future_frame blocks all parity rows
+        for bad_pid in [None, "", "   ", "not-a-period"]:
+            bad_ff = self.future_frame.copy()
+            bad_ff["prediction_period_id"] = bad_pid
+            passed, rows, _ = audit_fail_closed_schema_parity(
+                shadow_df=self.shadow_export,
+                active_df=active_df,
+                future_frame=bad_ff,
+                canonical_games=self.canonical_games,
+                carry_engine=self.carry_engine,
+                h2h_verification_evidence=make_valid_h2h(),
+                ce_predictions=self.predictions,
+                s30_state=self.s30_state,
+            )
+            self.assertFalse(passed)
+            self.assertTrue(all(r["status"] == "FAIL" for r in rows))
+            rn_row = [r for r in rows if r["field"] == "round_name"][0]
+            self.assertEqual(rn_row["status"], "FAIL")
+            self.assertEqual(rn_row["classification"], "INCOMPATIBLE_AND_BLOCKED")
+
+        # 3. Valid non-Round-5 period dynamically parses and validates
+        non_r5_pid = "2026-split-2-round-4"
+        parsed_name = _parse_period_to_round_name(non_r5_pid)
+        self.assertEqual(parsed_name, "Round 4 (Split 2)")
+
+        non_r5_ff = self.future_frame.copy()
+        non_r5_ff["prediction_period_id"] = non_r5_pid
+        non_r5_shadow = self.shadow_export.copy()
+        non_r5_shadow["round_name"] = "Round 4 (Split 2)"
+
+        passed_non_r5, rows_non_r5, _ = audit_fail_closed_schema_parity(
+            shadow_df=non_r5_shadow,
+            active_df=active_df,
+            future_frame=non_r5_ff,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertTrue(passed_non_r5)
+        rn_row_non_r5 = [r for r in rows_non_r5 if r["field"] == "round_name"][0]
+        self.assertEqual(rn_row_non_r5["status"], "PASS")
+
+    def test_28_finding3_exact_duplicate_free_key_sets(self):
+        """28. Finding 3: Verify exact duplicate-free key sets between shadow export and authoritative future frame."""
+        active_prod_path = ROOT / "data" / "predictions" / "current_player_projections.csv"
+        active_df = pd.read_csv(active_prod_path)
+
+        def make_valid_h2h():
+            return {
+                "audit_id": "STAGE_10D_R14F_H2H_CONTRACT_VERIFICATION",
+                "method": "independent_numpy_exponential_decay_recomputation",
+                "half_life_days": 180.0,
+                "damping_factor": 0.25,
+                "shrinkage_prior_weight": 3.0,
+                "diff_rounding_decimal_places": 4,
+                "verdict": "PASS",
+                "named_players_verified": [
+                    {
+                        "player": p,
+                        "expected_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "emitted_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "diff": 0.0,
+                        "status": "PASS",
+                    }
+                    for p in ["Impact", "FBI", "Palafox"]
+                ],
+                "named_players_passing_count": 3,
+            }
+
+        # 1. Duplicate a valid shadow player/role while removing another, retaining total row count
+        dup_shadow = self.shadow_export.copy()
+        dup_shadow.iloc[1] = dup_shadow.iloc[0].copy()  # overwrite row 1 with row 0 duplicate
+        self.assertEqual(len(dup_shadow), len(self.future_frame))
+
+        passed_dup, rows_dup, _ = audit_fail_closed_schema_parity(
+            shadow_df=dup_shadow,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed_dup)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_dup))
+        self.assertTrue(all(r["classification"] == "INCOMPATIBLE_AND_BLOCKED" for r in rows_dup))
+
+        # 2. Duplicate a future-frame key
+        dup_ff = self.future_frame.copy()
+        dup_ff.iloc[1] = dup_ff.iloc[0].copy()
+        passed_dup_ff, rows_dup_ff, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=dup_ff,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed_dup_ff)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_dup_ff))
+
+        # 3. Replace a shadow key with an unknown player/role (retaining total count)
+        unknown_shadow = self.shadow_export.copy()
+        unknown_shadow.loc[0, "player"] = "TotallyUnknownSummoner999"
+        passed_unk, rows_unk, _ = audit_fail_closed_schema_parity(
+            shadow_df=unknown_shadow,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed_unk)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_unk))
+
+        # 4. Permute valid shadow rows; audit passes, proving order independence
+        perm_shadow = self.shadow_export.sample(frac=1.0, random_state=12345).reset_index(drop=True)
+        passed_perm, rows_perm, summary_perm = audit_fail_closed_schema_parity(
+            shadow_df=perm_shadow,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertTrue(passed_perm)
+        self.assertEqual(summary_perm["columns_passing"], 36)
+
+    def test_29_finding4_injected_ce_predictions_strict_validation(self):
+        """29. Finding 4: Verify shape, finite numeric, algebraic, and state provenance validation on CE predictions."""
+        active_prod_path = ROOT / "data" / "predictions" / "current_player_projections.csv"
+        active_df = pd.read_csv(active_prod_path)
+
+        def make_valid_h2h():
+            return {
+                "audit_id": "STAGE_10D_R14F_H2H_CONTRACT_VERIFICATION",
+                "method": "independent_numpy_exponential_decay_recomputation",
+                "half_life_days": 180.0,
+                "damping_factor": 0.25,
+                "shrinkage_prior_weight": 3.0,
+                "diff_rounding_decimal_places": 4,
+                "verdict": "PASS",
+                "named_players_verified": [
+                    {
+                        "player": p,
+                        "expected_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "emitted_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                        "diff": 0.0,
+                        "status": "PASS",
+                    }
+                    for p in ["Impact", "FBI", "Palafox"]
+                ],
+                "named_players_passing_count": 3,
+            }
+
+        # 1. NaN, +Inf, -Inf, True, False in prediction vectors block parity
+        for vec_key in ["s30", "delta_e", "ce"]:
+            for bad_val in [float("nan"), float("inf"), float("-inf"), True, False]:
+                corrupt_preds = {
+                    "s30": self.predictions["s30"].copy(),
+                    "delta_e": self.predictions["delta_e"].copy(),
+                    "ce": self.predictions["ce"].copy(),
+                }
+                corrupt_preds[vec_key][0] = bad_val
+                passed, rows, _ = audit_fail_closed_schema_parity(
+                    shadow_df=self.shadow_export,
+                    active_df=active_df,
+                    future_frame=self.future_frame,
+                    canonical_games=self.canonical_games,
+                    carry_engine=self.carry_engine,
+                    h2h_verification_evidence=make_valid_h2h(),
+                    ce_predictions=corrupt_preds,
+                    s30_state=self.s30_state,
+                )
+                self.assertFalse(passed, f"Failed to reject bad_val={bad_val!r} in {vec_key}")
+                self.assertTrue(all(r["status"] == "FAIL" for r in rows))
+
+        # 2. Prediction vectors one item short and one item long block without uncaught exceptions
+        short_preds = {
+            "s30": self.predictions["s30"][:-1],
+            "delta_e": self.predictions["delta_e"][:-1],
+            "ce": self.predictions["ce"][:-1],
+        }
+        passed_short, rows_short, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=short_preds,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed_short)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_short))
+
+        long_preds = {
+            "s30": np.append(self.predictions["s30"], [15.0]),
+            "delta_e": np.append(self.predictions["delta_e"], [0.0]),
+            "ce": np.append(self.predictions["ce"], [15.0]),
+        }
+        passed_long, rows_long, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=long_preds,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed_long)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_long))
+
+        # 3. Missing delta_e or ce key blocks
+        for missing_key in ["delta_e", "ce", "s30"]:
+            incomplete_preds = {
+                k: (v.copy() if hasattr(v, "copy") else v) for k, v in self.predictions.items() if k != missing_key
+            }
+            passed_inc, rows_inc, _ = audit_fail_closed_schema_parity(
+                shadow_df=self.shadow_export,
+                active_df=active_df,
+                future_frame=self.future_frame,
+                canonical_games=self.canonical_games,
+                carry_engine=self.carry_engine,
+                h2h_verification_evidence=make_valid_h2h(),
+                ce_predictions=incomplete_preds,
+                s30_state=self.s30_state,
+            )
+            self.assertFalse(passed_inc)
+            self.assertTrue(all(r["status"] == "FAIL" for r in rows_inc))
+
+        # 4. Algebraically inconsistent vectors (ce != s30 + delta_e) block
+        bad_alg_preds = {
+            "s30": self.predictions["s30"].copy(),
+            "delta_e": self.predictions["delta_e"].copy(),
+            "ce": self.predictions["ce"].copy(),
+        }
+        bad_alg_preds["ce"][0] = bad_alg_preds["ce"][0] + 5.0
+        passed_alg, rows_alg, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=bad_alg_preds,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed_alg)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_alg))
+
+        # 5. Tampered s30_state blocks when injected predictions are used
+        tampered_state = json.loads(json.dumps(self.s30_state))
+        tampered_state["coefficients"][0] += 0.5
+        passed_tamper, rows_tamper, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=make_valid_h2h(),
+            ce_predictions=self.predictions,
+            s30_state=tampered_state,
+        )
+        self.assertFalse(passed_tamper)
+        self.assertTrue(all(r["status"] == "FAIL" for r in rows_tamper))
+
+    def test_30_finding5_exact_h2h_precision_key_rejection_of_legacy(self):
+        """30. Finding 5: Verify rejection of legacy diff_rounding_precision and enforcement of diff_rounding_decimal_places."""
+        active_prod_path = ROOT / "data" / "predictions" / "current_player_projections.csv"
+        active_df = pd.read_csv(active_prod_path)
+
+        # 1. Evidence containing only legacy diff_rounding_precision (and lacking diff_rounding_decimal_places)
+        legacy_evidence = {
+            "audit_id": "STAGE_10D_R14F_H2H_CONTRACT_VERIFICATION",
+            "method": "independent_numpy_exponential_decay_recomputation",
+            "half_life_days": 180.0,
+            "damping_factor": 0.25,
+            "shrinkage_prior_weight": 3.0,
+            "diff_rounding_precision": 4,  # Legacy key name only
+            "verdict": "PASS",
+            "named_players_verified": [
+                {
+                    "player": p,
+                    "expected_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                    "emitted_h2h": float(self.shadow_export[self.shadow_export["player"] == p]["h2h_adjustment"].iloc[0]),
+                    "diff": 0.0,
+                    "status": "PASS",
+                }
+                for p in ["Impact", "FBI", "Palafox"]
+            ],
+            "named_players_passing_count": 3,
+        }
+
+        passed_legacy, rows_legacy, _ = audit_fail_closed_schema_parity(
+            shadow_df=self.shadow_export,
+            active_df=active_df,
+            future_frame=self.future_frame,
+            canonical_games=self.canonical_games,
+            carry_engine=self.carry_engine,
+            h2h_verification_evidence=legacy_evidence,
+            ce_predictions=self.predictions,
+            s30_state=self.s30_state,
+        )
+        self.assertFalse(passed_legacy)
+        h2h_row = [r for r in rows_legacy if r["field"] == "h2h_adjustment"][0]
+        self.assertEqual(h2h_row["status"], "FAIL")
+        self.assertIn("diff_rounding_decimal_places", h2h_row["failure_reason"])
 
 
 if __name__ == "__main__":

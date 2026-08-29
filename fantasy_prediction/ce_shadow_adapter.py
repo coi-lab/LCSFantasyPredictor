@@ -1,21 +1,25 @@
 """CE Model Shadow Integration Adapter.
 
-Stage 10D-R14F Remediation-2: Implements the isolated shadow adapter for converting
+Stage 10D-R14F Remediation-6: Implements the isolated shadow adapter for converting
 target-free CE predictions into the exact production player projection schema
 without modifying active production configs, pointers, or live dashboard files.
 
 Enforces:
-1. Fail-closed semantic parity for all 36 production columns with explicit field-by-field audits.
-2. True point-in-time computation of Head-to-Head (H2H) adjustments from pre-lock games.
-3. True point-in-time computation of Carry Concentration profiles from pre-lock games.
-4. Strict pre-lock fallback hierarchy for historical deviation (no universal constants).
-5. Exact active production starter selection rule.
+1. Substantive fail-closed semantic parity for all 36 production columns strictly validated
+   against key-aligned authoritative inputs (future_frame, canonical_games, carry_engine,
+   h2h_verification_evidence, and CE model predictions).
+2. Elimination of all plausibility-only, literal-only, bounds-only, or active-export fallbacks.
+3. Explicit H2H verification evidence contract with declared rounding precision (decimal places / quantum),
+   strict numeric type validation (rejecting booleans), and inclusive 0.01 tolerance.
+4. Fail-closed return of INCOMPATIBLE_AND_BLOCKED parity status for any missing, malformed,
+   empty, or misaligned inputs without raising uncaught exceptions.
 """
 
 from __future__ import annotations
 
 import io
 import math
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -30,7 +34,13 @@ from fantasy_prediction.canonical_pit import (
     normalize_team,
 )
 from fantasy_prediction.carry_concentration import CarryProfileEngine
+from fantasy_prediction.ce_model import (
+    S30_V2_REFIT_20260817_STATE_PATH,
+    load_s30_state,
+    predict_ce,
+)
 from fantasy_prediction.player_baseline import canonical_team, recency_mean
+from fantasy_prediction.recovered_components import verify_sealed_state_integrity
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
@@ -83,6 +93,11 @@ ROLE_LOWER_MAP = {
 }
 
 
+def _is_finite_non_bool_number(val: Any) -> bool:
+    """Check if value is a valid finite numeric type and explicitly reject bool."""
+    return not isinstance(val, bool) and isinstance(val, (int, float, np.number)) and math.isfinite(float(val))
+
+
 def compute_historical_deviation_hierarchy(
     pre_lock_games: pd.DataFrame,
     player_id: str,
@@ -99,7 +114,7 @@ def compute_historical_deviation_hierarchy(
     Returns:
         (historical_deviation: float, hierarchy_level_used: str)
     """
-    if pre_lock_games is None or pre_lock_games.empty:
+    if pre_lock_games is None or not isinstance(pre_lock_games, pd.DataFrame) or pre_lock_games.empty:
         raise ValueError("BLOCKED_BY_MISSING_HISTORICAL_STATISTIC: pre_lock_games is None or empty")
 
     if "fantasy_points_game" not in pre_lock_games.columns:
@@ -186,11 +201,12 @@ def compute_player_point_in_time_h2h(
 
 def build_ce_shadow_player_export(
     future_frame: pd.DataFrame,
-    ce_predictions: Dict[str, np.ndarray],
+    ce_predictions: Dict[str, Any],
     canonical_games: Optional[pd.DataFrame] = None,
     carry_engine: Optional[CarryProfileEngine] = None,
-    round_name: str = "Round 5 (Split 3)",
-    lock_timestamp: str = "2026-08-22T20:00:00+00:00",
+    round_name: Optional[str] = None,
+    lock_timestamp: Optional[str] = None,
+    win_probability_source: Optional[str] = None,
 ) -> pd.DataFrame:
     """Transform target-free CE predictions into the exact production player projection schema.
 
@@ -201,13 +217,48 @@ def build_ce_shadow_player_export(
     - True point-in-time Carry Concentration profiles via CarryProfileEngine.
     - Exact active production starter selection rule.
     """
-    if canonical_games is None or canonical_games.empty:
+    if canonical_games is None or not isinstance(canonical_games, pd.DataFrame) or canonical_games.empty:
         raise ValueError("BLOCKED_BY_MISSING_HISTORICAL_STATISTIC: canonical_games is None or empty")
 
+    if future_frame is None or not isinstance(future_frame, pd.DataFrame) or future_frame.empty:
+        raise ValueError("BLOCKED_BY_MISSING_FUTURE_FRAME: future_frame is None or empty")
+
+    if lock_timestamp is None:
+        lock_timestamp = str(future_frame["lock_timestamp"].iloc[0])
     lock_ts = pd.to_datetime(lock_timestamp, utc=True)
     pre_games = canonical_games[canonical_games["date"] < lock_ts]
     if pre_games.empty:
         raise ValueError("BLOCKED_BY_MISSING_HISTORICAL_STATISTIC: No pre-lock games found before roster lock")
+
+    if round_name is None:
+        period_id = future_frame["prediction_period_id"].iloc[0]
+        round_name = _parse_period_to_round_name(period_id)
+
+    resolved_wp_source: Optional[str] = None
+    if win_probability_source is not None:
+        if not isinstance(win_probability_source, str) or isinstance(win_probability_source, bool) or not win_probability_source.strip():
+            raise ValueError(
+                f"BLOCKED_BY_INVALID_WIN_PROBABILITY_SOURCE: win_probability_source must be a non-blank string, got {win_probability_source!r}"
+            )
+        resolved_wp_source = win_probability_source.strip()
+    elif isinstance(ce_predictions, dict) and "win_probability_source" in ce_predictions:
+        cand_src = ce_predictions["win_probability_source"]
+        if not isinstance(cand_src, str) or isinstance(cand_src, bool) or not cand_src.strip():
+            raise ValueError(
+                f"BLOCKED_BY_INVALID_WIN_PROBABILITY_SOURCE: ce_predictions['win_probability_source'] must be a non-blank string, got {cand_src!r}"
+            )
+        resolved_wp_source = cand_src.strip()
+
+    if resolved_wp_source is None:
+        raise ValueError(
+            "BLOCKED_BY_MISSING_WIN_PROBABILITY_SOURCE: Neither win_probability_source argument nor ce_predictions contract supplied an authoritative source identifier"
+        )
+
+    if not re.match(r"^[a-zA-Z0-9_.-]+$", resolved_wp_source):
+        raise ValueError(
+            f"BLOCKED_BY_INVALID_WIN_PROBABILITY_SOURCE: Identifier {resolved_wp_source!r} does not match required pattern ^[a-zA-Z0-9_.-]+$"
+        )
+    win_probability_source = resolved_wp_source
 
     s30_preds = ce_predictions["s30"]
     delta_e = ce_predictions["delta_e"]
@@ -298,7 +349,7 @@ def build_ce_shadow_player_export(
             "projected_fantasy_pts": round(ce_val, 2),
             "projected_points_before_win_adjustment": round(s30_val, 2),
             "team_win_probability": round(team_win_prob, 4),
-            "win_probability_source": "canonical_pit_ce_portable_v1",
+            "win_probability_source": win_probability_source,
             "win_probability_adjustment": round(delta_e_val, 2),
             "player_recent_mean": round(p_recent_mean, 2),
             "short_term_5g_mean": round(short_5g, 2),
@@ -347,179 +398,179 @@ def build_ce_shadow_player_export(
 SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
     "round_name": {
         "production_meaning": "Official round and split identifier",
-        "ce_shadow_source": "Explicit round_name parameter from schedule contract",
+        "ce_shadow_source": "future_frame prediction_period_id strictly parsed as 'Round X (Split Y)' without fallbacks",
         "required_type": "string",
         "scoring_unit": "categorical_label",
         "nullable": False,
-        "validation_rule": "Non-empty string matching expected round identifier",
+        "validation_rule": "String matching round identity strictly parsed from authoritative future_frame prediction_period_id",
     },
     "roster_lock": {
         "production_meaning": "ISO 8601 UTC timestamp of official roster lock",
-        "ce_shadow_source": "Explicit lock_timestamp from schedule contract",
+        "ce_shadow_source": "future_frame lock_timestamp serialized as ISO 8601 UTC",
         "required_type": "string_iso8601",
         "scoring_unit": "utc_timestamp",
         "nullable": False,
-        "validation_rule": "Valid ISO 8601 UTC timestamp string",
+        "validation_rule": "Valid ISO 8601 UTC timestamp matching authoritative lock_timestamp",
     },
     "player": {
         "production_meaning": "Player summoner name matching official fantasy market",
-        "ce_shadow_source": "Canonical PIT player name normalized against market",
+        "ce_shadow_source": "future_frame source_player_name",
         "required_type": "string",
         "scoring_unit": "identifier",
         "nullable": False,
-        "validation_rule": "Non-empty string matching official summoner name",
+        "validation_rule": "Non-empty string matching authoritative future_frame source_player_name",
     },
     "role": {
         "production_meaning": "Canonical player position in lowercase",
-        "ce_shadow_source": "Canonical PIT role normalized to lowercase",
+        "ce_shadow_source": "future_frame role normalized to lowercase",
         "required_type": "string",
         "scoring_unit": "position_enum",
         "nullable": False,
-        "validation_rule": "Must be one of {'top', 'jgl', 'mid', 'bot', 'sup'}",
+        "validation_rule": "Must be one of {'top', 'jgl', 'mid', 'bot', 'sup'} matching authoritative future_frame role",
     },
     "team": {
         "production_meaning": "Canonical team name",
-        "ce_shadow_source": "Canonical PIT team name normalized to match data",
+        "ce_shadow_source": "future_frame canonical_team_name",
         "required_type": "string",
         "scoring_unit": "team_identifier",
         "nullable": False,
-        "validation_rule": "Non-empty string matching canonical team name",
+        "validation_rule": "Non-empty string matching authoritative future_frame canonical_team_name",
     },
     "opponent": {
         "production_meaning": "Pipe-separated list of scheduled opponents, or 'nan'",
-        "ce_shadow_source": "Canonical PIT scheduled matchup opponent names",
+        "ce_shadow_source": "future_frame scheduled_opponent_names joined by '|' or 'nan'",
         "required_type": "string",
         "scoring_unit": "pipe_separated_teams",
         "nullable": True,
-        "validation_rule": "String formatted with '|' delimiter or 'nan'",
+        "validation_rule": "Pipe-separated team names matching scheduled matchups from future_frame",
     },
     "price": {
         "production_meaning": "Official market price in fantasy gold",
-        "ce_shadow_source": "Market snapshot price column",
+        "ce_shadow_source": "future_frame market_price rounded to 1 decimal place",
         "required_type": "float",
         "scoring_unit": "fantasy_gold",
         "nullable": False,
-        "validation_rule": "Finite float >= 0.0",
+        "validation_rule": "Finite float >= 0.0 matching authoritative future_frame market_price",
     },
     "projected_fantasy_pts": {
         "production_meaning": "Expected fantasy points per game average (consumed by optimizer)",
-        "ce_shadow_source": "CE model prediction (S30 + delta_E)",
+        "ce_shadow_source": "CE model prediction (S30 + delta_E) from sealed candidate state",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float in reasonable per-game bounds [0.0, 50.0] with zero volume multipliers",
+        "validation_rule": "Finite float in [0.0, 50.0] matching authoritative predict_ce projection",
     },
     "projected_points_before_win_adjustment": {
         "production_meaning": "Base fantasy points per game before combat/win adjustment",
-        "ce_shadow_source": "S30 base Ridge regression prediction",
+        "ce_shadow_source": "S30 base Ridge regression prediction from sealed candidate state",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float in [0.0, 50.0]",
+        "validation_rule": "Finite float in [0.0, 50.0] matching authoritative S30 candidate prediction",
     },
     "team_win_probability": {
         "production_meaning": "Estimated team win probability for scheduled series",
-        "ce_shadow_source": "Canonical PIT team game win rate / pre-lock Elo win prob",
+        "ce_shadow_source": "future_frame team_game_win_rate rounded to 4 decimal places",
         "required_type": "float",
         "scoring_unit": "probability",
         "nullable": False,
-        "validation_rule": "Finite float in [0.0, 1.0]",
+        "validation_rule": "Finite float in [0.0, 1.0] matching authoritative future_frame team_game_win_rate",
     },
     "win_probability_source": {
         "production_meaning": "Model source identifier for win probability adjustment",
-        "ce_shadow_source": "Documented string identifier 'canonical_pit_ce_portable_v1'",
+        "ce_shadow_source": "Authoritative candidate model contract win_probability_source identifier",
         "required_type": "string",
         "scoring_unit": "model_identifier",
         "nullable": False,
-        "validation_rule": "Non-empty string",
+        "validation_rule": "Non-empty string matching authoritative candidate model contract win_probability_source",
     },
     "win_probability_adjustment": {
         "production_meaning": "Combat opportunity / win adjustment added to base",
-        "ce_shadow_source": "FE portable centered delta_E",
+        "ce_shadow_source": "FE portable centered delta_E from sealed candidate state",
         "required_type": "float",
         "scoring_unit": "fantasy_points_delta",
         "nullable": False,
-        "validation_rule": "Finite float",
+        "validation_rule": "Finite float matching authoritative FE delta_E prediction",
     },
     "player_recent_mean": {
         "production_meaning": "Weighted recent fantasy points mean",
-        "ce_shadow_source": "Canonical PIT recent_fantasy_mean_5",
+        "ce_shadow_source": "future_frame recent_fantasy_mean_5 rounded to 2 decimal places",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float >= 0.0",
+        "validation_rule": "Finite float >= 0.0 matching authoritative future_frame recent_fantasy_mean_5",
     },
     "short_term_5g_mean": {
         "production_meaning": "Rolling average fantasy points over last 5 pre-lock games",
-        "ce_shadow_source": "Canonical PIT recent_fantasy_mean_5",
+        "ce_shadow_source": "future_frame recent_fantasy_mean_5 rounded to 2 decimal places",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float >= 0.0",
+        "validation_rule": "Finite float >= 0.0 matching authoritative future_frame recent_fantasy_mean_5",
     },
     "role_baseline": {
         "production_meaning": "Historical fantasy points baseline for player's role",
-        "ce_shadow_source": "Canonical PIT role_baseline_fantasy_mean_100",
+        "ce_shadow_source": "future_frame role_baseline_fantasy_mean_100 rounded to 2 decimal places",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float >= 0.0",
+        "validation_rule": "Finite float >= 0.0 matching authoritative future_frame role_baseline_fantasy_mean_100",
     },
     "opponent_adjustment": {
         "production_meaning": "Adjustment reflecting opponent matchup strength",
-        "ce_shadow_source": "FE combat opportunity delta_E",
+        "ce_shadow_source": "FE combat opportunity delta_E from sealed candidate state",
         "required_type": "float",
         "scoring_unit": "fantasy_points_delta",
         "nullable": False,
-        "validation_rule": "Finite float",
+        "validation_rule": "Finite float matching authoritative FE delta_E prediction",
     },
     "h2h_adjustment": {
         "production_meaning": "Direct Head-to-Head adjustment against scheduled opponents",
-        "ce_shadow_source": "Point-in-time H2H calculation via compute_player_point_in_time_h2h",
+        "ce_shadow_source": "Point-in-time H2H calculation via compute_player_point_in_time_h2h verified against evidence",
         "required_type": "float",
         "scoring_unit": "fantasy_points_delta",
         "nullable": False,
-        "validation_rule": "Finite float",
+        "validation_rule": "Finite float matching PIT exponential-decay H2H adjustment and validated by evidence contract",
     },
     "historical_games": {
         "production_meaning": "Total count of pre-lock games played by player",
-        "ce_shadow_source": "Count of pre-lock games in canonical_games",
+        "ce_shadow_source": "Pre-lock game count for player in canonical_games",
         "required_type": "int",
         "scoring_unit": "game_count",
         "nullable": False,
-        "validation_rule": "Integer >= 0",
+        "validation_rule": "Integer >= 0 matching exact pre-lock games count in canonical_games",
     },
     "effective_recent_games": {
         "production_meaning": "Effective sample weight of recent games",
-        "ce_shadow_source": "Canonical PIT recent_games_count",
+        "ce_shadow_source": "future_frame recent_games_count rounded to 2 decimal places",
         "required_type": "float",
         "scoring_unit": "effective_sample_size",
         "nullable": False,
-        "validation_rule": "Finite float >= 0.0",
+        "validation_rule": "Finite float >= 0.0 matching authoritative future_frame recent_games_count",
     },
     "historical_deviation": {
         "production_meaning": "Standard deviation of historical game fantasy scores",
-        "ce_shadow_source": "compute_historical_deviation_hierarchy from pre-lock games",
+        "ce_shadow_source": "compute_historical_deviation_hierarchy from pre-lock canonical_games",
         "required_type": "float",
         "scoring_unit": "standard_deviation",
         "nullable": False,
-        "validation_rule": "Finite float > 0.0 derived from fallback hierarchy",
+        "validation_rule": "Finite float > 0.0 derived from 4-level pre-lock sample hierarchy",
     },
     "floor_pts": {
         "production_meaning": "Estimated lower bound per-game projection (proj - 1.5 * dev)",
-        "ce_shadow_source": "max(0.0, round(ce_val - 1.5 * hist_dev, 2))",
+        "ce_shadow_source": "max(0.0, round(proj - 1.5 * dev, 2)) from authoritative CE and deviation",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float >= 0.0",
+        "validation_rule": "Finite float >= 0.0 matching max(0.0, round(proj - 1.5 * dev, 2))",
     },
     "ceiling_pts": {
         "production_meaning": "Estimated upper bound per-game projection (proj + 1.5 * dev)",
-        "ce_shadow_source": "round(ce_val + 1.5 * hist_dev, 2)",
+        "ce_shadow_source": "round(proj + 1.5 * dev, 2) from authoritative CE and deviation",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float >= floor_pts",
+        "validation_rule": "Finite float >= floor_pts matching round(proj + 1.5 * dev, 2)",
     },
     "last_historical_game": {
         "production_meaning": "ISO 8601 timestamp of player's most recent pre-lock game",
@@ -527,23 +578,23 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "string_iso8601_or_empty",
         "scoring_unit": "utc_timestamp",
         "nullable": True,
-        "validation_rule": "Valid ISO timestamp string for played players or empty string",
+        "validation_rule": "Valid ISO timestamp string matching max pre-lock date in canonical_games or empty string",
     },
     "scheduled_matchups": {
         "production_meaning": "Count of scheduled series/matches in the round",
-        "ce_shadow_source": "Count of scheduled matchups in round contract",
+        "ce_shadow_source": "Count of scheduled opponents in future_frame",
         "required_type": "int",
         "scoring_unit": "matchup_count",
         "nullable": False,
-        "validation_rule": "Integer >= 1",
+        "validation_rule": "Integer >= 1 matching count of scheduled opponents in future_frame",
     },
     "elo_adjusted_fantasy_pts": {
         "production_meaning": "Pre-carry baseline projection",
-        "ce_shadow_source": "S30 base Ridge regression prediction",
+        "ce_shadow_source": "S30 base Ridge regression prediction from sealed candidate state",
         "required_type": "float",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": False,
-        "validation_rule": "Finite float in [0.0, 50.0]",
+        "validation_rule": "Finite float in [0.0, 50.0] matching authoritative S30 candidate prediction",
     },
     "carry_concentration_enabled": {
         "production_meaning": "Flag indicating carry concentration status",
@@ -551,7 +602,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "bool",
         "scoring_unit": "boolean_flag",
         "nullable": False,
-        "validation_rule": "Boolean True or False",
+        "validation_rule": "Boolean True matching active CarryProfileEngine",
     },
     "carry_score_if_win": {
         "production_meaning": "Expected fantasy score in win state",
@@ -559,7 +610,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": True,
-        "validation_rule": "Finite float >= 0.0 or NaN if unplayed",
+        "validation_rule": "Finite float >= 0.0 matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_score_if_loss": {
         "production_meaning": "Expected fantasy score in loss state",
@@ -567,7 +618,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "fantasy_points_per_game_average",
         "nullable": True,
-        "validation_rule": "Finite float >= 0.0 or NaN if unplayed",
+        "validation_rule": "Finite float >= 0.0 matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_win_uplift": {
         "production_meaning": "Difference between win and loss state score",
@@ -575,7 +626,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "fantasy_points_delta",
         "nullable": True,
-        "validation_rule": "Finite float or NaN if unplayed",
+        "validation_rule": "Finite float matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_win_fantasy_share": {
         "production_meaning": "Player's share of team fantasy points in wins",
@@ -583,7 +634,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "share_ratio",
         "nullable": True,
-        "validation_rule": "Finite float in [0.0, 1.0] or NaN",
+        "validation_rule": "Finite float in [0.0, 1.0] matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_win_sample_effective": {
         "production_meaning": "Effective sample size in win state",
@@ -591,7 +642,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "effective_sample_size",
         "nullable": True,
-        "validation_rule": "Finite float >= 0.0 or NaN",
+        "validation_rule": "Finite float >= 0.0 matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_loss_sample_effective": {
         "production_meaning": "Effective sample size in loss state",
@@ -599,7 +650,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "effective_sample_size",
         "nullable": True,
-        "validation_rule": "Finite float >= 0.0 or NaN",
+        "validation_rule": "Finite float >= 0.0 matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_current_team_win_sample_effective": {
         "production_meaning": "Effective sample size in wins with current team",
@@ -607,7 +658,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "effective_sample_size",
         "nullable": True,
-        "validation_rule": "Finite float >= 0.0 or NaN",
+        "validation_rule": "Finite float >= 0.0 matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_current_team_loss_sample_effective": {
         "production_meaning": "Effective sample size in losses with current team",
@@ -615,7 +666,7 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float_or_nan",
         "scoring_unit": "effective_sample_size",
         "nullable": True,
-        "validation_rule": "Finite float >= 0.0 or NaN",
+        "validation_rule": "Finite float >= 0.0 matching authoritative CarryProfileEngine profile or NaN",
     },
     "carry_adjustment_vs_elo": {
         "production_meaning": "Carry adjustment relative to base baseline",
@@ -623,15 +674,15 @@ SCHEMA_FIELD_SPECIFICATIONS: Dict[str, Dict[str, Any]] = {
         "required_type": "float",
         "scoring_unit": "fantasy_points_delta",
         "nullable": False,
-        "validation_rule": "Finite float",
+        "validation_rule": "Finite float matching authoritative win_prob * win_pts + (1-win_prob) * loss_pts - s30",
     },
     "projected_starter": {
         "production_meaning": "Projected starter flag for team/role",
-        "ce_shadow_source": "Sorted top candidate by [last_game_sort, historical_games]",
+        "ce_shadow_source": "Authoritative starter sorting rule: top candidate by [last_historical_game desc, historical_games desc]",
         "required_type": "bool",
         "scoring_unit": "boolean_flag",
         "nullable": False,
-        "validation_rule": "Boolean True/False, exactly 1 starter per team/role group with candidates",
+        "validation_rule": "Boolean True/False, exactly 1 starter per team/role group matching top candidate",
     },
 }
 
@@ -646,12 +697,13 @@ def validate_h2h_verification_evidence(
     Invariants:
     1. Must be a dict with exact audit_id, method, half_life_days=180.0, damping_factor=0.25,
        shrinkage_prior_weight=3.0, and verdict='PASS'.
-    2. Must contain named_players_verified list with >= 3 unique, non-blank player names.
-    3. For every entry: finite expected_h2h, finite emitted_h2h, finite nonnegative diff, status='PASS'.
-    4. emitted_h2h must match the shadow export row for the same player.
-    5. expected_h2h must match emitted_h2h within max_tolerance (0.01) inclusive.
-    6. diff must equal abs(expected_h2h - emitted_h2h) within rounding precision (1e-3).
-    7. declared named_players_passing_count must equal len(named_players_verified) and be >= 3.
+    2. Must declare diff rounding precision via explicit positive integer diff_rounding_decimal_places == 4 (reject booleans).
+    3. Must contain named_players_verified list with >= 3 unique, non-blank player names.
+    4. For every entry: finite numeric expected_h2h, emitted_h2h, and diff >= 0 (reject booleans), status='PASS'.
+    5. emitted_h2h must match the shadow export row for the same player within 1e-4.
+    6. expected_h2h must match emitted_h2h within max_tolerance (0.01) inclusive.
+    7. declared diff must equal abs(expected_h2h - emitted_h2h) rounded to declared decimal places (exact equality).
+    8. declared named_players_passing_count must equal len(named_players_verified) and be >= 3.
     """
     if not isinstance(evidence, dict):
         return False, "H2H verification evidence must be a valid dictionary"
@@ -660,14 +712,26 @@ def validate_h2h_verification_evidence(
         return False, f"H2H evidence audit_id invalid: {evidence.get('audit_id')}"
     if evidence.get("method") != "independent_numpy_exponential_decay_recomputation":
         return False, f"H2H evidence method invalid: {evidence.get('method')}"
-    if evidence.get("half_life_days") != 180.0:
-        return False, f"H2H evidence half_life_days invalid: {evidence.get('half_life_days')}"
-    if evidence.get("damping_factor") != 0.25:
-        return False, f"H2H evidence damping_factor invalid: {evidence.get('damping_factor')}"
-    if evidence.get("shrinkage_prior_weight") != 3.0:
-        return False, f"H2H evidence shrinkage_prior_weight invalid: {evidence.get('shrinkage_prior_weight')}"
+
+    for k, exp_val in [
+        ("half_life_days", 180.0),
+        ("damping_factor", 0.25),
+        ("shrinkage_prior_weight", 3.0),
+    ]:
+        v = evidence.get(k)
+        if not _is_finite_non_bool_number(v) or abs(float(v) - exp_val) > 1e-9:
+            return False, f"H2H evidence {k} invalid or boolean/non-numeric: {v} (expected {exp_val})"
+
     if evidence.get("verdict") != "PASS":
         return False, f"H2H evidence verdict is not PASS: {evidence.get('verdict')}"
+
+    # Declared diff rounding precision contract
+    if "diff_rounding_decimal_places" not in evidence:
+        return False, "H2H evidence missing required field 'diff_rounding_decimal_places'"
+    precision_val = evidence.get("diff_rounding_decimal_places")
+    if not _is_finite_non_bool_number(precision_val) or int(precision_val) != 4 or float(precision_val) != 4.0:
+        return False, f"H2H evidence missing or unsupported diff_rounding_decimal_places: {precision_val} (must be exact integer 4)"
+    rounding_decimals = 4
 
     verified_list = evidence.get("named_players_verified")
     if not isinstance(verified_list, list) or len(verified_list) < 3:
@@ -689,7 +753,7 @@ def validate_h2h_verification_evidence(
             return False, f"H2H evidence contains duplicate player name: '{pname}'"
         seen_names.add(norm_name)
 
-        p_rows = shadow_parsed[shadow_parsed["player"].str.casefold().eq(norm_name)]
+        p_rows = shadow_parsed[shadow_parsed["player"].astype(str).str.casefold().eq(norm_name)]
         if p_rows.empty:
             return False, f"H2H evidence player '{pname}' not found in shadow export"
 
@@ -698,12 +762,12 @@ def validate_h2h_verification_evidence(
         diff_val = entry.get("diff")
         status_val = entry.get("status")
 
-        if exp_h2h is None or not isinstance(exp_h2h, (int, float)) or not np.isfinite(exp_h2h):
-            return False, f"H2H evidence player '{pname}' has non-finite or missing expected_h2h: {exp_h2h}"
-        if emit_h2h is None or not isinstance(emit_h2h, (int, float)) or not np.isfinite(emit_h2h):
-            return False, f"H2H evidence player '{pname}' has non-finite or missing emitted_h2h: {emit_h2h}"
-        if diff_val is None or not isinstance(diff_val, (int, float)) or not np.isfinite(diff_val) or diff_val < 0.0:
-            return False, f"H2H evidence player '{pname}' has invalid diff: {diff_val}"
+        if not _is_finite_non_bool_number(exp_h2h):
+            return False, f"H2H evidence player '{pname}' has boolean, non-finite, or missing expected_h2h: {exp_h2h}"
+        if not _is_finite_non_bool_number(emit_h2h):
+            return False, f"H2H evidence player '{pname}' has boolean, non-finite, or missing emitted_h2h: {emit_h2h}"
+        if not _is_finite_non_bool_number(diff_val) or float(diff_val) < 0.0:
+            return False, f"H2H evidence player '{pname}' has invalid, boolean, or negative diff: {diff_val}"
         if status_val != "PASS":
             return False, f"H2H evidence player '{pname}' status is '{status_val}' (must be PASS)"
 
@@ -712,19 +776,47 @@ def validate_h2h_verification_evidence(
             return False, f"H2H evidence player '{pname}' declared emitted {emit_h2h} != shadow row {shadow_emitted}"
 
         actual_diff = abs(float(exp_h2h) - float(emit_h2h))
-        if abs(float(diff_val) - actual_diff) > 1e-3:
-            return False, f"H2H evidence player '{pname}' declared diff {diff_val} inconsistent with abs(expected - emitted)={actual_diff}"
+        expected_rounded_diff = round(actual_diff, rounding_decimals)
+        if abs(float(diff_val) - expected_rounded_diff) > 1e-9:
+            return False, f"H2H evidence player '{pname}' declared diff {diff_val} inconsistent with actual diff {actual_diff:.6f} at declared {rounding_decimals} decimal places"
 
-        if actual_diff > max_tolerance + 1e-9:
+        if actual_diff > max_tolerance + 1e-9 or float(diff_val) > max_tolerance + 1e-9:
             return False, f"H2H evidence player '{pname}' mismatch {actual_diff:.4f} exceeds tolerance {max_tolerance}"
 
         valid_passing_count += 1
 
     declared_count = evidence.get("named_players_passing_count")
-    if declared_count != valid_passing_count:
+    if not _is_finite_non_bool_number(declared_count) or int(declared_count) != valid_passing_count:
         return False, f"H2H evidence declared passing count ({declared_count}) does not match verified valid entries ({valid_passing_count})"
 
     return True, "Valid H2H contract verification evidence"
+
+
+def _parse_period_to_round_name(period_id: Any) -> str:
+    """Parse a prediction period id like '2026-split-3-round-5' into official round name 'Round 5 (Split 3)'.
+
+    Fails closed with ValueError if input is invalid, null, non-string, blank, or unparsable.
+    """
+    if not isinstance(period_id, str) or not period_id.strip():
+        raise ValueError(
+            f"BLOCKED_BY_INVALID_PREDICTION_PERIOD_ID: prediction_period_id must be non-blank string, got {period_id!r}"
+        )
+    m = re.search(r"split-(\d+)-round-(\d+)", period_id.strip(), re.IGNORECASE)
+    if not m:
+        raise ValueError(
+            f"BLOCKED_BY_UNPARSABLE_PREDICTION_PERIOD_ID: unable to parse split/round from '{period_id}'"
+        )
+    split_num, round_num = m.group(1), m.group(2)
+    return f"Round {round_num} (Split {split_num})"
+
+
+def _canonical_player_key(player_val: Any) -> str:
+    """Normalize a raw player name or canonical player ID string into canonical lowercase ID."""
+    raw = str(player_val or "").strip()
+    if raw.lower().startswith("player:"):
+        raw = raw[7:].strip()
+    canon_id, _ = normalize_player(raw)
+    return canon_id.casefold()
 
 
 def audit_fail_closed_schema_parity(
@@ -734,6 +826,9 @@ def audit_fail_closed_schema_parity(
     canonical_games: Optional[pd.DataFrame] = None,
     carry_engine: Optional[CarryProfileEngine] = None,
     h2h_verification_evidence: Optional[Dict[str, Any]] = None,
+    ce_predictions: Optional[Dict[str, Any]] = None,
+    s30_state: Optional[Dict[str, Any]] = None,
+    win_probability_source: Optional[str] = None,
 ) -> Tuple[bool, List[Dict[str, Any]], Dict[str, Any]]:
     """Strictly audit shadow export against active production player projections.
 
@@ -741,30 +836,293 @@ def audit_fail_closed_schema_parity(
     1. Exact column count and column ordering (36 columns).
     2. Compatible serialized CSV dtypes.
     3. Mandatory presence of authoritative inputs: future_frame, canonical_games, carry_engine, and h2h_verification_evidence.
-    4. Exact deterministic semantic and unit validation for every single column without any plausibility, mean, or range-only fallbacks.
-    5. Rejection of unmodeled fields, unsupported universal fallbacks, or missing/mismatched contract verifications.
+    4. Exact deterministic semantic and unit validation for every single column strictly derived from key-aligned authoritative inputs.
+    5. Zero plausibility-only, bounds-only, mean-only, or fixed-literal fallbacks.
+    6. Complete fail-closed behavior returning explicit INCOMPATIBLE_AND_BLOCKED parity rows for any missing, malformed, empty, or misaligned inputs.
 
     Returns:
         (is_passing: bool, parity_rows: list[dict], summary_report: dict)
     """
     # 1. Exact Column Ordering
-    cols_shadow = list(shadow_df.columns)
-    cols_active = list(active_df.columns)
+    cols_shadow = list(shadow_df.columns) if (isinstance(shadow_df, pd.DataFrame) and not shadow_df.empty) else []
+    cols_active = list(active_df.columns) if (isinstance(active_df, pd.DataFrame) and not active_df.empty) else []
     order_match = (cols_shadow == cols_active) and (cols_shadow == PRODUCTION_PLAYER_SCHEMA_COLUMNS)
 
-    # 2. Serialized CSV Dtype Compatibility
-    buf_shadow = io.StringIO()
-    shadow_df.to_csv(buf_shadow, index=False)
-    buf_shadow.seek(0)
-    shadow_parsed = pd.read_csv(buf_shadow)
+    # 2. Input validation & fail-closed structural pre-checks
+    input_errors: Dict[str, str] = {}
 
-    buf_active = io.StringIO()
-    active_df.to_csv(buf_active, index=False)
-    buf_active.seek(0)
-    active_parsed = pd.read_csv(buf_active)
+    if shadow_df is None or not isinstance(shadow_df, pd.DataFrame) or shadow_df.empty:
+        input_errors["shadow_df"] = "Missing or empty shadow_df input"
+
+    if active_df is None or not isinstance(active_df, pd.DataFrame) or active_df.empty:
+        input_errors["active_df"] = "Missing or empty active_df input"
+
+    req_ff_cols = {
+        "canonical_player_id",
+        "source_player_name",
+        "role",
+        "canonical_team_name",
+        "lock_timestamp",
+        "scheduled_opponent_names",
+        "market_price",
+        "recent_fantasy_mean_5",
+        "role_baseline_fantasy_mean_100",
+        "team_game_win_rate",
+        "recent_games_count",
+        "prediction_period_id",
+    }
+    if future_frame is None or not isinstance(future_frame, pd.DataFrame) or future_frame.empty:
+        input_errors["future_frame"] = "Missing or empty authoritative future_frame input"
+    elif not req_ff_cols.issubset(set(future_frame.columns)):
+        missing_ff = req_ff_cols - set(future_frame.columns)
+        input_errors["future_frame"] = f"Authoritative future_frame missing required columns: {missing_ff}"
+
+    req_cg_cols = {"canonical_player_id", "date", "fantasy_points_game", "role"}
+    if canonical_games is None or not isinstance(canonical_games, pd.DataFrame) or canonical_games.empty:
+        input_errors["canonical_games"] = "Missing or empty authoritative canonical_games input"
+    elif not req_cg_cols.issubset(set(canonical_games.columns)):
+        missing_cg = req_cg_cols - set(canonical_games.columns)
+        input_errors["canonical_games"] = f"Authoritative canonical_games missing required columns: {missing_cg}"
+
+    if carry_engine is None or not isinstance(carry_engine, CarryProfileEngine):
+        input_errors["carry_engine"] = "Missing or invalid authoritative carry_engine input"
+
+    if h2h_verification_evidence is None or not isinstance(h2h_verification_evidence, dict):
+        input_errors["h2h_verification_evidence"] = "Missing or invalid authoritative h2h_verification_evidence input"
+
+    # Validate prediction_period_id format on future_frame (Finding 2)
+    if "future_frame" not in input_errors and future_frame is not None:
+        try:
+            for pid in future_frame["prediction_period_id"]:
+                _parse_period_to_round_name(pid)
+        except Exception as e:
+            input_errors["prediction_period_id"] = str(e)
+
+    # Resolve and validate authoritative win_probability_source (Fail-closed provenance)
+    auth_wp_source: Optional[str] = None
+    if win_probability_source is not None:
+        if not isinstance(win_probability_source, str) or isinstance(win_probability_source, bool) or not win_probability_source.strip():
+            input_errors["win_probability_source"] = f"Invalid win_probability_source argument (must be non-blank string): {win_probability_source!r}"
+        else:
+            cand_src = win_probability_source.strip()
+            if re.match(r"^[a-zA-Z0-9_.-]+$", cand_src):
+                auth_wp_source = cand_src
+            else:
+                input_errors["win_probability_source"] = f"Malformed win_probability_source argument: {win_probability_source!r}"
+    elif ce_predictions is not None and isinstance(ce_predictions, dict) and "win_probability_source" in ce_predictions:
+        cand_src = ce_predictions["win_probability_source"]
+        if not isinstance(cand_src, str) or isinstance(cand_src, bool) or not cand_src.strip():
+            input_errors["win_probability_source"] = f"Invalid win_probability_source in ce_predictions (must be non-blank string): {cand_src!r}"
+        else:
+            cand_src_clean = cand_src.strip()
+            if re.match(r"^[a-zA-Z0-9_.-]+$", cand_src_clean):
+                auth_wp_source = cand_src_clean
+            else:
+                input_errors["win_probability_source"] = f"Malformed win_probability_source in ce_predictions: {cand_src!r}"
+    elif s30_state is not None and isinstance(s30_state, dict) and "win_probability_source" in s30_state:
+        cand_src = s30_state["win_probability_source"]
+        if not isinstance(cand_src, str) or isinstance(cand_src, bool) or not cand_src.strip():
+            input_errors["win_probability_source"] = f"Invalid win_probability_source in s30_state (must be non-blank string): {cand_src!r}"
+        else:
+            cand_src_clean = cand_src.strip()
+            if re.match(r"^[a-zA-Z0-9_.-]+$", cand_src_clean):
+                auth_wp_source = cand_src_clean
+            else:
+                input_errors["win_probability_source"] = f"Malformed win_probability_source in s30_state: {cand_src!r}"
+    else:
+        input_errors["win_probability_source"] = "Missing authoritative win_probability_source identifier from all inputs (argument, ce_predictions, s30_state)"
+
+    # Serialized CSV Dtype Compatibility
+    if shadow_df is not None and isinstance(shadow_df, pd.DataFrame) and not shadow_df.empty:
+        buf_shadow = io.StringIO()
+        shadow_df.to_csv(buf_shadow, index=False)
+        buf_shadow.seek(0)
+        shadow_parsed = pd.read_csv(buf_shadow)
+    else:
+        shadow_parsed = pd.DataFrame()
+
+    if active_df is not None and isinstance(active_df, pd.DataFrame) and not active_df.empty:
+        buf_active = io.StringIO()
+        active_df.to_csv(buf_active, index=False)
+        buf_active.seek(0)
+        active_parsed = pd.read_csv(buf_active)
+    else:
+        active_parsed = pd.DataFrame()
+
+    # Precompute authoritative model predictions and validate vectors (Finding 4)
+    auth_s30_by_key: Dict[Tuple[str, str], float] = {}
+    auth_delta_e_by_key: Dict[Tuple[str, str], float] = {}
+    auth_ce_by_key: Dict[Tuple[str, str], float] = {}
+    auth_ff_row_by_key: Dict[Tuple[str, str], pd.Series] = {}
+    lock_ts: Optional[pd.Timestamp] = None
+    pre_games: Optional[pd.DataFrame] = None
+    auth_starters_by_group: Dict[Tuple[str, str], str] = {}
+
+    if "future_frame" not in input_errors and "canonical_games" not in input_errors and future_frame is not None and canonical_games is not None:
+        try:
+            lock_str = str(future_frame["lock_timestamp"].iloc[0])
+            lock_ts = pd.to_datetime(lock_str, utc=True)
+            pre_games = canonical_games[canonical_games["date"] < lock_ts]
+
+            # Sealed-state provenance verification (Finding 4)
+            if s30_state is not None:
+                if not isinstance(s30_state, dict) or not verify_sealed_state_integrity(s30_state):
+                    input_errors["s30_state"] = "Supplied s30_state failed sealed-state integrity verification"
+                loaded_state = s30_state
+            else:
+                try:
+                    loaded_state = load_s30_state(S30_V2_REFIT_20260817_STATE_PATH, verify_integrity=True)
+                except Exception as e:
+                    input_errors["s30_state"] = f"Failed to load verified sealed s30_state: {str(e)}"
+                    loaded_state = None
+
+            # Handle CE predictions (injected or derived) with strict validation
+            s30_arr = None
+            delta_e_arr = None
+            ce_arr = None
+
+            if ce_predictions is not None:
+                if not isinstance(ce_predictions, dict):
+                    input_errors["ce_predictions"] = "Injected ce_predictions must be a dictionary"
+                else:
+                    req_pred_keys = {"s30", "delta_e", "ce"}
+                    if not req_pred_keys.issubset(set(ce_predictions.keys())):
+                        input_errors["ce_predictions"] = f"Injected ce_predictions missing required keys: {req_pred_keys - set(ce_predictions.keys())}"
+                    else:
+                        s30_arr = ce_predictions["s30"]
+                        delta_e_arr = ce_predictions["delta_e"]
+                        ce_arr = ce_predictions["ce"]
+            else:
+                if "s30_state" not in input_errors and loaded_state is not None:
+                    preds = predict_ce(
+                        frame=future_frame,
+                        canonical_games=canonical_games,
+                        cutoff_timestamp=lock_str,
+                        s30_state=loaded_state,
+                    )
+                    s30_arr = preds["s30"]
+                    delta_e_arr = preds["delta_e"]
+                    ce_arr = preds["ce"]
+
+            # Validate prediction vectors (shape, finite, non-bool, algebraic identity) (Finding 4)
+            if "ce_predictions" not in input_errors and "s30_state" not in input_errors and s30_arr is not None:
+                n_expected = len(future_frame)
+                for vec_name, vec in [("s30", s30_arr), ("delta_e", delta_e_arr), ("ce", ce_arr)]:
+                    if not hasattr(vec, "__len__") or (hasattr(vec, "ndim") and getattr(vec, "ndim") != 1) or len(vec) != n_expected:
+                        actual_len = len(vec) if hasattr(vec, "__len__") else "non-sequence"
+                        input_errors["ce_predictions_shape"] = f"Prediction vector '{vec_name}' shape invalid (length {actual_len} != expected {n_expected})"
+                        break
+                    for idx, val in enumerate(vec):
+                        if not _is_finite_non_bool_number(val):
+                            input_errors["ce_predictions_numeric"] = f"Prediction vector '{vec_name}'[{idx}] has non-finite, boolean, or invalid numeric value: {val!r}"
+                            break
+                    if "ce_predictions_shape" in input_errors or "ce_predictions_numeric" in input_errors:
+                        break
+
+                # Arithmetic check: ce == s30 + delta_e (tolerance 1e-6)
+                if "ce_predictions_shape" not in input_errors and "ce_predictions_numeric" not in input_errors:
+                    for idx in range(n_expected):
+                        diff_ce = abs(float(ce_arr[idx]) - (float(s30_arr[idx]) + float(delta_e_arr[idx])))
+                        if diff_ce > 1e-6:
+                            input_errors["ce_arithmetic"] = f"CE prediction vector violates algebraic identity ce == s30 + delta_e at index {idx} (diff={diff_ce:.8f} > 1e-6)"
+                            break
+
+            # Exact Duplicate-Free Key Sets Validation on future_frame (Finding 3)
+            ff_keys: List[Tuple[str, str]] = []
+            for idx, (_, ff_row) in enumerate(future_frame.iterrows()):
+                pid_val = ff_row.get("canonical_player_id")
+                role_val = ff_row.get("role")
+                if pd.isna(pid_val) or not str(pid_val).strip():
+                    input_errors["future_frame_keys"] = f"Authoritative future_frame row {idx} has blank or missing canonical_player_id"
+                    break
+                if pd.isna(role_val) or not str(role_val).strip():
+                    input_errors["future_frame_keys"] = f"Authoritative future_frame row {idx} has blank or missing role"
+                    break
+                canon_pid = _canonical_player_key(pid_val)
+                canon_role = normalize_role(str(role_val)).lower()
+                if canon_role not in {"top", "jgl", "mid", "bot", "sup"}:
+                    input_errors["future_frame_keys"] = f"Authoritative future_frame row {idx} has invalid role: {role_val!r}"
+                    break
+                k = (canon_pid, canon_role)
+                if k in auth_ff_row_by_key:
+                    input_errors["future_frame_keys"] = f"Duplicate key in authoritative future_frame: {k}"
+                    break
+                ff_keys.append(k)
+                auth_ff_row_by_key[k] = ff_row
+                if s30_arr is not None and "ce_predictions_shape" not in input_errors and "ce_predictions_numeric" not in input_errors:
+                    auth_s30_by_key[k] = float(s30_arr[idx])
+                    auth_delta_e_by_key[k] = float(delta_e_arr[idx])
+                    auth_ce_by_key[k] = float(ce_arr[idx])
+
+            if "future_frame_keys" not in input_errors:
+                if len(ff_keys) != len(set(ff_keys)):
+                    input_errors["future_frame_keys"] = f"Duplicate keys in future_frame: count={len(ff_keys)}, unique={len(set(ff_keys))}"
+
+            # Exact Duplicate-Free Key Sets Validation on shadow_parsed (Finding 3)
+            if shadow_parsed is not None and not shadow_parsed.empty:
+                shadow_keys: List[Tuple[str, str]] = []
+                for idx, (_, s_row) in enumerate(shadow_parsed.iterrows()):
+                    pname_val = s_row.get("player")
+                    role_val = s_row.get("role")
+                    if pd.isna(pname_val) or not str(pname_val).strip():
+                        input_errors["shadow_keys"] = f"Shadow export row {idx} has blank or missing player name"
+                        break
+                    if pd.isna(role_val) or not str(role_val).strip():
+                        input_errors["shadow_keys"] = f"Shadow export row {idx} has blank or missing role"
+                        break
+                    canon_pid = _canonical_player_key(pname_val)
+                    canon_role = normalize_role(str(role_val)).lower()
+                    if canon_role not in {"top", "jgl", "mid", "bot", "sup"}:
+                        input_errors["shadow_keys"] = f"Shadow export row {idx} has invalid role: {role_val!r}"
+                        break
+                    k = (canon_pid, canon_role)
+                    shadow_keys.append(k)
+
+                if "shadow_keys" not in input_errors:
+                    if len(shadow_keys) != len(set(shadow_keys)):
+                        input_errors["shadow_keys"] = f"Duplicate keys in shadow export: count={len(shadow_keys)}, unique={len(set(shadow_keys))}"
+
+                if "future_frame_keys" not in input_errors and "shadow_keys" not in input_errors:
+                    set_ff = set(ff_keys)
+                    set_shadow = set(shadow_keys)
+                    if set_ff != set_shadow or len(ff_keys) != len(shadow_keys):
+                        missing_in_shadow = set_ff - set_shadow
+                        extra_in_shadow = set_shadow - set_ff
+                        input_errors["key_set_mismatch"] = (
+                            f"Exact key set mismatch: missing_in_shadow={missing_in_shadow}, "
+                            f"extra_in_shadow={extra_in_shadow}, shadow_count={len(shadow_keys)}, ff_count={len(ff_keys)}"
+                        )
+
+            # Precompute authoritative starter selections from pre-lock games
+            if "future_frame_keys" not in input_errors:
+                cand_rows = []
+                for k, ff_row in auth_ff_row_by_key.items():
+                    pid = str(ff_row["canonical_player_id"])
+                    p_hist = pre_games[pre_games["canonical_player_id"].eq(pid)]
+                    h_games = int(len(p_hist))
+                    max_dt = p_hist["date"].max() if h_games > 0 else pd.NaT
+                    cand_rows.append({
+                        "key": k,
+                        "player": str(ff_row["source_player_name"]),
+                        "team": str(ff_row["canonical_team_name"]),
+                        "role": normalize_role(str(ff_row["role"])).lower(),
+                        "last_historical_game_dt": max_dt,
+                        "historical_games": h_games,
+                    })
+                cand_df = pd.DataFrame(cand_rows)
+                for (t_name, r_name), grp in cand_df.groupby(["team", "role"]):
+                    sorted_grp = grp.sort_values(
+                        ["last_historical_game_dt", "historical_games"],
+                        ascending=False,
+                        na_position="last",
+                    )
+                    top_player = str(sorted_grp.iloc[0]["player"]).strip().casefold()
+                    auth_starters_by_group[(t_name.strip().casefold(), r_name.strip().casefold())] = top_player
+        except Exception as e:
+            input_errors["authoritative_derivation"] = f"Failed to derive authoritative context: {str(e)}"
 
     parity_rows: List[Dict[str, Any]] = []
-    all_passed = order_match
+    all_passed = order_match and (len(input_errors) == 0)
 
     for col in PRODUCTION_PLAYER_SCHEMA_COLUMNS:
         shadow_has = col in shadow_parsed.columns
@@ -803,482 +1161,327 @@ def audit_fail_closed_schema_parity(
         else:
             dtype_match = False
 
-        # Specific Deterministic Semantic and Unit Validations per Column (No Plausibility Fallbacks)
+        # Fail-closed check if structural inputs are missing
+        if input_errors:
+            reasons = "; ".join(f"{k}: {v}" for k, v in input_errors.items())
+            parity_rows.append({
+                "field": col,
+                "production_meaning": spec.get("production_meaning", "Unknown"),
+                "ce_shadow_source": spec.get("ce_shadow_source", "None"),
+                "active_required": True,
+                "CE_available": True,
+                "dtype_match": dtype_match,
+                "semantic_match": False,
+                "unit_match": False,
+                "classification": "INCOMPATIBLE_AND_BLOCKED",
+                "status": "FAIL",
+                "failure_reason": f"Blocked by authoritative input error: {reasons}",
+            })
+            all_passed = False
+            continue
+
+        # Check key coverage and 1-to-1 alignment between shadow and future_frame
         s_series = shadow_parsed[col]
-        semantic_match = False
-        unit_match = False
+        semantic_match = True
+        unit_match = True
         reason = ""
 
-        if col == "round_name":
-            non_empty = bool((s_series.dropna().astype(str).str.strip().str.len() > 0).all())
-            semantic_match = non_empty and bool((s_series == "Round 5 (Split 3)").all())
-            unit_match = non_empty
-            if not semantic_match:
-                reason = "round_name does not match expected round contract 'Round 5 (Split 3)'"
-        elif col == "roster_lock":
+        if semantic_match:
             try:
-                parsed_dates = pd.to_datetime(s_series.dropna(), utc=True)
-                valid_iso = bool(len(parsed_dates) > 0 and parsed_dates.notna().all() and (s_series == "2026-08-22T20:00:00+00:00").all())
-                semantic_match = valid_iso
-                unit_match = valid_iso
-                if not valid_iso:
-                    reason = "roster_lock timestamp does not match exact round lock '2026-08-22T20:00:00+00:00'"
-            except Exception:
-                semantic_match = False
-                unit_match = False
-                reason = "Invalid ISO lock timestamp format"
-        elif col == "player":
-            non_empty = bool((s_series.dropna().astype(str).str.strip().str.len() > 0).all())
-            unique_players = bool(s_series.nunique() == len(s_series))
-            semantic_match = non_empty and unique_players and (len(s_series) == 44)
-            unit_match = non_empty
-            if not semantic_match:
-                reason = "player column contains empty, duplicate, or unexpected number of summoner names"
-        elif col == "role":
-            roles_set = set(s_series.dropna().str.lower())
-            valid_roles = (roles_set == {"top", "jgl", "mid", "bot", "sup"})
-            semantic_match = valid_roles
-            unit_match = valid_roles
-            if not valid_roles:
-                reason = f"role column contains invalid role enum set: {roles_set}"
-        elif col == "team":
-            non_empty = bool((s_series.dropna().astype(str).str.strip().str.len() > 0).all())
-            team_count_valid = bool(s_series.nunique() >= 4)
-            semantic_match = non_empty and team_count_valid
-            unit_match = non_empty
-            if not semantic_match:
-                reason = "team column contains blank values or fewer teams than scheduled"
-        elif col == "opponent":
-            null_count_s = int(s_series.isna().sum())
-            null_count_a = int(active_parsed["opponent"].isna().sum())
-            pipe_or_nan = bool(s_series.apply(lambda x: pd.isna(x) or str(x) == "nan" or (isinstance(x, str) and len(x) > 0)).all())
-            semantic_match = bool(null_count_s == null_count_a and pipe_or_nan)
-            unit_match = pipe_or_nan
-            if not semantic_match:
-                reason = f"opponent column format or null pattern mismatch (null_count shadow={null_count_s}, active={null_count_a})"
-        elif col == "price":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all())
-            if future_frame is None or "market_price" not in future_frame.columns:
-                semantic_match = False
-                reason = "Missing authoritative future_frame market_price input for price parity"
-            else:
-                exp_prices = future_frame["market_price"].fillna(15.0).round(1).to_numpy(dtype=float)
-                price_eq = bool(np.allclose(vals, exp_prices, atol=0.01))
-                semantic_match = bool(unit_match and price_eq)
-                if not price_eq:
-                    reason = "Market prices do not match exact future snapshot contract values"
-        elif col == "projected_fantasy_pts":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            s30 = pd.to_numeric(shadow_parsed["projected_points_before_win_adjustment"], errors="coerce")
-            win_adj = pd.to_numeric(shadow_parsed["win_probability_adjustment"], errors="coerce")
-            algebra_match = bool(np.allclose(vals, s30 + win_adj, atol=0.01))
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all() and (vals <= 50.0).all())
-            semantic_match = bool(unit_match and algebra_match)
-            if not semantic_match:
-                reason = "projected_fantasy_pts violates scoring unit bounds [0, 50] or exact algebra s30 + win_adj"
-        elif col == "projected_points_before_win_adjustment":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            elo_vals = pd.to_numeric(shadow_parsed["elo_adjusted_fantasy_pts"], errors="coerce")
-            elo_match = bool(np.allclose(vals, elo_vals, atol=1e-5))
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all() and (vals <= 50.0).all())
-            semantic_match = bool(unit_match and elo_match)
-            if not semantic_match:
-                reason = "projected_points_before_win_adjustment does not match exact elo_adjusted_fantasy_pts contract"
-        elif col == "team_win_probability":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all() and (vals <= 1.0).all())
-            if future_frame is None or "team_game_win_rate" not in future_frame.columns:
-                semantic_match = False
-                reason = "Missing authoritative future_frame team_game_win_rate input for team_win_probability parity"
-            else:
-                exp_wp = future_frame["team_game_win_rate"].round(4).to_numpy(dtype=float)
-                wp_match = bool(np.allclose(vals, exp_wp, atol=1e-4))
-                semantic_match = bool(unit_match and wp_match)
-                if not wp_match:
-                    reason = "team_win_probability does not match canonical PIT team_game_win_rate"
-        elif col == "win_probability_source":
-            non_empty = bool((s_series.dropna().astype(str).str.strip().str.len() > 0).all())
-            semantic_match = non_empty and bool((s_series == "canonical_pit_ce_portable_v1").all())
-            unit_match = non_empty
-            if not semantic_match:
-                reason = "win_probability_source must be 'canonical_pit_ce_portable_v1'"
-        elif col == "win_probability_adjustment":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            opp_adj = pd.to_numeric(shadow_parsed["opponent_adjustment"], errors="coerce")
-            eq_match = bool(np.allclose(vals, opp_adj, atol=1e-5))
-            proj_pts = pd.to_numeric(shadow_parsed["projected_fantasy_pts"], errors="coerce")
-            s30 = pd.to_numeric(shadow_parsed["projected_points_before_win_adjustment"], errors="coerce")
-            delta_match = bool(np.allclose(vals, proj_pts - s30, atol=0.01))
-            unit_match = bool(vals.notna().all())
-            semantic_match = bool(unit_match and eq_match and delta_match)
-            if not semantic_match:
-                reason = "win_probability_adjustment does not match opponent_adjustment or (proj - s30) delta"
-        elif col == "player_recent_mean":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            st_vals = pd.to_numeric(shadow_parsed["short_term_5g_mean"], errors="coerce")
-            eq_match = bool(np.allclose(vals, st_vals, atol=1e-5))
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all() and (vals <= 50.0).all())
-            if future_frame is None or "recent_fantasy_mean_5" not in future_frame.columns:
-                semantic_match = False
-                reason = "Missing authoritative future_frame recent_fantasy_mean_5 input for player_recent_mean parity"
-            else:
-                exp_vals = future_frame["recent_fantasy_mean_5"].round(2).to_numpy(dtype=float)
-                ff_match = bool(np.allclose(vals, exp_vals, atol=0.01))
-                semantic_match = bool(unit_match and eq_match and ff_match)
-                if not ff_match:
-                    reason = "player_recent_mean does not match future_frame recent_fantasy_mean_5"
-        elif col == "short_term_5g_mean":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            pm_vals = pd.to_numeric(shadow_parsed["player_recent_mean"], errors="coerce")
-            eq_match = bool(np.allclose(vals, pm_vals, atol=1e-5))
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all() and (vals <= 50.0).all())
-            if future_frame is None or "recent_fantasy_mean_5" not in future_frame.columns:
-                semantic_match = False
-                reason = "Missing authoritative future_frame recent_fantasy_mean_5 input for short_term_5g_mean parity"
-            else:
-                exp_vals = future_frame["recent_fantasy_mean_5"].round(2).to_numpy(dtype=float)
-                ff_match = bool(np.allclose(vals, exp_vals, atol=0.01))
-                semantic_match = bool(unit_match and eq_match and ff_match)
-                if not ff_match:
-                    reason = "short_term_5g_mean does not match future_frame recent_fantasy_mean_5"
-        elif col == "role_baseline":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all() and (vals <= 50.0).all())
-            role_const_match = bool((shadow_df.groupby("role")["role_baseline"].nunique() == 1).all())
-            if future_frame is None or "role_baseline_fantasy_mean_100" not in future_frame.columns:
-                semantic_match = False
-                reason = "Missing authoritative future_frame role_baseline_fantasy_mean_100 input for role_baseline parity"
-            else:
-                exp_vals = future_frame["role_baseline_fantasy_mean_100"].round(2).to_numpy(dtype=float)
-                ff_match = bool(np.allclose(vals, exp_vals, atol=0.01))
-                semantic_match = bool(unit_match and role_const_match and ff_match)
-                if not ff_match:
-                    reason = "role_baseline does not match future_frame role_baseline_fantasy_mean_100"
-        elif col == "opponent_adjustment":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            win_adj = pd.to_numeric(shadow_parsed["win_probability_adjustment"], errors="coerce")
-            eq_match = bool(np.allclose(vals, win_adj, atol=1e-5))
-            proj_pts = pd.to_numeric(shadow_parsed["projected_fantasy_pts"], errors="coerce")
-            s30 = pd.to_numeric(shadow_parsed["projected_points_before_win_adjustment"], errors="coerce")
-            delta_match = bool(np.allclose(vals, proj_pts - s30, atol=0.01))
-            unit_match = bool(vals.notna().all())
-            semantic_match = bool(unit_match and eq_match and delta_match)
-            if not semantic_match:
-                reason = "opponent_adjustment does not match win_probability_adjustment or (proj - s30) delta"
-        elif col == "h2h_adjustment":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all())
-            h2h_valid, h2h_msg = validate_h2h_verification_evidence(
-                evidence=h2h_verification_evidence,
-                shadow_parsed=shadow_parsed,
-                max_tolerance=0.01,
-            )
-            semantic_match = bool(unit_match and h2h_valid)
-            if not h2h_valid:
-                reason = h2h_msg
-        elif col == "historical_games":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            eff_games = pd.to_numeric(shadow_parsed["effective_recent_games"], errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= 0).all() and (vals.astype(int) == vals).all())
-            eff_bound = bool((vals >= np.floor(eff_games)).all())
-            if canonical_games is None:
-                semantic_match = False
-                reason = "Missing authoritative canonical_games input for historical_games count parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                pre_g = canonical_games[canonical_games["date"] < lock_ts]
-                counts_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    pid, _ = normalize_player(p_row["player"])
-                    exp_cnt = int(len(pre_g[pre_g["canonical_player_id"].eq(pid)]))
-                    if int(p_row["historical_games"]) != exp_cnt:
-                        counts_match = False
-                        reason = f"Player {p_row['player']} historical_games={p_row['historical_games']} != expected pre-lock count {exp_cnt}"
+                for idx, shadow_row in shadow_parsed.iterrows():
+                    p_name = str(shadow_row.get("player", "")).strip()
+                    p_role = normalize_role(str(shadow_row.get("role", ""))).lower()
+                    canon_pid = _canonical_player_key(p_name)
+                    k = (canon_pid, p_role)
+
+                    if k not in auth_ff_row_by_key:
+                        semantic_match = False
+                        reason = f"Player/role key '{k}' in shadow export not found in authoritative future_frame"
                         break
-                semantic_match = bool(unit_match and eff_bound and counts_match)
-        elif col == "effective_recent_games":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            hist_g = pd.to_numeric(shadow_parsed["historical_games"], errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all())
-            hist_bound = bool((vals <= hist_g + 1e-4).all())
-            if future_frame is None or "recent_games_count" not in future_frame.columns:
+
+                    ff_row = auth_ff_row_by_key[k]
+                    auth_s30 = auth_s30_by_key[k]
+                    auth_delta_e = auth_delta_e_by_key[k]
+                    auth_ce = auth_ce_by_key[k]
+                    team_win_prob = float(ff_row["team_game_win_rate"])
+                    shadow_val = shadow_row[col]
+
+                    # Parse scheduled opponents
+                    opp_names_str = str(ff_row.get("scheduled_opponent_names", ""))
+                    if opp_names_str and opp_names_str != "nan" and pd.notna(ff_row.get("scheduled_opponent_names")):
+                        opp_list = [o.strip() for o in opp_names_str.split(",") if o.strip()]
+                    else:
+                        opp_list = []
+
+                    # Column-by-Column Authoritative Source Exact Validation
+                    if col == "round_name":
+                        try:
+                            exp_round = _parse_period_to_round_name(str(ff_row["prediction_period_id"]))
+                        except Exception as e:
+                            semantic_match = False
+                            reason = f"Player {p_name} has unparsable prediction_period_id: {str(e)}"
+                            break
+                        if str(shadow_val) != exp_round:
+                            semantic_match = False
+                            reason = f"Player {p_name} round_name='{shadow_val}' != authoritative '{exp_round}'"
+                            break
+
+                    elif col == "roster_lock":
+                        exp_lock = pd.to_datetime(str(ff_row["lock_timestamp"]), utc=True).isoformat()
+                        act_lock = pd.to_datetime(str(shadow_val), utc=True).isoformat() if pd.notna(shadow_val) else ""
+                        if act_lock != exp_lock:
+                            semantic_match = False
+                            reason = f"Player {p_name} roster_lock='{act_lock}' != authoritative '{exp_lock}'"
+                            break
+
+                    elif col == "player":
+                        exp_player = str(ff_row["source_player_name"]).strip()
+                        if str(shadow_val).strip() != exp_player:
+                            semantic_match = False
+                            reason = f"Player '{shadow_val}' != authoritative source_player_name '{exp_player}'"
+                            break
+
+                    elif col == "role":
+                        exp_role = ROLE_LOWER_MAP.get(str(ff_row["role"]).upper(), str(ff_row["role"]).lower())
+                        if str(shadow_val).lower() != exp_role:
+                            semantic_match = False
+                            reason = f"Player {p_name} role='{shadow_val}' != authoritative role '{exp_role}'"
+                            break
+
+                    elif col == "team":
+                        exp_team = str(ff_row["canonical_team_name"]).strip()
+                        if str(shadow_val).strip() != exp_team:
+                            semantic_match = False
+                            reason = f"Player {p_name} team='{shadow_val}' != authoritative canonical_team_name '{exp_team}'"
+                            break
+
+                    elif col == "opponent":
+                        exp_opp = "|".join(opp_list) if opp_list else "nan"
+                        act_opp = str(shadow_val) if pd.notna(shadow_val) else "nan"
+                        if act_opp != exp_opp:
+                            semantic_match = False
+                            reason = f"Player {p_name} opponent='{act_opp}' != authoritative scheduled opponents '{exp_opp}'"
+                            break
+
+                    elif col == "price":
+                        raw_price = ff_row.get("market_price")
+                        if pd.isna(raw_price):
+                            semantic_match = False
+                            reason = f"Player {p_name} has null market_price in authoritative input (price is non-nullable)"
+                            break
+                        exp_price = round(float(raw_price), 1)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_price) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} price={shadow_val} != authoritative market_price {exp_price}"
+                            break
+
+                    elif col == "projected_fantasy_pts":
+                        exp_proj = round(float(auth_ce), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_proj) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} projected_fantasy_pts={shadow_val} != authoritative CE projection {exp_proj}"
+                            break
+                        if float(shadow_val) < 0.0 or float(shadow_val) > 50.0:
+                            unit_match = False
+                            reason = f"Player {p_name} projected_fantasy_pts={shadow_val} out of per-game scoring unit bounds [0, 50]"
+                            break
+
+                    elif col == "projected_points_before_win_adjustment":
+                        exp_s30_round = round(float(auth_s30), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_s30_round) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} projected_points_before_win_adjustment={shadow_val} != authoritative S30 baseline {exp_s30_round}"
+                            break
+                        if float(shadow_val) < 0.0 or float(shadow_val) > 50.0:
+                            unit_match = False
+                            reason = f"Player {p_name} projected_points_before_win_adjustment={shadow_val} out of scoring bounds [0, 50]"
+                            break
+
+                    elif col == "team_win_probability":
+                        exp_wp = round(float(ff_row["team_game_win_rate"]), 4)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_wp) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} team_win_probability={shadow_val} != authoritative team_game_win_rate {exp_wp}"
+                            break
+                        if float(shadow_val) < 0.0 or float(shadow_val) > 1.0:
+                            unit_match = False
+                            reason = f"Player {p_name} team_win_probability={shadow_val} out of probability bounds [0, 1]"
+                            break
+
+                    elif col == "win_probability_source":
+                        if not isinstance(shadow_val, str) or str(shadow_val).strip() != auth_wp_source:
+                            semantic_match = False
+                            reason = f"Player {p_name} win_probability_source='{shadow_val}' != authoritative source '{auth_wp_source}'"
+                            break
+
+                    elif col == "win_probability_adjustment":
+                        exp_delta = round(float(auth_delta_e), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_delta) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} win_probability_adjustment={shadow_val} != authoritative delta_E {exp_delta}"
+                            break
+
+                    elif col == "player_recent_mean":
+                        exp_mean = round(float(ff_row["recent_fantasy_mean_5"]), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_mean) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} player_recent_mean={shadow_val} != authoritative recent_fantasy_mean_5 {exp_mean}"
+                            break
+
+                    elif col == "short_term_5g_mean":
+                        exp_mean = round(float(ff_row["recent_fantasy_mean_5"]), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_mean) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} short_term_5g_mean={shadow_val} != authoritative recent_fantasy_mean_5 {exp_mean}"
+                            break
+
+                    elif col == "role_baseline":
+                        exp_rb = round(float(ff_row["role_baseline_fantasy_mean_100"]), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_rb) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} role_baseline={shadow_val} != authoritative role_baseline_fantasy_mean_100 {exp_rb}"
+                            break
+
+                    elif col == "opponent_adjustment":
+                        exp_delta = round(float(auth_delta_e), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_delta) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} opponent_adjustment={shadow_val} != authoritative delta_E {exp_delta}"
+                            break
+
+                    elif col == "h2h_adjustment":
+                        h2h_valid, h2h_msg = validate_h2h_verification_evidence(
+                            evidence=h2h_verification_evidence,
+                            shadow_parsed=shadow_parsed,
+                            max_tolerance=0.01,
+                        )
+                        if not h2h_valid:
+                            semantic_match = False
+                            reason = h2h_msg
+                            break
+                        exp_h2h = compute_player_point_in_time_h2h(pre_games, canon_pid, opp_list, lock_ts, auth_s30)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_h2h) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} h2h_adjustment={shadow_val} != authoritative PIT H2H {exp_h2h}"
+                            break
+
+                    elif col == "historical_games":
+                        p_hist = pre_games[pre_games["canonical_player_id"].eq(canon_pid)]
+                        exp_hist = int(len(p_hist))
+                        if not _is_finite_non_bool_number(shadow_val) or int(shadow_val) != exp_hist:
+                            semantic_match = False
+                            reason = f"Player {p_name} historical_games={shadow_val} != authoritative pre-lock games count {exp_hist}"
+                            break
+
+                    elif col == "effective_recent_games":
+                        exp_eff = round(float(ff_row["recent_games_count"]), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_eff) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} effective_recent_games={shadow_val} != authoritative recent_games_count {exp_eff}"
+                            break
+
+                    elif col == "historical_deviation":
+                        exp_dev, _ = compute_historical_deviation_hierarchy(pre_games, canon_pid, str(ff_row["role"]).upper())
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_dev) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} historical_deviation={shadow_val} != authoritative hierarchy deviation {exp_dev}"
+                            break
+
+                    elif col == "floor_pts":
+                        exp_dev, _ = compute_historical_deviation_hierarchy(pre_games, canon_pid, str(ff_row["role"]).upper())
+                        exp_floor = max(0.0, round(round(float(auth_ce), 2) - 1.5 * exp_dev, 2))
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_floor) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} floor_pts={shadow_val} != authoritative max(0, proj - 1.5*dev)={exp_floor}"
+                            break
+
+                    elif col == "ceiling_pts":
+                        exp_dev, _ = compute_historical_deviation_hierarchy(pre_games, canon_pid, str(ff_row["role"]).upper())
+                        exp_ceil = round(round(float(auth_ce), 2) + 1.5 * exp_dev, 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_ceil) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} ceiling_pts={shadow_val} != authoritative round(proj + 1.5*dev, 2)={exp_ceil}"
+                            break
+
+                    elif col == "last_historical_game":
+                        p_hist = pre_games[pre_games["canonical_player_id"].eq(canon_pid)]
+                        exp_dt = p_hist["date"].max().isoformat() if (not p_hist.empty and pd.notna(p_hist["date"].max())) else ""
+                        act_dt = str(shadow_val) if (pd.notna(shadow_val) and str(shadow_val) != "nan") else ""
+                        if act_dt != exp_dt:
+                            semantic_match = False
+                            reason = f"Player {p_name} last_historical_game='{act_dt}' != authoritative date '{exp_dt}'"
+                            break
+
+                    elif col == "scheduled_matchups":
+                        exp_sched = len(opp_list) if opp_list else 1
+                        if not _is_finite_non_bool_number(shadow_val) or int(shadow_val) != exp_sched:
+                            semantic_match = False
+                            reason = f"Player {p_name} scheduled_matchups={shadow_val} != authoritative count {exp_sched}"
+                            break
+
+                    elif col == "elo_adjusted_fantasy_pts":
+                        exp_s30_round = round(float(auth_s30), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_s30_round) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} elo_adjusted_fantasy_pts={shadow_val} != authoritative S30 baseline {exp_s30_round}"
+                            break
+
+                    elif col == "carry_concentration_enabled":
+                        if shadow_val not in (True, 1, "True"):
+                            semantic_match = False
+                            reason = f"Player {p_name} carry_concentration_enabled is not True with active carry_engine"
+                            break
+
+                    elif col in (
+                        "carry_score_if_win",
+                        "carry_score_if_loss",
+                        "carry_win_uplift",
+                        "carry_win_fantasy_share",
+                        "carry_win_sample_effective",
+                        "carry_loss_sample_effective",
+                        "carry_current_team_win_sample_effective",
+                        "carry_current_team_loss_sample_effective",
+                    ):
+                        prof = carry_engine.profile(p_name, p_role, str(ff_row["canonical_team_name"]), lock_ts)
+                        field_key = col.replace("carry_", "")
+                        raw_prof_val = prof.get(field_key)
+                        if pd.isna(raw_prof_val) or raw_prof_val is None:
+                            if pd.notna(shadow_val) and str(shadow_val) != "nan":
+                                semantic_match = False
+                                reason = f"Player {p_name} {col}={shadow_val} != authoritative NaN"
+                                break
+                        else:
+                            exp_digits = 4 if col == "carry_win_fantasy_share" else 2
+                            exp_prof_val = round(float(raw_prof_val), exp_digits)
+                            if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_prof_val) > 1e-4:
+                                semantic_match = False
+                                reason = f"Player {p_name} {col}={shadow_val} != authoritative CarryProfileEngine {exp_prof_val}"
+                                break
+
+                    elif col == "carry_adjustment_vs_elo":
+                        prof = carry_engine.profile(p_name, p_role, str(ff_row["canonical_team_name"]), lock_ts)
+                        c_win = round(float(prof["score_if_win"]), 2)
+                        c_loss = round(float(prof["score_if_loss"]), 2)
+                        carry_matchup = team_win_prob * c_win + (1.0 - team_win_prob) * c_loss
+                        exp_cadj = round(float(carry_matchup - round(auth_s30, 2)), 2)
+                        if not _is_finite_non_bool_number(shadow_val) or abs(float(shadow_val) - exp_cadj) > 1e-4:
+                            semantic_match = False
+                            reason = f"Player {p_name} carry_adjustment_vs_elo={shadow_val} != authoritative carry delta {exp_cadj}"
+                            break
+
+                    elif col == "projected_starter":
+                        t_key = (str(ff_row["canonical_team_name"]).strip().casefold(), p_role.casefold())
+                        exp_starter_player = auth_starters_by_group.get(t_key, "")
+                        should_be_starter = (p_name.casefold() == exp_starter_player)
+                        is_starter = bool(shadow_val in (True, 1, "True"))
+                        if is_starter != should_be_starter:
+                            semantic_match = False
+                            reason = f"Player {p_name} projected_starter={is_starter} != authoritative starter contract {should_be_starter} (expected top candidate: '{exp_starter_player}')"
+                            break
+
+            except Exception as e:
                 semantic_match = False
-                reason = "Missing authoritative future_frame recent_games_count input for effective_recent_games parity"
-            else:
-                exp_eff = future_frame["recent_games_count"].round(2).to_numpy(dtype=float)
-                ff_match = bool(np.allclose(vals, exp_eff, atol=0.01))
-                semantic_match = bool(unit_match and hist_bound and ff_match)
-                if not ff_match:
-                    reason = "effective_recent_games does not match future_frame recent_games_count"
-        elif col == "historical_deviation":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals > 0.0).all() and (vals <= 30.0).all())
-            non_const = bool(vals.nunique() > 1)
-            if canonical_games is None:
-                semantic_match = False
-                reason = "Missing authoritative canonical_games input for historical_deviation parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                pre_g = canonical_games[canonical_games["date"] < lock_ts]
-                devs_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    pid, _ = normalize_player(p_row["player"])
-                    exp_dev, _ = compute_historical_deviation_hierarchy(pre_g, pid, str(p_row["role"]).upper())
-                    if abs(float(p_row["historical_deviation"]) - exp_dev) > 0.01:
-                        devs_match = False
-                        reason = f"Player {p_row['player']} historical_deviation={p_row['historical_deviation']} != expected {exp_dev}"
-                        break
-                semantic_match = bool(unit_match and non_const and devs_match)
-        elif col == "floor_pts":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all())
-            ce_vals = pd.to_numeric(shadow_parsed["projected_fantasy_pts"], errors="coerce")
-            dev_vals = pd.to_numeric(shadow_parsed["historical_deviation"], errors="coerce")
-            expected_floors = np.maximum(0.0, np.round(ce_vals - 1.5 * dev_vals, 2))
-            eq_match = bool(np.allclose(vals, expected_floors, atol=0.01))
-            semantic_match = bool(unit_match and eq_match)
-            if not semantic_match:
-                reason = "Floor points do not match exact contract equation max(0.0, round(proj - 1.5 * dev, 2))"
-        elif col == "ceiling_pts":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            ce_vals = pd.to_numeric(shadow_parsed["projected_fantasy_pts"], errors="coerce")
-            dev_vals = pd.to_numeric(shadow_parsed["historical_deviation"], errors="coerce")
-            expected_ceilings = np.round(ce_vals + 1.5 * dev_vals, 2)
-            eq_match = bool(np.allclose(vals, expected_ceilings, atol=0.01))
-            floors = pd.to_numeric(shadow_parsed["floor_pts"], errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= floors).all())
-            semantic_match = bool(unit_match and eq_match)
-            if not semantic_match:
-                reason = "Ceiling points do not match exact contract equation round(proj + 1.5 * dev, 2)"
-        elif col == "last_historical_game":
-            non_empty_count = (s_series.dropna().astype(str).str.strip().str.len() > 0).sum()
-            unit_match = bool(non_empty_count >= 30)
-            if canonical_games is None:
-                semantic_match = False
-                reason = "Missing authoritative canonical_games input for last_historical_game parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                pre_g = canonical_games[canonical_games["date"] < lock_ts]
-                dt_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    pid, _ = normalize_player(p_row["player"])
-                    p_hist = pre_g[pre_g["canonical_player_id"].eq(pid)]
-                    exp_dt = p_hist["date"].max().isoformat() if not p_hist.empty else ""
-                    actual_dt = str(p_row["last_historical_game"]) if (pd.notna(p_row["last_historical_game"]) and str(p_row["last_historical_game"]) != "nan") else ""
-                    if actual_dt != exp_dt:
-                        dt_match = False
-                        reason = f"Player {p_row['player']} last_historical_game='{actual_dt}' != expected '{exp_dt}'"
-                        break
-                semantic_match = bool(unit_match and dt_match)
-        elif col == "scheduled_matchups":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals >= 1).all())
-            expected_sched = np.array([
-                len(str(o).split("|")) if (pd.notna(o) and str(o) != "nan" and str(o).strip()) else 1
-                for o in shadow_parsed["opponent"]
-            ])
-            sched_eq = bool(np.array_equal(vals.to_numpy(dtype=int), expected_sched))
-            semantic_match = bool(unit_match and sched_eq)
-            if not semantic_match:
-                reason = "scheduled_matchups does not match exact opponent count len(opponent.split('|'))"
-        elif col == "elo_adjusted_fantasy_pts":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            s30 = pd.to_numeric(shadow_parsed["projected_points_before_win_adjustment"], errors="coerce")
-            eq_match = bool(np.allclose(vals, s30, atol=1e-5))
-            unit_match = bool(vals.notna().all() and (vals >= 0.0).all() and (vals <= 50.0).all())
-            semantic_match = bool(unit_match and eq_match)
-            if not semantic_match:
-                reason = "elo_adjusted_fantasy_pts does not match projected_points_before_win_adjustment"
-        elif col == "carry_concentration_enabled":
-            vals = s_series.isin([True, False, 1, 0, "True", "False"])
-            unit_match = bool(vals.all())
-            semantic_match = bool(s_series.iloc[0] in (True, 1, "True"))
-            if not semantic_match:
-                reason = "carry_concentration_enabled is not True"
-        elif col == "carry_score_if_win":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            loss_vals = pd.to_numeric(shadow_parsed["carry_score_if_loss"], errors="coerce").dropna()
-            uplift = pd.to_numeric(shadow_parsed["carry_win_uplift"], errors="coerce").dropna()
-            eq_match = bool(np.allclose(vals - loss_vals, uplift, atol=0.01))
-            unit_match = bool(len(vals) > 0 and (vals >= 0.0).all() and (vals <= 50.0).all())
-            if carry_engine is None:
-                semantic_match = False
-                reason = "Missing authoritative carry_engine input for carry_score_if_win parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                p_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    prof = carry_engine.profile(str(p_row["player"]), str(p_row["role"]).lower(), str(p_row["team"]), lock_ts)
-                    exp_w = round(float(prof["score_if_win"]), 2)
-                    act_w = float(p_row["carry_score_if_win"])
-                    if abs(act_w - exp_w) > 0.01:
-                        p_match = False
-                        reason = f"Player {p_row['player']} carry_score_if_win={act_w} != expected {exp_w}"
-                        break
-                semantic_match = bool(unit_match and eq_match and p_match)
-        elif col == "carry_score_if_loss":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            win_vals = pd.to_numeric(shadow_parsed["carry_score_if_win"], errors="coerce").dropna()
-            uplift = pd.to_numeric(shadow_parsed["carry_win_uplift"], errors="coerce").dropna()
-            eq_match = bool(np.allclose(win_vals - vals, uplift, atol=0.01))
-            unit_match = bool(len(vals) > 0 and (vals >= 0.0).all() and (vals <= 50.0).all())
-            if carry_engine is None:
-                semantic_match = False
-                reason = "Missing authoritative carry_engine input for carry_score_if_loss parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                p_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    prof = carry_engine.profile(str(p_row["player"]), str(p_row["role"]).lower(), str(p_row["team"]), lock_ts)
-                    exp_l = round(float(prof["score_if_loss"]), 2)
-                    act_l = float(p_row["carry_score_if_loss"])
-                    if abs(act_l - exp_l) > 0.01:
-                        p_match = False
-                        reason = f"Player {p_row['player']} carry_score_if_loss={act_l} != expected {exp_l}"
-                        break
-                semantic_match = bool(unit_match and eq_match and p_match)
-        elif col == "carry_win_uplift":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            win_scores = pd.to_numeric(shadow_parsed["carry_score_if_win"], errors="coerce").dropna()
-            loss_scores = pd.to_numeric(shadow_parsed["carry_score_if_loss"], errors="coerce").dropna()
-            expected_uplift = np.round(win_scores - loss_scores, 2)
-            eq_match = bool(np.allclose(vals, expected_uplift, atol=0.01))
-            unit_match = bool(len(vals) > 0 and (vals.abs() <= 30.0).all())
-            semantic_match = bool(unit_match and eq_match)
-            if not semantic_match:
-                reason = "Carry win uplift does not match carry_score_if_win - carry_score_if_loss"
-        elif col == "carry_win_fantasy_share":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            unit_match = bool(len(vals) > 0 and (vals >= 0.0).all() and (vals <= 1.0).all())
-            if carry_engine is None:
-                semantic_match = False
-                reason = "Missing authoritative carry_engine input for carry_win_fantasy_share parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                p_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    prof = carry_engine.profile(str(p_row["player"]), str(p_row["role"]).lower(), str(p_row["team"]), lock_ts)
-                    exp_s = round(float(prof["win_fantasy_share"]), 4)
-                    act_s = float(p_row["carry_win_fantasy_share"])
-                    if abs(act_s - exp_s) > 1e-3:
-                        p_match = False
-                        reason = f"Player {p_row['player']} carry_win_fantasy_share={act_s} != expected {exp_s}"
-                        break
-                semantic_match = bool(unit_match and p_match)
-        elif col == "carry_win_sample_effective":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            team_win_sample = pd.to_numeric(shadow_parsed["carry_current_team_win_sample_effective"], errors="coerce").dropna()
-            bound_match = bool((vals >= team_win_sample - 1e-4).all())
-            unit_match = bool(len(vals) > 0 and (vals >= 0.0).all())
-            if carry_engine is None:
-                semantic_match = False
-                reason = "Missing authoritative carry_engine input for carry_win_sample_effective parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                p_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    prof = carry_engine.profile(str(p_row["player"]), str(p_row["role"]).lower(), str(p_row["team"]), lock_ts)
-                    exp_v = round(float(prof["win_sample_effective"]), 2)
-                    act_v = float(p_row["carry_win_sample_effective"])
-                    if abs(act_v - exp_v) > 0.01:
-                        p_match = False
-                        reason = f"Player {p_row['player']} carry_win_sample_effective={act_v} != expected {exp_v}"
-                        break
-                semantic_match = bool(unit_match and bound_match and p_match)
-        elif col == "carry_loss_sample_effective":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            team_loss_sample = pd.to_numeric(shadow_parsed["carry_current_team_loss_sample_effective"], errors="coerce").dropna()
-            bound_match = bool((vals >= team_loss_sample - 1e-4).all())
-            unit_match = bool(len(vals) > 0 and (vals >= 0.0).all())
-            if carry_engine is None:
-                semantic_match = False
-                reason = "Missing authoritative carry_engine input for carry_loss_sample_effective parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                p_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    prof = carry_engine.profile(str(p_row["player"]), str(p_row["role"]).lower(), str(p_row["team"]), lock_ts)
-                    exp_v = round(float(prof["loss_sample_effective"]), 2)
-                    act_v = float(p_row["carry_loss_sample_effective"])
-                    if abs(act_v - exp_v) > 0.01:
-                        p_match = False
-                        reason = f"Player {p_row['player']} carry_loss_sample_effective={act_v} != expected {exp_v}"
-                        break
-                semantic_match = bool(unit_match and bound_match and p_match)
-        elif col == "carry_current_team_win_sample_effective":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            win_sample = pd.to_numeric(shadow_parsed["carry_win_sample_effective"], errors="coerce").dropna()
-            bound_match = bool((vals <= win_sample + 1e-4).all())
-            unit_match = bool(len(vals) > 0 and (vals >= 0.0).all())
-            if carry_engine is None:
-                semantic_match = False
-                reason = "Missing authoritative carry_engine input for carry_current_team_win_sample_effective parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                p_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    prof = carry_engine.profile(str(p_row["player"]), str(p_row["role"]).lower(), str(p_row["team"]), lock_ts)
-                    exp_v = round(float(prof["current_team_win_sample_effective"]), 2)
-                    act_v = float(p_row["carry_current_team_win_sample_effective"])
-                    if abs(act_v - exp_v) > 0.01:
-                        p_match = False
-                        reason = f"Player {p_row['player']} carry_current_team_win_sample_effective={act_v} != expected {exp_v}"
-                        break
-                semantic_match = bool(unit_match and bound_match and p_match)
-        elif col == "carry_current_team_loss_sample_effective":
-            vals = pd.to_numeric(s_series, errors="coerce").dropna()
-            loss_sample = pd.to_numeric(shadow_parsed["carry_loss_sample_effective"], errors="coerce").dropna()
-            bound_match = bool((vals <= loss_sample + 1e-4).all())
-            unit_match = bool(len(vals) > 0 and (vals >= 0.0).all())
-            if carry_engine is None:
-                semantic_match = False
-                reason = "Missing authoritative carry_engine input for carry_current_team_loss_sample_effective parity"
-            else:
-                lock_ts = pd.to_datetime(shadow_parsed["roster_lock"].iloc[0], utc=True)
-                p_match = True
-                for _, p_row in shadow_parsed.iterrows():
-                    prof = carry_engine.profile(str(p_row["player"]), str(p_row["role"]).lower(), str(p_row["team"]), lock_ts)
-                    exp_v = round(float(prof["current_team_loss_sample_effective"]), 2)
-                    act_v = float(p_row["carry_current_team_loss_sample_effective"])
-                    if abs(act_v - exp_v) > 0.01:
-                        p_match = False
-                        reason = f"Player {p_row['player']} carry_current_team_loss_sample_effective={act_v} != expected {exp_v}"
-                        break
-                semantic_match = bool(unit_match and bound_match and p_match)
-        elif col == "carry_adjustment_vs_elo":
-            vals = pd.to_numeric(s_series, errors="coerce")
-            unit_match = bool(vals.notna().all() and (vals.abs() <= 15.0).all())
-            win_prob = pd.to_numeric(shadow_parsed["team_win_probability"], errors="coerce")
-            win_scores = pd.to_numeric(shadow_parsed["carry_score_if_win"], errors="coerce")
-            loss_scores = pd.to_numeric(shadow_parsed["carry_score_if_loss"], errors="coerce")
-            elo_scores = pd.to_numeric(shadow_parsed["elo_adjusted_fantasy_pts"], errors="coerce")
-            carry_pts = win_prob * win_scores + (1.0 - win_prob) * loss_scores
-            expected_carry_adj = np.round(carry_pts - elo_scores, 2)
-            eq_match = bool(np.allclose(vals, expected_carry_adj, atol=0.01))
-            semantic_match = bool(unit_match and eq_match)
-            if not semantic_match:
-                reason = "Carry adjustment does not match win_prob * win_score + (1-win_prob) * loss_score - base"
-        elif col == "projected_starter":
-            vals = s_series.isin([True, False, 1, 0, "True", "False"])
-            unit_match = bool(vals.all())
-            starter_contract_pass = True
-            for (t, r), s_group in shadow_df.groupby(["team", "role"]):
-                starters = s_group[s_group["projected_starter"] == True]
-                if len(starters) != 1:
-                    starter_contract_pass = False
-                    reason = f"Team {t} role {r} has {len(starters)} starters (expected 1)"
-                    break
-                sorted_cands = s_group.sort_values(
-                    ["last_historical_game", "historical_games"], ascending=False, na_position="last"
-                )
-                expected_starter = sorted_cands.iloc[0]["player"]
-                actual_starter = starters.iloc[0]["player"]
-                if actual_starter != expected_starter:
-                    starter_contract_pass = False
-                    reason = f"Starter in ({t}, {r}) is {actual_starter}, expected top candidate {expected_starter}"
-                    break
-            semantic_match = bool(unit_match and starter_contract_pass)
+                reason = f"Authoritative verification raised exception on {col}: {str(e)}"
 
         col_status = "PASS" if (dtype_match and semantic_match and unit_match) else "FAIL"
         classification = "PROVEN_COMPATIBLE" if col_status == "PASS" else "INCOMPATIBLE_AND_BLOCKED"
@@ -1308,5 +1511,4 @@ def audit_fail_closed_schema_parity(
         "all_passed": all_passed,
         "verdict": "PASS" if all_passed else "FAIL",
     }
-
     return all_passed, parity_rows, summary
