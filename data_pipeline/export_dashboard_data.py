@@ -87,19 +87,71 @@ def build_estimated_price_history(
     return start_price, current_price, history
 
 
-def export_dashboard_json(output_path: str = None) -> str:
+from typing import Any, Dict, List, Optional, Union
+from pathlib import Path
+
+def export_dashboard_json(
+    output_path: Optional[Union[str, Path]] = None,
+    player_projections: Optional[Union[pd.DataFrame, str, Path]] = None,
+    data: Optional[Union[pd.DataFrame, List[Dict[str, Any]]]] = None,
+) -> str:
     """
     Ingests match data, calculates weekly player totals, and exports to JSON.
+    Accepts optional explicit player_projections (DataFrame or CSV path) for dependency injection.
     """
     if output_path is None:
         output_dir = os.path.join(BASE_DIR, "dashboard", "generated", "current")
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, "dashboard_data.json")
+    else:
+        output_path = str(output_path)
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
+
+    # Process explicit player_projections input
+    proj_df: Optional[pd.DataFrame] = None
+    if player_projections is not None:
+        if isinstance(player_projections, (str, Path)):
+            p_path = Path(player_projections)
+            if not p_path.exists():
+                raise FileNotFoundError(
+                    f"BLOCKED_BY_MISSING_SHADOW_INPUT: Injected player projections file not found: {player_projections}"
+                )
+            if not HAS_PANDAS:
+                raise RuntimeError("pandas required to parse player projections CSV")
+            try:
+                proj_df = pd.read_csv(p_path)
+            except Exception as e:
+                raise ValueError(f"BLOCKED_BY_INVALID_SHADOW_INPUT: Failed to read CSV {player_projections}: {e}")
+        elif HAS_PANDAS and isinstance(player_projections, pd.DataFrame):
+            proj_df = player_projections.copy()
+        else:
+            raise TypeError(
+                f"BLOCKED_BY_INVALID_SHADOW_INPUT: player_projections must be a DataFrame or CSV path, got {type(player_projections)}"
+            )
+
+        # Validate required projection columns
+        required_cols = {"player", "projected_fantasy_pts"}
+        if not required_cols.issubset(proj_df.columns):
+            missing = required_cols - set(proj_df.columns)
+            raise ValueError(
+                f"BLOCKED_BY_INVALID_SHADOW_INPUT: player_projections missing required columns: {sorted(missing)}"
+            )
 
     print("=== Processing Weekly Fantasy Aggregation ===")
-    ingestor = LCSDataIngestor()
-    data = ingestor.run_pipeline(preview_rows=0)
-    market_model = ingestor.scoring_rules.get("estimated_market_model", {})
+    if data is None:
+        ingestor = LCSDataIngestor()
+        data = ingestor.run_pipeline(preview_rows=0)
+        market_model = ingestor.scoring_rules.get("estimated_market_model", {})
+    else:
+        market_model = {}
+        rules_path = os.path.join(BASE_DIR, "config", "scoring_rules.json")
+        if os.path.exists(rules_path):
+            try:
+                with open(rules_path, "r", encoding="utf-8") as f:
+                    rules_json = json.load(f)
+                    market_model = rules_json.get("estimated_market_model", {})
+            except Exception:
+                pass
 
     if HAS_PANDAS and isinstance(data, pd.DataFrame):
         df = data.copy()
@@ -400,6 +452,60 @@ def export_dashboard_json(output_path: str = None) -> str:
     print(f"Added {market_only_count} official market profiles without match history.")
     print(f"Applied official market prices to {official_price_count} player-season profiles.")
 
+    # Attach injected projections if supplied
+    if proj_df is not None:
+        proj_records = proj_df.to_dict(orient="records")
+        proj_by_name = {str(r.get("player", "")).strip().casefold(): r for r in proj_records}
+        for p in player_list:
+            k = p["playername"].casefold()
+            if k in proj_by_name:
+                match_r = proj_by_name[k]
+                p["projected_fantasy_pts"] = float(match_r["projected_fantasy_pts"])
+                if "projected_points_before_win_adjustment" in match_r and pd.notna(match_r["projected_points_before_win_adjustment"]):
+                    p["projected_points_before_win_adjustment"] = float(match_r["projected_points_before_win_adjustment"])
+                else:
+                    p["projected_points_before_win_adjustment"] = p["projected_fantasy_pts"]
+                p["current_projection"] = {k2: (v if pd.notna(v) else None) for k2, v in match_r.items()}
+                p["projected_starter"] = bool(match_r.get("projected_starter", False))
+
+        # Add any projected player not currently in player_list
+        known_players = {p["playername"].casefold() for p in player_list}
+        for r in proj_records:
+            pname = str(r.get("player", "")).strip()
+            if pname and pname.casefold() not in known_players:
+                role_pos = str(r.get("role", "MID")).upper()
+                tname = str(r.get("team", "Unknown")).strip()
+                new_p = {
+                    "playername": pname,
+                    "teamname": tname,
+                    "teams": [tname],
+                    "position": role_pos,
+                    "league": "LCS",
+                    "year": "2026",
+                    "splits": [str(r.get("round_name", "Spring"))],
+                    "total_games": int(r.get("historical_games", 0)),
+                    "total_kills": 0,
+                    "total_deaths": 0,
+                    "total_assists": 0,
+                    "total_fantasy_pts": 0.0,
+                    "total_adjusted_pts": 0.0,
+                    "weekly_stats": {},
+                    "avg_fantasy_pts": 0.0,
+                    "split": str(r.get("round_name", "Spring")),
+                    "is_swapped": False,
+                    "start_price": float(r.get("price", 15.0)),
+                    "current_price": float(r.get("price", 15.0)),
+                    "total_price_change": 0.0,
+                    "latest_weekly_change": 0.0,
+                    "price_history": [],
+                    "projected_fantasy_pts": float(r["projected_fantasy_pts"]),
+                    "projected_points_before_win_adjustment": float(r.get("projected_points_before_win_adjustment", r["projected_fantasy_pts"])),
+                    "current_projection": {k2: (v if pd.notna(v) else None) for k2, v in r.items()},
+                    "projected_starter": bool(r.get("projected_starter", False)),
+                }
+                player_list.append(new_p)
+                known_players.add(pname.casefold())
+
     # Save to JSON
     meta = {
         "total_players": len(player_list),
@@ -409,6 +515,9 @@ def export_dashboard_json(output_path: str = None) -> str:
         "official_price_profiles": official_price_count,
         "market_only_profiles": market_only_count,
         "estimated_market_model": market_model,
+        "player_projections": proj_df.to_dict(orient="records") if proj_df is not None else [],
+        "projections_injected": proj_df is not None,
+        "projections_count": len(proj_df) if proj_df is not None else 0,
         "players": player_list
     }
 
@@ -417,27 +526,30 @@ def export_dashboard_json(output_path: str = None) -> str:
 
     print(f"Dashboard data successfully exported to: {output_path}")
     print(f"   Processed {len(player_list)} unique player-season profiles.")
-    if HAS_PANDAS and isinstance(data, pd.DataFrame):
-        # Champion Lab enforces its 2020-2025 training-data scope internally.
-        export_champion_lab_json(data)
-    if DEFAULT_HISTORICAL_REPORT.exists():
-        export_historical_lineup_dashboard()
-    else:
-        print("Historical lineup report unavailable; skipped its dashboard export.")
 
-    # Generate Model Evaluation dashboard data
-    try:
-        from data_pipeline.export_model_evaluation_data import main as export_model_evaluation_data
-        export_model_evaluation_data()
-    except Exception as e:
-        print(f"Warning: Model evaluation data export failed: {e}")
+    # Suppress companion live-output exports only when an injected shadow projection input is present
+    if proj_df is None:
+        if HAS_PANDAS and isinstance(data, pd.DataFrame):
+            # Champion Lab enforces its 2020-2025 training-data scope internally.
+            export_champion_lab_json(data)
+        if DEFAULT_HISTORICAL_REPORT.exists():
+            export_historical_lineup_dashboard()
+        else:
+            print("Historical lineup report unavailable; skipped its dashboard export.")
 
-    # Generate M3 Diagnostics and summary
-    try:
-        from scripts.export_m3_diagnostics import main as export_m3_diagnostics
-        export_m3_diagnostics()
-    except Exception as e:
-        print(f"Warning: M3 player diagnostics export failed: {e}")
+        # Generate Model Evaluation dashboard data
+        try:
+            from data_pipeline.export_model_evaluation_data import main as export_model_evaluation_data
+            export_model_evaluation_data()
+        except Exception as e:
+            print(f"Warning: Model evaluation data export failed: {e}")
+
+        # Generate M3 Diagnostics and summary
+        try:
+            from scripts.export_m3_diagnostics import main as export_m3_diagnostics
+            export_m3_diagnostics()
+        except Exception as e:
+            print(f"Warning: M3 player diagnostics export failed: {e}")
 
     return output_path
 
