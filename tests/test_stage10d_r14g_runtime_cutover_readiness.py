@@ -39,10 +39,12 @@ from fantasy_prediction.ce_shadow_adapter import (
     build_ce_shadow_player_export,
 )
 from fantasy_prediction.player_baseline import (
+    canonical_team,
     prepare_history,
     project_market,
     project_market_ce,
     resolve_round_identity,
+    scheduled_market_entities,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -58,6 +60,54 @@ def _sha256(path: Path) -> str:
         while chunk := f.read(65536):
             h.update(chunk)
     return h.hexdigest()
+
+
+def _market_player_identity(row: pd.Series) -> tuple[str, str, str]:
+    """Return the production identity for an official market player row."""
+    role = {"jng": "jgl", "jungle": "jgl", "bottom": "bot", "support": "sup"}.get(
+        str(row["role"]).casefold(), str(row["role"]).casefold()
+    )
+    return (
+        str(row["summoner_name"]).strip().casefold(),
+        canonical_team(row["team_name"]).casefold(),
+        role,
+    )
+
+
+def _assert_exact_scheduled_player_export(proj: pd.DataFrame, market: pd.DataFrame) -> None:
+    """Fail closed unless production is exactly the fixture's scheduled player set."""
+    expected_rows = scheduled_market_entities(market)
+    expected_rows = expected_rows.loc[
+        ~expected_rows["role"].astype(str).str.casefold().eq("coach")
+    ]
+    expected = {_market_player_identity(row) for _, row in expected_rows.iterrows()}
+    actual = {
+        (str(row.player).strip().casefold(), str(row.team).strip().casefold(), str(row.role).casefold())
+        for row in proj[["player", "team", "role"]].itertuples(index=False)
+    }
+
+    if actual != expected:
+        raise AssertionError(
+            "Production player population must exactly equal the official-market "
+            "scheduled and eligible player population. "
+            f"missing={sorted(expected - actual)}, leaked={sorted(actual - expected)}"
+        )
+    if proj.duplicated(["player", "team", "role"]).any():
+        raise AssertionError("Production player export contains duplicate player/team/role identities.")
+    if proj.isna().any().any():
+        raise AssertionError("Production player export contains null values.")
+    numeric = proj.select_dtypes(include=[np.number])
+    if not np.isfinite(numeric.to_numpy(dtype=float)).all():
+        raise AssertionError("Production player export contains non-finite numeric values.")
+    if not pd.api.types.is_numeric_dtype(proj["price"]):
+        raise AssertionError("Production price dtype is not numeric.")
+    if pd.to_datetime(proj["roster_lock"], utc=True, errors="coerce").isna().any():
+        raise AssertionError("Production roster_lock dtype is not ISO-8601 UTC compatible.")
+    if proj["opponent"].astype(str).str.strip().eq("").any():
+        raise AssertionError("Scheduled player output has incomplete opponent context.")
+    expected_round, _ = resolve_round_identity(market)
+    if not proj["round_name"].eq(expected_round).all():
+        raise AssertionError("Production output round identity does not match the official market fixture.")
 
 
 class TestStage10DR14GRuntimeCutoverReadiness(unittest.TestCase):
@@ -230,17 +280,34 @@ class TestStage10DR14GRuntimeCutoverReadiness(unittest.TestCase):
         self.assertEqual(runtime_fit_calls, [], "runtime_fit_calls must be zero")
 
     def test_08_candidate_writes_exact_production_schema(self) -> None:
-        """8. Verify project_market_ce outputs the exact 36-column production schema in canonical order."""
+        """8. Verify schema and scheduled-only production population from the fixture."""
         proj = project_market_ce(self.market_df, history=self.raw_history)
         self.assertEqual(list(proj.columns), PRODUCTION_PLAYER_SCHEMA_COLUMNS)
-        self.assertEqual(len(proj), 44)
+        _assert_exact_scheduled_player_export(proj, self.market_df)
 
     def test_09_player_coverage_100_percent(self) -> None:
         """9. Verify 100% of eligible market players receive valid, non-null predictions."""
         proj = project_market_ce(self.market_df, history=self.raw_history)
-        self.assertEqual(len(proj), 44)
+        _assert_exact_scheduled_player_export(proj, self.market_df)
         self.assertTrue(proj["projected_fantasy_pts"].notna().all())
         self.assertTrue(proj["projected_points_before_win_adjustment"].notna().all())
+
+    def test_09b_unscheduled_player_leakage_fails_closed(self) -> None:
+        """A player from an unscheduled official team must fail the export contract."""
+        proj = project_market_ce(self.market_df, history=self.raw_history)
+        unscheduled = self.market_df.loc[
+            ~self.market_df.index.isin(scheduled_market_entities(self.market_df).index)
+            & ~self.market_df["role"].astype(str).str.casefold().eq("coach")
+        ].iloc[0]
+        leaked = proj.copy()
+        leaked.loc[0, ["player", "team", "role", "opponent"]] = [
+            unscheduled["summoner_name"],
+            canonical_team(unscheduled["team_name"]),
+            _market_player_identity(unscheduled)[2],
+            "INVALID_UNSCHEDULED_LEAK",
+        ]
+        with self.assertRaisesRegex(AssertionError, "scheduled and eligible"):
+            _assert_exact_scheduled_player_export(leaked, self.market_df)
 
     def test_10_coach_semantics_preserved_in_isolated_mode_outputs(self) -> None:
         """10. Baseline and CE mode outputs must preserve the exact coach export."""
