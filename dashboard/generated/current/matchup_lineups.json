@@ -17790,6 +17790,4610 @@
         "final_projected_score": 112.63,
         "optimizer_objective": 112.63
       }
+    },
+    {
+      "week_id": "Round 6 (Split 3)|2026-08-29T20:00:00+00:00",
+      "round_name": "Round 6 (Split 3)",
+      "roster_lock": "2026-08-29T20:00:00+00:00",
+      "budget": 129.5,
+      "objective": "maximize risk-adjusted player + champion + coach points after official variety buff and matchup-conflict penalty",
+      "coach_counts_toward_variety": true,
+      "matchup_conflict_penalty_points": 5.0,
+      "top_conflict_weight": 0.5,
+      "lineups": [
+        {
+          "total_cost": 123.9,
+          "remaining_gold": 5.6,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 87.28,
+          "projected_champion_bonus": 5.17,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 110.16,
+          "projected_total_points": 126.69,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 126.69,
+          "players": [
+            {
+              "role": "top",
+              "player": "Fudge",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 14.5,
+              "projected_points": 13.98,
+              "projected_points_before_win_adjustment": 14.39,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.41,
+              "elo_adjusted_fantasy_pts": 14.39,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.09,
+              "carry_score_if_loss": 6.22,
+              "carry_win_uplift": 12.87,
+              "carry_win_fantasy_share": 0.1692,
+              "carry_adjustment_vs_elo": -3.51,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5162,
+              "floor_pts": 1.26,
+              "ceiling_pts": 26.7,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1400572934529536,
+                  "expected_multiplier_bonus": 0.5162
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1064365972258359,
+                  "expected_multiplier_bonus": 0.5583
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0956632513522867,
+                  "expected_multiplier_bonus": 0.3942
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1326634258418839,
+                  "expected_multiplier_bonus": 0.5003
+                },
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0612002118499856,
+                  "expected_multiplier_bonus": 0.203
+                },
+                {
+                  "champion": "Aatrox",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0243623776512935,
+                  "expected_multiplier_bonus": 0.0934
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.037708226821456,
+                  "expected_multiplier_bonus": 0.1148
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0266824951078351,
+                  "expected_multiplier_bonus": 0.0237
+                },
+                {
+                  "champion": "Gwen",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.020236748366809,
+                  "expected_multiplier_bonus": 0.0623
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Josedeodo",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.9,
+              "projected_points": 15.96,
+              "projected_points_before_win_adjustment": 14.75,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.2,
+              "elo_adjusted_fantasy_pts": 14.75,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.4,
+              "carry_score_if_loss": 9.47,
+              "carry_win_uplift": 16.93,
+              "carry_win_fantasy_share": 0.2219,
+              "carry_adjustment_vs_elo": 4.94,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9879,
+              "floor_pts": 2.18,
+              "ceiling_pts": 29.75,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1688994316688274,
+                  "expected_multiplier_bonus": 0.9879
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1403375410999921,
+                  "expected_multiplier_bonus": 0.6258
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.073881573577001,
+                  "expected_multiplier_bonus": 0.701
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1229678164805035,
+                  "expected_multiplier_bonus": 0.6272
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0496826131483515,
+                  "expected_multiplier_bonus": 0.5328
+                },
+                {
+                  "champion": "Trundle",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0401544760747464,
+                  "expected_multiplier_bonus": 0.3548
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0165191331547156,
+                  "expected_multiplier_bonus": 0.0749
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0150311275478132,
+                  "expected_multiplier_bonus": 0.0131
+                },
+                {
+                  "champion": "Rek'Sai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0127429759786311,
+                  "expected_multiplier_bonus": 0.0258
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Tactical",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 18.5,
+              "projected_points": 17.63,
+              "projected_points_before_win_adjustment": 17.57,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.06,
+              "elo_adjusted_fantasy_pts": 17.57,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 22.98,
+              "carry_score_if_loss": 10.38,
+              "carry_win_uplift": 12.6,
+              "carry_win_fantasy_share": 0.1793,
+              "carry_adjustment_vs_elo": 1.11,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.3758,
+              "floor_pts": 3.02,
+              "ceiling_pts": 32.24,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.3020529752086735,
+                  "expected_multiplier_bonus": 1.3758
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.2686179728825265,
+                  "expected_multiplier_bonus": 0.8836
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1051912498871277,
+                  "expected_multiplier_bonus": 0.6136
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0276837782990605,
+                  "expected_multiplier_bonus": 0.5589
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0245326577781586,
+                  "expected_multiplier_bonus": 0.7884
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0140572168252063,
+                  "expected_multiplier_bonus": 0.2026
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0074264262784396,
+                  "expected_multiplier_bonus": 0.0892
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0063868452038854,
+                  "expected_multiplier_bonus": 0.1825
+                },
+                {
+                  "champion": "Smolder",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0053109234684405,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 1
+        },
+        {
+          "total_cost": 121.7,
+          "remaining_gold": 7.8,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 87.17,
+          "projected_champion_bonus": 4.63,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 109.51,
+          "projected_total_points": 125.94,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 125.94,
+          "players": [
+            {
+              "role": "top",
+              "player": "Morgan",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 19.9,
+              "projected_points": 16.81,
+              "projected_points_before_win_adjustment": 15.54,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.27,
+              "elo_adjusted_fantasy_pts": 15.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 17.82,
+              "carry_score_if_loss": 5.88,
+              "carry_win_uplift": 11.93,
+              "carry_win_fantasy_share": 0.1489,
+              "carry_adjustment_vs_elo": -2.45,
+              "champion": "Renekton",
+              "champion_expected_bonus": 0.2743,
+              "floor_pts": 5.54,
+              "ceiling_pts": 28.07,
+              "champion_options": [
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1386971070428189,
+                  "expected_multiplier_bonus": 0.2743
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1305106358659772,
+                  "expected_multiplier_bonus": 0.3886
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1281720537553026,
+                  "expected_multiplier_bonus": 0.4214
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1054729162340581,
+                  "expected_multiplier_bonus": 0.8444
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0417014173442431,
+                  "expected_multiplier_bonus": 0.5336
+                },
+                {
+                  "champion": "Jax",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0259349019666543,
+                  "expected_multiplier_bonus": 0.0427
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0290394571106678,
+                  "expected_multiplier_bonus": 0.1122
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0220401727775844,
+                  "expected_multiplier_bonus": 0.0275
+                },
+                {
+                  "champion": "Camille",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0192450883125204,
+                  "expected_multiplier_bonus": 0.0638
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Contractz",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 16.3,
+              "projected_points": 13.02,
+              "projected_points_before_win_adjustment": 13.4,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.38,
+              "elo_adjusted_fantasy_pts": 13.4,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.13,
+              "carry_score_if_loss": 6.91,
+              "carry_win_uplift": 18.23,
+              "carry_win_fantasy_share": 0.2193,
+              "carry_adjustment_vs_elo": 0.11,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.6891,
+              "floor_pts": 0.0,
+              "ceiling_pts": 26.58,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1546807543025739,
+                  "expected_multiplier_bonus": 0.6891
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1410668954193774,
+                  "expected_multiplier_bonus": 0.4627
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1355678418165513,
+                  "expected_multiplier_bonus": 0.7093
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0619027915291954,
+                  "expected_multiplier_bonus": 0.524
+                },
+                {
+                  "champion": "Sejuani",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0427751110540375,
+                  "expected_multiplier_bonus": 0.2234
+                },
+                {
+                  "champion": "Kha'Zix",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0315074896884307,
+                  "expected_multiplier_bonus": 0.207
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.014971021303283,
+                  "expected_multiplier_bonus": 0.0597
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0104330969187465,
+                  "expected_multiplier_bonus": 0.0004
+                },
+                {
+                  "champion": "Lillia",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0099292480448156,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Tactical",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 18.5,
+              "projected_points": 17.63,
+              "projected_points_before_win_adjustment": 17.57,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.06,
+              "elo_adjusted_fantasy_pts": 17.57,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 22.98,
+              "carry_score_if_loss": 10.38,
+              "carry_win_uplift": 12.6,
+              "carry_win_fantasy_share": 0.1793,
+              "carry_adjustment_vs_elo": 1.11,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.3758,
+              "floor_pts": 3.02,
+              "ceiling_pts": 32.24,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.3020529752086735,
+                  "expected_multiplier_bonus": 1.3758
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.2686179728825265,
+                  "expected_multiplier_bonus": 0.8836
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1051912498871277,
+                  "expected_multiplier_bonus": 0.6136
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0276837782990605,
+                  "expected_multiplier_bonus": 0.5589
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0245326577781586,
+                  "expected_multiplier_bonus": 0.7884
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0140572168252063,
+                  "expected_multiplier_bonus": 0.2026
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0074264262784396,
+                  "expected_multiplier_bonus": 0.0892
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0063868452038854,
+                  "expected_multiplier_bonus": 0.1825
+                },
+                {
+                  "champion": "Smolder",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0053109234684405,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 2
+        },
+        {
+          "total_cost": 123.5,
+          "remaining_gold": 6.0,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 86.82,
+          "projected_champion_bonus": 4.59,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 109.12,
+          "projected_total_points": 125.48,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 125.48,
+          "players": [
+            {
+              "role": "top",
+              "player": "Fudge",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 14.5,
+              "projected_points": 13.98,
+              "projected_points_before_win_adjustment": 14.39,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.41,
+              "elo_adjusted_fantasy_pts": 14.39,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.09,
+              "carry_score_if_loss": 6.22,
+              "carry_win_uplift": 12.87,
+              "carry_win_fantasy_share": 0.1692,
+              "carry_adjustment_vs_elo": -3.51,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5162,
+              "floor_pts": 1.26,
+              "ceiling_pts": 26.7,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1400572934529536,
+                  "expected_multiplier_bonus": 0.5162
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1064365972258359,
+                  "expected_multiplier_bonus": 0.5583
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0956632513522867,
+                  "expected_multiplier_bonus": 0.3942
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1326634258418839,
+                  "expected_multiplier_bonus": 0.5003
+                },
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0612002118499856,
+                  "expected_multiplier_bonus": 0.203
+                },
+                {
+                  "champion": "Aatrox",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0243623776512935,
+                  "expected_multiplier_bonus": 0.0934
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.037708226821456,
+                  "expected_multiplier_bonus": 0.1148
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0266824951078351,
+                  "expected_multiplier_bonus": 0.0237
+                },
+                {
+                  "champion": "Gwen",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.020236748366809,
+                  "expected_multiplier_bonus": 0.0623
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Blaber",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 18.8,
+              "projected_points": 13.64,
+              "projected_points_before_win_adjustment": 13.6,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.04,
+              "elo_adjusted_fantasy_pts": 13.6,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.47,
+              "carry_score_if_loss": 8.26,
+              "carry_win_uplift": 17.21,
+              "carry_win_fantasy_share": 0.2177,
+              "carry_adjustment_vs_elo": 5.99,
+              "champion": "Xin Zhao",
+              "champion_expected_bonus": 0.7302,
+              "floor_pts": 0.62,
+              "ceiling_pts": 26.66,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1409022772856586,
+                  "expected_multiplier_bonus": 0.7372
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1352519132238496,
+                  "expected_multiplier_bonus": 0.7548
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0581258550970147,
+                  "expected_multiplier_bonus": 0.3204
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1551494790544602,
+                  "expected_multiplier_bonus": 0.7302
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.05898630584089,
+                  "expected_multiplier_bonus": 0.6028
+                },
+                {
+                  "champion": "Wukong",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0558667423704185,
+                  "expected_multiplier_bonus": 0.5787
+                },
+                {
+                  "champion": "Nidalee",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0182493568759235,
+                  "expected_multiplier_bonus": 0.0054
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0170134765663997,
+                  "expected_multiplier_bonus": 0.0044
+                },
+                {
+                  "champion": "Lillia",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0111641126177408,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Yeon",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.2,
+              "projected_points": 19.49,
+              "projected_points_before_win_adjustment": 18.02,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.47,
+              "elo_adjusted_fantasy_pts": 18.02,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 23.99,
+              "carry_score_if_loss": 8.61,
+              "carry_win_uplift": 15.38,
+              "carry_win_fantasy_share": 0.2035,
+              "carry_adjustment_vs_elo": -0.12,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0456,
+              "floor_pts": 3.7,
+              "ceiling_pts": 35.28,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2444288349031805,
+                  "expected_multiplier_bonus": 1.0456
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0804827890077274,
+                  "expected_multiplier_bonus": 0.8766
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0436314736851241,
+                  "expected_multiplier_bonus": 0.2211
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1604342190120593,
+                  "expected_multiplier_bonus": 0.8622
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0920608790148849,
+                  "expected_multiplier_bonus": 0.9063
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0696134454434823,
+                  "expected_multiplier_bonus": 0.8871
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0423837978725973,
+                  "expected_multiplier_bonus": 0.6101
+                },
+                {
+                  "champion": "Aphelios",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0226805226962932,
+                  "expected_multiplier_bonus": 0.0306
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0210943781933429,
+                  "expected_multiplier_bonus": 0.3295
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 3
+        },
+        {
+          "total_cost": 124.7,
+          "remaining_gold": 4.8,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 86.53,
+          "projected_champion_bonus": 4.58,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 108.82,
+          "projected_total_points": 125.15,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 125.15,
+          "players": [
+            {
+              "role": "top",
+              "player": "Thanatos",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 18.2,
+              "projected_points": 14.31,
+              "projected_points_before_win_adjustment": 14.27,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.05,
+              "elo_adjusted_fantasy_pts": 14.27,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 17.9,
+              "carry_score_if_loss": 8.45,
+              "carry_win_uplift": 9.46,
+              "carry_win_fantasy_share": 0.1532,
+              "carry_adjustment_vs_elo": 0.4,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5536,
+              "floor_pts": 1.94,
+              "ceiling_pts": 26.69,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1361575703514199,
+                  "expected_multiplier_bonus": 0.5536
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0968396459685801,
+                  "expected_multiplier_bonus": 0.6114
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0918466019029942,
+                  "expected_multiplier_bonus": 0.4364
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1164184730788635,
+                  "expected_multiplier_bonus": 0.5696
+                },
+                {
+                  "champion": "Ornn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0422539583766273,
+                  "expected_multiplier_bonus": 0.2051
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0375751406946305,
+                  "expected_multiplier_bonus": 0.1892
+                },
+                {
+                  "champion": "Gwen",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0306124422977694,
+                  "expected_multiplier_bonus": 0.0849
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0280051035241027,
+                  "expected_multiplier_bonus": 0.0289
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0277959785901135,
+                  "expected_multiplier_bonus": 0.1767
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Contractz",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 16.3,
+              "projected_points": 13.02,
+              "projected_points_before_win_adjustment": 13.4,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.38,
+              "elo_adjusted_fantasy_pts": 13.4,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.13,
+              "carry_score_if_loss": 6.91,
+              "carry_win_uplift": 18.23,
+              "carry_win_fantasy_share": 0.2193,
+              "carry_adjustment_vs_elo": 0.11,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.6891,
+              "floor_pts": 0.0,
+              "ceiling_pts": 26.58,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1546807543025739,
+                  "expected_multiplier_bonus": 0.6891
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1410668954193774,
+                  "expected_multiplier_bonus": 0.4627
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1355678418165513,
+                  "expected_multiplier_bonus": 0.7093
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0619027915291954,
+                  "expected_multiplier_bonus": 0.524
+                },
+                {
+                  "champion": "Sejuani",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0427751110540375,
+                  "expected_multiplier_bonus": 0.2234
+                },
+                {
+                  "champion": "Kha'Zix",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0315074896884307,
+                  "expected_multiplier_bonus": 0.207
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.014971021303283,
+                  "expected_multiplier_bonus": 0.0597
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0104330969187465,
+                  "expected_multiplier_bonus": 0.0004
+                },
+                {
+                  "champion": "Lillia",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0099292480448156,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Yeon",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.2,
+              "projected_points": 19.49,
+              "projected_points_before_win_adjustment": 18.02,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.47,
+              "elo_adjusted_fantasy_pts": 18.02,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 23.99,
+              "carry_score_if_loss": 8.61,
+              "carry_win_uplift": 15.38,
+              "carry_win_fantasy_share": 0.2035,
+              "carry_adjustment_vs_elo": -0.12,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0456,
+              "floor_pts": 3.7,
+              "ceiling_pts": 35.28,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2444288349031805,
+                  "expected_multiplier_bonus": 1.0456
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0804827890077274,
+                  "expected_multiplier_bonus": 0.8766
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0436314736851241,
+                  "expected_multiplier_bonus": 0.2211
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1604342190120593,
+                  "expected_multiplier_bonus": 0.8622
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0920608790148849,
+                  "expected_multiplier_bonus": 0.9063
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0696134454434823,
+                  "expected_multiplier_bonus": 0.8871
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0423837978725973,
+                  "expected_multiplier_bonus": 0.6101
+                },
+                {
+                  "champion": "Aphelios",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0226805226962932,
+                  "expected_multiplier_bonus": 0.0306
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0210943781933429,
+                  "expected_multiplier_bonus": 0.3295
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 4
+        },
+        {
+          "total_cost": 125.1,
+          "remaining_gold": 4.4,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 87.12,
+          "projected_champion_bonus": 3.91,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 108.74,
+          "projected_total_points": 125.05,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 125.05,
+          "players": [
+            {
+              "role": "top",
+              "player": "Fudge",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 14.5,
+              "projected_points": 13.98,
+              "projected_points_before_win_adjustment": 14.39,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.41,
+              "elo_adjusted_fantasy_pts": 14.39,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.09,
+              "carry_score_if_loss": 6.22,
+              "carry_win_uplift": 12.87,
+              "carry_win_fantasy_share": 0.1692,
+              "carry_adjustment_vs_elo": -3.51,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5162,
+              "floor_pts": 1.26,
+              "ceiling_pts": 26.7,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1400572934529536,
+                  "expected_multiplier_bonus": 0.5162
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1064365972258359,
+                  "expected_multiplier_bonus": 0.5583
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0956632513522867,
+                  "expected_multiplier_bonus": 0.3942
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1326634258418839,
+                  "expected_multiplier_bonus": 0.5003
+                },
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0612002118499856,
+                  "expected_multiplier_bonus": 0.203
+                },
+                {
+                  "champion": "Aatrox",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0243623776512935,
+                  "expected_multiplier_bonus": 0.0934
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.037708226821456,
+                  "expected_multiplier_bonus": 0.1148
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0266824951078351,
+                  "expected_multiplier_bonus": 0.0237
+                },
+                {
+                  "champion": "Gwen",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.020236748366809,
+                  "expected_multiplier_bonus": 0.0623
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Josedeodo",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.9,
+              "projected_points": 15.96,
+              "projected_points_before_win_adjustment": 14.75,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.2,
+              "elo_adjusted_fantasy_pts": 14.75,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.4,
+              "carry_score_if_loss": 9.47,
+              "carry_win_uplift": 16.93,
+              "carry_win_fantasy_share": 0.2219,
+              "carry_adjustment_vs_elo": 4.94,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9879,
+              "floor_pts": 2.18,
+              "ceiling_pts": 29.75,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1688994316688274,
+                  "expected_multiplier_bonus": 0.9879
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1403375410999921,
+                  "expected_multiplier_bonus": 0.6258
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.073881573577001,
+                  "expected_multiplier_bonus": 0.701
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1229678164805035,
+                  "expected_multiplier_bonus": 0.6272
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0496826131483515,
+                  "expected_multiplier_bonus": 0.5328
+                },
+                {
+                  "champion": "Trundle",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0401544760747464,
+                  "expected_multiplier_bonus": 0.3548
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0165191331547156,
+                  "expected_multiplier_bonus": 0.0749
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0150311275478132,
+                  "expected_multiplier_bonus": 0.0131
+                },
+                {
+                  "champion": "Rek'Sai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0127429759786311,
+                  "expected_multiplier_bonus": 0.0258
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Loki",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 20.9,
+              "projected_points": 17.73,
+              "projected_points_before_win_adjustment": 17.68,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.06,
+              "elo_adjusted_fantasy_pts": 17.68,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 27.33,
+              "carry_score_if_loss": 10.48,
+              "carry_win_uplift": 16.85,
+              "carry_win_fantasy_share": 0.2181,
+              "carry_adjustment_vs_elo": 3.9,
+              "champion": "",
+              "champion_expected_bonus": 0.0,
+              "floor_pts": 0.75,
+              "ceiling_pts": 34.71,
+              "champion_options": []
+            },
+            {
+              "role": "bot",
+              "player": "Yeon",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.2,
+              "projected_points": 19.49,
+              "projected_points_before_win_adjustment": 18.02,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.47,
+              "elo_adjusted_fantasy_pts": 18.02,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 23.99,
+              "carry_score_if_loss": 8.61,
+              "carry_win_uplift": 15.38,
+              "carry_win_fantasy_share": 0.2035,
+              "carry_adjustment_vs_elo": -0.12,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0456,
+              "floor_pts": 3.7,
+              "ceiling_pts": 35.28,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2444288349031805,
+                  "expected_multiplier_bonus": 1.0456
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0804827890077274,
+                  "expected_multiplier_bonus": 0.8766
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0436314736851241,
+                  "expected_multiplier_bonus": 0.2211
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1604342190120593,
+                  "expected_multiplier_bonus": 0.8622
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0920608790148849,
+                  "expected_multiplier_bonus": 0.9063
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0696134454434823,
+                  "expected_multiplier_bonus": 0.8871
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0423837978725973,
+                  "expected_multiplier_bonus": 0.6101
+                },
+                {
+                  "champion": "Aphelios",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0226805226962932,
+                  "expected_multiplier_bonus": 0.0306
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0210943781933429,
+                  "expected_multiplier_bonus": 0.3295
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 5
+        },
+        {
+          "total_cost": 121.7,
+          "remaining_gold": 7.8,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 86.79,
+          "projected_champion_bonus": 4.19,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 108.69,
+          "projected_total_points": 125.0,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 125.0,
+          "players": [
+            {
+              "role": "top",
+              "player": "Morgan",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 19.9,
+              "projected_points": 16.81,
+              "projected_points_before_win_adjustment": 15.54,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.27,
+              "elo_adjusted_fantasy_pts": 15.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 17.82,
+              "carry_score_if_loss": 5.88,
+              "carry_win_uplift": 11.93,
+              "carry_win_fantasy_share": 0.1489,
+              "carry_adjustment_vs_elo": -2.45,
+              "champion": "Renekton",
+              "champion_expected_bonus": 0.2743,
+              "floor_pts": 5.54,
+              "ceiling_pts": 28.07,
+              "champion_options": [
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1386971070428189,
+                  "expected_multiplier_bonus": 0.2743
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1305106358659772,
+                  "expected_multiplier_bonus": 0.3886
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1281720537553026,
+                  "expected_multiplier_bonus": 0.4214
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1054729162340581,
+                  "expected_multiplier_bonus": 0.8444
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0417014173442431,
+                  "expected_multiplier_bonus": 0.5336
+                },
+                {
+                  "champion": "Jax",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0259349019666543,
+                  "expected_multiplier_bonus": 0.0427
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0290394571106678,
+                  "expected_multiplier_bonus": 0.1122
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0220401727775844,
+                  "expected_multiplier_bonus": 0.0275
+                },
+                {
+                  "champion": "Camille",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0192450883125204,
+                  "expected_multiplier_bonus": 0.0638
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Josedeodo",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.9,
+              "projected_points": 15.96,
+              "projected_points_before_win_adjustment": 14.75,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.2,
+              "elo_adjusted_fantasy_pts": 14.75,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.4,
+              "carry_score_if_loss": 9.47,
+              "carry_win_uplift": 16.93,
+              "carry_win_fantasy_share": 0.2219,
+              "carry_adjustment_vs_elo": 4.94,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9879,
+              "floor_pts": 2.18,
+              "ceiling_pts": 29.75,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1688994316688274,
+                  "expected_multiplier_bonus": 0.9879
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1403375410999921,
+                  "expected_multiplier_bonus": 0.6258
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.073881573577001,
+                  "expected_multiplier_bonus": 0.701
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1229678164805035,
+                  "expected_multiplier_bonus": 0.6272
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0496826131483515,
+                  "expected_multiplier_bonus": 0.5328
+                },
+                {
+                  "champion": "Trundle",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0401544760747464,
+                  "expected_multiplier_bonus": 0.3548
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0165191331547156,
+                  "expected_multiplier_bonus": 0.0749
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0150311275478132,
+                  "expected_multiplier_bonus": 0.0131
+                },
+                {
+                  "champion": "Rek'Sai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0127429759786311,
+                  "expected_multiplier_bonus": 0.0258
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Tactical",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 18.5,
+              "projected_points": 17.63,
+              "projected_points_before_win_adjustment": 17.57,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.06,
+              "elo_adjusted_fantasy_pts": 17.57,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 22.98,
+              "carry_score_if_loss": 10.38,
+              "carry_win_uplift": 12.6,
+              "carry_win_fantasy_share": 0.1793,
+              "carry_adjustment_vs_elo": 1.11,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.3758,
+              "floor_pts": 3.02,
+              "ceiling_pts": 32.24,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.3020529752086735,
+                  "expected_multiplier_bonus": 1.3758
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.2686179728825265,
+                  "expected_multiplier_bonus": 0.8836
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1051912498871277,
+                  "expected_multiplier_bonus": 0.6136
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0276837782990605,
+                  "expected_multiplier_bonus": 0.5589
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0245326577781586,
+                  "expected_multiplier_bonus": 0.7884
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0140572168252063,
+                  "expected_multiplier_bonus": 0.2026
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0074264262784396,
+                  "expected_multiplier_bonus": 0.0892
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0063868452038854,
+                  "expected_multiplier_bonus": 0.1825
+                },
+                {
+                  "champion": "Smolder",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0053109234684405,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Zeyzal",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 16.7,
+              "projected_points": 16.64,
+              "projected_points_before_win_adjustment": 17.13,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.49,
+              "elo_adjusted_fantasy_pts": 17.13,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.85,
+              "carry_score_if_loss": 7.34,
+              "carry_win_uplift": 18.52,
+              "carry_win_fantasy_share": 0.2357,
+              "carry_adjustment_vs_elo": -3.09,
+              "champion": "Milio",
+              "champion_expected_bonus": 0.6188,
+              "floor_pts": 2.48,
+              "ceiling_pts": 30.8,
+              "champion_options": [
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2233850407944428,
+                  "expected_multiplier_bonus": 0.6188
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1208044244372536,
+                  "expected_multiplier_bonus": 0.7508
+                },
+                {
+                  "champion": "Rakan",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0838741867432452,
+                  "expected_multiplier_bonus": 0.2734
+                },
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0775981206177712,
+                  "expected_multiplier_bonus": 0.7659
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0697020177083792,
+                  "expected_multiplier_bonus": 0.5678
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0341366780031365,
+                  "expected_multiplier_bonus": 0.3162
+                },
+                {
+                  "champion": "Braum",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0228630809479619,
+                  "expected_multiplier_bonus": 0.0966
+                },
+                {
+                  "champion": "Blitzcrank",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0081046280534865,
+                  "expected_multiplier_bonus": 0.0005
+                },
+                {
+                  "champion": "Mel",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0081046280534865,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 6
+        },
+        {
+          "total_cost": 125.7,
+          "remaining_gold": 3.8,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 86.51,
+          "projected_champion_bonus": 4.28,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 108.5,
+          "projected_total_points": 124.78,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 124.78,
+          "players": [
+            {
+              "role": "top",
+              "player": "Fudge",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 14.5,
+              "projected_points": 13.98,
+              "projected_points_before_win_adjustment": 14.39,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.41,
+              "elo_adjusted_fantasy_pts": 14.39,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.09,
+              "carry_score_if_loss": 6.22,
+              "carry_win_uplift": 12.87,
+              "carry_win_fantasy_share": 0.1692,
+              "carry_adjustment_vs_elo": -3.51,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5162,
+              "floor_pts": 1.26,
+              "ceiling_pts": 26.7,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1400572934529536,
+                  "expected_multiplier_bonus": 0.5162
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1064365972258359,
+                  "expected_multiplier_bonus": 0.5583
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0956632513522867,
+                  "expected_multiplier_bonus": 0.3942
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1326634258418839,
+                  "expected_multiplier_bonus": 0.5003
+                },
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0612002118499856,
+                  "expected_multiplier_bonus": 0.203
+                },
+                {
+                  "champion": "Aatrox",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0243623776512935,
+                  "expected_multiplier_bonus": 0.0934
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.037708226821456,
+                  "expected_multiplier_bonus": 0.1148
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0266824951078351,
+                  "expected_multiplier_bonus": 0.0237
+                },
+                {
+                  "champion": "Gwen",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.020236748366809,
+                  "expected_multiplier_bonus": 0.0623
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Josedeodo",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.9,
+              "projected_points": 15.96,
+              "projected_points_before_win_adjustment": 14.75,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.2,
+              "elo_adjusted_fantasy_pts": 14.75,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.4,
+              "carry_score_if_loss": 9.47,
+              "carry_win_uplift": 16.93,
+              "carry_win_fantasy_share": 0.2219,
+              "carry_adjustment_vs_elo": 4.94,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9879,
+              "floor_pts": 2.18,
+              "ceiling_pts": 29.75,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1688994316688274,
+                  "expected_multiplier_bonus": 0.9879
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1403375410999921,
+                  "expected_multiplier_bonus": 0.6258
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.073881573577001,
+                  "expected_multiplier_bonus": 0.701
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1229678164805035,
+                  "expected_multiplier_bonus": 0.6272
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0496826131483515,
+                  "expected_multiplier_bonus": 0.5328
+                },
+                {
+                  "champion": "Trundle",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0401544760747464,
+                  "expected_multiplier_bonus": 0.3548
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0165191331547156,
+                  "expected_multiplier_bonus": 0.0749
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0150311275478132,
+                  "expected_multiplier_bonus": 0.0131
+                },
+                {
+                  "champion": "Rek'Sai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0127429759786311,
+                  "expected_multiplier_bonus": 0.0258
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Yeon",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.2,
+              "projected_points": 19.49,
+              "projected_points_before_win_adjustment": 18.02,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.47,
+              "elo_adjusted_fantasy_pts": 18.02,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 23.99,
+              "carry_score_if_loss": 8.61,
+              "carry_win_uplift": 15.38,
+              "carry_win_fantasy_share": 0.2035,
+              "carry_adjustment_vs_elo": -0.12,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0456,
+              "floor_pts": 3.7,
+              "ceiling_pts": 35.28,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2444288349031805,
+                  "expected_multiplier_bonus": 1.0456
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0804827890077274,
+                  "expected_multiplier_bonus": 0.8766
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0436314736851241,
+                  "expected_multiplier_bonus": 0.2211
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1604342190120593,
+                  "expected_multiplier_bonus": 0.8622
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0920608790148849,
+                  "expected_multiplier_bonus": 0.9063
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0696134454434823,
+                  "expected_multiplier_bonus": 0.8871
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0423837978725973,
+                  "expected_multiplier_bonus": 0.6101
+                },
+                {
+                  "champion": "Aphelios",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0226805226962932,
+                  "expected_multiplier_bonus": 0.0306
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0210943781933429,
+                  "expected_multiplier_bonus": 0.3295
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "Vulcan",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 21.4,
+              "projected_points": 17.33,
+              "projected_points_before_win_adjustment": 17.28,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.05,
+              "elo_adjusted_fantasy_pts": 17.28,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.66,
+              "carry_win_uplift": 15.64,
+              "carry_win_fantasy_share": 0.2222,
+              "carry_adjustment_vs_elo": 3.68,
+              "champion": "Alistar",
+              "champion_expected_bonus": 0.7965,
+              "floor_pts": 2.96,
+              "ceiling_pts": 31.7,
+              "champion_options": [
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1543964856877301,
+                  "expected_multiplier_bonus": 0.8523
+                },
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1523705686639565,
+                  "expected_multiplier_bonus": 0.7288
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1185462258871584,
+                  "expected_multiplier_bonus": 0.5639
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1668239967278774,
+                  "expected_multiplier_bonus": 0.7965
+                },
+                {
+                  "champion": "Rakan",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0453441296649923,
+                  "expected_multiplier_bonus": 0.2459
+                },
+                {
+                  "champion": "Lulu",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0424044477692287,
+                  "expected_multiplier_bonus": 0.4017
+                },
+                {
+                  "champion": "Braum",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0233274384785435,
+                  "expected_multiplier_bonus": 0.1054
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0208325163841037,
+                  "expected_multiplier_bonus": 0.0049
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0142059131824995,
+                  "expected_multiplier_bonus": 0.5024
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 7
+        },
+        {
+          "total_cost": 121.9,
+          "remaining_gold": 7.6,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 84.03,
+          "projected_champion_bonus": 5.43,
+          "projected_coach_points": 18.69,
+          "projected_base_points": 108.15,
+          "projected_total_points": 124.37,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 124.37,
+          "players": [
+            {
+              "role": "top",
+              "player": "Fudge",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 14.5,
+              "projected_points": 13.98,
+              "projected_points_before_win_adjustment": 14.39,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.41,
+              "elo_adjusted_fantasy_pts": 14.39,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 19.09,
+              "carry_score_if_loss": 6.22,
+              "carry_win_uplift": 12.87,
+              "carry_win_fantasy_share": 0.1692,
+              "carry_adjustment_vs_elo": -3.51,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5162,
+              "floor_pts": 1.26,
+              "ceiling_pts": 26.7,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1400572934529536,
+                  "expected_multiplier_bonus": 0.5162
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1064365972258359,
+                  "expected_multiplier_bonus": 0.5583
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0956632513522867,
+                  "expected_multiplier_bonus": 0.3942
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1326634258418839,
+                  "expected_multiplier_bonus": 0.5003
+                },
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0612002118499856,
+                  "expected_multiplier_bonus": 0.203
+                },
+                {
+                  "champion": "Aatrox",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0243623776512935,
+                  "expected_multiplier_bonus": 0.0934
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.037708226821456,
+                  "expected_multiplier_bonus": 0.1148
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0266824951078351,
+                  "expected_multiplier_bonus": 0.0237
+                },
+                {
+                  "champion": "Gwen",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.020236748366809,
+                  "expected_multiplier_bonus": 0.0623
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Armao",
+              "team": "LYON",
+              "opponent": "Team Liquid|Cloud9",
+              "price": 18.3,
+              "projected_points": 12.71,
+              "projected_points_before_win_adjustment": 12.91,
+              "team_win_probability": 0.5806,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.19,
+              "elo_adjusted_fantasy_pts": 12.91,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 22.51,
+              "carry_score_if_loss": 10.92,
+              "carry_win_uplift": 11.59,
+              "carry_win_fantasy_share": 0.2028,
+              "carry_adjustment_vs_elo": 4.74,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 1.2414,
+              "floor_pts": 0.0,
+              "ceiling_pts": 26.11,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2222488363026299,
+                  "expected_multiplier_bonus": 1.2414
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1940035752077815,
+                  "expected_multiplier_bonus": 0.7555
+                },
+                {
+                  "champion": "Wukong",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.082682120707264,
+                  "expected_multiplier_bonus": 0.5417
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0379656751042148,
+                  "expected_multiplier_bonus": 0.689
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0196795553840989,
+                  "expected_multiplier_bonus": 0.5237
+                },
+                {
+                  "champion": "Naafiri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0143482409132495,
+                  "expected_multiplier_bonus": 0.3405
+                },
+                {
+                  "champion": "Lillia",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0100741297620107,
+                  "expected_multiplier_bonus": 0.0005
+                },
+                {
+                  "champion": "Ivern",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0093096951357871,
+                  "expected_multiplier_bonus": 0.0005
+                },
+                {
+                  "champion": "Zyra",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0092317562155558,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Tactical",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 18.5,
+              "projected_points": 17.63,
+              "projected_points_before_win_adjustment": 17.57,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.06,
+              "elo_adjusted_fantasy_pts": 17.57,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 22.98,
+              "carry_score_if_loss": 10.38,
+              "carry_win_uplift": 12.6,
+              "carry_win_fantasy_share": 0.1793,
+              "carry_adjustment_vs_elo": 1.11,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.3758,
+              "floor_pts": 3.02,
+              "ceiling_pts": 32.24,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.3020529752086735,
+                  "expected_multiplier_bonus": 1.3758
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.2686179728825265,
+                  "expected_multiplier_bonus": 0.8836
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1051912498871277,
+                  "expected_multiplier_bonus": 0.6136
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0276837782990605,
+                  "expected_multiplier_bonus": 0.5589
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0245326577781586,
+                  "expected_multiplier_bonus": 0.7884
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0140572168252063,
+                  "expected_multiplier_bonus": 0.2026
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0074264262784396,
+                  "expected_multiplier_bonus": 0.0892
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0063868452038854,
+                  "expected_multiplier_bonus": 0.1825
+                },
+                {
+                  "champion": "Smolder",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0053109234684405,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Spawn",
+            "team": "Team Liquid",
+            "opponent": "LYON|Shopify Rebellion",
+            "price": 21.9,
+            "projected_points": 18.69,
+            "projected_points_before_win_conditioning": 16.29,
+            "team_win_probability": 0.6652,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 2.39,
+            "projected_score_if_win": 23.54,
+            "projected_score_if_loss": 9.05,
+            "win_sample_games": 280,
+            "loss_sample_games": 185
+          },
+          "rank": 8
+        },
+        {
+          "total_cost": 125.8,
+          "remaining_gold": 3.7,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 85.61,
+          "projected_champion_bonus": 4.78,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 108.1,
+          "projected_total_points": 124.32,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 124.32,
+          "players": [
+            {
+              "role": "top",
+              "player": "Thanatos",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 18.2,
+              "projected_points": 14.31,
+              "projected_points_before_win_adjustment": 14.27,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.05,
+              "elo_adjusted_fantasy_pts": 14.27,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 17.9,
+              "carry_score_if_loss": 8.45,
+              "carry_win_uplift": 9.46,
+              "carry_win_fantasy_share": 0.1532,
+              "carry_adjustment_vs_elo": 0.4,
+              "champion": "Gnar",
+              "champion_expected_bonus": 0.5536,
+              "floor_pts": 1.94,
+              "ceiling_pts": 26.69,
+              "champion_options": [
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1361575703514199,
+                  "expected_multiplier_bonus": 0.5536
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0968396459685801,
+                  "expected_multiplier_bonus": 0.6114
+                },
+                {
+                  "champion": "Ambessa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0918466019029942,
+                  "expected_multiplier_bonus": 0.4364
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1164184730788635,
+                  "expected_multiplier_bonus": 0.5696
+                },
+                {
+                  "champion": "Ornn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0422539583766273,
+                  "expected_multiplier_bonus": 0.2051
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0375751406946305,
+                  "expected_multiplier_bonus": 0.1892
+                },
+                {
+                  "champion": "Gwen",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0306124422977694,
+                  "expected_multiplier_bonus": 0.0849
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0280051035241027,
+                  "expected_multiplier_bonus": 0.0289
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0277959785901135,
+                  "expected_multiplier_bonus": 0.1767
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Josedeodo",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.9,
+              "projected_points": 15.96,
+              "projected_points_before_win_adjustment": 14.75,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.2,
+              "elo_adjusted_fantasy_pts": 14.75,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.4,
+              "carry_score_if_loss": 9.47,
+              "carry_win_uplift": 16.93,
+              "carry_win_fantasy_share": 0.2219,
+              "carry_adjustment_vs_elo": 4.94,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.9879,
+              "floor_pts": 2.18,
+              "ceiling_pts": 29.75,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1688994316688274,
+                  "expected_multiplier_bonus": 0.9879
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1403375410999921,
+                  "expected_multiplier_bonus": 0.6258
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.073881573577001,
+                  "expected_multiplier_bonus": 0.701
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1229678164805035,
+                  "expected_multiplier_bonus": 0.6272
+                },
+                {
+                  "champion": "Lee Sin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0496826131483515,
+                  "expected_multiplier_bonus": 0.5328
+                },
+                {
+                  "champion": "Trundle",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0401544760747464,
+                  "expected_multiplier_bonus": 0.3548
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0165191331547156,
+                  "expected_multiplier_bonus": 0.0749
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0150311275478132,
+                  "expected_multiplier_bonus": 0.0131
+                },
+                {
+                  "champion": "Rek'Sai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0127429759786311,
+                  "expected_multiplier_bonus": 0.0258
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Quid",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.4,
+              "projected_points": 19.75,
+              "projected_points_before_win_adjustment": 18.26,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.49,
+              "elo_adjusted_fantasy_pts": 18.26,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 24.87,
+              "carry_score_if_loss": 10.25,
+              "carry_win_uplift": 14.62,
+              "carry_win_fantasy_share": 0.2077,
+              "carry_adjustment_vs_elo": 0.82,
+              "champion": "Orianna",
+              "champion_expected_bonus": 0.9355,
+              "floor_pts": 3.22,
+              "ceiling_pts": 36.28,
+              "champion_options": [
+                {
+                  "champion": "Orianna",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1561970678204402,
+                  "expected_multiplier_bonus": 0.9355
+                },
+                {
+                  "champion": "Syndra",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1459027468443378,
+                  "expected_multiplier_bonus": 0.8021
+                },
+                {
+                  "champion": "Ryze",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1076783697991237,
+                  "expected_multiplier_bonus": 1.023
+                },
+                {
+                  "champion": "Viktor",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0697280864542299,
+                  "expected_multiplier_bonus": 0.6116
+                },
+                {
+                  "champion": "Ahri",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0522377125392071,
+                  "expected_multiplier_bonus": 0.4615
+                },
+                {
+                  "champion": "Azir",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0498732276215847,
+                  "expected_multiplier_bonus": 0.318
+                },
+                {
+                  "champion": "Aurora",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.022689826115149,
+                  "expected_multiplier_bonus": 0.0677
+                },
+                {
+                  "champion": "Yasuo",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0113145303157263,
+                  "expected_multiplier_bonus": 0.0652
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0040421334965324,
+                  "expected_multiplier_bonus": 0.0149
+                }
+              ]
+            },
+            {
+              "role": "bot",
+              "player": "Bvoy",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 16.7,
+              "projected_points": 15.63,
+              "projected_points_before_win_adjustment": 16.09,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.46,
+              "elo_adjusted_fantasy_pts": 16.09,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.57,
+              "carry_score_if_loss": 9.17,
+              "carry_win_uplift": 16.4,
+              "carry_win_fantasy_share": 0.2198,
+              "carry_adjustment_vs_elo": -0.98,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 0.9483,
+              "floor_pts": 0.0,
+              "ceiling_pts": 31.27,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2683761288741669,
+                  "expected_multiplier_bonus": 0.9483
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1772840129040867,
+                  "expected_multiplier_bonus": 0.7313
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0794458654040256,
+                  "expected_multiplier_bonus": 0.7164
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0776713585357321,
+                  "expected_multiplier_bonus": 0.7691
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0650980145029643,
+                  "expected_multiplier_bonus": 0.548
+                },
+                {
+                  "champion": "Yunara",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0274450588792136,
+                  "expected_multiplier_bonus": 0.3365
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0316359648936594,
+                  "expected_multiplier_bonus": 0.1758
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0191324161471458,
+                  "expected_multiplier_bonus": 0.1061
+                },
+                {
+                  "champion": "Sivir",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.013007794116122,
+                  "expected_multiplier_bonus": 0.0006
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 9
+        },
+        {
+          "total_cost": 122.9,
+          "remaining_gold": 6.6,
+          "unique_teams": 4,
+          "variety_bonus": 0.15,
+          "projected_player_points": 87.01,
+          "projected_champion_bonus": 3.37,
+          "projected_coach_points": 17.71,
+          "projected_base_points": 108.09,
+          "projected_total_points": 124.3,
+          "matchup_conflicts": [],
+          "matchup_conflict_penalty": 0,
+          "risk_adjusted_points": 124.3,
+          "players": [
+            {
+              "role": "top",
+              "player": "Morgan",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 19.9,
+              "projected_points": 16.81,
+              "projected_points_before_win_adjustment": 15.54,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.27,
+              "elo_adjusted_fantasy_pts": 15.54,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 17.82,
+              "carry_score_if_loss": 5.88,
+              "carry_win_uplift": 11.93,
+              "carry_win_fantasy_share": 0.1489,
+              "carry_adjustment_vs_elo": -2.45,
+              "champion": "Renekton",
+              "champion_expected_bonus": 0.2743,
+              "floor_pts": 5.54,
+              "ceiling_pts": 28.07,
+              "champion_options": [
+                {
+                  "champion": "Renekton",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1386971070428189,
+                  "expected_multiplier_bonus": 0.2743
+                },
+                {
+                  "champion": "K'Sante",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1305106358659772,
+                  "expected_multiplier_bonus": 0.3886
+                },
+                {
+                  "champion": "Gnar",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1281720537553026,
+                  "expected_multiplier_bonus": 0.4214
+                },
+                {
+                  "champion": "Rumble",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1054729162340581,
+                  "expected_multiplier_bonus": 0.8444
+                },
+                {
+                  "champion": "Jayce",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0417014173442431,
+                  "expected_multiplier_bonus": 0.5336
+                },
+                {
+                  "champion": "Jax",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0259349019666543,
+                  "expected_multiplier_bonus": 0.0427
+                },
+                {
+                  "champion": "Sion",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0290394571106678,
+                  "expected_multiplier_bonus": 0.1122
+                },
+                {
+                  "champion": "Yorick",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0220401727775844,
+                  "expected_multiplier_bonus": 0.0275
+                },
+                {
+                  "champion": "Camille",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0192450883125204,
+                  "expected_multiplier_bonus": 0.0638
+                }
+              ]
+            },
+            {
+              "role": "jgl",
+              "player": "Contractz",
+              "team": "Shopify Rebellion",
+              "opponent": "Cloud9|Team Liquid",
+              "price": 16.3,
+              "projected_points": 13.02,
+              "projected_points_before_win_adjustment": 13.4,
+              "team_win_probability": 0.3622,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": -0.38,
+              "elo_adjusted_fantasy_pts": 13.4,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 25.13,
+              "carry_score_if_loss": 6.91,
+              "carry_win_uplift": 18.23,
+              "carry_win_fantasy_share": 0.2193,
+              "carry_adjustment_vs_elo": 0.11,
+              "champion": "Jarvan IV",
+              "champion_expected_bonus": 0.6891,
+              "floor_pts": 0.0,
+              "ceiling_pts": 26.58,
+              "champion_options": [
+                {
+                  "champion": "Jarvan IV",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1546807543025739,
+                  "expected_multiplier_bonus": 0.6891
+                },
+                {
+                  "champion": "Vi",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1410668954193774,
+                  "expected_multiplier_bonus": 0.4627
+                },
+                {
+                  "champion": "Xin Zhao",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.1355678418165513,
+                  "expected_multiplier_bonus": 0.7093
+                },
+                {
+                  "champion": "Pantheon",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0619027915291954,
+                  "expected_multiplier_bonus": 0.524
+                },
+                {
+                  "champion": "Sejuani",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0427751110540375,
+                  "expected_multiplier_bonus": 0.2234
+                },
+                {
+                  "champion": "Kha'Zix",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0315074896884307,
+                  "expected_multiplier_bonus": 0.207
+                },
+                {
+                  "champion": "Olaf",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.014971021303283,
+                  "expected_multiplier_bonus": 0.0597
+                },
+                {
+                  "champion": "Maokai",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0104330969187465,
+                  "expected_multiplier_bonus": 0.0004
+                },
+                {
+                  "champion": "Lillia",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0099292480448156,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            },
+            {
+              "role": "mid",
+              "player": "Loki",
+              "team": "Cloud9",
+              "opponent": "Shopify Rebellion|LYON",
+              "price": 20.9,
+              "projected_points": 17.73,
+              "projected_points_before_win_adjustment": 17.68,
+              "team_win_probability": 0.6585,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 0.06,
+              "elo_adjusted_fantasy_pts": 17.68,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 27.33,
+              "carry_score_if_loss": 10.48,
+              "carry_win_uplift": 16.85,
+              "carry_win_fantasy_share": 0.2181,
+              "carry_adjustment_vs_elo": 3.9,
+              "champion": "",
+              "champion_expected_bonus": 0.0,
+              "floor_pts": 0.75,
+              "ceiling_pts": 34.71,
+              "champion_options": []
+            },
+            {
+              "role": "bot",
+              "player": "Yeon",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 23.2,
+              "projected_points": 19.49,
+              "projected_points_before_win_adjustment": 18.02,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.47,
+              "elo_adjusted_fantasy_pts": 18.02,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 23.99,
+              "carry_score_if_loss": 8.61,
+              "carry_win_uplift": 15.38,
+              "carry_win_fantasy_share": 0.2035,
+              "carry_adjustment_vs_elo": -0.12,
+              "champion": "Ezreal",
+              "champion_expected_bonus": 1.0456,
+              "floor_pts": 3.7,
+              "ceiling_pts": 35.28,
+              "champion_options": [
+                {
+                  "champion": "Ezreal",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.2444288349031805,
+                  "expected_multiplier_bonus": 1.0456
+                },
+                {
+                  "champion": "Lucian",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0804827890077274,
+                  "expected_multiplier_bonus": 0.8766
+                },
+                {
+                  "champion": "Kai'Sa",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0436314736851241,
+                  "expected_multiplier_bonus": 0.2211
+                },
+                {
+                  "champion": "Jhin",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1604342190120593,
+                  "expected_multiplier_bonus": 0.8622
+                },
+                {
+                  "champion": "Varus",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0920608790148849,
+                  "expected_multiplier_bonus": 0.9063
+                },
+                {
+                  "champion": "Caitlyn",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0696134454434823,
+                  "expected_multiplier_bonus": 0.8871
+                },
+                {
+                  "champion": "Xayah",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0423837978725973,
+                  "expected_multiplier_bonus": 0.6101
+                },
+                {
+                  "champion": "Aphelios",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0226805226962932,
+                  "expected_multiplier_bonus": 0.0306
+                },
+                {
+                  "champion": "Ashe",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0210943781933429,
+                  "expected_multiplier_bonus": 0.3295
+                }
+              ]
+            },
+            {
+              "role": "sup",
+              "player": "CoreJJ",
+              "team": "Team Liquid",
+              "opponent": "LYON|Shopify Rebellion",
+              "price": 24.3,
+              "projected_points": 19.96,
+              "projected_points_before_win_adjustment": 18.46,
+              "team_win_probability": 0.6039,
+              "win_probability_source": "canonical_pit_ce_portable_v1",
+              "win_probability_adjustment": 1.5,
+              "elo_adjusted_fantasy_pts": 18.46,
+              "carry_concentration_enabled": true,
+              "carry_score_if_win": 26.3,
+              "carry_score_if_loss": 10.75,
+              "carry_win_uplift": 15.55,
+              "carry_win_fantasy_share": 0.2221,
+              "carry_adjustment_vs_elo": 1.68,
+              "champion": "Bard",
+              "champion_expected_bonus": 1.3582,
+              "floor_pts": 5.94,
+              "ceiling_pts": 33.98,
+              "champion_options": [
+                {
+                  "champion": "Leona",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1211964454887847,
+                  "expected_multiplier_bonus": 0.6858
+                },
+                {
+                  "champion": "Nautilus",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.1140339521062298,
+                  "expected_multiplier_bonus": 0.4138
+                },
+                {
+                  "champion": "Rell",
+                  "multiplier": "1.3x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0691341005144877,
+                  "expected_multiplier_bonus": 0.5365
+                },
+                {
+                  "champion": "Bard",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.1679193144086068,
+                  "expected_multiplier_bonus": 1.3582
+                },
+                {
+                  "champion": "Alistar",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0944530289109262,
+                  "expected_multiplier_bonus": 0.6613
+                },
+                {
+                  "champion": "Milio",
+                  "multiplier": "1.5x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0886696774541979,
+                  "expected_multiplier_bonus": 0.7059
+                },
+                {
+                  "champion": "Tahm Kench",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 1",
+                  "estimated_pick_chance": 0.0168804200213256,
+                  "expected_multiplier_bonus": 0.0019
+                },
+                {
+                  "champion": "Seraphine",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 2",
+                  "estimated_pick_chance": 0.0144139052896711,
+                  "expected_multiplier_bonus": 0.4049
+                },
+                {
+                  "champion": "Thresh",
+                  "multiplier": "1.7x",
+                  "option_basis": "Rank 3",
+                  "estimated_pick_chance": 0.0138269101471667,
+                  "expected_multiplier_bonus": 0.0005
+                }
+              ]
+            }
+          ],
+          "coach": {
+            "coach": "Reignover",
+            "team": "LYON",
+            "opponent": "Team Liquid|Cloud9",
+            "price": 18.3,
+            "projected_points": 17.71,
+            "projected_points_before_win_conditioning": 16.32,
+            "team_win_probability": 0.6015,
+            "win_probability_source": "sequential_elo_tracker",
+            "win_probability_adjustment": 1.39,
+            "projected_score_if_win": 23.17,
+            "projected_score_if_loss": 9.47,
+            "win_sample_games": 58,
+            "loss_sample_games": 46
+          },
+          "rank": 10
+        }
+      ]
     }
   ]
 }

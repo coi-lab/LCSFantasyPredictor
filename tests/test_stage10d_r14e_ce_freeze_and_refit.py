@@ -39,6 +39,33 @@ from fantasy_prediction.recovered_components import (
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_DIR = ROOT / ".agent-runs" / "player-model-v2-stage-10d-r14e-ce-freeze-refit-20260828T210800Z"
 
+# R14G intentionally moved CE from a sealed candidate into the production
+# player-export boundary.  Keep that boundary small and explicit: downstream
+# consumers receive the ordinary projection schema and must not know CE
+# internals.
+CE_RUNTIME_ALLOWLIST = {
+    "fantasy_prediction/ce_model.py",
+    "fantasy_prediction/ce_shadow_adapter.py",
+    "fantasy_prediction/player_baseline.py",
+}
+CE_NON_RUNTIME_PREFIXES = (
+    ".agent-runs/",
+    ".agents/",
+    ".codex/",
+    "docs/",
+    "scripts/",
+    "tests/",
+)
+
+
+def classify_ce_reference_path(path: str) -> str:
+    """Classify a CE symbol reference under the R14G approved boundary."""
+    if path in CE_RUNTIME_ALLOWLIST:
+        return "APPROVED_CE_RUNTIME_BOUNDARY"
+    if path.startswith(CE_NON_RUNTIME_PREFIXES) or path in {"README.md", "AGENTS.md"}:
+        return "NON_RUNTIME_REFERENCE"
+    return "UNAPPROVED_APPLICATION_OR_RUNTIME_REFERENCE"
+
 
 class TestStage10DR14ECEFreezeAndRefit(unittest.TestCase):
     """Test suite verifying all Stage 10D-R14E and R14E-R1 contracts, architecture freeze, and refit state."""
@@ -366,7 +393,7 @@ class TestStage10DR14ECEFreezeAndRefit(unittest.TestCase):
         self.assertEqual(filtered["player"].iloc[0], "AllowedBefore")
 
     def test_13_production_separation_executable_search(self):
-        """13. Executable search across repository ensuring zero active production exposure of CE candidate."""
+        """13. Preserve R14E history and enforce the approved R14G CE boundary."""
         symbols = [
             "fantasy_prediction.ce_model",
             "predict_ce",
@@ -375,8 +402,38 @@ class TestStage10DR14ECEFreezeAndRefit(unittest.TestCase):
             "s30_v2_refit_20260817",
         ]
 
-        active_matches = []
-        unknown_matches = []
+        # R14E's completed historical state had no active CE integration. Audit
+        # its checkpoint rather than imposing its former quarantine on the
+        # post-R14G runtime integration.
+        r14e_checkpoint = "05503950aa83fe61ca61b3730c29e4d2a4b2619d"
+        historical_runtime_matches = []
+        for sym in symbols:
+            try:
+                raw_out = subprocess.check_output(
+                    ["git", "grep", "-n", sym, r14e_checkpoint],
+                    cwd=ROOT,
+                    text=True,
+                )
+                lines = raw_out.splitlines() if raw_out else []
+            except subprocess.CalledProcessError:
+                lines = []
+            for line in lines:
+                parts = line.split(":", 2)
+                if len(parts) < 3:
+                    continue
+                historical_path = parts[1]
+                if historical_path != "fantasy_prediction/ce_model.py" and not historical_path.startswith(
+                    ("tests/", "scripts/", "docs/", ".agent-runs/")
+                ):
+                    historical_runtime_matches.append(line)
+        self.assertEqual(
+            historical_runtime_matches,
+            [],
+            msg=(
+                "R14E historical fact violated: its sealed candidate must have "
+                f"zero active production exposure, found {historical_runtime_matches}"
+            ),
+        )
 
         for sym in symbols:
             try:
@@ -390,31 +447,32 @@ class TestStage10DR14ECEFreezeAndRefit(unittest.TestCase):
                 if len(parts) < 3:
                     continue
                 file_path = parts[0]
-                if file_path.startswith("tests/") or file_path.startswith("scripts/"):
-                    continue
-                elif file_path == "fantasy_prediction/ce_model.py":
-                    continue
-                elif (
-                    file_path.startswith(("config/", "dashboard/", "data_pipeline/"))
-                    or file_path in [
-                        "fantasy_prediction/lineup_optimizer.py",
-                        "fantasy_prediction/lineup_aware_optimizer.py",
-                        "fantasy_prediction/player_model_v2.py",
-                    ]
-                ):
-                    active_matches.append(line)
-                else:
-                    unknown_matches.append(line)
+                classification = classify_ce_reference_path(file_path)
+                self.assertNotEqual(
+                    classification,
+                    "UNAPPROVED_APPLICATION_OR_RUNTIME_REFERENCE",
+                    msg=(
+                        "CE references may only occur in the explicit R14G "
+                        f"runtime boundary; {line!r} is {classification}."
+                    ),
+                )
 
-        self.assertEqual(len(active_matches), 0, msg=f"Active production exposure found: {active_matches}")
-        self.assertEqual(len(unknown_matches), 0, msg=f"Unknown match occurrences: {unknown_matches}")
-
-        # Active configuration file contains zero candidate references
-        config_path = ROOT / "config/player_model_v2.json"
-        if config_path.exists():
-            cfg_text = config_path.read_text(encoding="utf-8")
-            for sym in symbols:
-                self.assertNotIn(sym, cfg_text, msg=f"Config contains unexpected candidate symbol {sym}")
+    def test_13a_ce_boundary_rejects_unauthorized_runtime_paths(self):
+        """The CE boundary is fail-closed for generic downstream consumers."""
+        for path in (
+            "dashboard/server.py",
+            "config/player_model_v2.json",
+            "data_pipeline/export_dashboard_data.py",
+            "fantasy_prediction/lineup_optimizer.py",
+            "fantasy_prediction/lineup_aware_optimizer.py",
+            "fantasy_prediction/player_model_v2.py",
+            "champion_prediction/simple_predictor.py",
+        ):
+            self.assertEqual(
+                classify_ce_reference_path(path),
+                "UNAPPROVED_APPLICATION_OR_RUNTIME_REFERENCE",
+                msg=f"Unauthorized CE dependency must fail closed: {path}",
+            )
 
     def test_14_evidence_manifest_integrity(self):
         """14. Verify evidence manifest hashes, absence of self-reference, and fail-closed validation."""
