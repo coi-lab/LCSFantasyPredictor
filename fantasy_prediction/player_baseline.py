@@ -41,6 +41,31 @@ def canonical_team(value: Any) -> str:
     return TEAM_ALIASES.get(text.casefold(), text)
 
 
+def resolve_round_identity(market: pd.DataFrame) -> tuple[str, str]:
+    """Return the explicit production round label and canonical period ID.
+
+    CE inference is point-in-time only when its target period comes from the
+    official market capture.  A missing or malformed label is therefore an
+    error, not an invitation to reuse a prior round.
+    """
+    if "round_name" not in market.columns or market.empty:
+        raise ValueError("Cannot resolve CE target round identity: missing official round_name metadata.")
+
+    round_names = market["round_name"].dropna().astype(str).str.strip()
+    unique_names = round_names[round_names.ne("")].unique().tolist()
+    if len(unique_names) != 1:
+        raise ValueError("Cannot resolve CE target round identity: official round_name must contain one non-empty value.")
+
+    round_name = unique_names[0]
+    match = re.fullmatch(r"Round\s+(\d+)\s*\(Split\s+(\d+)\)", round_name, re.IGNORECASE)
+    if match is None:
+        raise ValueError(
+            "Cannot resolve CE target round identity: expected 'Round <n> (Split <n>)' official metadata."
+        )
+    round_number, split_number = match.groups()
+    return round_name, f"2026-split-{split_number}-round-{round_number}"
+
+
 def prepare_history(scored_rows: pd.DataFrame) -> pd.DataFrame:
     """Attach normalized roles and the opposing team to scored player games."""
     rows = scored_rows.copy()
@@ -470,13 +495,7 @@ def project_market_ce(
     from fantasy_prediction.carry_concentration import CarryProfileEngine
 
     cutoff = pd.to_datetime(market["market_closes_at"].iloc[0], utc=True)
-    round_name = str(market["round_name"].iloc[0]) if "round_name" in market.columns else "Round 5 (Split 3)"
-    m = re.search(r"Round\s+(\d+)\s*\(Split\s+(\d+)\)", round_name, re.IGNORECASE)
-    if m:
-        r_num, s_num = m.group(1), m.group(2)
-        period_id = f"2026-split-{s_num}-round-{r_num}"
-    else:
-        period_id = "2026-split-3-round-5"
+    round_name, period_id = resolve_round_identity(market)
 
     canonical_games, canonical_series = build_canonical_history()
     future_frame = build_future_prediction_frame(

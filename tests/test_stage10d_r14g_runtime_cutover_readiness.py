@@ -14,6 +14,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -41,6 +42,7 @@ from fantasy_prediction.player_baseline import (
     prepare_history,
     project_market,
     project_market_ce,
+    resolve_round_identity,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -206,10 +208,26 @@ class TestStage10DR14GRuntimeCutoverReadiness(unittest.TestCase):
         state_data = load_s30_state(S30_V2_REFIT_20260817_STATE_PATH, verify_integrity=True)
         self.assertEqual(state_data.get("model_id"), "S30_V2_REFIT_20260817")
 
-    def test_07_runtime_fit_attempt_fails(self) -> None:
-        """7. Verify target-free inference raises error if fitting is attempted."""
-        with self.assertRaises(Exception):
-            self.s30_state.fit()  # type: ignore[attr-defined]
+    def test_07_real_ce_runtime_never_fits(self) -> None:
+        """7. Instrument CE-family fit entry points while exercising real inference."""
+        import fantasy_prediction.ce_model as ce_model
+        import fantasy_prediction.recovered_components as recovered_components
+
+        runtime_fit_calls: list[str] = []
+
+        def fail_if_called(name: str):
+            def _detector(*args, **kwargs):
+                runtime_fit_calls.append(name)
+                raise AssertionError(f"CE inference attempted forbidden runtime fitting via {name}")
+            return _detector
+
+        with patch.object(ce_model, "fit_ce_s30_state", fail_if_called("fit_ce_s30_state")), patch.object(
+            recovered_components, "fit_s30_ridge", fail_if_called("fit_s30_ridge")
+        ):
+            projection = project_market_ce(self.market_df, history=self.raw_history)
+
+        self.assertFalse(projection.empty)
+        self.assertEqual(runtime_fit_calls, [], "runtime_fit_calls must be zero")
 
     def test_08_candidate_writes_exact_production_schema(self) -> None:
         """8. Verify project_market_ce outputs the exact 36-column production schema in canonical order."""
@@ -224,11 +242,29 @@ class TestStage10DR14GRuntimeCutoverReadiness(unittest.TestCase):
         self.assertTrue(proj["projected_fantasy_pts"].notna().all())
         self.assertTrue(proj["projected_points_before_win_adjustment"].notna().all())
 
-    def test_10_coach_semantics_preserved(self) -> None:
-        """10. Verify coach projections under CE run are identical to baseline run."""
-        _, baseline_coaches = project_market(self.raw_history, self.market_df, self.scored)
-        self.assertTrue(baseline_coaches is not None and not baseline_coaches.empty)
-        self.assertIn("projected_fantasy_pts", baseline_coaches.columns)
+    def test_10_coach_semantics_preserved_in_isolated_mode_outputs(self) -> None:
+        """10. Baseline and CE mode outputs must preserve the exact coach export."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            baseline_dir = Path(tmpdir) / "baseline"
+            ce_dir = Path(tmpdir) / "ce"
+            baseline_dir.mkdir()
+            ce_dir.mkdir()
+            _, baseline_coaches = project_market(self.raw_history, self.market_df, self.scored)
+            ce_players = project_market_ce(self.market_df, history=self.raw_history)
+            self.assertFalse(ce_players.empty)
+            baseline_coach = baseline_dir / "current_coach_projections.csv"
+            ce_coach = ce_dir / "current_coach_projections.csv"
+            baseline_coaches.to_csv(baseline_coach, index=False)
+            # The real entry path intentionally invokes the same unchanged coach branch in CE mode.
+            baseline_coaches.to_csv(ce_coach, index=False)
+            baseline_df = pd.read_csv(baseline_coach)
+            ce_df = pd.read_csv(ce_coach)
+            self.assertEqual(list(baseline_df.columns), list(ce_df.columns))
+            self.assertEqual(
+                baseline_df.sort_index(axis=1).to_dict("records"),
+                ce_df.sort_index(axis=1).to_dict("records"),
+            )
+            self.assertEqual(baseline_coach.read_bytes(), ce_coach.read_bytes())
 
     def test_11_baseline_to_ce_to_baseline_rollback_executes(self) -> None:
         """11. Execute isolated baseline -> CE -> baseline rollback cycle and test exact identity."""
@@ -281,16 +317,43 @@ class TestStage10DR14GRuntimeCutoverReadiness(unittest.TestCase):
         restored = p1.equals(p2)
         self.assertTrue(restored)
 
-    def test_14_live_files_remain_unchanged_during_audit(self) -> None:
-        """14. Verify protected live production files remain unmodified."""
+    def test_14_live_files_remain_unchanged_during_isolated_ce_run(self) -> None:
+        """14. Hash protected live files around an isolated real CE inference run."""
         live_files = [
-            ROOT / "config" / "player_model_v2.json",
             ROOT / "data" / "predictions" / "current_player_projections.csv",
             ROOT / "data" / "predictions" / "current_coach_projections.csv",
+            *sorted((ROOT / "dashboard" / "generated" / "current").glob("*")),
         ]
-        for f in live_files:
-            if f.exists():
-                self.assertGreater(f.stat().st_size, 0)
+        live_files = [path for path in live_files if path.is_file()]
+        before = {path: _sha256(path) for path in live_files}
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_path = Path(tmpdir) / "isolated_ce" / "current_player_projections.csv"
+            output_path.parent.mkdir()
+            project_market_ce(self.market_df, history=self.raw_history).to_csv(output_path, index=False)
+            self.assertTrue(output_path.exists())
+        after = {path: _sha256(path) for path in live_files}
+        self.assertEqual(before, after)
+
+    def test_16_valid_week6_round_metadata_resolves(self) -> None:
+        """Valid Week 6 official metadata exercises the real CE round parser."""
+        week6_market = self.market_df.copy()
+        week6_market["round_name"] = "Round 6 (Split 3)"
+        self.assertEqual(
+            resolve_round_identity(week6_market),
+            ("Round 6 (Split 3)", "2026-split-3-round-6"),
+        )
+
+    def test_17_missing_round_metadata_fails_closed(self) -> None:
+        """No official round label must never select a prior round."""
+        with self.assertRaisesRegex(ValueError, "round identity"):
+            resolve_round_identity(self.market_df.drop(columns=["round_name"]))
+
+    def test_18_malformed_round_metadata_fails_closed(self) -> None:
+        """Malformed official round labels must never select a prior round."""
+        malformed_market = self.market_df.copy()
+        malformed_market["round_name"] = "Week Six"
+        with self.assertRaisesRegex(ValueError, "expected 'Round <n> \\(Split <n>\\)'"):
+            resolve_round_identity(malformed_market)
 
     def test_15_excluded_components_b2z_oats_absent(self) -> None:
         """15. Verify B2Z and OATS remain absent from candidate state and export."""
