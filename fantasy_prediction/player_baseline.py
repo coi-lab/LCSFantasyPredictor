@@ -6,6 +6,7 @@ import argparse
 import glob
 import math
 from pathlib import Path
+import re
 from typing import Any
 
 import numpy as np
@@ -454,11 +455,81 @@ def backtest_2026(history: pd.DataFrame) -> dict[str, float | int | str]:
     }
 
 
+def project_market_ce(
+    market: pd.DataFrame,
+    history: Optional[pd.DataFrame] = None,
+) -> pd.DataFrame:
+    """Project player projections using the sealed CE model candidate.
+
+    Loads verified sealed state, builds point-in-time canonical history and future frame,
+    runs target-free predict_ce, and exports to the exact 36-column production schema.
+    """
+    from fantasy_prediction.canonical_pit import build_canonical_history, build_future_prediction_frame
+    from fantasy_prediction.ce_model import S30_V2_REFIT_20260817_STATE_PATH, load_s30_state, predict_ce
+    from fantasy_prediction.ce_shadow_adapter import build_ce_shadow_player_export
+    from fantasy_prediction.carry_concentration import CarryProfileEngine
+
+    cutoff = pd.to_datetime(market["market_closes_at"].iloc[0], utc=True)
+    round_name = str(market["round_name"].iloc[0]) if "round_name" in market.columns else "Round 5 (Split 3)"
+    m = re.search(r"Round\s+(\d+)\s*\(Split\s+(\d+)\)", round_name, re.IGNORECASE)
+    if m:
+        r_num, s_num = m.group(1), m.group(2)
+        period_id = f"2026-split-{s_num}-round-{r_num}"
+    else:
+        period_id = "2026-split-3-round-5"
+
+    canonical_games, canonical_series = build_canonical_history()
+    future_frame = build_future_prediction_frame(
+        prediction_period_id=period_id,
+        lock_timestamp=cutoff.isoformat(),
+        scheduled_matchups=[],
+        eligible_players_or_market=market,
+        canonical_games=canonical_games,
+        canonical_series=canonical_series,
+    )
+    s30_state = load_s30_state(S30_V2_REFIT_20260817_STATE_PATH, verify_integrity=True)
+    ce_preds = predict_ce(
+        frame=future_frame,
+        canonical_games=canonical_games,
+        cutoff_timestamp=cutoff.isoformat(),
+        s30_state=s30_state,
+    )
+    ce_preds["win_probability_source"] = "canonical_pit_ce_portable_v1"
+
+    if history is None:
+        ingestor = LCSDataIngestor()
+        raw = ingestor.load_raw_data()
+        contextual = ingestor.attach_team_game_context(raw)
+        players = ingestor.filter_player_positions(contextual)
+        scored = ingestor.calculate_fantasy_points(players)
+        history = prepare_history(scored)
+
+    pre_lock_history = history.loc[history["date"].lt(cutoff)].copy()
+    carry_engine = CarryProfileEngine(pre_lock_history)
+
+    return build_ce_shadow_player_export(
+        future_frame=future_frame,
+        ce_predictions=ce_preds,
+        canonical_games=canonical_games,
+        carry_engine=carry_engine,
+        round_name=round_name,
+        lock_timestamp=cutoff.isoformat(),
+        win_probability_source="canonical_pit_ce_portable_v1",
+    )
+
+
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--market", type=Path)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument(
+        "--model",
+        type=str,
+        choices=["baseline", "ce"],
+        default="baseline",
+        help="Player prediction model: 'baseline' (default production model) or 'ce' (sealed CE production candidate).",
+    )
     parser.add_argument(
         "--skip-backtest",
         action="store_true",
@@ -483,7 +554,15 @@ def main() -> None:
     history = prepare_history(scored)
     market_path = args.market or latest_market_snapshot()
     market = pd.read_csv(market_path)
-    player_projections, coach_projections = project_market(history, market, scored)
+
+    # Coach model remains active and unchanged
+    baseline_player_projections, coach_projections = project_market(history, market, scored)
+
+    if args.model == "ce":
+        player_projections = project_market_ce(market, history=history)
+    else:
+        player_projections = baseline_player_projections
+
     baseline_players = baseline_coaches = None
     if args.export_controlled_baseline:
         baseline_players, baseline_coaches = project_market(
@@ -508,7 +587,7 @@ def main() -> None:
         baseline_coaches.to_csv(
             args.output_dir / "week2_control_coach_projections.csv", index=False
         )
-    print(f"Wrote player projections: {player_path}")
+    print(f"Wrote player projections ({args.model}): {player_path}")
     print(f"Wrote coach projections: {coach_path}")
     if backtest is not None:
         print(f"2026 chronological test: {backtest}")

@@ -682,6 +682,22 @@ def build_prediction_period_frame(
             team_games_min[t_self] = team_games_min.get(t_self, 0) + g_min
             team_games_max[t_self] = team_games_max.get(t_self, 0) + g_max
 
+    # If market snapshot provides explicit opponent codes, align team opponent order to market snapshot
+    if market_snapshot is not None and not market_snapshot.empty and "opponent_codes" in market_snapshot.columns:
+        from fantasy_prediction.player_baseline import canonical_team
+        code_to_team = {}
+        for _, r in market_snapshot[["team_code", "team_name"]].drop_duplicates().iterrows():
+            code_to_team[str(r["team_code"])] = canonical_team(r["team_name"])
+        for _, r in market_snapshot.iterrows():
+            t_id, _, _ = normalize_team(r.get("team_name") or r.get("team") or r.get("team_code"))
+            opp_codes_raw = str(r.get("opponent_codes", ""))
+            if opp_codes_raw and opp_codes_raw != "nan" and pd.notna(r.get("opponent_codes")):
+                opp_codes = [c.strip() for c in opp_codes_raw.split("|") if c.strip() and c.strip() != "nan"]
+                opp_names = [code_to_team.get(c, c) for c in opp_codes]
+                opp_canon_ids = [normalize_team(name)[0] for name in opp_names]
+                if opp_canon_ids:
+                    team_opponents[t_id] = opp_canon_ids
+
     # 2. Determine eligible players
     eligible_players = []
     if market_snapshot is not None and not market_snapshot.empty:

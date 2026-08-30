@@ -275,13 +275,13 @@ def build_ce_shadow_player_export(
 
         # Opponents formatting
         opp_names_str = str(row.get("scheduled_opponent_names", ""))
-        if opp_names_str and opp_names_str != "nan":
+        if opp_names_str and opp_names_str != "nan" and pd.notna(row.get("scheduled_opponent_names")):
             opp_list = [o.strip() for o in opp_names_str.split(",") if o.strip()]
-            opponent_field = "|".join(opp_list) if opp_list else "nan"
-            sched_matchups = len(opp_list)
+            opponent_field = "|".join(opp_list) if opp_list else ""
+            sched_matchups = len(opp_list) if opp_list else 1
         else:
             opp_list = []
-            opponent_field = "nan"
+            opponent_field = ""
             sched_matchups = 1
 
         price_val = float(row.get("market_price", 15.0)) if pd.notna(row.get("market_price")) else 15.0
@@ -1256,8 +1256,8 @@ def audit_fail_closed_schema_parity(
                             break
 
                     elif col == "opponent":
-                        exp_opp = "|".join(opp_list) if opp_list else "nan"
-                        act_opp = str(shadow_val) if pd.notna(shadow_val) else "nan"
+                        exp_opp = "|".join(opp_list) if opp_list else ""
+                        act_opp = str(shadow_val).strip() if (pd.notna(shadow_val) and str(shadow_val).strip() != "nan") else ""
                         if act_opp != exp_opp:
                             semantic_match = False
                             reason = f"Player {p_name} opponent='{act_opp}' != authoritative scheduled opponents '{exp_opp}'"
