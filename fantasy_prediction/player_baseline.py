@@ -33,12 +33,75 @@ TEAM_ALIASES = {
     "cloud9 kia": "Cloud9",
     "team liquid alienware": "Team Liquid",
 }
+MARKET_OPPONENT_CONTEXT_FIELDS = (
+    "opponent_codes",
+    "opponent_sides",
+    "match_timestamps",
+)
 
 
 def canonical_team(value: Any) -> str:
     """Normalize official-market branding to the match-data team identity."""
     text = str(value or "").strip()
     return TEAM_ALIASES.get(text.casefold(), text)
+
+
+def classify_market_participation(market: pd.DataFrame) -> pd.DataFrame:
+    """Classify official-market rows by their native round participation.
+
+    A team is scheduled only when *all* of its market rows carry complete
+    official matchup context.  A team with no context is deliberately retained
+    in the returned audit table but is ineligible for this round.  Mixed team
+    context is unsafe upstream data and fails closed rather than allowing a
+    partial roster into inference.
+    """
+    missing = [field for field in MARKET_OPPONENT_CONTEXT_FIELDS if field not in market]
+    if missing:
+        raise ValueError(
+            "BLOCKED_BY_WEEK6_SCHEDULE_CONTEXT: official market is missing "
+            f"required opponent fields {missing}"
+        )
+    if "team_code" not in market and "team_id" not in market:
+        raise ValueError("BLOCKED_BY_WEEK6_SCHEDULE_CONTEXT: official market has no team identity")
+
+    classified = market.copy()
+    complete = classified[list(MARKET_OPPONENT_CONTEXT_FIELDS)].notna().all(axis=1)
+    complete &= classified[list(MARKET_OPPONENT_CONTEXT_FIELDS)].apply(
+        lambda column: column.astype(str).str.strip().ne("") & column.astype(str).str.casefold().ne("nan")
+    ).all(axis=1)
+    classified["opponent_context_complete"] = complete
+    team_key = "team_id" if "team_id" in classified else "team_code"
+    scheduled_by_team = classified.groupby(team_key, dropna=False)["opponent_context_complete"].agg(["all", "any"])
+    mixed = scheduled_by_team.loc[scheduled_by_team["all"] != scheduled_by_team["any"]]
+    if not mixed.empty:
+        raise ValueError(
+            "BLOCKED_BY_WEEK6_SCHEDULE_CONTEXT: mixed opponent context within "
+            f"official team identities {mixed.index.astype(str).tolist()}"
+        )
+    scheduled = scheduled_by_team["all"].to_dict()
+    classified["scheduled_team"] = classified[team_key].map(scheduled).astype(bool)
+    classified["exclusion_reason"] = np.where(
+        classified["scheduled_team"], "", "UNSCHEDULED_THIS_ROUND"
+    )
+    return classified
+
+
+def scheduled_market_entities(market: pd.DataFrame) -> pd.DataFrame:
+    """Return only officially scheduled, valid market rows for round inference."""
+    classified = classify_market_participation(market)
+    scheduled = classified.loc[classified["scheduled_team"]].copy()
+    required_identity = ["summoner_name", "role", "price"]
+    missing = [field for field in required_identity if field not in scheduled]
+    if missing:
+        raise ValueError(f"BLOCKED_BY_WEEK6_SCHEDULE_CONTEXT: scheduled rows missing {missing}")
+    valid_identity = scheduled["summoner_name"].notna() & scheduled["summoner_name"].astype(str).str.strip().ne("")
+    valid_role = scheduled["role"].notna() & scheduled["role"].astype(str).str.strip().ne("")
+    valid_price = pd.to_numeric(scheduled["price"], errors="coerce").notna()
+    if not (valid_identity & valid_role & valid_price).all():
+        raise ValueError("BLOCKED_BY_WEEK6_SCHEDULE_CONTEXT: scheduled row has unresolved identity, role, or price")
+    if scheduled.empty:
+        raise ValueError("BLOCKED_BY_WEEK6_SCHEDULE_CONTEXT: no scheduled market entities")
+    return scheduled.drop(columns=["scheduled_team", "opponent_context_complete", "exclusion_reason"])
 
 
 def resolve_round_identity(market: pd.DataFrame) -> tuple[str, str]:
@@ -276,7 +339,7 @@ def project_market(
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Project current market players and coaches from the roster-lock snapshot."""
     from fantasy_prediction.team_win_model import EloTracker, extract_canonical_matches
-    rows = market.copy()
+    rows = scheduled_market_entities(market)
     cutoff = pd.to_datetime(rows["market_closes_at"].iloc[0], utc=True)
     code_to_team = {
         str(row.team_code): canonical_team(row.team_name)
@@ -494,15 +557,16 @@ def project_market_ce(
     from fantasy_prediction.ce_shadow_adapter import build_ce_shadow_player_export
     from fantasy_prediction.carry_concentration import CarryProfileEngine
 
-    cutoff = pd.to_datetime(market["market_closes_at"].iloc[0], utc=True)
-    round_name, period_id = resolve_round_identity(market)
+    scheduled_market = scheduled_market_entities(market)
+    cutoff = pd.to_datetime(scheduled_market["market_closes_at"].iloc[0], utc=True)
+    round_name, period_id = resolve_round_identity(scheduled_market)
 
     canonical_games, canonical_series = build_canonical_history()
     future_frame = build_future_prediction_frame(
         prediction_period_id=period_id,
         lock_timestamp=cutoff.isoformat(),
         scheduled_matchups=[],
-        eligible_players_or_market=market,
+        eligible_players_or_market=scheduled_market,
         canonical_games=canonical_games,
         canonical_series=canonical_series,
     )

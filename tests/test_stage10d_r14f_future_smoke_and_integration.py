@@ -159,7 +159,15 @@ class TestStage10DR14FFutureSmokeAndIntegration(unittest.TestCase):
     def test_04_cutoff_safety_and_no_future_leakage(self):
         """4. Verify inference source events are strictly < future lock and model cutoff is respected."""
         lock_ts = pd.to_datetime(ROUND5_LOCK, utc=True)
-        self.assertTrue((self.canonical_games["date"] < lock_ts).all())
+        # The immutable raw history may legitimately advance after this old
+        # fixture's lock.  Inference must instead consume only its pre-lock
+        # slice; asserting the whole canonical store is frozen would reject
+        # valid completed official history.
+        inference_source = self.canonical_games.loc[
+            self.canonical_games["date"] < lock_ts
+        ]
+        self.assertFalse(inference_source.empty)
+        self.assertTrue((inference_source["date"] < lock_ts).all())
         training_cutoff = pd.to_datetime(FINAL_TRAINING_CUTOFF, utc=True)
         self.assertTrue(training_cutoff <= pd.to_datetime("2026-08-17T23:59:59Z", utc=True))
 

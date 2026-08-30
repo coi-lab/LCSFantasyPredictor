@@ -140,6 +140,7 @@ def run_all_files_production_separation_audit() -> Dict[str, Any]:
         "candidate_test": 0,
         "candidate_module": 0,
         "candidate_adapter": 0,
+        "candidate_entrypoint": 0,
         "active_production_path": 0,
         "unknown": 0,
     }
@@ -167,13 +168,16 @@ def run_all_files_production_separation_audit() -> Dict[str, Any]:
                         cat = "candidate_module"
                     elif rel_path == "fantasy_prediction/ce_shadow_adapter.py":
                         cat = "candidate_adapter"
+                    elif rel_path == "fantasy_prediction/player_baseline.py":
+                        # CE is reachable only through the explicit --model ce
+                        # shadow branch; the default remains baseline.
+                        cat = "candidate_entrypoint"
                     elif (
                         rel_path.startswith(("config/", "dashboard/", "data_pipeline/"))
                         or rel_path in [
                             "fantasy_prediction/lineup_optimizer.py",
                             "fantasy_prediction/lineup_aware_optimizer.py",
                             "fantasy_prediction/player_model_v2.py",
-                            "fantasy_prediction/player_baseline.py",
                         ]
                     ):
                         cat = "active_production_path"
