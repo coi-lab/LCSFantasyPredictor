@@ -8,5 +8,9 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - run: python -m unittest tests/test_evidence_harness.py tests/test_agent_harness_validator.py -v
+      - name: Positive end-to-end evidence harness smoke
+        run: |
+          evidence_root="$(python scripts/run_stage_with_evidence.py --stage-config harness_configs/stage-10d-r17a-dry-run.json)"
+          python scripts/validate_stage_evidence.py --evidence-root "$evidence_root"
       - run: python -m compileall scripts tests
       - run: git diff --check

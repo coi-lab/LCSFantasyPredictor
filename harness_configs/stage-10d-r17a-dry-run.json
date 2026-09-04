@@ -1,14 +1,16 @@
 {
   "version": 1,
   "stage_id": "R17A_NEW_HARNESS_DRY_RUN",
-  "prompt_path": "docs/task-evidence/stage-10d-r17a/stage-10d-r17a-current-recency-contract.md",
-  "commands": [],
-  "test_commands": [".venv/bin/python -m unittest tests/test_stage10d_r17a_recency.py -v"],
-  "required_artifacts": [],
-  "required_claims": [],
-  "required_gates": [],
+  "prompt_path": "harness_configs/contracts/stage-10d-r17a-harness-dry-run.md",
+  "input_artifacts": [".codex/r17p/stage-10d-r17p-program-plan.md", ".codex/audits/stage-10d-r17q/stage-10d-r17q-agy-evidence-integrity-audit.md"],
+  "commands": ["python scripts/run_stage10d_r17a_harness_smoke.py"],
+  "test_commands": ["python -m unittest tests/test_stage10d_r17a_harness_smoke.py -v"],
+  "required_artifacts": ["r17a-harness-smoke-proof.json", "stage-10d-r17q-r2c-protected-path-inventory.json"],
+  "required_claims": ["CLAIM_R17A_HARNESS_SMOKE"],
+  "required_gates": [{"gate_id": "R17A_HARNESS_SMOKE_GATE", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status", "predicate": "== true", "blocking": true}],
   "allowed_write_paths": [".agent-runs"],
-  "protected_paths": ["fantasy_prediction", "champion_prediction", "data_pipeline", "learning", "rag"],
+  "protected_paths": ["fantasy_prediction", "champion_prediction", "data_pipeline", "learning", "rag", "data/predictions/current_player_projections.csv", "data/predictions/current_coach_projections.csv", "data/predictions/current_champion_portfolio.csv", "data/predictions/current_champion_rankings.csv", "data/predictions/current_lineup_recommendations.json", "dashboard/generated/current"],
+  "report_bindings": [{"report_field": "smoke_status", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status"}],
   "report_template": "generic_pending_independent_review",
   "evidence_root": ".agent-runs"
 }
