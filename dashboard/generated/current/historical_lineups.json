@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-08-22T01:19:05.431595+00:00",
+  "generated_at_utc": "2026-09-04T19:07:20.877733+00:00",
   "title": "Historical training and testing lineups",
   "budget_notice": "Historical V2 lineups use a reconstructed score-price market. Prices and the account budget move after every week from the selected roster's asset changes; this is not recovered official historical pricing.",
   "champion_notice": "Champion locks are available for the frozen 2026 audit. The older training/validation artifacts did not preserve point-in-time champion locks.",

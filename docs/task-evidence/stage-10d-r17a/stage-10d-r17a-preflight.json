@@ -1,0 +1,32 @@
+{
+  "stage_id": "Stage 10D-R17A",
+  "r17p_verdict": "PORTABLE_MODEL_IMPROVEMENT_PROGRAM_READY",
+  "selected_implementation_node": "R17A \u2014 recency-form evaluation",
+  "current_baseline_identity": "CE_PORTABLE_V1 = S30_V2 + FE_PORTABLE_ON_S30_V2",
+  "current_recency_definition": "last-5 game arithmetic mean over fantasy points, kills, deaths, assists, total_cs, and count",
+  "git_branch": "main",
+  "git_head": "f86c54186db62dbb2b82c082f362920e824d09c2",
+  "pre_existing_worktree_changes": [
+    "M data/raw/oracles_elixir/2026_LoL_esports_match_data_from_OraclesElixir.csv",
+    "?? .codex/r17p/"
+  ],
+  "allowed_files": [
+    "fantasy_prediction/canonical_pit.py",
+    "fantasy_prediction/recovered_components.py",
+    "scripts/fit_s30_v2.py",
+    "scripts/build_s30_v2_raw_modeling_table.py",
+    "scripts/run_stage10d_r17a_recency_evaluation.py",
+    "tests/test_stage10d_r17a_recency.py",
+    "docs/task-evidence/stage-10d-r17a/",
+    ".agent-runs/player-model-v2-stage-10d-r17a-recency-form-20260904T183200Z/"
+  ],
+  "forbidden_files": [
+    "fantasy_prediction/ce_model.py",
+    "fantasy_prediction/lineup_optimizer.py",
+    "config/scoring_rules.json",
+    "data/raw/",
+    "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json",
+    "dashboard/",
+    "data/predictions/current_player_projections.csv"
+  ]
+}

@@ -1,0 +1,22 @@
+signal,classification,raw_source,canonical_or_point_in_time_producer,grain,historical_availability,future_availability,cutoff_rule,missing_behavior,notes
+recent_player_fantasy_form,ACTIVE_IN_CE,Oracle player-game rows,build_player_point_in_time_context,player-game to player-period,yes,yes,date < lock,role baseline,last-5 active
+player_KDA_CS,ACTIVE_IN_CE,Oracle player-game rows,build_player_point_in_time_context,player-game to player-period,yes,yes,date < lock,role baseline,last-5 active
+role,ACTIVE_IN_CE,official market/schedule,build_prediction_period_frame,player-period,yes,yes,roster known at lock,fail closed if unavailable,role dummies
+team_kills,ACTIVE_IN_CE,Oracle team context,calculate_fe1_combat_opportunity,team-game to team-period,yes,yes,current split and date < lock,12.60 league mean,FE last-5
+opponent_deaths,ACTIVE_IN_CE,Oracle team context,calculate_fe1_combat_opportunity,team-game to matchup-period,yes,yes,current split and date < lock,12.60 league mean,only first opponent consumed
+team_deaths,AVAILABLE_BUT_UNUSED,Oracle team context,build_team_point_in_time_context,team-period,yes,yes,date < lock,12.0 default,canonical field
+team_win_rate,AVAILABLE_BUT_UNUSED,Oracle results,build_team_point_in_time_context,team-period,yes,yes,date < lock,0.5 default,canonical field
+recent_team_win_rate,AVAILABLE_BUT_UNUSED,Oracle results,build_team_point_in_time_context,team-period,yes,yes,date < lock,team rate/0.5,tail-10 canonical field
+opponent_win_rate,AVAILABLE_BUT_UNUSED,Oracle results,build_prediction_period_frame,matchup-period,yes,yes,date < lock,0.5 default,average across schedule
+team_elo,AVAILABLE_IN_COACH_ONLY,Oracle canonical matches,EloTracker/build_pregame_elo_lookup,team-game,yes,yes,state replay before event,1500 initial,new player producer required
+matchup_win_probability,AVAILABLE_IN_COACH_ONLY,Oracle canonical matches,EloTracker/build_pregame_elo_lookup,team-opponent-game,yes,yes,state replay before event,0.5,new player producer required
+win_loss_coach_signal,AVAILABLE_IN_COACH_ONLY,Oracle team slates,conditional_coach_projection,team-game,yes,yes,slates date < cutoff,development baseline,final coach projection must not enter player model
+streak_state,AVAILABLE_BUT_UNUSED,Oracle results,OATSRatingTracker.series_history,team-series,yes,yes,series date < lock,zero history,not an approved candidate without independent test
+roster_identity_continuity,AVAILABLE_BUT_UNUSED,market plus canonical history,market roster and history counts,player/team-period,partial,yes,lock roster and date < lock,explicit unknown/fallback,requires lineage audit before use
+scheduled_opponents,AVAILABLE_BUT_UNUSED,official schedule/market,build_prediction_period_frame,team-period,yes,yes,known before lock,fail closed,full ordered list exists
+multiple_scheduled_opponents,AVAILABLE_BUT_UNUSED,official schedule/market,build_prediction_period_frame,team-period,yes,yes,known before lock,one-opponent behavior only if exactly one,currently FE ignores all but first
+player_score_dispersion,AVAILABLE_BUT_UNUSED,labels plus CE predictions,evaluation-only joined rows,player-period,yes,not inference input,post-period evaluation only,N/A,calibration state can be portable
+optimizer_matchup_conflicts,ACTIVE_IN_CE,pre-lock opponent fields,build_matchup_conflicts,lineup-pair,yes,yes,schedule at lock,no conflict if unknown,optimizer-only penalty
+historical_OATS_final_projection,HISTORICAL_ONLY,legacy artifacts,legacy unavailable producer,player-period,partial,no,not reproducible,N/A,explicitly excluded from CE
+realized_game_count,NOT_PORTABLE,post-lock outcomes,attach_realized_labels,period label,yes,no,post-lock,N/A,must never weight future multi-opponent expectation
+

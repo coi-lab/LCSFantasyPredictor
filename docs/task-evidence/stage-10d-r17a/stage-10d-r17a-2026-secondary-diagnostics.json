@@ -1,0 +1,61 @@
+{
+  "metrics_2026": {
+    "RECENCY_10": {
+      "MAE": 5.8483,
+      "RMSE": 7.266,
+      "Spearman": 0.2559,
+      "bias": -1.1179,
+      "observations": 739
+    },
+    "RECENCY_15_SENSITIVITY": {
+      "MAE": 5.8194,
+      "RMSE": 7.22,
+      "Spearman": 0.2745,
+      "bias": -1.0587,
+      "observations": 739
+    },
+    "RECENCY_3": {
+      "MAE": 5.9577,
+      "RMSE": 7.4097,
+      "Spearman": 0.1754,
+      "bias": -1.2868,
+      "observations": 739
+    },
+    "RECENCY_5_BASELINE": {
+      "MAE": 5.8681,
+      "RMSE": 7.3043,
+      "Spearman": 0.2354,
+      "bias": -1.2087,
+      "observations": 739
+    },
+    "RECENCY_7": {
+      "MAE": 5.8798,
+      "RMSE": 7.2996,
+      "Spearman": 0.2379,
+      "bias": -1.1724,
+      "observations": 739
+    },
+    "RECENCY_EWMA_H2": {
+      "MAE": 5.8659,
+      "RMSE": 7.316,
+      "Spearman": 0.2271,
+      "bias": -1.1858,
+      "observations": 739
+    },
+    "RECENCY_EWMA_H4": {
+      "MAE": 5.819,
+      "RMSE": 7.2501,
+      "Spearman": 0.2627,
+      "bias": -1.1235,
+      "observations": 739
+    },
+    "RECENCY_EWMA_H6": {
+      "MAE": 5.811,
+      "RMSE": 7.2308,
+      "Spearman": 0.2706,
+      "bias": -1.0982,
+      "observations": 739
+    }
+  },
+  "notice": "Non-binding secondary diagnostic. Did not participate in candidate selection."
+}

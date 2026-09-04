@@ -1,0 +1,16 @@
+{
+  "stage-10d-r17a-2026-secondary-diagnostics.json": "256ec2f0d8c2f63827f458c6b73719c93677a008ef1bd0b7c8ff19d87ec2c69e",
+  "stage-10d-r17a-candidate-classification.json": "f71def8d762d1653ba413f374e60e5dfd42d06fdf15ea3cb41388c76a675d8b3",
+  "stage-10d-r17a-candidate-comparison.csv": "0334609afb7c5fdfda52cd59059717cbe1acde65c28abaff1f298c7ebc2a0685",
+  "stage-10d-r17a-candidate-contract.json": "2845eaad37abc64bbda16be5f6dca90d920c9ea72459b93aaae2401cee883fb8",
+  "stage-10d-r17a-completion-report.md": "e94cb42261a27a07b9315bad27b4df9b6019576afce8c571b527b457a42140d6",
+  "stage-10d-r17a-current-recency-contract.md": "1e2214c2f14006d5e18bc70a73f6d920912d548000698889776d9d5b24bb3de6",
+  "stage-10d-r17a-frozen-component.json": "2631c1a29067fa5e6f246254ac0c751a4269cec5fd57ce05b236b9237fcbce2a",
+  "stage-10d-r17a-future-smoke.json": "9df7292b899a8618e9b0eb0f9cfd0e4fa159da11f6e29664e1cb650fdd7fd5a9",
+  "stage-10d-r17a-history-coverage.csv": "ae53fd31fb9b50d4c123fb34337e4fcdd60975d5a9c492701242450a46b9944c",
+  "stage-10d-r17a-prediction-spread.csv": "f324675bb01e5d66bd4750b6f54444c6a7e22b738af5fb81672c2db5adead325",
+  "stage-10d-r17a-preflight.json": "81184c59013e199b1bae1c6d0c003ad9cc32b4acabe7d1a07f8271dd7ac7b20c",
+  "stage-10d-r17a-production-immutability.json": "64360ed9a0211a7a7689d518386395123b0f10cdf6968dd6c7c8660401c6ec41",
+  "stage-10d-r17a-role-diagnostics.csv": "81c6de0966e6d4ecdb20de38907c2ce9e24a189e02b969d589cb839308114d12",
+  "stage-10d-r17a-target-grain-check.json": "eec9f6e54269b6b1b1763f4671f15ccc7be3116d601a7202b13559afa34ee293"
+}

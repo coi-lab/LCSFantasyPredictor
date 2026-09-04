@@ -1,0 +1,54 @@
+{
+  "RECENCY_10": {
+    "delta_MAE_pooled": -0.021700000000000053,
+    "pooled_MAE": 5.3284,
+    "reason": "Severe single-year regression",
+    "status": "INELIGIBLE_UNSTABLE"
+  },
+  "RECENCY_15_SENSITIVITY": {
+    "delta_MAE_pooled": -0.07340000000000035,
+    "is_baseline": false,
+    "is_sensitivity_only": true,
+    "pooled_MAE": 5.2767,
+    "reason": "Predeclared long-window sensitivity check (not eligible for primary promotion)",
+    "status": "ELIGIBLE_SENSITIVITY_ONLY"
+  },
+  "RECENCY_3": {
+    "delta_MAE_pooled": 0.031200000000000117,
+    "pooled_MAE": 5.3813,
+    "reason": "Pooled MAE 5.3813 does not materially improve over baseline 5.3501 by >= 0.005",
+    "status": "INELIGIBLE_NO_IMPROVEMENT"
+  },
+  "RECENCY_5_BASELINE": {
+    "delta_MAE_pooled": 0.0,
+    "is_baseline": true,
+    "is_sensitivity_only": false,
+    "pooled_MAE": 5.3501,
+    "reason": "Production reference baseline",
+    "status": "ELIGIBLE"
+  },
+  "RECENCY_7": {
+    "delta_MAE_pooled": -0.016500000000000625,
+    "pooled_MAE": 5.3336,
+    "reason": "Improves pooled MAE by 0.0165 (0.31%) with robust year and role balance",
+    "status": "ELIGIBLE"
+  },
+  "RECENCY_EWMA_H2": {
+    "delta_MAE_pooled": -0.017400000000000304,
+    "pooled_MAE": 5.3327,
+    "reason": "Improves pooled MAE by 0.0174 (0.33%) with robust year and role balance",
+    "status": "ELIGIBLE"
+  },
+  "RECENCY_EWMA_H4": {
+    "delta_MAE_pooled": -0.048500000000000654,
+    "pooled_MAE": 5.3016,
+    "reason": "Improves pooled MAE by 0.0485 (0.91%) with robust year and role balance",
+    "status": "ELIGIBLE"
+  },
+  "RECENCY_EWMA_H6": {
+    "delta_MAE_pooled": -0.05970000000000031,
+    "pooled_MAE": 5.2904,
+    "reason": "Improves pooled MAE by 0.0597 (1.12%) with robust year and role balance",
+    "status": "ELIGIBLE"
+  }
+}

@@ -1,0 +1,6 @@
+# R17P optimizer matchup-conflict plan
+
+`lineup_optimizer.DEFAULT_MATCHUP_CONFLICT_PENALTY` is 5.0 points per opposing-slot pair. `build_matchup_conflicts` examines every pair among TOP/JGL/MID/BOT/SUP/coach; the pair weight is the minimum role weight: TOP=0.5 and every other role, including coach,=1.0. The summed penalty is subtracted only from optimizer `risk_adjusted_points`, after projected total and the official variety bonus. It does not change contest scoring, player projections, prices, or the fixed 0/5/10/15/20/25% organization ladder; coach contributes to unique organizations.
+
+R17E starts only after the selected player-model components and calibration are frozen. Using frozen historical player/coach/champion inputs and chronological account budgets, sweep a small preregistered grid `{0,2.5,5,7.5,10}` on development periods, freeze one value, then evaluate later periods and archived prospective rounds separately. Compare realized legal-lineup score, rank/regret versus the same feasible universe, conflict count, and variety tier. Do not tune this parameter jointly with player-model candidates. Stop if market/budget/roster lineage cannot make the comparison common and chronological.
+

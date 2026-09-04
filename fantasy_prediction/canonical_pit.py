@@ -425,12 +425,112 @@ def build_canonical_history(
     return games_df, series_df
 
 
+@dataclass(frozen=True)
+class RecentFormSpec:
+    """Configurable, versioned, cutoff-safe recent-form specification."""
+    candidate_id: str = "RECENCY_5_BASELINE"
+    method: str = "fixed_window"  # "fixed_window" or "exponential_decay"
+    window: Optional[int] = 5
+    half_life_games: Optional[float] = None
+    max_lookback_games: int = 15
+    fallback_hierarchy: str = "role_baseline_100"
+
+    def compute_weights(self, n_games: int) -> np.ndarray:
+        """Compute weights for n_games in reverse chronological order (index 0 is most recent)."""
+        if n_games <= 0:
+            return np.array([], dtype=float)
+        if self.method == "fixed_window":
+            win = self.window if self.window is not None else 5
+            m = min(n_games, win)
+            return np.ones(m, dtype=float)
+        elif self.method == "exponential_decay":
+            m = min(n_games, self.max_lookback_games)
+            hl = self.half_life_games if self.half_life_games is not None else 4.0
+            ages = np.arange(m, dtype=float)
+            return np.power(0.5, ages / hl)
+        else:
+            raise ValueError(f"Unknown recent-form method: {self.method}")
+
+
+# Frozen R17A Candidate Registry
+R17A_CANDIDATE_REGISTRY: Dict[str, RecentFormSpec] = {
+    "RECENCY_3": RecentFormSpec(candidate_id="RECENCY_3", method="fixed_window", window=3, max_lookback_games=3),
+    "RECENCY_5_BASELINE": RecentFormSpec(candidate_id="RECENCY_5_BASELINE", method="fixed_window", window=5, max_lookback_games=5),
+    "RECENCY_7": RecentFormSpec(candidate_id="RECENCY_7", method="fixed_window", window=7, max_lookback_games=7),
+    "RECENCY_10": RecentFormSpec(candidate_id="RECENCY_10", method="fixed_window", window=10, max_lookback_games=10),
+    "RECENCY_15_SENSITIVITY": RecentFormSpec(candidate_id="RECENCY_15_SENSITIVITY", method="fixed_window", window=15, max_lookback_games=15),
+    "RECENCY_EWMA_H2": RecentFormSpec(candidate_id="RECENCY_EWMA_H2", method="exponential_decay", half_life_games=2.0, max_lookback_games=15),
+    "RECENCY_EWMA_H4": RecentFormSpec(candidate_id="RECENCY_EWMA_H4", method="exponential_decay", half_life_games=4.0, max_lookback_games=15),
+    "RECENCY_EWMA_H6": RecentFormSpec(candidate_id="RECENCY_EWMA_H6", method="exponential_decay", half_life_games=6.0, max_lookback_games=15),
+}
+
+
+def compute_player_recent_form(
+    p_history: pd.DataFrame,
+    role_baseline: Dict[str, float],
+    spec: Optional[RecentFormSpec] = None,
+) -> Dict[str, float]:
+    """Compute recent-form statistics deterministically for a player under a versioned spec.
+
+    p_history: player games strictly before cutoff, sorted chronologically ascending by date.
+    role_baseline: dict of role baseline means.
+    """
+    if spec is None:
+        spec = RecentFormSpec()
+
+    p_len = len(p_history)
+    if p_len == 0:
+        return {
+            "recent_games_count": 0.0,
+            "recent_fantasy_mean_5": float(role_baseline.get("role_baseline_fantasy_mean_100", 15.0)),
+            "recent_kills_mean_5": float(role_baseline.get("role_baseline_kills_mean_100", 2.5)),
+            "recent_deaths_mean_5": float(role_baseline.get("role_baseline_deaths_mean_100", 2.5)),
+            "recent_assists_mean_5": float(role_baseline.get("role_baseline_assists_mean_100", 5.0)),
+            "recent_cs_mean_5": float(role_baseline.get("role_baseline_cs_mean_100", 200.0)),
+        }
+
+    weights = spec.compute_weights(p_len)
+    m = len(weights)
+    recent_slice = p_history.iloc[-m:]
+    w = weights[::-1]  # Chronological order alignment: slice[0] (oldest) gets w[0], slice[-1] (newest) gets w[-1]
+    w_sum = float(np.sum(w))
+    if w_sum <= 0:
+        w_sum = 1.0
+
+    f_col = "fantasy_points_game" if "fantasy_points_game" in recent_slice.columns else "fantasy_pts"
+    cs_col = "total_cs" if "total_cs" in recent_slice.columns else "total cs"
+
+    f_vals = recent_slice[f_col].to_numpy(dtype=float)
+    k_vals = recent_slice["kills"].to_numpy(dtype=float)
+    d_vals = recent_slice["deaths"].to_numpy(dtype=float)
+    a_vals = recent_slice["assists"].to_numpy(dtype=float)
+    cs_vals = recent_slice[cs_col].to_numpy(dtype=float)
+
+    if spec.method == "fixed_window":
+        count_val = float(m)
+    else:
+        count_val = float(np.sum(weights))
+
+    return {
+        "recent_games_count": count_val,
+        "recent_fantasy_mean_5": float(np.sum(f_vals * w) / w_sum),
+        "recent_kills_mean_5": float(np.sum(k_vals * w) / w_sum),
+        "recent_deaths_mean_5": float(np.sum(d_vals * w) / w_sum),
+        "recent_assists_mean_5": float(np.sum(a_vals * w) / w_sum),
+        "recent_cs_mean_5": float(np.sum(cs_vals * w) / w_sum),
+    }
+
+
 def build_player_point_in_time_context(
     canonical_games: pd.DataFrame,
     cutoff_timestamp: Union[pd.Timestamp, str, datetime],
     player_ids: Optional[List[str]] = None,
+    recency_spec: Optional[RecentFormSpec] = None,
 ) -> pd.DataFrame:
     """Build point-in-time player historical context strictly before cutoff."""
+    if recency_spec is None:
+        recency_spec = RecentFormSpec()
+
     cutoff = pd.Timestamp(cutoff_timestamp)
     if cutoff.tzinfo is None:
         cutoff = cutoff.tz_localize("UTC")
@@ -475,18 +575,12 @@ def build_player_point_in_time_context(
 
         r_base = role_baselines.get(last_role, default_role_baseline)
 
-        tail5 = p_history.tail(5)
+        # Compute parameterized recent form
+        rf = compute_player_recent_form(p_history, r_base, spec=recency_spec)
+
         tail10 = p_history.tail(10)
         tail20 = p_history.tail(20)
-
-        n5 = len(tail5)
-        recent_f5 = float(tail5["fantasy_points_game"].mean()) if n5 > 0 else r_base["role_baseline_fantasy_mean_100"]
-        recent_k5 = float(tail5["kills"].mean()) if n5 > 0 else r_base["role_baseline_kills_mean_100"]
-        recent_d5 = float(tail5["deaths"].mean()) if n5 > 0 else r_base["role_baseline_deaths_mean_100"]
-        recent_a5 = float(tail5["assists"].mean()) if n5 > 0 else r_base["role_baseline_assists_mean_100"]
-        recent_cs5 = float(tail5["total_cs"].mean()) if n5 > 0 else r_base["role_baseline_cs_mean_100"]
-
-        recent_f10 = float(tail10["fantasy_points_game"].mean()) if len(tail10) > 0 else recent_f5
+        recent_f10 = float(tail10["fantasy_points_game"].mean()) if len(tail10) > 0 else rf["recent_fantasy_mean_5"]
         recent_f20 = float(tail20["fantasy_points_game"].mean()) if len(tail20) > 0 else recent_f10
 
         records.append({
@@ -495,13 +589,13 @@ def build_player_point_in_time_context(
             "last_known_team_id": last_team_id,
             "last_known_team_name": last_team_name,
             "last_known_role": last_role,
-            "recent_games_count": n5,
+            "recent_games_count": rf["recent_games_count"],
             "historical_games_total": p_len,
-            "recent_fantasy_mean_5": recent_f5,
-            "recent_kills_mean_5": recent_k5,
-            "recent_deaths_mean_5": recent_d5,
-            "recent_assists_mean_5": recent_a5,
-            "recent_cs_mean_5": recent_cs5,
+            "recent_fantasy_mean_5": rf["recent_fantasy_mean_5"],
+            "recent_kills_mean_5": rf["recent_kills_mean_5"],
+            "recent_deaths_mean_5": rf["recent_deaths_mean_5"],
+            "recent_assists_mean_5": rf["recent_assists_mean_5"],
+            "recent_cs_mean_5": rf["recent_cs_mean_5"],
             "recent_fantasy_mean_10": recent_f10,
             "recent_fantasy_mean_20": recent_f20,
             "role_baseline_fantasy_mean_100": r_base["role_baseline_fantasy_mean_100"],
@@ -646,6 +740,7 @@ def build_prediction_period_frame(
     canonical_games: pd.DataFrame,
     canonical_series: Optional[pd.DataFrame] = None,
     market_snapshot: Optional[pd.DataFrame] = None,
+    recency_spec: Optional[RecentFormSpec] = None,
 ) -> pd.DataFrame:
     """Build canonical model-agnostic, target-free prediction frame for a round.
 
@@ -755,7 +850,7 @@ def build_prediction_period_frame(
     p_ids = [ep["canonical_player_id"] for ep in eligible_players]
     t_ids = list(set([ep["canonical_team_id"] for ep in eligible_players] + list(team_opponents.keys())))
 
-    player_pit_df = build_player_point_in_time_context(canonical_games, lock_ts, player_ids=p_ids)
+    player_pit_df = build_player_point_in_time_context(canonical_games, lock_ts, player_ids=p_ids, recency_spec=recency_spec)
     team_pit_df = build_team_point_in_time_context(canonical_games, canonical_series, lock_ts, team_ids=t_ids)
 
     player_pit_lookup = {r["canonical_player_id"]: r.to_dict() for _, r in player_pit_df.iterrows()}
@@ -831,6 +926,7 @@ def build_future_prediction_frame(
     eligible_players_or_market: Union[pd.DataFrame, List[Dict[str, Any]]],
     canonical_games: pd.DataFrame,
     canonical_series: Optional[pd.DataFrame] = None,
+    recency_spec: Optional[RecentFormSpec] = None,
 ) -> pd.DataFrame:
     """Construct target-free inference frame for upcoming/future round."""
     period_dict = {
@@ -844,6 +940,7 @@ def build_future_prediction_frame(
             canonical_games=canonical_games,
             canonical_series=canonical_series,
             market_snapshot=eligible_players_or_market,
+            recency_spec=recency_spec,
         )
     else:
         period_dict["eligible_roster"] = eligible_players_or_market
@@ -851,6 +948,7 @@ def build_future_prediction_frame(
             prediction_period=period_dict,
             canonical_games=canonical_games,
             canonical_series=canonical_series,
+            recency_spec=recency_spec,
         )
 
 

@@ -1,0 +1,105 @@
+{
+  "stage_id": "Stage 10D-R17A",
+  "candidate_count": 8,
+  "candidate_registry_frozen_before_scoring": true,
+  "candidates": [
+    {
+      "candidate_id": "RECENCY_3",
+      "family": "fixed_window",
+      "window": 3,
+      "max_lookback": 3,
+      "half_life_games": null,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": false,
+      "is_sensitivity_only": false,
+      "description": "Short fixed window of 3 most recent completed games"
+    },
+    {
+      "candidate_id": "RECENCY_5_BASELINE",
+      "family": "fixed_window",
+      "window": 5,
+      "max_lookback": 5,
+      "half_life_games": null,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": true,
+      "is_sensitivity_only": false,
+      "description": "Frozen production baseline of 5 most recent completed games"
+    },
+    {
+      "candidate_id": "RECENCY_7",
+      "family": "fixed_window",
+      "window": 7,
+      "max_lookback": 7,
+      "half_life_games": null,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": false,
+      "is_sensitivity_only": false,
+      "description": "Medium fixed window of 7 most recent completed games"
+    },
+    {
+      "candidate_id": "RECENCY_10",
+      "family": "fixed_window",
+      "window": 10,
+      "max_lookback": 10,
+      "half_life_games": null,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": false,
+      "is_sensitivity_only": false,
+      "description": "Extended fixed window of 10 most recent completed games"
+    },
+    {
+      "candidate_id": "RECENCY_15_SENSITIVITY",
+      "family": "fixed_window",
+      "window": 15,
+      "max_lookback": 15,
+      "half_life_games": null,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": false,
+      "is_sensitivity_only": true,
+      "description": "Predeclared long-window sensitivity candidate of 15 completed games"
+    },
+    {
+      "candidate_id": "RECENCY_EWMA_H2",
+      "family": "exponential_decay",
+      "window": null,
+      "max_lookback": 15,
+      "half_life_games": 2.0,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": false,
+      "is_sensitivity_only": false,
+      "description": "Exponential weighting with half-life of 2 games over up to 15 games"
+    },
+    {
+      "candidate_id": "RECENCY_EWMA_H4",
+      "family": "exponential_decay",
+      "window": null,
+      "max_lookback": 15,
+      "half_life_games": 4.0,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": false,
+      "is_sensitivity_only": false,
+      "description": "Exponential weighting with half-life of 4 games over up to 15 games"
+    },
+    {
+      "candidate_id": "RECENCY_EWMA_H6",
+      "family": "exponential_decay",
+      "window": null,
+      "max_lookback": 15,
+      "half_life_games": 6.0,
+      "fallback_hierarchy": "role_baseline_100",
+      "is_baseline": false,
+      "is_sensitivity_only": false,
+      "description": "Exponential weighting with half-life of 6 games over up to 15 games"
+    }
+  ],
+  "feature_names": [
+    "recent_fantasy_mean",
+    "recent_kills_mean",
+    "recent_deaths_mean",
+    "recent_assists_mean",
+    "recent_cs_mean",
+    "recent_games_count"
+  ],
+  "evaluation_universe": "Common eligible 2024-2025 player-period observations",
+  "no_additional_hyperparameter_sweep": true
+}

@@ -1,0 +1,52 @@
+{
+  "stage_id": "R17A",
+  "objective": "Implement a candidate-only, cutoff-safe configurable recent-form producer and chronological S30 same-family evaluation for the preregistered 3/5/7/10 (plus sensitivity 15) and exponential candidates; do not select from 2026 or activate production.",
+  "implementation_owner": "AGY",
+  "allowed_files": [
+    "fantasy_prediction/canonical_pit.py",
+    "fantasy_prediction/recovered_components.py",
+    "scripts/fit_s30_v2.py",
+    "scripts/build_s30_v2_raw_modeling_table.py",
+    "scripts/run_stage10d_r17a_recency_evaluation.py",
+    "tests/test_stage10d_r17a_recency.py",
+    "docs/task-evidence/stage-10d-r17a/"
+  ],
+  "forbidden_files": [
+    "fantasy_prediction/ce_model.py",
+    "fantasy_prediction/lineup_optimizer.py",
+    "config/scoring_rules.json",
+    "data/raw/",
+    "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json",
+    "dashboard/",
+    "data/predictions/current_player_projections.csv"
+  ],
+  "required_tests": [
+    "strict pre-lock cutoff exclusion",
+    "3/5/7/10 and exponential hand-calculation parity",
+    "partial and empty-history fallback",
+    "same candidate configuration gives deterministic replay",
+    "common-row chronology and no 2026/Week-6 selection",
+    "sealed current CE state and current production outputs unchanged"
+  ],
+  "required_evidence": [
+    "candidate registry frozen before metrics",
+    "feature/source/cutoff/missingness lineage table",
+    "2024 fold metrics and frozen 2025 validation metrics by pooled/year/role",
+    "paired period bootstrap or predeclared robustness comparison",
+    "state/config hash and future target-free smoke run",
+    "production immutability manifest"
+  ],
+  "acceptance_criteria": [
+    "all candidate features are reproducible using only pre-lock history",
+    "no current production model, optimizer, dashboard or active state changes",
+    "one candidate is promoted only if the predeclared R17A gate passes; otherwise current last-5 remains",
+    "outputs preserve enough metadata to recreate inference later"
+  ],
+  "stop_conditions": [
+    "canonical history cannot distinguish event time from target-period outcomes",
+    "common 2024-2025 evaluation rows cannot be built",
+    "candidate behavior is non-deterministic or requires target-period data",
+    "a requested change would mutate active production state or outputs"
+  ]
+}
+

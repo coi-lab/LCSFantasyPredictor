@@ -1,0 +1,91 @@
+{
+  "baseline_pooled_MAE": 5.3501,
+  "component_id": "RECENCY_EWMA_H6",
+  "future_inference_path": "fantasy_prediction.canonical_pit.compute_player_recent_form(spec=R17A_CANDIDATE_REGISTRY['RECENCY_EWMA_H6'])",
+  "model_family": "S30_RIDGE_PARAMETRIC_RECENCY",
+  "pooled_MAE": 5.2904,
+  "production_activation": false,
+  "promotion_verdict": "PROMOTED_AS_R17A_RESEARCH_WINNER",
+  "recency_spec": {
+    "candidate_id": "RECENCY_EWMA_H6",
+    "half_life_games": 6.0,
+    "max_lookback_games": 15,
+    "method": "exponential_decay",
+    "window": 5
+  },
+  "state": {
+    "alpha": 0.1,
+    "coefficients": [
+      0.35009108219712803,
+      -0.1314624862134187,
+      -0.24283865034063776,
+      -0.11758549806794862,
+      -0.0033872035829566782,
+      0.43998943238443,
+      -0.4703455849758751,
+      -0.4703455849758967,
+      -0.4703455849758882,
+      -0.47034558497590395,
+      -0.47034558497590384,
+      0.0,
+      -0.029201988654436316,
+      -1.3592106957937342,
+      1.143358586925465,
+      1.1547394707311127,
+      -0.9096853732572331
+    ],
+    "content_hash": "2a07f66532f4e8a186f93d895b63c2393380134b185466a8a6e69fbb84957ed9",
+    "feature_order": [
+      "recent_fantasy_mean_5",
+      "recent_kills_mean_5",
+      "recent_deaths_mean_5",
+      "recent_assists_mean_5",
+      "recent_cs_mean_5",
+      "recent_games_count"
+    ],
+    "intercept": 13.802712586903603,
+    "mean": [
+      13.832801473763753,
+      2.407985129512871,
+      2.3974988219051245,
+      5.66363566829907,
+      216.4273463727773,
+      6.696499343129056
+    ],
+    "median": [
+      13.792228785520475,
+      2.4514627742199786,
+      2.3734169846102544,
+      5.42245918741688,
+      254.18,
+      7.5454961726507745
+    ],
+    "model_id": "S30_V2_RECENCY_EWMA_H6",
+    "recency_spec": {
+      "candidate_id": "RECENCY_EWMA_H6",
+      "half_life_games": 6.0,
+      "max_lookback_games": 15,
+      "method": "exponential_decay",
+      "window": 5
+    },
+    "role_encoding": [
+      "TOP",
+      "JGL",
+      "MID",
+      "BOT",
+      "SUP"
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.94200095631694
+    ],
+    "target": "arithmetic mean of raw fantasy points across target-period player games",
+    "target_grain": "player \u00d7 local prediction period \u00d7 game-average",
+    "training_cutoff": "2023-12-31T23:59:59Z",
+    "training_rows": 4203
+  }
+}

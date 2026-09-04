@@ -1,0 +1,12 @@
+{
+  "stage_id": "Stage 10D-R17A",
+  "target_grain": "PER_GAME_AVERAGE",
+  "game_volume_multiplier": false,
+  "target_column": "realized_fantasy_target",
+  "target_definition": "arithmetic mean of raw fantasy points across target-period player games",
+  "target_expression": "realized_fantasy_total / target_games",
+  "calendar_week_sum_multiplier_used": false,
+  "series_total_multiplier_used": false,
+  "bo3_volume_multiplier_used": false,
+  "audit_status": "PASS"
+}

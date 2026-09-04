@@ -1,0 +1,66 @@
+{
+  "RECENCY_10": {
+    "deterministic_replay": true,
+    "max_prediction": 18.276,
+    "min_prediction": 10.218,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  },
+  "RECENCY_15_SENSITIVITY": {
+    "deterministic_replay": true,
+    "max_prediction": 19.491,
+    "min_prediction": 10.429,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  },
+  "RECENCY_3": {
+    "deterministic_replay": true,
+    "max_prediction": 16.66,
+    "min_prediction": 10.943,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  },
+  "RECENCY_5_BASELINE": {
+    "deterministic_replay": true,
+    "max_prediction": 17.461,
+    "min_prediction": 10.281,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  },
+  "RECENCY_7": {
+    "deterministic_replay": true,
+    "max_prediction": 17.726,
+    "min_prediction": 10.441,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  },
+  "RECENCY_EWMA_H2": {
+    "deterministic_replay": true,
+    "max_prediction": 17.335,
+    "min_prediction": 10.603,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  },
+  "RECENCY_EWMA_H4": {
+    "deterministic_replay": true,
+    "max_prediction": 18.228,
+    "min_prediction": 10.4,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  },
+  "RECENCY_EWMA_H6": {
+    "deterministic_replay": true,
+    "max_prediction": 18.72,
+    "min_prediction": 10.381,
+    "rows_projected": 44,
+    "status": "PASS",
+    "target_columns_present": false
+  }
+}
