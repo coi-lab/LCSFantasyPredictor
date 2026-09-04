@@ -8,8 +8,9 @@
   "required_artifacts": ["r17a-harness-smoke-proof.json", "stage-10d-r17q-r2c-protected-path-inventory.json"],
   "required_claims": ["CLAIM_R17A_HARNESS_SMOKE"],
   "required_gates": [{"gate_id": "R17A_HARNESS_SMOKE_GATE", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status", "predicate": "== true", "blocking": true}],
+  "execution_policy": "HARNESS_RUNS_ARE_READ_ONLY_OUTSIDE_EVIDENCE_ROOT",
   "allowed_write_paths": [".agent-runs"],
-  "protected_paths": ["fantasy_prediction", "champion_prediction", "data_pipeline", "learning", "rag", "data/predictions/current_player_projections.csv", "data/predictions/current_coach_projections.csv", "data/predictions/current_champion_portfolio.csv", "data/predictions/current_champion_rankings.csv", "data/predictions/current_lineup_recommendations.json", "dashboard/generated/current"],
+  "protected_paths": ["fantasy_prediction", "champion_prediction", "data_pipeline", "learning", "rag", "data/predictions/current_player_projections.csv", "data/predictions/current_coach_projections.csv", "data/predictions/current_champion_portfolio.csv", "data/predictions/current_champion_rankings.csv", "data/predictions/current_lineup_recommendations.json", {"path": "dashboard/generated/current", "must_exist": true}],
   "report_bindings": [{"report_field": "smoke_status", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status"}],
   "report_template": "generic_pending_independent_review",
   "evidence_root": ".agent-runs"

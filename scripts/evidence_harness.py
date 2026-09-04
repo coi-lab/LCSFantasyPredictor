@@ -16,6 +16,7 @@ from typing import Any
 FORBIDDEN_STATUSES = {"FINAL PASS", "FULLY VALIDATED", "PRODUCTION READY", "READY FOR NEXT STAGE", "NEXT_STAGE_AUTHORIZED", "PASS"}
 MAXIMUM_STATUS = "IMPLEMENTATION_COMPLETE_PENDING_INDEPENDENT_VERIFICATION"
 IDENTITY_FIELDS = ("run_id", "stage_id", "git_commit", "prompt_sha256", "stage_config_sha256", "input_sha256", "working_tree_clean", "working_tree_digest", "tracked_diff_digest", "untracked_digest")
+READ_ONLY_POLICY = "HARNESS_RUNS_ARE_READ_ONLY_OUTSIDE_EVIDENCE_ROOT"
 
 
 def utc_now() -> str:
@@ -64,6 +65,11 @@ def require_config(config: dict[str, Any]) -> list[str]:
         for key in ("gate_id", "source_artifact", "source_locator", "predicate", "blocking"):
             if key not in gate: errors.append(f"gate missing {key}")
         if gate.get("blocking") is not True: errors.append(f"gate {gate.get('gate_id', '<unknown>')} must be blocking")
+    for protected in config.get("protected_paths", []):
+        if not isinstance(protected, (str, dict)): errors.append("protected path must be a string or object")
+        if isinstance(protected, dict) and "path" not in protected: errors.append("protected path object missing path")
+    if config.get("execution_policy", READ_ONLY_POLICY) != READ_ONLY_POLICY:
+        errors.append(f"unsupported execution_policy {config.get('execution_policy')}")
     return errors
 
 
@@ -93,8 +99,12 @@ def identity(root: Path, config_path: Path, config: dict[str, Any]) -> dict[str,
     return result
 
 
-def snapshot_paths(root: Path, paths: list[str]) -> dict[str, str | None]:
-    return {pattern: directory_digest(root / pattern) if not any(x in pattern for x in "*?[") else _glob_digest(root, pattern) for pattern in paths}
+def protected_specs(paths: list[Any]) -> list[dict[str, Any]]:
+    return [{"path": item, "must_exist": False} if isinstance(item, str) else {"path": item["path"], "must_exist": bool(item.get("must_exist", False))} for item in paths]
+
+
+def snapshot_paths(root: Path, paths: list[Any]) -> dict[str, str | None]:
+    return {item["path"]: directory_digest(root / item["path"]) if not any(x in item["path"] for x in "*?[") else _glob_digest(root, item["path"]) for item in protected_specs(paths)}
 
 
 def _glob_digest(root: Path, pattern: str) -> str:
@@ -123,7 +133,7 @@ def _checkpoint(evidence: Path, state: dict[str, Any], kind: str, results: list[
     state["last_checkpoint_utc"] = utc_now(); json_dump(evidence / "execution-state.json", state)
 
 
-def _execute_pending(root: Path, evidence: Path, config: dict[str, Any], meta: dict[str, Any], state: dict[str, Any], kind: str, commands: list[Any]) -> list[dict[str, Any]]:
+def _execute_pending(root: Path, evidence: Path, config: dict[str, Any], meta: dict[str, Any], state: dict[str, Any], kind: str, commands: list[Any]) -> tuple[list[dict[str, Any]], bool]:
     result_path = evidence / f"{kind}-results.json"; results = json_load(result_path) if result_path.exists() else []
     by_id = {item.get("command_id"): item for item in results}; prefix = "stage" if kind == "command" else "test"
     for index, command in enumerate(commands, 1):
@@ -133,13 +143,17 @@ def _execute_pending(root: Path, evidence: Path, config: dict[str, Any], meta: d
         results = [item for item in results if item.get("command_id") != command_id] + [record]
         results.sort(key=lambda item: int(str(item.get("command_id", "-0")).rsplit("-", 1)[-1]))
         state["phase"] = f"{kind}s"; state["last_command_id"] = command_id; _checkpoint(evidence, state, kind, results)
-    return results
+        if record["exit_code"] != 0 and not (isinstance(command, dict) and command.get("continue_on_failure") is True):
+            state["fail_fast_stop"] = command_id; _checkpoint(evidence, state, kind, results)
+            return results, True
+    return results, False
 
 
 def _finalize(root: Path, evidence: Path, config: dict[str, Any], meta: dict[str, Any], state: dict[str, Any]) -> tuple[Path, int]:
     json_dump(evidence / "protected-paths.json", {"before": state["protected_before"], "after": snapshot_paths(root, config["protected_paths"])})
     meta["end_timestamp_utc"] = utc_now(); json_dump(evidence / "run-identity.json", meta)
-    result = validate(root, evidence); json_dump(evidence / "validation.json", result); render_report(evidence, result)
+    raw_result = validate(root, evidence); render_report(evidence, raw_result)
+    result = validate(root, evidence); json_dump(evidence / "validation.json", result)
     state["phase"] = "finalized"; state["finalized"] = True
     _checkpoint(evidence, state, "command", json_load(evidence / "command-results.json")); _checkpoint(evidence, state, "test", json_load(evidence / "test-results.json"))
     return evidence, 0 if result["valid"] else 1
@@ -150,7 +164,9 @@ def run_stage(root: Path, config_path: Path) -> tuple[Path, int]:
     if errors: raise ValueError("; ".join(errors))
     meta = identity(root, config_path, config); evidence = root / config["evidence_root"] / f"{config['stage_id'].lower()}-{meta['run_id']}"
     evidence.mkdir(parents=True, exist_ok=False); json_dump(evidence / "run-identity.json", meta); (evidence / "stage-config.json").write_bytes(config_path.read_bytes())
-    state = {"phase": "initialized", "finalized": False, "protected_before": snapshot_paths(root, config["protected_paths"]), "last_checkpoint_utc": utc_now()}
+    before = snapshot_paths(root, config["protected_paths"])
+    missing_required = [item["path"] for item in protected_specs(config["protected_paths"]) if item["must_exist"] and before[item["path"]] is None]
+    state = {"phase": "initialized", "finalized": False, "protected_before": before, "preflight_failures": [f"required protected path missing {path}" for path in missing_required], "last_checkpoint_utc": utc_now()}
     _checkpoint(evidence, state, "command", []); _checkpoint(evidence, state, "test", [])
     return resume_stage(root, evidence)
 
@@ -161,9 +177,13 @@ def resume_stage(root: Path, evidence: Path) -> tuple[Path, int]:
     if git(root, "rev-parse", "HEAD") != meta["git_commit"]: raise ValueError("resume rejected: commit changed")
     if not config_path.exists() or sha256_file(config_path) != meta["stage_config_sha256"]: raise ValueError("resume rejected: config changed")
     if not prompt_path.exists() or sha256_file(prompt_path) != meta["prompt_sha256"]: raise ValueError("resume rejected: prompt changed")
+    current_worktree = worktree_provenance(root, [config["evidence_root"]])
+    for key in ("working_tree_digest", "tracked_diff_digest", "untracked_digest"):
+        if current_worktree[key] != meta.get(key): raise ValueError(f"resume rejected: worktree drift {key}")
     if state.get("finalized"): return evidence, 0 if validate(root, evidence)["valid"] else 1
-    _execute_pending(root, evidence, config, meta, state, "command", config["commands"])
-    _execute_pending(root, evidence, config, meta, state, "test", config["test_commands"])
+    if state.get("preflight_failures"): return _finalize(root, evidence, config, meta, state)
+    _, stopped = _execute_pending(root, evidence, config, meta, state, "command", config["commands"])
+    if not stopped: _execute_pending(root, evidence, config, meta, state, "test", config["test_commands"])
     return _finalize(root, evidence, config, meta, state)
 
 
@@ -217,11 +237,14 @@ def validate(root: Path, evidence: Path) -> dict[str, Any]:
                 body = json_load(path)
                 if body.get("run_id") != meta["run_id"]: failures.append(f"artifact run_id mismatch {artifact}")
                 if body.get("git_commit") != meta["git_commit"]: failures.append(f"artifact commit mismatch {artifact}")
+                if body.get("stage_id") != meta["stage_id"]: failures.append(f"artifact stage_id mismatch {artifact}")
             except (json.JSONDecodeError, AttributeError): failures.append(f"invalid provenance artifact {artifact}")
     try:
         protected = json_load(evidence / "protected-paths.json")
+        specs = {item["path"]: item for item in protected_specs(config["protected_paths"])}
         for path, before in protected["before"].items():
-            if before != protected["after"].get(path) and path not in config.get("allowed_write_paths", []): failures.append(f"protected path mutation {path}")
+            if specs[path]["must_exist"] and before is None: failures.append(f"required protected path missing {path}")
+            if before != protected["after"].get(path): failures.append(f"protected path mutation {path}")
     except (OSError, KeyError, json.JSONDecodeError): failures.append("missing protected path evidence")
     for gate in config.get("required_gates", []):
         try:
@@ -233,14 +256,18 @@ def validate(root: Path, evidence: Path) -> dict[str, Any]:
             claim = claims.get(claim_id)
             if not claim: failures.append(f"missing claim proof {claim_id}"); continue
             mandatory = ("claim_text", "claim_status", "source_artifact", "source_locator", "predicate", "producer_command_id", "source_sha256", "run_id", "git_commit")
-            if any(not claim.get(k) for k in mandatory): failures.append(f"missing claim provenance {claim_id}"); continue
+            if any(not claim.get(k) for k in mandatory) or claim.get("claim_status") != "PROVEN": failures.append(f"missing claim provenance {claim_id}"); continue
             producer = executed.get(claim["producer_command_id"])
             if not producer: failures.append(f"unknown claim producer {claim_id}"); continue
             if producer.get("exit_code") != 0: failures.append(f"failed claim producer {claim_id}"); continue
             source = evidence / claim["source_artifact"]
             if not source.exists() or sha256_file(source) != claim["source_sha256"]: failures.append(f"stale source hash {claim_id}"); continue
             if claim["run_id"] != meta["run_id"] or claim["git_commit"] != meta["git_commit"]: failures.append(f"claim provenance mismatch {claim_id}"); continue
-            if not predicate(locator(json_load(source), claim["source_locator"]), claim["predicate"]): failures.append(f"claim not proven {claim_id}")
+            source_body = json_load(source)
+            declared = claim["source_artifact"] in config.get("required_artifacts", [])
+            source_bound = source_body.get("run_id") == meta["run_id"] and source_body.get("git_commit") == meta["git_commit"] and source_body.get("stage_id") == meta["stage_id"]
+            if not declared and not source_bound: failures.append(f"unbound claim source {claim_id}"); continue
+            if not predicate(locator(source_body, claim["source_locator"]), claim["predicate"]): failures.append(f"claim not proven {claim_id}")
     except (OSError, KeyError, json.JSONDecodeError, IndexError):
         if config.get("required_claims"): failures.append("missing claim manifest")
     report_path = evidence / "report.json"

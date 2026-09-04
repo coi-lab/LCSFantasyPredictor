@@ -9,6 +9,7 @@ import unittest
 import os
 import sys
 import subprocess
+from unittest import mock
 from pathlib import Path
 
 from scripts import evidence_harness as harness
@@ -33,7 +34,7 @@ class EvidenceHarnessTests(unittest.TestCase):
 
     def write_good(self):
         harness.json_dump(self.evidence / "run-identity.json", self.meta)
-        metric = {"run_id": "run-1", "git_commit": self.meta["git_commit"], "ok": True, "mae": 5.2}
+        metric = {"run_id": "run-1", "git_commit": self.meta["git_commit"], "stage_id": "DEMO", "ok": True, "mae": 5.2}
         harness.json_dump(self.evidence / "metric.json", metric)
         harness.json_dump(self.evidence / "test-results.json", [{"command_id": "test-1", "exit_code": 0}])
         harness.json_dump(self.evidence / "command-results.json", [{"command_id": "stage-1", "exit_code": 0}])
@@ -45,6 +46,9 @@ class EvidenceHarnessTests(unittest.TestCase):
     def test_clean_positive_case_accepted_pending_review(self): self.assertTrue(harness.validate(self.root, self.evidence)["valid"])
     def test_rejects_wrong_run_id_and_commit(self):
         data = json.loads((self.evidence / "metric.json").read_text()); data["run_id"]="other"; data["git_commit"]="other"; harness.json_dump(self.evidence / "metric.json", data); self.assert_rejected()
+    def test_rejects_wrong_artifact_stage_and_unproven_claim(self):
+        data = json.loads((self.evidence / "metric.json").read_text()); data["stage_id"] = "OTHER"; harness.json_dump(self.evidence / "metric.json", data); self.assert_rejected()
+        self.write_good(); claims = harness.json_load(self.evidence / "claim-manifest.json"); claims["claims"][0]["claim_status"] = "NOT_PROVEN"; harness.json_dump(self.evidence / "claim-manifest.json", claims); self.assert_rejected()
     def test_rejects_wrong_prompt_or_config_hash(self):
         self.meta["prompt_sha256"]="bad"; harness.json_dump(self.evidence / "run-identity.json", self.meta); self.assert_rejected()
     def test_rejects_missing_artifact_claim_and_stale_hash(self):
@@ -85,6 +89,37 @@ class EvidenceHarnessTests(unittest.TestCase):
             candidate, _ = harness.run_stage(self.root, config_path)
             mutation()
             with self.assertRaisesRegex(ValueError, expected): harness.resume_stage(self.root, candidate)
+    def test_resume_rejects_all_worktree_drift_before_commands(self):
+        config_path = self.root / "drift.json"; config = dict(self.config); config.update({"required_artifacts": [], "required_claims": [], "required_gates": []}); config_path.write_text(json.dumps(config), encoding="utf-8")
+        subprocess.run(["git", "add", "drift.json"], cwd=self.root, check=True); subprocess.run(["git", "commit", "-qm", "drift config"], cwd=self.root, check=True)
+        evidence, _ = harness.run_stage(self.root, config_path)
+        state = harness.json_load(evidence / "execution-state.json"); state["finalized"] = False; harness.json_dump(evidence / "execution-state.json", state)
+        original = harness.json_load(evidence / "command-results.json")
+        for path, contents, staged in (("protected.txt", "tracked drift", False), ("staged.txt", "staged drift", True), ("untracked.txt", "untracked drift", False)):
+            (self.root / path).write_text(contents, encoding="utf-8")
+            if staged: subprocess.run(["git", "add", path], cwd=self.root, check=True)
+            with self.assertRaisesRegex(ValueError, "worktree drift"): harness.resume_stage(self.root, evidence)
+            self.assertEqual(original, harness.json_load(evidence / "command-results.json"))
+            if staged: subprocess.run(["git", "restore", "--staged", path], cwd=self.root, check=True)
+            (self.root / path).unlink()
+    def test_missing_must_exist_protected_path_is_rejected(self):
+        self.config["protected_paths"] = [{"path": "absent-production-output", "must_exist": True}]
+        (self.evidence / "stage-config.json").write_text(json.dumps(self.config), encoding="utf-8"); self.meta["stage_config_sha256"] = harness.sha256_file(self.evidence / "stage-config.json"); harness.json_dump(self.evidence / "run-identity.json", self.meta)
+        harness.json_dump(self.evidence / "protected-paths.json", {"before": {"absent-production-output": None}, "after": {"absent-production-output": None}}); self.assert_rejected()
+    def test_runner_revalidates_rendered_report_and_fails_fast(self):
+        config_path = self.root / "runner.json"
+        config = dict(self.config); config.update({"required_artifacts": [], "required_claims": [], "required_gates": [], "commands": ["false", "printf should-not-run"], "test_commands": ["printf should-not-test"]})
+        config_path.write_text(json.dumps(config), encoding="utf-8"); subprocess.run(["git", "add", "runner.json"], cwd=self.root, check=True); subprocess.run(["git", "commit", "-qm", "runner config"], cwd=self.root, check=True)
+        evidence, code = harness.run_stage(self.root, config_path)
+        self.assertEqual(code, 1); self.assertEqual(len(harness.json_load(evidence / "command-results.json")), 1); self.assertEqual(harness.json_load(evidence / "test-results.json"), [])
+        config["commands"] = []; config["test_commands"] = []; config_path.write_text(json.dumps(config), encoding="utf-8"); subprocess.run(["git", "add", "runner.json"], cwd=self.root, check=True); subprocess.run(["git", "commit", "-qm", "clean runner config"], cwd=self.root, check=True)
+        original = harness.render_report
+        def corrupt_report(evidence_path, validation):
+            original(evidence_path, validation)
+            report = harness.json_load(evidence_path / "report.json"); report["failure_count"] = 99; harness.json_dump(evidence_path / "report.json", report)
+        with mock.patch.object(harness, "render_report", corrupt_report):
+            _, code = harness.run_stage(self.root, config_path)
+        self.assertEqual(code, 1)
     def test_rejects_failed_test_blocking_gate_and_protected_mutation(self):
         harness.json_dump(self.evidence / "test-results.json", [{"exit_code": 1}]); self.assert_rejected()
         self.write_good(); data=json.loads((self.evidence / "metric.json").read_text()); data["ok"]=False; harness.json_dump(self.evidence / "metric.json", data); self.assert_rejected()
