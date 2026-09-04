@@ -1,5 +1,4 @@
 {
-  "PRODUCTION_UNCHANGED": true,
   "after": {
     "config/scoring_rules.json": "3063a00aaf9daa64d547863e8cfc06934409ac08b315be6683ec80dc9afa0936",
     "dashboard/generated/current/dashboard_data.json": "ab96594c3e14eb93fa28ff7e7d9aeb025100bfe8360cc423d210b06531d32d83",
@@ -23,6 +22,5 @@
     "data/predictions/current_lineup_recommendations.json": "e1b4673311e0bcea7ed3d2a95ba67ea715084e3b2a11150d83025358bafc3ea9",
     "data/predictions/current_player_projections.csv": "9fdf504e87ccfd82c67c0008d095b0b4f4724c1287a9a52604ff6394cb778ea8",
     "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json": "c8270c82cf555e57ec0fb6de58e2a7c4d7d9aedb051a6b2f0796f92fb2abe994"
-  },
-  "run_id": "2fc6d0ab-4210-4e04-8c55-784d09d86bb1"
+  }
 }

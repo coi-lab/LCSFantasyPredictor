@@ -1,0 +1,19 @@
+{
+  "finalized": true,
+  "last_checkpoint_utc": "2026-09-04T21:41:43Z",
+  "last_command_id": "test-1",
+  "phase": "finalized",
+  "preflight_failures": [],
+  "protected_before": {
+    "config/scoring_rules.json": "3063a00aaf9daa64d547863e8cfc06934409ac08b315be6683ec80dc9afa0936",
+    "dashboard/generated/current/dashboard_data.json": "ab96594c3e14eb93fa28ff7e7d9aeb025100bfe8360cc423d210b06531d32d83",
+    "dashboard/generated/current/matchup_lineups.json": "2b1964a443d1137eb224d2b478edfb826ea5209f6f27909cd8755ba2f34cda16",
+    "dashboard/generated/current/weekly_champion_predictions.json": "99b98b53533836410edde8cb2d171d0090c963213fa86fad6ad5b731af1b2f97",
+    "data/predictions/current_champion_portfolio.csv": "7cddfd28c3460786c9ad2c62029ce94845e28508641fe6106b7d56e4e115bdb4",
+    "data/predictions/current_champion_rankings.csv": "16091e7d8085cc9233453168a5f5c1191635e3ab6509645c7ff97847a8b6cf03",
+    "data/predictions/current_coach_projections.csv": "0e0ecd8c0b0b7ad2db9b16bc710975371acb6dd59bfbc04bc8984cc4fa931b75",
+    "data/predictions/current_lineup_recommendations.json": "e1b4673311e0bcea7ed3d2a95ba67ea715084e3b2a11150d83025358bafc3ea9",
+    "data/predictions/current_player_projections.csv": "9fdf504e87ccfd82c67c0008d095b0b4f4724c1287a9a52604ff6394cb778ea8",
+    "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json": "c8270c82cf555e57ec0fb6de58e2a7c4d7d9aedb051a6b2f0796f92fb2abe994"
+  }
+}

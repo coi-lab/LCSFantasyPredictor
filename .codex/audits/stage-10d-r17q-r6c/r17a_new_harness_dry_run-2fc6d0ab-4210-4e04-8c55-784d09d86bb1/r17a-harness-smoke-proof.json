@@ -1,0 +1,10 @@
+{
+  "git_commit": "d14acfea72b3ab171390f6193eaa20d729a08777",
+  "production_mutated": false,
+  "prompt_sha256": "e592ffaa57d6ea59c1397abf2fe1014c3fceaab87087275560a4b8f3687e4517",
+  "run_id": "2fc6d0ab-4210-4e04-8c55-784d09d86bb1",
+  "smoke_status": true,
+  "stage_config_sha256": "a8ff61e7f26fcdd5b5651c0a148c0e5d427fee1374e6459452cb9f2231beacfe",
+  "stage_id": "R17A_NEW_HARNESS_DRY_RUN",
+  "target_free": true
+}

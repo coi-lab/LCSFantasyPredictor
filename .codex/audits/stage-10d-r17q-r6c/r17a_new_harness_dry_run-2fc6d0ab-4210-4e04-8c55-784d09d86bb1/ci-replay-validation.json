@@ -1,13 +1,11 @@
 {
   "failures": [
-    "commit mismatch",
     "worktree provenance mismatch working_tree_digest",
     "worktree provenance mismatch tracked_diff_digest",
-    "worktree provenance mismatch untracked_digest",
     "report/raw metric mismatch"
   ],
-  "git_commit": "07283e96f6502e4707fef0e19edeb30a2388cc4b",
-  "run_id": "4ab799e6-4627-4942-a9b9-570d404cf99c",
+  "git_commit": "d14acfea72b3ab171390f6193eaa20d729a08777",
+  "run_id": "2fc6d0ab-4210-4e04-8c55-784d09d86bb1",
   "status": "BLOCKED",
   "valid": false
 }
