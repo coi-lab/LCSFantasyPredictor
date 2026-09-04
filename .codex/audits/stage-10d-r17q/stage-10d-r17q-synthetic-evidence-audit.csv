@@ -1,0 +1,9 @@
+file,line,field,computed_or_synthetic,risk,can_disagree_with_execution
+scripts/run_stage10d_r17a_recency_evaluation.py,679,tests_passed = 14,SYNTHETIC,Claims execution without running tests,Yes
+scripts/run_stage10d_r17a_recency_evaluation.py,680,tests_failed = 0,SYNTHETIC,Hides test failures,Yes
+scripts/run_stage10d_r17a_recency_evaluation.py,682,verdict = PASS,SYNTHETIC,Final-looking verdict bypasses gate results,Yes
+scripts/run_stage10d_r17a_recency_evaluation.py,684-697,coverage PASS map,SYNTHETIC,Names assertions as proven coverage,Yes
+scripts/run_stage10d_r17a_recency_evaluation.py,355,ridge parity status PASS,SYNTHETIC,Status is unconditional despite numeric exact-match field,Yes
+scripts/run_stage10d_r17a_recency_evaluation.py,754-756,report PASS statements,TEMPLATE_DERIVED,Report has hard-coded pass prose rather than reading artifact fields,Yes
+tests/test_stage10d_r17a_recency.py,115-117,chronology test,TOY_ASSERTION,Does not exercise selection logic or 2025 exclusion,Yes
+tests/test_stage10d_r17a_recency.py,163-173,portability negative test,TOY_ASSERTION,Does not invoke production gate or verify nonzero exit,Yes

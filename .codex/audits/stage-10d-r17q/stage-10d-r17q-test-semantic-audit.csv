@@ -1,0 +1,15 @@
+test,claimed_invariant,actual_assertions,can_fail_on_production_defect,classification
+test_01,Authoritative fitter parity,Refit parameters equal sealed state,Yes,ADEQUATE
+test_02,Full-population research parity,Same prediction function called twice on same state,No,TAUTOLOGICAL
+test_03,Production runtime parity,S30 prediction equals CE result's internally supplied S30,No,TAUTOLOGICAL
+test_04,2025 excluded from selection,Only H4 registry membership,No,DOES_NOT_TEST_CLAIM
+test_05,Sensitivity cannot win,Only candidate ID and window,No,DOES_NOT_TEST_CLAIM
+test_06,Bootstrap multiplicity,Manually concatenates rows without calling bootstrap function,No,DOES_NOT_TEST_CLAIM
+test_07,Probability metric,Calls bootstrap and validates value range/key,Yes,ADEQUATE
+test_08,Fail-closed future smoke,Local column membership test,No,TAUTOLOGICAL
+test_09,Target-free inference,Exercises real future-frame builder and prediction,Yes,ADEQUATE
+test_10,CE decomposition,Exercises predict_ce arithmetic,Yes,ADEQUATE
+test_11,FE share behavior,Uses standalone arrays and formula,No,WEAK
+test_12,Production immutability,Hash checks selected files against literals,Yes,ADEQUATE
+test_13,Strict cutoff,Exercises production context function on synthetic boundary data,Yes,STRONG
+test_14,Determinism,Calls production feature extractor twice,Yes,ADEQUATE

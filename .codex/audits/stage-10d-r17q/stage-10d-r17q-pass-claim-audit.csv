@@ -1,0 +1,10 @@
+claim_id,claim,executable_check,ran_or_recorded,can_fail,fail_blocks_stage,dynamic,independent,assessment
+PC01,14 tests passed,No subprocess; literals at evaluator lines 679-680,No,No,No,No,No,HARD_CODED_CLAIM
+PC02,Research baseline parity PASS,Gate A numeric comparison,Artifact records result,Yes,Yes,Yes,No,ADEQUATE
+PC03,Production runtime parity PASS,Compares predict_s30_v2 to predict_ce returned s30,Artifact records result,Nominally,Only before later work,Yes,No,TAUTOLOGICAL_VALIDATION
+PC04,Chronology selection PASS,2024 dataframe filtering and sort,Artifact records result,Yes,No,Yes,No,PARTIALLY_PROVEN
+PC05,Sensitivity candidate excluded,Status field and later filter,Artifact records result,Yes,No,Yes,No,PARTIALLY_PROVEN
+PC06,Future portability fail closed,Column-list checks on a locally injected frame,Artifact records result,Nominally,No,Yes,No,TAUTOLOGICAL_VALIDATION
+PC07,CE integration PASS,CSV metrics produced but no acceptance predicate,Artifact records result,No,No,Yes,No,NON_BINDING_GATE
+PC08,Production immutability PASS,Pre/post selected file hashes,Artifact records result,Yes,No,Yes,No,PARTIALLY_PROVEN
+PC09,Evidence consistency PASS,Manifest hash check only,Artifact records result,Yes,No,Yes,No,PARTIALLY_PROVEN

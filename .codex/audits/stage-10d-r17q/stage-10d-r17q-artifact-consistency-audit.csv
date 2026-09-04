@@ -1,0 +1,8 @@
+run,comparison,result,classification
+R17A-R1,docs artifacts vs manifest SHA256,All 16 manifest entries match,CONSISTENT_BUT_INSUFFICIENT
+R17A-R1,manifest vs run provenance,No run_id commit prompt_hash config_hash or command log,UNBOUND_ARTIFACTS
+R17A-R1,test summary vs evaluator source,14/0/PASS are constants and no subprocess is invoked,CONTRADICTED
+R17A-R1,report PASS prose vs raw portability,Report calls fail closed; evaluator does not raise or block on portability FAIL,OVERSTATED
+R17A-R1,report chronology claim vs focused test,Report says selection is proven; test only checks registry membership,OVERSTATED
+R17A-R1,report CE integration PASS vs evaluator,CSV generated but no acceptance threshold or failure branch exists,NON_BINDING_GATE
+R17A-R1,tracked Git history vs evidence,Only plan/remediation commits visible; artifacts do not bind to a specific code commit,STALE_EVIDENCE_RISK

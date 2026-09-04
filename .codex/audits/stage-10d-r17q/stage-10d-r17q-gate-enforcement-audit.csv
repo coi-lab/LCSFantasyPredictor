@@ -1,0 +1,10 @@
+gate,computed,FAIL_possible,nonzero_exit,prevents_freeze,prevents_PASS_report,assessment
+chronology,Yes,Yes,No,No,No,NON_BINDING_GATE
+baseline_parity,Yes,Yes,Yes,Yes,Partially,HARD_GATE_ONLY
+cutoff_safety,Test only,Yes,No,No,No,NON_BINDING_GATE
+portability,Yes,Yes,No,No,No,FAIL_OPEN
+future_input_provenance,Partial column check,Yes,No,No,No,NON_BINDING_GATE
+production_immutability,Yes,Yes,No,No,No,NON_BINDING_GATE
+candidate_eligibility,Partial,Yes,No,No,No,NON_BINDING_GATE
+evidence_consistency,Hash only,Yes,No,No,No,NON_BINDING_GATE
+test_execution,No,No,No,No,No,HARD_CODED_CLAIM
