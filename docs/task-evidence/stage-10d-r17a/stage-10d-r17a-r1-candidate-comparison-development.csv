@@ -1,0 +1,9 @@
+candidate_id,family,window_or_hl,is_baseline,is_sensitivity_only,alpha,2024_n,2024_MAE,2024_RMSE,2024_bias,2024_Spearman,MAE_diff_vs_baseline_2024,rel_MAE_diff_2024_pct,MAE_diff_ci95_low_2024,MAE_diff_ci95_high_2024,bootstrap_prob_candidate_improves_baseline
+RECENCY_EWMA_H4,exponential_decay,hl_4.0,False,False,0.1,675,5.0572,6.1915,-0.6498,0.2599,-0.0202,-0.397,-0.0597,0.0222,0.819
+RECENCY_EWMA_H6,exponential_decay,hl_6.0,False,False,0.1,675,5.0585,6.1823,-0.6212,0.2622,-0.0189,-0.372,-0.071,0.0376,0.743
+RECENCY_EWMA_H2,exponential_decay,hl_2.0,False,False,0.1,675,5.0681,6.2201,-0.7251,0.2554,-0.0093,-0.183,-0.0398,0.0271,0.689
+RECENCY_15_SENSITIVITY,fixed_window,15,False,True,0.1,675,5.0692,6.1756,-0.5871,0.2648,-0.0082,-0.162,-0.0933,0.0782,0.516
+RECENCY_5_BASELINE,fixed_window,5,True,False,0.1,675,5.0774,6.225,-0.734,0.2505,0.0,0.0,0.0,0.0,0.0
+RECENCY_7,fixed_window,7,False,False,0.1,675,5.0788,6.214,-0.6935,0.2503,0.0014,0.028,-0.037,0.0395,0.444
+RECENCY_3,fixed_window,3,False,False,0.1,675,5.1014,6.2586,-0.8177,0.2456,0.024,0.472,-0.0372,0.0912,0.253
+RECENCY_10,fixed_window,10,False,False,0.1,675,5.1093,6.2355,-0.6402,0.2333,0.0319,0.628,-0.0228,0.0868,0.116

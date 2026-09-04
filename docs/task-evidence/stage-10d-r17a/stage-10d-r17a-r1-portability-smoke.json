@@ -1,0 +1,9 @@
+{
+  "TARGET_COLUMNS_PRESENT": false,
+  "clean_frame_columns_count": 32,
+  "clean_frame_rows": 44,
+  "fail_closed_adversarial_detection_verified": true,
+  "present_forbidden_columns": [],
+  "status": "PASS",
+  "timestamp": "2026-09-04T19:56:46.073311+00:00"
+}

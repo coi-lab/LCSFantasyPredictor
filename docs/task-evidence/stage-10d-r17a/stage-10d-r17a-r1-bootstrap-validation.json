@@ -1,0 +1,24 @@
+{
+  "2024_development": {
+    "MAE_diff_ci95_high": 0.022172345376885505,
+    "MAE_diff_ci95_low": -0.05966911508182608,
+    "MAE_diff_mean": -0.018817111400325957,
+    "Spearman_diff_ci95_high": 0.030122236525555336,
+    "Spearman_diff_ci95_low": -0.01326875246236526,
+    "Spearman_diff_mean": 0.008732880085960888,
+    "bootstrap_prob_candidate_improves_baseline": 0.819
+  },
+  "2025_secondary_validation": {
+    "MAE_diff_ci95_high": -0.007575177005216837,
+    "MAE_diff_ci95_low": -0.13337951203696083,
+    "MAE_diff_mean": -0.0702475922995393,
+    "Spearman_diff_ci95_high": 0.07906916586778263,
+    "Spearman_diff_ci95_low": 0.0181243354074111,
+    "Spearman_diff_mean": 0.049051167219232895,
+    "bootstrap_prob_candidate_improves_baseline": 0.988
+  },
+  "description": "Multiplicity-correct cluster bootstrap with period replacement",
+  "multiplicity_preservation": "CONCATENATED_SAMPLED_CLUSTERS",
+  "selected_candidate_id": "RECENCY_EWMA_H4",
+  "timestamp": "2026-09-04T19:56:45.911073+00:00"
+}

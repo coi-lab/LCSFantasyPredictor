@@ -1,0 +1,24 @@
+{
+  "coverage": {
+    "authoritative_fitter_reuse": "PASS",
+    "ce_arithmetic_decomposition": "PASS",
+    "chronology_dev_selection": "PASS",
+    "cluster_bootstrap_multiplicity": "PASS",
+    "deterministic_replay": "PASS",
+    "fail_closed_portability": "PASS",
+    "fe_share_reallocation": "PASS",
+    "probability_metric_naming": "PASS",
+    "production_immutability": "PASS",
+    "production_runtime_parity_gate_b": "PASS",
+    "research_baseline_parity_gate_a": "PASS",
+    "sensitivity_only_exclusion": "PASS",
+    "strict_cutoff_safety": "PASS",
+    "target_free_inference": "PASS"
+  },
+  "stage": "STAGE_10D_R17A_R1",
+  "test_suite": "tests/test_stage10d_r17a_recency.py",
+  "tests_failed": 0,
+  "tests_passed": 14,
+  "timestamp": "2026-09-04T19:57:10.437663+00:00",
+  "verdict": "PASS"
+}

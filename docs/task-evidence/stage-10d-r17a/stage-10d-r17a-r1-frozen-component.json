@@ -1,0 +1,99 @@
+{
+  "candidate_spec": {
+    "candidate_id": "RECENCY_EWMA_H4",
+    "fallback_hierarchy": "role_baseline_100",
+    "half_life_games": 4.0,
+    "max_lookback_games": 15,
+    "method": "exponential_decay",
+    "window": null
+  },
+  "decision": "RECENCY_CANDIDATE_RESELECTED_PENDING_PROSPECTIVE_CONFIRMATION",
+  "development_metrics_2024": {
+    "MAE": 5.0572,
+    "RMSE": 6.1915,
+    "Spearman": 0.2599,
+    "bias": -0.6498,
+    "bootstrap_prob_candidate_improves_baseline": 0.819,
+    "delta_MAE_vs_baseline": -0.0202,
+    "n": 675
+  },
+  "model_state": {
+    "alpha": 0.1,
+    "coefficients": [
+      1.2826918922584714,
+      -0.2114519159128848,
+      -0.157486097168691,
+      -0.24128280224002932,
+      -0.27996373693668036,
+      0.4320959351022977,
+      -0.4595465435115373,
+      -0.45954654351154367,
+      -0.4595465435115435,
+      -0.45954654351154567,
+      -0.4595465435115456,
+      0.0,
+      -0.0806285766356675,
+      -1.3835452516029456,
+      1.1476200352987427,
+      1.1816626736850846,
+      -0.8651088808034603
+    ],
+    "content_hash": "948d4228977f94b306fbbf9a4123ba2756db433128b9296ebbf7e1148e68f7f7",
+    "feature_order": [
+      "recent_fantasy_mean_5",
+      "recent_kills_mean_5",
+      "recent_deaths_mean_5",
+      "recent_assists_mean_5",
+      "recent_cs_mean_5",
+      "recent_games_count"
+    ],
+    "intercept": 13.802647529024703,
+    "mean": [
+      13.831842232730878,
+      2.4076985506464568,
+      2.4024786679309256,
+      5.66916690320053,
+      216.41197786573065,
+      5.237959551153368
+    ],
+    "median": [
+      13.775897608470265,
+      2.430601411480261,
+      2.37,
+      5.414168491783795,
+      253.57886160897536,
+      5.818062218952872
+    ],
+    "model_id": "S30_V2_RECENCY_EWMA_H4",
+    "recency_spec": {
+      "candidate_id": "RECENCY_EWMA_H4",
+      "half_life_games": 4.0,
+      "max_lookback_games": 15,
+      "method": "exponential_decay",
+      "window": null
+    },
+    "role_encoding": [
+      "TOP",
+      "JGL",
+      "MID",
+      "BOT",
+      "SUP"
+    ],
+    "scale": [
+      3.894609619347554,
+      1.303517274189512,
+      0.7780061940028501,
+      1.9669280990777849,
+      100.86603741427511,
+      1.4168891603231952
+    ],
+    "target": "arithmetic mean of raw fantasy points across target-period player games",
+    "target_grain": "player \u00d7 local prediction period \u00d7 game-average",
+    "training_cutoff": "2023-12-31T23:59:59Z",
+    "training_rows": 4203
+  },
+  "selected_candidate_id": "RECENCY_EWMA_H4",
+  "selection_chronology": "2024_development_folds_only",
+  "stage": "STAGE_10D_R17A_R1",
+  "timestamp": "2026-09-04T19:56:22.853068+00:00"
+}

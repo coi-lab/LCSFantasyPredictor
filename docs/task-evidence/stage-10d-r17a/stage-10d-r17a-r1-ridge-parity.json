@@ -1,0 +1,11 @@
+{
+  "ONE_AUTHORITATIVE_S30_RIDGE_FITTER": true,
+  "authoritative_fitter": "fantasy_prediction.recovered_components.fit_s30_ridge",
+  "fitter_exact_match": true,
+  "intercept_diff": 0.0,
+  "max_coef_diff": 0.0,
+  "max_mean_diff": 0.0,
+  "max_scale_diff": 0.0,
+  "status": "PASS",
+  "timestamp": "2026-09-04T19:55:00.827110+00:00"
+}

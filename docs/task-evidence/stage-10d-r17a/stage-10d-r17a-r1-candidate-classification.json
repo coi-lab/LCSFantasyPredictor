@@ -1,0 +1,66 @@
+{
+  "RECENCY_10": {
+    "2024_MAE": 5.1093,
+    "delta_MAE_2024": 0.0319,
+    "is_baseline": false,
+    "is_sensitivity_only": false,
+    "reason": "2024 Development MAE 5.1093 does not materially improve over baseline 5.0774 by >= 0.005",
+    "status": "INELIGIBLE_NO_IMPROVEMENT"
+  },
+  "RECENCY_15_SENSITIVITY": {
+    "2024_MAE": 5.0692,
+    "delta_MAE_2024": -0.0082,
+    "is_baseline": false,
+    "is_sensitivity_only": true,
+    "reason": "Predeclared long-window sensitivity check (not eligible for primary promotion)",
+    "status": "ELIGIBLE_SENSITIVITY_ONLY"
+  },
+  "RECENCY_3": {
+    "2024_MAE": 5.1014,
+    "delta_MAE_2024": 0.024,
+    "is_baseline": false,
+    "is_sensitivity_only": false,
+    "reason": "2024 Development MAE 5.1014 does not materially improve over baseline 5.0774 by >= 0.005",
+    "status": "INELIGIBLE_NO_IMPROVEMENT"
+  },
+  "RECENCY_5_BASELINE": {
+    "2024_MAE": 5.0774,
+    "delta_MAE_2024": 0.0,
+    "is_baseline": true,
+    "is_sensitivity_only": false,
+    "reason": "Production reference baseline",
+    "status": "ELIGIBLE"
+  },
+  "RECENCY_7": {
+    "2024_MAE": 5.0788,
+    "delta_MAE_2024": 0.0014,
+    "is_baseline": false,
+    "is_sensitivity_only": false,
+    "reason": "2024 Development MAE 5.0788 does not materially improve over baseline 5.0774 by >= 0.005",
+    "status": "INELIGIBLE_NO_IMPROVEMENT"
+  },
+  "RECENCY_EWMA_H2": {
+    "2024_MAE": 5.0681,
+    "delta_MAE_2024": -0.0093,
+    "is_baseline": false,
+    "is_sensitivity_only": false,
+    "reason": "Improves 2024 development MAE by 0.0093 (0.18%)",
+    "status": "ELIGIBLE"
+  },
+  "RECENCY_EWMA_H4": {
+    "2024_MAE": 5.0572,
+    "delta_MAE_2024": -0.0202,
+    "is_baseline": false,
+    "is_sensitivity_only": false,
+    "reason": "Improves 2024 development MAE by 0.0202 (0.40%)",
+    "status": "ELIGIBLE"
+  },
+  "RECENCY_EWMA_H6": {
+    "2024_MAE": 5.0585,
+    "delta_MAE_2024": -0.0189,
+    "is_baseline": false,
+    "is_sensitivity_only": false,
+    "reason": "Improves 2024 development MAE by 0.0189 (0.37%)",
+    "status": "ELIGIBLE"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "gate_a_research_baseline": {
+    "max_prediction_diff": 1.922018100231071e-12,
+    "mean_prediction_diff": 2.5485340664570936e-13,
+    "name": "RESEARCH_RECENCY_5_PARITY",
+    "row_count": 6455,
+    "status": "PASS",
+    "tolerance": 0.001
+  },
+  "gate_b_production_runtime": {
+    "exact_zero_match": true,
+    "inference_rows": 44,
+    "max_prediction_diff": 0.0,
+    "name": "PRODUCTION_RECENCY_5_RUNTIME_PARITY",
+    "status": "PASS"
+  },
+  "status": "PASS",
+  "timestamp": "2026-09-04T19:56:07.841252+00:00"
+}

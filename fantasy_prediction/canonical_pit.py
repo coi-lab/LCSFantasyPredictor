@@ -459,9 +459,9 @@ R17A_CANDIDATE_REGISTRY: Dict[str, RecentFormSpec] = {
     "RECENCY_7": RecentFormSpec(candidate_id="RECENCY_7", method="fixed_window", window=7, max_lookback_games=7),
     "RECENCY_10": RecentFormSpec(candidate_id="RECENCY_10", method="fixed_window", window=10, max_lookback_games=10),
     "RECENCY_15_SENSITIVITY": RecentFormSpec(candidate_id="RECENCY_15_SENSITIVITY", method="fixed_window", window=15, max_lookback_games=15),
-    "RECENCY_EWMA_H2": RecentFormSpec(candidate_id="RECENCY_EWMA_H2", method="exponential_decay", half_life_games=2.0, max_lookback_games=15),
-    "RECENCY_EWMA_H4": RecentFormSpec(candidate_id="RECENCY_EWMA_H4", method="exponential_decay", half_life_games=4.0, max_lookback_games=15),
-    "RECENCY_EWMA_H6": RecentFormSpec(candidate_id="RECENCY_EWMA_H6", method="exponential_decay", half_life_games=6.0, max_lookback_games=15),
+    "RECENCY_EWMA_H2": RecentFormSpec(candidate_id="RECENCY_EWMA_H2", method="exponential_decay", window=None, half_life_games=2.0, max_lookback_games=15),
+    "RECENCY_EWMA_H4": RecentFormSpec(candidate_id="RECENCY_EWMA_H4", method="exponential_decay", window=None, half_life_games=4.0, max_lookback_games=15),
+    "RECENCY_EWMA_H6": RecentFormSpec(candidate_id="RECENCY_EWMA_H6", method="exponential_decay", window=None, half_life_games=6.0, max_lookback_games=15),
 }
 
 

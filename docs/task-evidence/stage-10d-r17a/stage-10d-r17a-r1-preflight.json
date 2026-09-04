@@ -1,0 +1,31 @@
+{
+  "authoritative_fitter": "fantasy_prediction.recovered_components.fit_s30_ridge",
+  "chronology_rule": "Candidate selection strictly on 2024 development folds before opening 2025",
+  "description": "Preflight capture for Stage 10D-R17A-R1 recency remediation",
+  "protected_hashes": {
+    "config/player_model_v2.json": "7cbace478cb37aab25891c6c172ca588307830315ca7a5d92c611b493f381bef",
+    "config/scoring_rules.json": "3063a00aaf9daa64d547863e8cfc06934409ac08b315be6683ec80dc9afa0936",
+    "dashboard/generated/current/champion_lab_data.json": "6d52c977f2c290b411a7d50fc8931722e347ea6379b2202a5c1a5728418ec137",
+    "dashboard/generated/current/dashboard_data.json": "ab96594c3e14eb93fa28ff7e7d9aeb025100bfe8360cc423d210b06531d32d83",
+    "dashboard/generated/current/historical_lineups.json": "835decb0d5826fe9307a49250f36168afaefed7bc5f28fd774106fdb0d6cd40d",
+    "dashboard/generated/current/m3-player-diagnostic-summary.json": "3054105f40724a2c5d7d8d34a73ff48f58318252dd3dba1edbeee6e07f2a69e6",
+    "dashboard/generated/current/m3-player-diagnostics.json": "10d952f7c039db44cfea57dc7d8a1aa0c73b47e23ed03b730baab2ab3685d815",
+    "dashboard/generated/current/matchup_lineups.json": "2b1964a443d1137eb224d2b478edfb826ea5209f6f27909cd8755ba2f34cda16",
+    "dashboard/generated/current/model-development-summary.json": "9f5d5466dc5c322436e947667ba3d8d7677cded53012ddc7a4f5c3444a0154f8",
+    "dashboard/generated/current/player-rating-price-history.json": "18e6597218794dab936373bca1701acd3e805e2ac614b872f4d3c6e1c75d91b9",
+    "dashboard/generated/current/s30-player-model-comparison.json": "8270f63501554390d73820921edac4bec4c133437af14ce7a9334448dcad4368",
+    "dashboard/generated/current/stage-8-exposed-2026-diagnostics.json": "e15d971a0ab1e301394e966b930c0602ee6d09737d78169fdf9dbec0cc0e5467",
+    "dashboard/generated/current/stage-9b-b-rating-price-dashboard-summary.json": "5cef98641d05cd273e633bd5991866c31b3eafc1a7ab3afe5e5b9ef0ad7172e4",
+    "dashboard/generated/current/stage-9b-player-elo-history.json": "f133319ced04b588338944d904359206b7bfb59de3b5cf1784b2482937d68a87",
+    "dashboard/generated/current/stage-9b-player-elo-weekly-validity.json": "e5ca960752c940d7d75a8dd4556891d871dfae2c532df90ac83e4eafde901e3e",
+    "dashboard/generated/current/stage7-leaderboard-comparison.json": "891c678694ad80cebf279365bb5e31a2d49695b5148095e383c6639b2196bd28",
+    "dashboard/generated/current/stage7-provenance.json": "6ff4c52871c1f38f74e5aa99a3b4ce86e7d4f8e0a616b8a61dd180606fa4ed0c",
+    "dashboard/generated/current/stage7-weekly-results.json": "b0de42782f9902dedb78a53e83688ca68020b2794ebeb45bedf908cffcc28228",
+    "dashboard/generated/current/weekly_champion_predictions.json": "99b98b53533836410edde8cb2d171d0090c963213fa86fad6ad5b731af1b2f97",
+    "data/predictions/current_coach_projections.csv": "0e0ecd8c0b0b7ad2db9b16bc710975371acb6dd59bfbc04bc8984cc4fa931b75",
+    "data/predictions/current_player_projections.csv": "9fdf504e87ccfd82c67c0008d095b0b4f4724c1287a9a52604ff6394cb778ea8",
+    "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json": "c8270c82cf555e57ec0fb6de58e2a7c4d7d9aedb051a6b2f0796f92fb2abe994"
+  },
+  "stage": "STAGE_10D_R17A_R1",
+  "timestamp": "2026-09-04T19:54:46.822013+00:00"
+}
