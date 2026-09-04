@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "stage_id": "STAGE_10D_R17A_R2",
+  "prompt_path": "harness_configs/contracts/stage-10d-r17a-r2.md",
+  "input_artifacts": [
+    ".codex/r17p/stage-10d-r17p-recency-plan.md",
+    ".codex/r17p/stage-10d-r17p-evaluation-contract.md",
+    ".codex/r17p/stage-10d-r17p-promotion-gates.md",
+    ".codex/audits/stage-10d-r17q/stage-10d-r17q-agy-evidence-integrity-audit.md"
+  ],
+  "commands": [
+    ".venv/bin/python scripts/run_stage10d_r17a_r2_evaluation.py"
+  ],
+  "test_commands": [
+    ".venv/bin/python -m unittest tests/test_stage10d_r17a_r2_recency.py -v"
+  ],
+  "required_artifacts": [
+    "stage-10d-r17a-r2-candidate-freeze.json",
+    "stage-10d-r17a-r2-baseline-feature-parity.json",
+    "stage-10d-r17a-r2-bootstrap.json",
+    "stage-10d-r17a-r2-selection-chronology.json",
+    "stage-10d-r17a-r2-selected-candidate.json",
+    "stage-10d-r17a-r2-score-spread-diagnostics.json",
+    "stage-10d-r17a-r2-ce-integration.json",
+    "stage-10d-r17a-r2-portability-smoke.json",
+    "stage-10d-r17a-r2-production-immutability.json",
+    "stage-10d-r17a-r2-test-summary.json"
+  ],
+  "required_claims": [
+    "CLAIM_BASELINE_RECENCY5_PARITY",
+    "CLAIM_TRUE_ROLLING_FOLDS",
+    "CLAIM_DEVELOPMENT_ONLY_SELECTION",
+    "CLAIM_ELIGIBILITY_BEFORE_SELECTION",
+    "CLAIM_BOOTSTRAP_MULTIPLICITY_CORRECT",
+    "CLAIM_2025_NOT_USED_FOR_SELECTION",
+    "CLAIM_AUTHORITATIVE_CE_INTEGRATION",
+    "CLAIM_SCHEDULED_OPPONENT_SOURCE",
+    "CLAIM_PORTABILITY_TARGET_FREE",
+    "CLAIM_PRODUCTION_UNCHANGED",
+    "CLAIM_SELECTED_RECENCY_COMPONENT"
+  ],
+  "required_gates": [
+    {
+      "gate_id": "GATE_BASELINE_PARITY",
+      "source_artifact": "stage-10d-r17a-r2-baseline-feature-parity.json",
+      "source_locator": "/parity_pass",
+      "predicate": "== true",
+      "blocking": true
+    },
+    {
+      "gate_id": "GATE_SELECTION_CHRONOLOGY",
+      "source_artifact": "stage-10d-r17a-r2-selection-chronology.json",
+      "source_locator": "/exclusion_of_2025_from_selection",
+      "predicate": "== true",
+      "blocking": true
+    },
+    {
+      "gate_id": "GATE_CE_INTEGRATION",
+      "source_artifact": "stage-10d-r17a-r2-ce-integration.json",
+      "source_locator": "/ce_integration_status",
+      "predicate": "== \"PASS\"",
+      "blocking": true
+    },
+    {
+      "gate_id": "GATE_PORTABILITY_SMOKE",
+      "source_artifact": "stage-10d-r17a-r2-portability-smoke.json",
+      "source_locator": "/portability_pass",
+      "predicate": "== true",
+      "blocking": true
+    },
+    {
+      "gate_id": "GATE_PRODUCTION_IMMUTABILITY",
+      "source_artifact": "stage-10d-r17a-r2-production-immutability.json",
+      "source_locator": "/PRODUCTION_UNCHANGED",
+      "predicate": "== true",
+      "blocking": true
+    }
+  ],
+  "execution_policy": "HARNESS_RUNS_ARE_READ_ONLY_OUTSIDE_EVIDENCE_ROOT",
+  "allowed_write_paths": [
+    ".agent-runs"
+  ],
+  "protected_paths": [
+    {
+      "path": "data/predictions/current_player_projections.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_coach_projections.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_champion_portfolio.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_champion_rankings.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_lineup_recommendations.json",
+      "must_exist": true
+    },
+    {
+      "path": "dashboard/generated/current/dashboard_data.json",
+      "must_exist": true
+    },
+    {
+      "path": "dashboard/generated/current/matchup_lineups.json",
+      "must_exist": true
+    },
+    {
+      "path": "dashboard/generated/current/weekly_champion_predictions.json",
+      "must_exist": true
+    },
+    {
+      "path": "config/scoring_rules.json",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json",
+      "must_exist": true
+    }
+  ],
+  "report_bindings": [
+    {
+      "report_field": "selected_candidate",
+      "source_artifact": "stage-10d-r17a-r2-selected-candidate.json",
+      "source_locator": "/selected_candidate_id"
+    },
+    {
+      "report_field": "decision",
+      "source_artifact": "stage-10d-r17a-r2-selected-candidate.json",
+      "source_locator": "/decision"
+    },
+    {
+      "report_field": "baseline_parity",
+      "source_artifact": "stage-10d-r17a-r2-baseline-feature-parity.json",
+      "source_locator": "/status"
+    },
+    {
+      "report_field": "portability_status",
+      "source_artifact": "stage-10d-r17a-r2-portability-smoke.json",
+      "source_locator": "/status"
+    },
+    {
+      "report_field": "ce_integration_status",
+      "source_artifact": "stage-10d-r17a-r2-ce-integration.json",
+      "source_locator": "/ce_integration_status"
+    },
+    {
+      "report_field": "production_immutability",
+      "source_artifact": "stage-10d-r17a-r2-production-immutability.json",
+      "source_locator": "/status"
+    }
+  ],
+  "report_template": "generic_pending_independent_review",
+  "evidence_root": ".agent-runs"
+}
