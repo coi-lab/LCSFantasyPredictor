@@ -1,0 +1,9 @@
+{
+  "command": "/home/raymondw/Documents/RWorkspace/LCSFantasy/.venv/bin/python -m unittest tests/test_evidence_harness.py tests/test_agent_harness_validator.py tests/test_evidence_harness_protected_paths.py -v",
+  "exit_code": 0,
+  "tests_run": 46,
+  "failures": 0,
+  "errors": 0,
+  "duration_seconds": 24.553,
+  "actual_subprocess_summary": "Ran 46 tests in 24.553s; OK. The captured terminal transcript enumerated all 46 passing tests."
+}

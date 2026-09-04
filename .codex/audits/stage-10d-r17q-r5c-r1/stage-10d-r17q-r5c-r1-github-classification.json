@@ -1,0 +1,4 @@
+{
+  "classification": "GITHUB_CI_NOT_RELEVANT",
+  "reason": "The authorization defines local Player Model V2 validation as required and GitHub CI as optional. No GitHub CI result was used as an acceptance gate."
+}

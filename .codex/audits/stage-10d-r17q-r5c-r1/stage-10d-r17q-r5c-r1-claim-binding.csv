@@ -1,0 +1,4 @@
+run_id,run_directory,claim_id,claim_status,run_id_match,stage_id_match,commit_match,source_exists,source_hash_match,producer_exit_code,predicate_true
+4ab799e6-4627-4942-a9b9-570d404cf99c,r17a_new_harness_dry_run-4ab799e6-4627-4942-a9b9-570d404cf99c,CLAIM_R17A_HARNESS_SMOKE,PROVEN,true,true,true,true,true,0,true
+2fc6d0ab-4210-4e04-8c55-784d09d86bb1,r17a_new_harness_dry_run-2fc6d0ab-4210-4e04-8c55-784d09d86bb1,CLAIM_R17A_HARNESS_SMOKE,PROVEN,true,true,true,true,true,0,true
+8ba338d3-1caa-49a3-bab0-6bab3c8107a9,r17a_new_harness_dry_run-8ba338d3-1caa-49a3-bab0-6bab3c8107a9,CLAIM_R17A_HARNESS_SMOKE,PROVEN,true,true,true,true,true,0,true

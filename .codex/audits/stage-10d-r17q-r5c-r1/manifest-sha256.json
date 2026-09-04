@@ -1,0 +1,15 @@
+{
+  "stage-10d-r17q-r5c-r1-adversarial-review.json": "860fa12a15bc6755925c0f6f46564c48e424d0fe5f5509e5e1c9170d86caa696",
+  "stage-10d-r17q-r5c-r1-claim-binding.csv": "1de2e32bd8d559389eb19d1671d3ce0c417d7a9400ec1dd26a75783d7c6ea81f",
+  "stage-10d-r17q-r5c-r1-failure-mode-review.csv": "7ae50da78c1485364d9e7ff2a0e688b4fc1d340fec7a5c4727225a61c1220789",
+  "stage-10d-r17q-r5c-r1-final-report.md": "865502fcfbe6b1963bc8c2f0a8747e26581845704c265b7f71b0f50c16425880",
+  "stage-10d-r17q-r5c-r1-focused-tests.json": "f24001e15f731ef7958230b9887bc4d749bce78fc13716676d4dfc8407984f55",
+  "stage-10d-r17q-r5c-r1-github-classification.json": "d039d99cc1781ffd53a7228412334fec5fb5f09b264545ec372e2c2f4bfce5c5",
+  "stage-10d-r17q-r5c-r1-local-smoke.json": "c3db2249a0f46b5aa6780175bd4a6b7f418a6b8f4f3a920a8caea6fca6cb1353",
+  "stage-10d-r17q-r5c-r1-preflight.json": "ca6d975cd9dbba6d0b8974564b5dd3d8d1617eba78d76d1d00cce346e72713a8",
+  "stage-10d-r17q-r5c-r1-production-immutability.json": "3aaedaabb9f8e1c3fa19e6f4c52bfc499bab47694e368722b31ce9b55336639f",
+  "stage-10d-r17q-r5c-r1-r6c-closure-check.json": "8d231fabc6ed837792e635c197b029ba8f218d512e7ce4f092f058bc8bf95eda",
+  "stage-10d-r17q-r5c-r1-report-binding.json": "aaf0f6592c500ece740bd8ca1a8df146ee82e4a347b451e85f38c10d726c83b2",
+  "stage-10d-r17q-r5c-r1-resume-review.json": "3e4ba486c2555d03f603d2a83b2c0ba18ae930c4e5eb2d311df795da7b3c1b24",
+  "stage-10d-r17q-r5c-r1-status-ceiling.json": "fc6e6c69664cf47d35ed0e247ec83a3f77b83530894d29b033bd14e40ecb0317"
+}

@@ -1,0 +1,8 @@
+{
+  "RESUME_PROVENANCE_PASS": true,
+  "evidence": [
+    "test_resume_retries_only_incomplete_work_and_rejects_changed_identity verifies run_id retention, original before snapshot retention, and completed-command reuse.",
+    "test_resume_rejects_all_worktree_drift_before_commands verifies tracked and untracked drift rejection.",
+    "resume_stage explicitly rejects changed commit, prompt hash, and config hash before command execution."
+  ]
+}

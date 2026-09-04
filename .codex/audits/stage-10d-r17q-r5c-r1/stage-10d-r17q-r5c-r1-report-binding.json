@@ -1,0 +1,14 @@
+{
+  "REPORT_RAW_CONSISTENCY_PASS": true,
+  "run_id_match": true,
+  "git_commit_match": true,
+  "stage_id_bound_in_raw_proof": true,
+  "test_result_exit_code": 0,
+  "gate_result": true,
+  "claim_status": "PROVEN",
+  "protected_path_result": "all 10 before/after digests identical",
+  "smoke_result": true,
+  "validator_status": "PENDING_INDEPENDENT_REVIEW",
+  "report_failure_count": 0,
+  "raw_validation_failure_count": 0
+}

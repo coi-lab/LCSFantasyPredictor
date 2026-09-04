@@ -1,0 +1,8 @@
+{
+  "PRODUCTION_IMMUTABILITY_PASS": true,
+  "protected_path_count": 10,
+  "all_exist": true,
+  "all_unchanged": true,
+  "protected_paths_source": ".codex/audits/stage-10d-r17q-r6c/r17a_new_harness_dry_run-8ba338d3-1caa-49a3-bab0-6bab3c8107a9/protected-paths.json",
+  "historical_lineups": "The current tracked dashboard/generated/current/historical_lineups.json was not modified by this review."
+}

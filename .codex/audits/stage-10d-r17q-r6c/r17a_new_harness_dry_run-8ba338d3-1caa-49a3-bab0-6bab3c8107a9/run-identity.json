@@ -1,0 +1,28 @@
+{
+  "end_timestamp_utc": "2026-09-04T21:45:30Z",
+  "git_branch": "main",
+  "git_commit": "f19962ad2a7c70ac6fa9cb4f00b6ff5489409028",
+  "input_artifacts": [
+    ".codex/r17p/stage-10d-r17p-program-plan.md",
+    ".codex/audits/stage-10d-r17q/stage-10d-r17q-agy-evidence-integrity-audit.md"
+  ],
+  "input_sha256": {
+    ".codex/audits/stage-10d-r17q/stage-10d-r17q-agy-evidence-integrity-audit.md": "05bb2b9277df3765f850c58686317d992b3dc0961fc7bad4ceebc2c69ad71293",
+    ".codex/r17p/stage-10d-r17p-program-plan.md": "5588fd772394716b0a2819316b6352c36fb3f3b8b4ed5db9719a1369f16f8f33"
+  },
+  "prompt_path": "harness_configs/contracts/stage-10d-r17a-harness-dry-run.md",
+  "prompt_sha256": "e592ffaa57d6ea59c1397abf2fe1014c3fceaab87087275560a4b8f3687e4517",
+  "run_id": "8ba338d3-1caa-49a3-bab0-6bab3c8107a9",
+  "runner_version": "2",
+  "stage_config_path": "harness_configs/stage-10d-r17a-dry-run.json",
+  "stage_config_sha256": "a8ff61e7f26fcdd5b5651c0a148c0e5d427fee1374e6459452cb9f2231beacfe",
+  "stage_id": "R17A_NEW_HARNESS_DRY_RUN",
+  "staged_diff_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "start_timestamp_utc": "2026-09-04T21:45:30Z",
+  "tracked_diff_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "untracked_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "untracked_files": [],
+  "validator_version": "2",
+  "working_tree_clean": true,
+  "working_tree_digest": "0039005ba2e026e39724255265ab3fa1ce663b22876f0d3dc87a281f2632db35"
+}

@@ -1,0 +1,14 @@
+{
+  "R6C_PROTECTED_PATH_CLOSURE_PRESENT": true,
+  "config_path": "harness_configs/stage-10d-r17a-dry-run.json",
+  "required_must_exist_path_count": 10,
+  "all_required_paths_exist": true,
+  "must_exist_semantics": "scripts.evidence_harness.protected_path_failures rejects a missing required path and any snapshot change.",
+  "specific_dashboard_paths": [
+    "dashboard/generated/current/dashboard_data.json",
+    "dashboard/generated/current/matchup_lineups.json",
+    "dashboard/generated/current/weekly_champion_predictions.json"
+  ],
+  "sealed_s30_state": "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json",
+  "broad_dashboard_directory_protected": false
+}

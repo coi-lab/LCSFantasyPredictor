@@ -1,0 +1,17 @@
+{
+  "ALL_REQUIRED_NEGATIVE_CASES_REJECTED": true,
+  "evidence": {
+    "fake_PASS": "test_rejects_synthetic_fake_pass_and_manual_status",
+    "failed_subprocess_and_blocking_gate": "test_rejects_failed_test_blocking_gate_and_protected_mutation",
+    "wrong_run_id_and_commit": "test_rejects_wrong_run_id_and_commit",
+    "wrong_stage_id": "test_rejects_wrong_artifact_stage_and_unproven_claim",
+    "wrong_prompt_or_config_hash": "test_rejects_wrong_prompt_or_config_hash",
+    "stale_source_hash_and_missing_claim": "test_rejects_missing_artifact_claim_and_stale_hash",
+    "failed_claim_producer": "test_rejects_unknown_or_failed_claim_producer",
+    "missing_required_path_and_mutated_file": "test_missing_must_exist_protected_path_is_rejected; protected path fixture tests",
+    "mutated_directory": "test_required_file_and_directory_member_mutation_fail",
+    "report_raw_mismatch": "test_rejects_report_raw_metric_mismatch",
+    "resume_worktree_drift": "test_resume_rejects_all_worktree_drift_before_commands",
+    "cross_run_artifact": "run_id and stage_id mismatch checks in test_rejects_wrong_artifact_stage_and_unproven_claim"
+  }
+}

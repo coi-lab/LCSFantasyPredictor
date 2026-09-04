@@ -1,0 +1,13 @@
+failure_mode,status,evidence
+hard-coded tests_passed/tests_failed,FIXED,test_evidence_harness rejects synthetic fake PASS and checks subprocess exit evidence
+hard-coded PASS,FIXED,FORBIDDEN_STATUSES and fake-PASS test prevent acceptance status injection
+self-validating tests,FIXED,validator and harness mutation suites use isolated fixtures and external replay
+non-binding gates,FIXED,require_config requires blocking true and test suite rejects gate failure
+stale artifacts,FIXED,required artifacts require matching run_id commit and stage_id
+report/raw mismatch,FIXED,test_rejects_report_raw_metric_mismatch passes
+missing run identity,FIXED,IDENTITY_FIELDS are mandatory and bound in validation
+missing commit/prompt/config/input binding,FIXED,identity and validator bind all four; mutation tests reject hash changes
+missing independent validator,FIXED,validate_stage_evidence replay passed on the fresh smoke
+missing claim-to-proof binding,FIXED,claim manifest binds producer source hash identity and predicate
+missing protected-path validation,FIXED,10 must_exist paths had equal before/after digests; protected fixture tests pass
+AGY self-certification,FIXED,status ceiling prohibits FINAL PASS and smoke validator returns PENDING_INDEPENDENT_REVIEW

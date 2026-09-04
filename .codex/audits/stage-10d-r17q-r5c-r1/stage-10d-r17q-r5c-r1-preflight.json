@@ -1,0 +1,12 @@
+{
+  "branch": "main",
+  "git_commit": "f19962ad2a7c70ac6fa9cb4f00b6ff5489409028",
+  "python_interpreter": "/home/raymondw/Documents/RWorkspace/LCSFantasy/.venv/bin/python",
+  "python_version": "3.14.7",
+  "staged_diff_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "tracked_diff_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "untracked_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "working_tree_clean": true,
+  "working_tree_digest": "0039005ba2e026e39724255265ab3fa1ce663b22876f0d3dc87a281f2632db35",
+  "notes": "Captured immediately before the R5C-R1 smoke. The subsequent R6C smoke evidence directory is the configured volatile evidence root and is excluded from its own provenance digest."
+}
