@@ -9,7 +9,7 @@
   "required_claims": ["CLAIM_R17A_HARNESS_SMOKE"],
   "required_gates": [{"gate_id": "R17A_HARNESS_SMOKE_GATE", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status", "predicate": "== true", "blocking": true}],
   "execution_policy": "HARNESS_RUNS_ARE_READ_ONLY_OUTSIDE_EVIDENCE_ROOT",
-  "allowed_write_paths": [".codex/audits/stage-10d-r17q-r6c"],
+  "allowed_write_paths": [".codex/audits/stage-10d-r17q-r6c/runs"],
   "protected_paths": [
     {"path": "data/predictions/current_player_projections.csv", "must_exist": true},
     {"path": "data/predictions/current_coach_projections.csv", "must_exist": true},
@@ -20,9 +20,10 @@
     {"path": "dashboard/generated/current/matchup_lineups.json", "must_exist": true},
     {"path": "dashboard/generated/current/weekly_champion_predictions.json", "must_exist": true},
     {"path": "config/scoring_rules.json", "must_exist": true},
+    {"path": "data/predictions/player_model_v2/model-status.json", "must_exist": true},
     {"path": "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json", "must_exist": true}
   ],
   "report_bindings": [{"report_field": "smoke_status", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status"}],
   "report_template": "generic_pending_independent_review",
-  "evidence_root": ".codex/audits/stage-10d-r17q-r6c"
+  "evidence_root": ".codex/audits/stage-10d-r17q-r6c/runs"
 }

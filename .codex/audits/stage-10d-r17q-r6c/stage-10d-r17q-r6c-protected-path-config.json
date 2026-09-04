@@ -1,0 +1,47 @@
+{
+  "config_path": "harness_configs/stage-10d-r17a-dry-run.json",
+  "config_sha256": "a8ff61e7f26fcdd5b5651c0a148c0e5d427fee1374e6459452cb9f2231beacfe",
+  "directory_protection_choice": "Specific output files only. This is the smallest complete set for dashboard state and excludes unrelated generated dashboard reports.",
+  "protected_paths": [
+    {
+      "must_exist": true,
+      "path": "data/predictions/current_player_projections.csv"
+    },
+    {
+      "must_exist": true,
+      "path": "data/predictions/current_coach_projections.csv"
+    },
+    {
+      "must_exist": true,
+      "path": "data/predictions/current_champion_portfolio.csv"
+    },
+    {
+      "must_exist": true,
+      "path": "data/predictions/current_champion_rankings.csv"
+    },
+    {
+      "must_exist": true,
+      "path": "data/predictions/current_lineup_recommendations.json"
+    },
+    {
+      "must_exist": true,
+      "path": "dashboard/generated/current/dashboard_data.json"
+    },
+    {
+      "must_exist": true,
+      "path": "dashboard/generated/current/matchup_lineups.json"
+    },
+    {
+      "must_exist": true,
+      "path": "dashboard/generated/current/weekly_champion_predictions.json"
+    },
+    {
+      "must_exist": true,
+      "path": "config/scoring_rules.json"
+    },
+    {
+      "must_exist": true,
+      "path": "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json"
+    }
+  ]
+}

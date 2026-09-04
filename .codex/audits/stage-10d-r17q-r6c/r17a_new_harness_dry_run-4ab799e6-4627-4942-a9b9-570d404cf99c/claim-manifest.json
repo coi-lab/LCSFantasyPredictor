@@ -1,0 +1,16 @@
+{
+  "claims": [
+    {
+      "claim_id": "CLAIM_R17A_HARNESS_SMOKE",
+      "claim_status": "PROVEN",
+      "claim_text": "The bounded R17A harness integration smoke produced run-bound proof.",
+      "git_commit": "07283e96f6502e4707fef0e19edeb30a2388cc4b",
+      "predicate": "== true",
+      "producer_command_id": "stage-1",
+      "run_id": "4ab799e6-4627-4942-a9b9-570d404cf99c",
+      "source_artifact": "r17a-harness-smoke-proof.json",
+      "source_locator": "/smoke_status",
+      "source_sha256": "8b897a47b0e6bde0671b9785a253823fc6b76656e38c795227db198883db0a6c"
+    }
+  ]
+}

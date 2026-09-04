@@ -1,0 +1,10 @@
+test_optional_missing_is_allowed_but_existing_mutation_fails (tests.test_evidence_harness_protected_paths.ProtectedPathTests.test_optional_missing_is_allowed_but_existing_mutation_fails) ... ok
+test_required_existing_file_unchanged_passes (tests.test_evidence_harness_protected_paths.ProtectedPathTests.test_required_existing_file_unchanged_passes) ... ok
+test_required_file_and_directory_member_mutation_fail (tests.test_evidence_harness_protected_paths.ProtectedPathTests.test_required_file_and_directory_member_mutation_fail) ... ok
+test_required_missing_and_typo_fail (tests.test_evidence_harness_protected_paths.ProtectedPathTests.test_required_missing_and_typo_fail) ... ok
+test_run_bound_smoke_proof_exists (tests.test_stage10d_r17a_harness_smoke.R17AHarnessSmokeTests.test_run_bound_smoke_proof_exists) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK

@@ -1,0 +1,9 @@
+{
+  "ALL_REQUIRED_PRODUCTION_PATHS_EXIST": true,
+  "GITHUB_CI_REQUIRED": false,
+  "git_commit": "07283e96f6502e4707fef0e19edeb30a2388cc4b",
+  "missing_required_paths": [],
+  "required_path_count": 10,
+  "run_id": "4ab799e6-4627-4942-a9b9-570d404cf99c",
+  "stage": "R17Q-R6C"
+}

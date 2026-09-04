@@ -1,0 +1,16 @@
+[
+  {
+    "command": "python scripts/run_stage10d_r17a_harness_smoke.py",
+    "command_id": "stage-1",
+    "cwd": "/home/raymondw/Documents/RWorkspace/LCSFantasy",
+    "duration_seconds": 0.026736,
+    "end_timestamp_utc": "2026-09-04T21:34:50Z",
+    "exit_code": 0,
+    "start_timestamp_utc": "2026-09-04T21:34:50Z",
+    "stderr_artifact": "stage-1.stderr.txt",
+    "stdout_artifact": "stage-1.stdout.txt",
+    "tests_failed": null,
+    "tests_run": null,
+    "tests_skipped": null
+  }
+]

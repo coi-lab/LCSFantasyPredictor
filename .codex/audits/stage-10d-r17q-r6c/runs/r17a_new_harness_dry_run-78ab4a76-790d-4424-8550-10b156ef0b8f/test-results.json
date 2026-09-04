@@ -1,0 +1,16 @@
+[
+  {
+    "command": "python -m unittest tests/test_evidence_harness_protected_paths.py tests/test_stage10d_r17a_harness_smoke.py -v",
+    "command_id": "test-1",
+    "cwd": "/home/raymondw/Documents/RWorkspace/LCSFantasy",
+    "duration_seconds": 0.051143,
+    "end_timestamp_utc": "2026-09-04T21:33:14Z",
+    "exit_code": 0,
+    "start_timestamp_utc": "2026-09-04T21:33:14Z",
+    "stderr_artifact": "test-1.stderr.txt",
+    "stdout_artifact": "test-1.stdout.txt",
+    "tests_failed": null,
+    "tests_run": 5,
+    "tests_skipped": null
+  }
+]

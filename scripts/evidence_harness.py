@@ -107,6 +107,21 @@ def snapshot_paths(root: Path, paths: list[Any]) -> dict[str, str | None]:
     return {item["path"]: directory_digest(root / item["path"]) if not any(x in item["path"] for x in "*?[") else _glob_digest(root, item["path"]) for item in protected_specs(paths)}
 
 
+def protected_path_failures(
+    before: dict[str, str | None], after: dict[str, str | None], paths: list[Any]
+) -> list[str]:
+    """Return fail-closed existence and immutability failures for protected paths."""
+    failures: list[str] = []
+    for spec in protected_specs(paths):
+        path = spec["path"]
+        prior = before.get(path)
+        if spec["must_exist"] and prior is None:
+            failures.append(f"required protected path missing {path}")
+        if prior != after.get(path):
+            failures.append(f"protected path mutation {path}")
+    return failures
+
+
 def _glob_digest(root: Path, pattern: str) -> str:
     digest = hashlib.sha256()
     for item in sorted(root.glob(pattern)):
@@ -241,10 +256,9 @@ def validate(root: Path, evidence: Path) -> dict[str, Any]:
             except (json.JSONDecodeError, AttributeError): failures.append(f"invalid provenance artifact {artifact}")
     try:
         protected = json_load(evidence / "protected-paths.json")
-        specs = {item["path"]: item for item in protected_specs(config["protected_paths"])}
-        for path, before in protected["before"].items():
-            if specs[path]["must_exist"] and before is None: failures.append(f"required protected path missing {path}")
-            if before != protected["after"].get(path): failures.append(f"protected path mutation {path}")
+        failures.extend(protected_path_failures(
+            protected["before"], protected["after"], config["protected_paths"]
+        ))
     except (OSError, KeyError, json.JSONDecodeError): failures.append("missing protected path evidence")
     for gate in config.get("required_gates", []):
         try:

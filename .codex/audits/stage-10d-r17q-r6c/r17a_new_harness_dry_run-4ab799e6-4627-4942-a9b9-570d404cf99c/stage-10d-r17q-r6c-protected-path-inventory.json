@@ -1,0 +1,21 @@
+{
+  "discovered_from": [
+    "scripts/run_stage10d_r16a_diversity_team_strength_audit.py",
+    "docs/task-evidence/stage-10d-r17a/stage-10d-r17a-production-immutability.json"
+  ],
+  "git_commit": "07283e96f6502e4707fef0e19edeb30a2388cc4b",
+  "protected_paths": [
+    "data/predictions/current_player_projections.csv",
+    "data/predictions/current_coach_projections.csv",
+    "data/predictions/current_champion_portfolio.csv",
+    "data/predictions/current_champion_rankings.csv",
+    "data/predictions/current_lineup_recommendations.json",
+    "dashboard/generated/current/dashboard_data.json",
+    "dashboard/generated/current/matchup_lineups.json",
+    "dashboard/generated/current/weekly_champion_predictions.json",
+    "config/scoring_rules.json",
+    "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json"
+  ],
+  "run_id": "4ab799e6-4627-4942-a9b9-570d404cf99c",
+  "stage_id": "R17A_NEW_HARNESS_DRY_RUN"
+}

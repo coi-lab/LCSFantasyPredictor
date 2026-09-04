@@ -1,0 +1,12 @@
+{
+  "PROTECTED_PATH_VALIDATION": "PASS",
+  "all_required_production_paths_exist": true,
+  "all_required_production_paths_unchanged": true,
+  "git_commit": "07283e96f6502e4707fef0e19edeb30a2388cc4b",
+  "protected_after_snapshot_captured": true,
+  "protected_before_snapshot_captured": true,
+  "run_evidence": ".codex/audits/stage-10d-r17q-r6c/r17a_new_harness_dry_run-4ab799e6-4627-4942-a9b9-570d404cf99c",
+  "run_id": "4ab799e6-4627-4942-a9b9-570d404cf99c",
+  "stage_smoke_exit_code": 0,
+  "validator_status": "PENDING_INDEPENDENT_REVIEW"
+}

@@ -1,0 +1,16 @@
+{
+  "PROTECTED_PATH_VALIDATION": "PASS",
+  "coverage": [
+    "required exists unchanged",
+    "required missing",
+    "required file mutation",
+    "required directory-member mutation",
+    "optional missing",
+    "optional existing mutation",
+    "typo required path"
+  ],
+  "fixture_only": true,
+  "test_command": "python -m unittest tests/test_evidence_harness_protected_paths.py tests/test_stage10d_r17a_harness_smoke.py -v",
+  "test_exit_code": 0,
+  "tests_run": 5
+}

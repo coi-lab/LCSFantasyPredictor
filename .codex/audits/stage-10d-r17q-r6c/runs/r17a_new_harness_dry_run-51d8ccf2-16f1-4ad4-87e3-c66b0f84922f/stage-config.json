@@ -9,7 +9,7 @@
   "required_claims": ["CLAIM_R17A_HARNESS_SMOKE"],
   "required_gates": [{"gate_id": "R17A_HARNESS_SMOKE_GATE", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status", "predicate": "== true", "blocking": true}],
   "execution_policy": "HARNESS_RUNS_ARE_READ_ONLY_OUTSIDE_EVIDENCE_ROOT",
-  "allowed_write_paths": [".codex/audits/stage-10d-r17q-r6c"],
+  "allowed_write_paths": [".codex/audits/stage-10d-r17q-r6c/runs"],
   "protected_paths": [
     {"path": "data/predictions/current_player_projections.csv", "must_exist": true},
     {"path": "data/predictions/current_coach_projections.csv", "must_exist": true},
@@ -24,5 +24,5 @@
   ],
   "report_bindings": [{"report_field": "smoke_status", "source_artifact": "r17a-harness-smoke-proof.json", "source_locator": "/smoke_status"}],
   "report_template": "generic_pending_independent_review",
-  "evidence_root": ".codex/audits/stage-10d-r17q-r6c"
+  "evidence_root": ".codex/audits/stage-10d-r17q-r6c/runs"
 }

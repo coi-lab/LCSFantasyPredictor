@@ -1,0 +1,76 @@
+{
+  "required_paths": [
+    {
+      "consumer": "lineup_optimizer; weekly champion export",
+      "logical_role": "current player projections",
+      "path": "data/predictions/current_player_projections.csv",
+      "producer_command": "python -m fantasy_prediction.player_baseline",
+      "runtime_or_runbook_evidence": "fantasy_prediction.player_baseline.main writes it at lines 662-663"
+    },
+    {
+      "consumer": "lineup_optimizer",
+      "logical_role": "current coach projections",
+      "path": "data/predictions/current_coach_projections.csv",
+      "producer_command": "python -m fantasy_prediction.player_baseline",
+      "runtime_or_runbook_evidence": "fantasy_prediction.player_baseline.main writes it at lines 662-663"
+    },
+    {
+      "consumer": "lineup_optimizer; weekly champion export",
+      "logical_role": "current champion portfolio",
+      "path": "data/predictions/current_champion_portfolio.csv",
+      "producer_command": "python scripts/refresh_champion_pool.py",
+      "runtime_or_runbook_evidence": "weekly runbook documents refresh_champion_pool output"
+    },
+    {
+      "consumer": "weekly review",
+      "logical_role": "current champion rankings",
+      "path": "data/predictions/current_champion_rankings.csv",
+      "producer_command": "python scripts/refresh_champion_pool.py",
+      "runtime_or_runbook_evidence": "weekly runbook documents champion predictor output"
+    },
+    {
+      "consumer": "weekly roster workflow",
+      "logical_role": "optimized lineup output",
+      "path": "data/predictions/current_lineup_recommendations.json",
+      "producer_command": "python -m fantasy_prediction.lineup_optimizer",
+      "runtime_or_runbook_evidence": "fantasy_prediction.lineup_optimizer.DEFAULT_OUTPUT"
+    },
+    {
+      "consumer": "dashboard browser",
+      "logical_role": "dashboard player projection data",
+      "path": "dashboard/generated/current/dashboard_data.json",
+      "producer_command": "python data_pipeline/export_dashboard_data.py",
+      "runtime_or_runbook_evidence": "data_pipeline.export_dashboard_data.export_dashboard_json default output"
+    },
+    {
+      "consumer": "dashboard browser",
+      "logical_role": "dashboard lineup recommendations",
+      "path": "dashboard/generated/current/matchup_lineups.json",
+      "producer_command": "python -m fantasy_prediction.lineup_optimizer",
+      "runtime_or_runbook_evidence": "fantasy_prediction.lineup_optimizer.DEFAULT_DASHBOARD_OUTPUT"
+    },
+    {
+      "consumer": "dashboard browser",
+      "logical_role": "dashboard champion data",
+      "path": "dashboard/generated/current/weekly_champion_predictions.json",
+      "producer_command": "python -m data_pipeline.export_weekly_champion_predictions",
+      "runtime_or_runbook_evidence": "data_pipeline.export_weekly_champion_predictions.DEFAULT_OUTPUT"
+    },
+    {
+      "consumer": "lineup_optimizer",
+      "logical_role": "production scoring and lineup rules",
+      "path": "config/scoring_rules.json",
+      "producer_command": "maintained production configuration",
+      "runtime_or_runbook_evidence": "fantasy_prediction.lineup_optimizer.DEFAULT_RULES_PATH"
+    },
+    {
+      "consumer": "fantasy_prediction.ce_model.predict_ce",
+      "logical_role": "sealed S30 state used by CE",
+      "path": "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json",
+      "producer_command": "scripts/fit_s30_v2.py / sealed refit workflow",
+      "runtime_or_runbook_evidence": "fantasy_prediction.ce_model.S30_V2_REFIT_20260817_STATE_PATH"
+    }
+  ],
+  "run_id": "4ab799e6-4627-4942-a9b9-570d404cf99c",
+  "stage": "R17Q-R6C"
+}
