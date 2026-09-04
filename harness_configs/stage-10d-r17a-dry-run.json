@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "stage_id": "R17A_NEW_HARNESS_DRY_RUN",
+  "prompt_path": "docs/task-evidence/stage-10d-r17a/stage-10d-r17a-current-recency-contract.md",
+  "commands": [],
+  "test_commands": [".venv/bin/python -m unittest tests/test_stage10d_r17a_recency.py -v"],
+  "required_artifacts": [],
+  "required_claims": [],
+  "required_gates": [],
+  "allowed_write_paths": [".agent-runs"],
+  "protected_paths": ["fantasy_prediction", "champion_prediction", "data_pipeline", "learning", "rag"],
+  "report_template": "generic_pending_independent_review",
+  "evidence_root": ".agent-runs"
+}
