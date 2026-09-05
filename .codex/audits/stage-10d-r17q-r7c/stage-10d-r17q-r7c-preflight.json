@@ -1,0 +1,27 @@
+{
+  "stage_id": "STAGE_10D_R17Q_R7C",
+  "stage_title": "Frozen Acceptance Policy + Sealed Evidence Bundle Remediation",
+  "active_codex_write_exception": "STAGE_10D_R17Q_R7C_FROZEN_ACCEPTANCE_POLICY_AND_SEALED_BUNDLE",
+  "implementation_owner": "CODEX",
+  "owner_authorization": "EXPLICIT",
+  "timestamp_utc": "2026-09-04T23:41:37.912790Z",
+  "remediation_findings_addressed": [
+    "P1 - Artifact-bound claims tested against actual generated artifacts rather than recomputed/synthetic data",
+    "P1 - Structural prevention of AGY weakening required_artifacts, required_claims, blocking gates, protected paths, or report bindings",
+    "P1 - Complete sealed manifest verification by independent validator",
+    "P2 - Semantic invariant proof evaluation replacing test-name self-certification",
+    "P2 - Policy immutability enforcement preventing policy mutation during or after runs"
+  ],
+  "models_preserved_untouched": [
+    "S30",
+    "CE",
+    "FE",
+    "Elo",
+    "recency formulas",
+    "optimizer",
+    "coach/champion models",
+    "production predictions",
+    "dashboard production data",
+    "raw model data"
+  ]
+}

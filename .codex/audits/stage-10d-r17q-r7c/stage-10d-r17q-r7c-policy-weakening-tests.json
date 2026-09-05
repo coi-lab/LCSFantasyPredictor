@@ -1,0 +1,54 @@
+{
+  "test_suite": "PolicyGovernanceTests.test_all_policy_weakening_attempts_rejected",
+  "all_policy_weakening_attacks_rejected": true,
+  "attacks_tested": [
+    {
+      "attack": "remove_development_folds_csv",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "policy required artifact omitted: stage-10d-r17a-development-folds.csv"
+    },
+    {
+      "attack": "remove_eligibility_table_csv",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "policy required artifact omitted: stage-10d-r17a-eligibility-table.csv"
+    },
+    {
+      "attack": "remove_secondary_2025_validation_csv",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "policy required artifact omitted: stage-10d-r17a-secondary-2025-validation.csv"
+    },
+    {
+      "attack": "remove_required_claim_portability",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "policy required claim omitted: CLAIM_PORTABILITY_TARGET_FREE"
+    },
+    {
+      "attack": "remove_blocking_gate",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "policy required blocking gate omitted: GATE_BASELINE_PARITY"
+    },
+    {
+      "attack": "downgrade_gate_to_non_blocking",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "gate GATE_BASELINE_PARITY must be blocking"
+    },
+    {
+      "attack": "downgrade_protected_path_must_exist",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "policy required protected path must_exist downgraded: protected.txt"
+    },
+    {
+      "attack": "omit_required_report_binding",
+      "detected_by": "enforce_policy_vs_config",
+      "result": "REJECTED_BEFORE_EXECUTION",
+      "error": "policy required report binding omitted: decision"
+    }
+  ]
+}

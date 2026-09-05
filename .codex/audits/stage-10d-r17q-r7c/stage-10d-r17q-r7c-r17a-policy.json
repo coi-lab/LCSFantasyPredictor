@@ -1,0 +1,163 @@
+{
+  "policy_id": "STAGE_10D_R17A_RECENCY_POLICY",
+  "policy_version": 1,
+  "stage_family": "STAGE_10D_R17A",
+  "required_artifacts": [
+    "stage-10d-r17a-candidate-freeze.json",
+    "stage-10d-r17a-development-folds.csv",
+    "stage-10d-r17a-baseline-feature-parity.json",
+    "stage-10d-r17a-development-metrics.csv",
+    "stage-10d-r17a-role-metrics.csv",
+    "stage-10d-r17a-eligibility-table.csv",
+    "stage-10d-r17a-bootstrap.json",
+    "stage-10d-r17a-selection-chronology.json",
+    "stage-10d-r17a-selected-candidate.json",
+    "stage-10d-r17a-secondary-2025-validation.csv",
+    "stage-10d-r17a-score-spread-diagnostics.json",
+    "stage-10d-r17a-ce-integration.json",
+    "stage-10d-r17a-portability-smoke.json",
+    "stage-10d-r17a-production-immutability.json",
+    "stage-10d-r17a-artifact-bound-test-summary.json",
+    "stage-10d-r17a-claim-proof-audit.csv",
+    "stage-10d-r17a-independent-replay.json",
+    "claim-manifest.json",
+    "invariant-proofs.json",
+    "manifest-sha256.json"
+  ],
+  "required_claims": [
+    "CLAIM_BASELINE_RECENCY5_PARITY",
+    "CLAIM_TRUE_ROLLING_FOLDS",
+    "CLAIM_DEVELOPMENT_ONLY_SELECTION",
+    "CLAIM_ELIGIBILITY_BEFORE_SELECTION",
+    "CLAIM_BOOTSTRAP_MULTIPLICITY_CORRECT",
+    "CLAIM_2025_NOT_USED_FOR_SELECTION",
+    "CLAIM_AUTHORITATIVE_CE_INTEGRATION",
+    "CLAIM_SCHEDULED_OPPONENT_SOURCE",
+    "CLAIM_PORTABILITY_TARGET_FREE",
+    "CLAIM_PRODUCTION_UNCHANGED",
+    "CLAIM_SELECTED_RECENCY_COMPONENT"
+  ],
+  "required_blocking_gates": [
+    "GATE_BASELINE_PARITY",
+    "GATE_TRUE_ROLLING_FOLDS",
+    "GATE_SELECTION_CHRONOLOGY",
+    "GATE_ELIGIBILITY_BEFORE_SELECTION",
+    "GATE_CE_INTEGRATION",
+    "GATE_PORTABILITY_SMOKE",
+    "GATE_PRODUCTION_IMMUTABILITY",
+    "GATE_ARTIFACT_BOUND_TESTS_PASS",
+    "GATE_CLAIM_PROOF_AUDIT_PASS"
+  ],
+  "required_test_invariants": [
+    {
+      "invariant_id": "ARTIFACT_FOLDS_CHRONOLOGICAL",
+      "artifact_consumption_required": true,
+      "description": "Development folds are strictly chronological with train_end <= val_start and no lookahead"
+    },
+    {
+      "invariant_id": "ARTIFACT_SELECTION_RECONSTRUCTS_FROM_DEVELOPMENT_ONLY",
+      "artifact_consumption_required": true,
+      "description": "Candidate selection reconstructs strictly from development metrics without 2025 data"
+    },
+    {
+      "invariant_id": "ARTIFACT_2025_MUTATION_DOES_NOT_CHANGE_SELECTION",
+      "artifact_consumption_required": true,
+      "description": "2025 evaluation rows/metrics are excluded from the selection decision"
+    },
+    {
+      "invariant_id": "ARTIFACT_INELIGIBLE_CANDIDATE_CANNOT_WIN",
+      "artifact_consumption_required": true,
+      "description": "Candidate winner must be strictly in the eligible set verified before selection"
+    },
+    {
+      "invariant_id": "ARTIFACT_BOOTSTRAP_PRESERVES_MULTIPLICITY",
+      "artifact_consumption_required": true,
+      "description": "Bootstrap validation accounts for multi-candidate multiplicity"
+    },
+    {
+      "invariant_id": "ARTIFACT_CE_USES_CANONICAL_SCHEDULED_OPPONENTS",
+      "artifact_consumption_required": true,
+      "description": "CE evaluation uses canonical scheduled opponents"
+    },
+    {
+      "invariant_id": "ARTIFACT_POSTLOCK_SNAPSHOT_REJECTED",
+      "artifact_consumption_required": true,
+      "description": "Post-lock snapshots or post-cutoff information are rejected"
+    },
+    {
+      "invariant_id": "ARTIFACT_TARGET_FREE_PORTABILITY_SUCCEEDS",
+      "artifact_consumption_required": true,
+      "description": "Future inference portability operates with zero target columns"
+    },
+    {
+      "invariant_id": "ARTIFACT_PRODUCTION_BEFORE_AFTER_HASHES_IDENTICAL",
+      "artifact_consumption_required": true,
+      "description": "Production protected paths before and after run have identical hashes"
+    }
+  ],
+  "required_protected_paths": [
+    {
+      "path": "data/predictions/current_player_projections.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_coach_projections.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_champion_portfolio.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_champion_rankings.csv",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/current_lineup_recommendations.json",
+      "must_exist": true
+    },
+    {
+      "path": "dashboard/generated/current/dashboard_data.json",
+      "must_exist": true
+    },
+    {
+      "path": "dashboard/generated/current/matchup_lineups.json",
+      "must_exist": true
+    },
+    {
+      "path": "dashboard/generated/current/weekly_champion_predictions.json",
+      "must_exist": true
+    },
+    {
+      "path": "config/scoring_rules.json",
+      "must_exist": true
+    },
+    {
+      "path": "data/predictions/player_model_v2/model_state/s30_v2_refit_20260817_5fb7d2510674dee36aee67155376501e8cb22d130c56f1230fc7c6fd808b2910.json",
+      "must_exist": true
+    }
+  ],
+  "required_report_bindings": [
+    {
+      "report_field": "selected_candidate"
+    },
+    {
+      "report_field": "decision"
+    },
+    {
+      "report_field": "baseline_parity"
+    },
+    {
+      "report_field": "portability_status"
+    },
+    {
+      "report_field": "ce_integration_status"
+    },
+    {
+      "report_field": "production_immutability"
+    }
+  ],
+  "manifest_required": true,
+  "manifest_scope": "ALL_EVIDENCE_BUNDLE_FILES",
+  "status_ceiling": "PENDING_INDEPENDENT_REVIEW"
+}

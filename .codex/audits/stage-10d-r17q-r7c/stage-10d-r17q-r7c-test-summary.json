@@ -1,0 +1,9 @@
+{
+  "stage_id": "STAGE_10D_R17Q_R7C",
+  "runner_command": ".venv/bin/python -m unittest tests/test_evidence_harness.py tests/test_evidence_harness_protected_paths.py tests/test_evidence_policy_governance.py -v",
+  "total_tests_run": 29,
+  "total_tests_passed": 29,
+  "total_tests_failed": 0,
+  "exit_code": 0,
+  "verdict": "PASS"
+}

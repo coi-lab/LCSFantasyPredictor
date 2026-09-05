@@ -1,0 +1,16 @@
+{
+  "schema_id": "FROZEN_ACCEPTANCE_POLICY_V1",
+  "required_fields": {
+    "policy_id": "string - Unique policy identifier",
+    "policy_version": "integer/string - Monotonically increasing policy version",
+    "stage_family": "string - Target stage family identifier",
+    "required_artifacts": "list[string] - Minimum required generated evidence artifacts",
+    "required_claims": "list[string] - Minimum required machine-verified claims",
+    "required_blocking_gates": "list[string|object] - Minimum required gates with blocking=true",
+    "required_test_invariants": "list[object] - Minimum required semantic invariant proofs",
+    "required_protected_paths": "list[object] - Minimum protected paths with must_exist specifications",
+    "required_report_bindings": "list[object] - Minimum bindings between report fields and raw evidence",
+    "manifest_required": "boolean - Enforces complete sealed bundle manifest",
+    "status_ceiling": "string - Maximum allowed status, strictly bounded to PENDING_INDEPENDENT_REVIEW"
+  }
+}

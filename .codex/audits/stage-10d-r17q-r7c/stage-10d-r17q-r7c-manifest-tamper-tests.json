@@ -1,0 +1,60 @@
+{
+  "test_suite": "PolicyGovernanceTests.test_manifest_tamper_all_files_rejected",
+  "manifest_tamper_detection_pass": true,
+  "tamper_scenarios_tested": [
+    {
+      "target": "stage-10d-r17a-development-folds.csv",
+      "tamper_action": "single_byte_mutation",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: hash mismatch",
+      "result": "PASS"
+    },
+    {
+      "target": "stage-10d-r17a-development-metrics.csv",
+      "tamper_action": "single_byte_mutation",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: hash mismatch",
+      "result": "PASS"
+    },
+    {
+      "target": "stage-10d-r17a-eligibility-table.csv",
+      "tamper_action": "single_byte_mutation",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: hash mismatch",
+      "result": "PASS"
+    },
+    {
+      "target": "stage-10d-r17a-secondary-2025-validation.csv",
+      "tamper_action": "single_byte_mutation",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: hash mismatch",
+      "result": "PASS"
+    },
+    {
+      "target": "claim-manifest.json",
+      "tamper_action": "whitespace_mutation",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: hash mismatch",
+      "result": "PASS"
+    },
+    {
+      "target": "report.json",
+      "tamper_action": "whitespace_mutation",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: hash mismatch",
+      "result": "PASS"
+    },
+    {
+      "target": "test-results.json",
+      "tamper_action": "whitespace_mutation",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: hash mismatch",
+      "result": "PASS"
+    },
+    {
+      "target": "stage-10d-r17a-candidate-freeze.json",
+      "tamper_action": "file_deletion",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: missing manifest file",
+      "result": "PASS"
+    },
+    {
+      "target": "unsealed-extra.txt",
+      "tamper_action": "unsealed_file_injection",
+      "expected_failure": "BLOCKED_BY_MANIFEST_MISMATCH: unsealed evidence file",
+      "result": "PASS"
+    }
+  ]
+}

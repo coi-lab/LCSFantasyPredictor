@@ -1,0 +1,11 @@
+{
+  "stage-10d-r17q-r7c-artifact-proof-tests.json": "8d363db1515c86c07a747afdb87fce35ffef8fa321ebef5474d8b1677e1981cc",
+  "stage-10d-r17q-r7c-completion-report.md": "535858a214f13797de89362b7001ac25d56dbac085acfdd919cd7edc61403b03",
+  "stage-10d-r17q-r7c-manifest-tamper-tests.json": "7dd63ff4a515e525f0d6bb51c5cd9e6e731d4838fbe410d83bff098547b4a78f",
+  "stage-10d-r17q-r7c-policy-mutation-tests.json": "d487a60604c7823d08460f6c89de5b312e3381fc6b9e1a079e1ebb822ce005f6",
+  "stage-10d-r17q-r7c-policy-schema.json": "b64ce3fff9fd64f17999d1d74418ee11468076557350b327240b731d4d926cc3",
+  "stage-10d-r17q-r7c-policy-weakening-tests.json": "bd631ae81ff62265d3116de48d7047052e409694fdb3617da9f0833f714895bc",
+  "stage-10d-r17q-r7c-preflight.json": "c107100c89500c6a8b42fbfb6eaa3dd863307f7bfade9f8a1c45e2d365d9ffdd",
+  "stage-10d-r17q-r7c-r17a-policy.json": "cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f",
+  "stage-10d-r17q-r7c-test-summary.json": "e4abd8f1fe1483a060d542892c836e515ea3a528bfc8016896b74ed8607b292c"
+}

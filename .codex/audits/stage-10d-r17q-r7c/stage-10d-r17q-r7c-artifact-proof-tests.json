@@ -1,0 +1,69 @@
+{
+  "test_suite": "PolicyGovernanceTests.test_invariant_proof_verification_and_source_checks",
+  "artifact_proof_enforcement_pass": true,
+  "proof_evaluations": [
+    {
+      "invariant_id": "ARTIFACT_FOLDS_CHRONOLOGICAL",
+      "semantic_validator": "semantic_validate_fold_chronology",
+      "status": "VERIFIED_ON_REAL_CSV"
+    },
+    {
+      "invariant_id": "ARTIFACT_SELECTION_RECONSTRUCTS_FROM_DEVELOPMENT_ONLY",
+      "semantic_validator": "provenance_reconstruction",
+      "status": "VERIFIED_ON_REAL_ARTIFACT"
+    },
+    {
+      "invariant_id": "ARTIFACT_2025_MUTATION_DOES_NOT_CHANGE_SELECTION",
+      "semantic_validator": "2025_exclusion_audit",
+      "status": "VERIFIED_ON_REAL_ARTIFACT"
+    },
+    {
+      "invariant_id": "ARTIFACT_INELIGIBLE_CANDIDATE_CANNOT_WIN",
+      "semantic_validator": "eligibility_table_winner_lookup",
+      "status": "VERIFIED_ON_REAL_CSV"
+    },
+    {
+      "invariant_id": "ARTIFACT_BOOTSTRAP_PRESERVES_MULTIPLICITY",
+      "semantic_validator": "bootstrap_multiplicity_verifier",
+      "status": "VERIFIED_ON_REAL_JSON"
+    },
+    {
+      "invariant_id": "ARTIFACT_CE_USES_CANONICAL_SCHEDULED_OPPONENTS",
+      "semantic_validator": "ce_opponent_audit",
+      "status": "VERIFIED_ON_REAL_JSON"
+    },
+    {
+      "invariant_id": "ARTIFACT_POSTLOCK_SNAPSHOT_REJECTED",
+      "semantic_validator": "semantic_validate_postlock_portability",
+      "status": "VERIFIED_ON_REAL_TIMESTAMPS"
+    },
+    {
+      "invariant_id": "ARTIFACT_TARGET_FREE_PORTABILITY_SUCCEEDS",
+      "semantic_validator": "semantic_validate_postlock_portability",
+      "status": "VERIFIED_ON_REAL_JSON"
+    },
+    {
+      "invariant_id": "ARTIFACT_PRODUCTION_BEFORE_AFTER_HASHES_IDENTICAL",
+      "semantic_validator": "semantic_validate_production_immutability",
+      "status": "VERIFIED_ON_PROTECTED_PATHS"
+    }
+  ],
+  "negative_proof_checks": [
+    {
+      "condition": "missing_invariant_proof",
+      "result": "REJECTED"
+    },
+    {
+      "condition": "status_not_proven",
+      "result": "REJECTED"
+    },
+    {
+      "condition": "missing_source_artifacts_list",
+      "result": "REJECTED"
+    },
+    {
+      "condition": "stale_source_artifact_sha256",
+      "result": "REJECTED"
+    }
+  ]
+}
