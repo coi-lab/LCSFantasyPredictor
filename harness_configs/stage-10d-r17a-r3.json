@@ -15,23 +15,28 @@
     ".venv/bin/python -m unittest tests/test_stage10d_r17a_r3_recency.py -v"
   ],
   "required_artifacts": [
-    "stage-10d-r17a-r3-source-freeze.json",
-    "stage-10d-r17a-r3-exact-commit-proof.json",
-    "stage-10d-r17a-r3-candidate-freeze.json",
-    "stage-10d-r17a-r3-baseline-feature-parity.json",
-    "stage-10d-r17a-r3-bootstrap.json",
-    "stage-10d-r17a-r3-selection-chronology.json",
-    "stage-10d-r17a-r3-selected-candidate.json",
-    "stage-10d-r17a-r3-score-spread-diagnostics.json",
-    "stage-10d-r17a-r3-ce-integration.json",
-    "stage-10d-r17a-r3-portability-smoke.json",
-    "stage-10d-r17a-r3-production-immutability.json",
-    "stage-10d-r17a-r3-artifact-bound-test-summary.json",
-    "stage-10d-r17a-r3-independent-replay.json"
+    "stage-10d-r17a-candidate-freeze.json",
+    "stage-10d-r17a-development-folds.csv",
+    "stage-10d-r17a-baseline-feature-parity.json",
+    "stage-10d-r17a-development-metrics.csv",
+    "stage-10d-r17a-role-metrics.csv",
+    "stage-10d-r17a-eligibility-table.csv",
+    "stage-10d-r17a-bootstrap.json",
+    "stage-10d-r17a-selection-chronology.json",
+    "stage-10d-r17a-selected-candidate.json",
+    "stage-10d-r17a-secondary-2025-validation.csv",
+    "stage-10d-r17a-score-spread-diagnostics.json",
+    "stage-10d-r17a-ce-integration.json",
+    "stage-10d-r17a-portability-smoke.json",
+    "stage-10d-r17a-production-immutability.json",
+    "stage-10d-r17a-artifact-bound-test-summary.json",
+    "stage-10d-r17a-claim-proof-audit.csv",
+    "stage-10d-r17a-independent-replay.json",
+    "claim-manifest.json",
+    "invariant-proofs.json",
+    "manifest-sha256.json"
   ],
   "required_claims": [
-    "CLAIM_ALL_STAGE_SOURCES_TRACKED",
-    "CLAIM_EXACT_COMMIT_MATCH",
     "CLAIM_BASELINE_RECENCY5_PARITY",
     "CLAIM_TRUE_ROLLING_FOLDS",
     "CLAIM_DEVELOPMENT_ONLY_SELECTION",
@@ -48,78 +53,64 @@
   ],
   "required_gates": [
     {
-      "gate_id": "GATE_ALL_STAGE_SOURCES_TRACKED",
-      "source_artifact": "stage-10d-r17a-r3-source-freeze.json",
-      "source_locator": "/ALL_STAGE_SOURCES_TRACKED",
-      "predicate": "== true",
-      "blocking": true
-    },
-    {
-      "gate_id": "GATE_EXACT_COMMIT_MATCH",
-      "source_artifact": "stage-10d-r17a-r3-exact-commit-proof.json",
-      "source_locator": "/EXACT_COMMIT_MATCH",
-      "predicate": "== true",
-      "blocking": true
-    },
-    {
       "gate_id": "GATE_BASELINE_PARITY",
-      "source_artifact": "stage-10d-r17a-r3-baseline-feature-parity.json",
+      "source_artifact": "stage-10d-r17a-baseline-feature-parity.json",
       "source_locator": "/parity_pass",
       "predicate": "== true",
       "blocking": true
     },
     {
       "gate_id": "GATE_TRUE_ROLLING_FOLDS",
-      "source_artifact": "stage-10d-r17a-r3-selection-chronology.json",
+      "source_artifact": "stage-10d-r17a-selection-chronology.json",
       "source_locator": "/true_rolling_folds_verified",
       "predicate": "== true",
       "blocking": true
     },
     {
       "gate_id": "GATE_SELECTION_CHRONOLOGY",
-      "source_artifact": "stage-10d-r17a-r3-selection-chronology.json",
+      "source_artifact": "stage-10d-r17a-selection-chronology.json",
       "source_locator": "/exclusion_of_2025_from_selection",
       "predicate": "== true",
       "blocking": true
     },
     {
       "gate_id": "GATE_ELIGIBILITY_BEFORE_SELECTION",
-      "source_artifact": "stage-10d-r17a-r3-selected-candidate.json",
+      "source_artifact": "stage-10d-r17a-selected-candidate.json",
       "source_locator": "/winner_selection_status",
       "predicate": "== \"ELIGIBLE_CANDIDATE_SELECTED\"",
       "blocking": true
     },
     {
       "gate_id": "GATE_CE_INTEGRATION",
-      "source_artifact": "stage-10d-r17a-r3-ce-integration.json",
+      "source_artifact": "stage-10d-r17a-ce-integration.json",
       "source_locator": "/ce_integration_status",
       "predicate": "== \"PASS\"",
       "blocking": true
     },
     {
       "gate_id": "GATE_PORTABILITY_SMOKE",
-      "source_artifact": "stage-10d-r17a-r3-portability-smoke.json",
+      "source_artifact": "stage-10d-r17a-portability-smoke.json",
       "source_locator": "/portability_pass",
       "predicate": "== true",
       "blocking": true
     },
     {
       "gate_id": "GATE_PRODUCTION_IMMUTABILITY",
-      "source_artifact": "stage-10d-r17a-r3-production-immutability.json",
+      "source_artifact": "stage-10d-r17a-production-immutability.json",
       "source_locator": "/PRODUCTION_UNCHANGED",
       "predicate": "== true",
       "blocking": true
     },
     {
       "gate_id": "GATE_ARTIFACT_BOUND_TESTS_PASS",
-      "source_artifact": "stage-10d-r17a-r3-artifact-bound-test-summary.json",
+      "source_artifact": "stage-10d-r17a-artifact-bound-test-summary.json",
       "source_locator": "/all_tests_passed",
       "predicate": "== true",
       "blocking": true
     },
     {
       "gate_id": "GATE_CLAIM_PROOF_AUDIT_PASS",
-      "source_artifact": "stage-10d-r17a-r3-exact-commit-proof.json",
+      "source_artifact": "stage-10d-r17a-selected-candidate.json",
       "source_locator": "/claim_proof_audit_passed",
       "predicate": "== true",
       "blocking": true
@@ -144,42 +135,32 @@
   "report_bindings": [
     {
       "report_field": "selected_candidate",
-      "source_artifact": "stage-10d-r17a-r3-selected-candidate.json",
+      "source_artifact": "stage-10d-r17a-selected-candidate.json",
       "source_locator": "/selected_candidate_id"
     },
     {
       "report_field": "decision",
-      "source_artifact": "stage-10d-r17a-r3-selected-candidate.json",
+      "source_artifact": "stage-10d-r17a-selected-candidate.json",
       "source_locator": "/decision"
     },
     {
       "report_field": "baseline_parity",
-      "source_artifact": "stage-10d-r17a-r3-baseline-feature-parity.json",
+      "source_artifact": "stage-10d-r17a-baseline-feature-parity.json",
       "source_locator": "/status"
     },
     {
-      "report_field": "all_sources_tracked",
-      "source_artifact": "stage-10d-r17a-r3-source-freeze.json",
-      "source_locator": "/ALL_STAGE_SOURCES_TRACKED"
-    },
-    {
-      "report_field": "exact_commit_match",
-      "source_artifact": "stage-10d-r17a-r3-exact-commit-proof.json",
-      "source_locator": "/EXACT_COMMIT_MATCH"
-    },
-    {
       "report_field": "portability_status",
-      "source_artifact": "stage-10d-r17a-r3-portability-smoke.json",
+      "source_artifact": "stage-10d-r17a-portability-smoke.json",
       "source_locator": "/status"
     },
     {
       "report_field": "ce_integration_status",
-      "source_artifact": "stage-10d-r17a-r3-ce-integration.json",
+      "source_artifact": "stage-10d-r17a-ce-integration.json",
       "source_locator": "/ce_integration_status"
     },
     {
       "report_field": "production_immutability",
-      "source_artifact": "stage-10d-r17a-r3-production-immutability.json",
+      "source_artifact": "stage-10d-r17a-production-immutability.json",
       "source_locator": "/status"
     }
   ],

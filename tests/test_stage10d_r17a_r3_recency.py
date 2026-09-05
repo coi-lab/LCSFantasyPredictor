@@ -270,6 +270,7 @@ class TestStage10DR17AR3Recency(unittest.TestCase):
                 "report_bindings": [],
             }
             (tmp_path / "stage-config.json").write_text(json.dumps(config), encoding="utf-8")
+            (tmp_path / "run-identity.json").write_text(json.dumps({"stage_id": "STAGE_10D_R17A_R3", "run_id": "test_run", "git_commit": "test_commit"}), encoding="utf-8")
             evidence_harness.render_report(tmp_path, validation)
             report = json.loads((tmp_path / "report.json").read_text(encoding="utf-8"))
             self.assertEqual(report["implementation_status"], "BLOCKED")
