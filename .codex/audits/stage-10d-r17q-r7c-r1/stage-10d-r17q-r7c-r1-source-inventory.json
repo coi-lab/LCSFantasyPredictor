@@ -1,0 +1,9 @@
+{
+  "ALL_POLICY_IMPLEMENTATION_SOURCES_TRACKED": true,
+  "sources": [
+    {"path":"harness_policies/stage-10d-r17a-recency-policy.json","tracked_before":true,"content_sha256":"cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f","role":"frozen policy"},
+    {"path":"scripts/evidence_policy.py","tracked_before":true,"content_sha256":"27a70f79c65cd08fc63ac8a54252dfe56106cd66bea958b0af980f17937ae985","role":"semantic validators and anchor"},
+    {"path":"scripts/evidence_harness.py","tracked_before":true,"content_sha256":"204670bc8f49512a36a1f2fa893eba4a53f84764fabd0be7a7a94123570565d9","role":"validator and policy ceiling enforcement"},
+    {"path":"tests/test_evidence_policy_governance.py","tracked_before":true,"content_sha256":"b6265b4a578a15b0e7830edbf06e2d7381f8047ecb37038fbf11db37ab2793a7","role":"governance regression tests"}
+  ]
+}

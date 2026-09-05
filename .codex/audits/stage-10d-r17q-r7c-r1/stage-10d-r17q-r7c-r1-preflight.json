@@ -1,0 +1,7 @@
+{
+  "branch": "main",
+  "head_before": "8fdacde4036fb05428d96b7538bd09c3038e3f5d",
+  "status_before": ["M scripts/evidence_harness.py", "M scripts/evidence_policy.py", "M tests/test_evidence_policy_governance.py"],
+  "untracked_governance_files": [],
+  "write_exception": "STAGE_10D_R17Q_R7C_R1_FROZEN_POLICY_SEMANTIC_ENFORCEMENT"
+}

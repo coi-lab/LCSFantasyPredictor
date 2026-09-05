@@ -1,0 +1,17 @@
+{
+  "stage-10d-r17q-r7c-r1-bootstrap-semantic-tests.json":"54b37351c15cd7eb6b1dc1b342a0cf11347961ae18079f90389acb9efbbcdd07",
+  "stage-10d-r17q-r7c-r1-ce-semantic-tests.json":"214c1f200766178081a6c5e9d05d7e16cf126fd0d2e8bd47984ebc9f98a8ea8f",
+  "stage-10d-r17q-r7c-r1-completion-report.md":"3705aa1078115031f6d342eade37331e18307e23b32b74d730bca0a73c63fcd7",
+  "stage-10d-r17q-r7c-r1-eligibility-semantic-tests.json":"46a7bca882c5f2ed46c02b6b6cc1fcada7ba05158535bd0de1e09ca70882cfb8",
+  "stage-10d-r17q-r7c-r1-manifest-regression-tests.json":"5376094e1908b4e2fdf1ddcdd366cb4b6f42ef7a76af128c7c2d44d02faecf3d",
+  "stage-10d-r17q-r7c-r1-old-r17a-r3-revalidation.json":"546c953c015692c3f84fcb1a78c8bfd83523734d5c1c5f03ca21013a7dfdf0bf",
+  "stage-10d-r17q-r7c-r1-policy-anchor-tests.json":"496813ad26626828d8030b03eb59652773d115c6da287c9c548e21b6813d4e8c",
+  "stage-10d-r17q-r7c-r1-portability-semantic-tests.json":"c9596b415182a3c6cd5ad174bf1a89acd1d71f265e303b333909baef3ee5a107",
+  "stage-10d-r17q-r7c-r1-positive-governance-fixture.json":"cc28dbc776ded1a4f7c3bf22cf9ca558f9af1516fcd76393bd8e10e27a22fd67",
+  "stage-10d-r17q-r7c-r1-preflight.json":"10dcae105f7e935de5d21d213eee6523818ef287614b9c26bd9dac6a5c4b148e",
+  "stage-10d-r17q-r7c-r1-production-immutability-semantic-tests.json":"747740947180d3b9a3acfc24a72faf835c0b4bf65085482536414f12a3ed72d9",
+  "stage-10d-r17q-r7c-r1-selection-semantic-tests.json":"9f47ed7b989efb44836a8990886499c71b4de3f4131f8dd82d3f77299545e76f",
+  "stage-10d-r17q-r7c-r1-source-inventory.json":"9727acfc889cc8446ab13653f280fe5d143159351c0040d4883eeca036e90929",
+  "stage-10d-r17q-r7c-r1-status-ceiling-tests.json":"bde123918610131569d358cb9bfcf1b8714b3f1696aca9887f5d5eeacd9afea1",
+  "stage-10d-r17q-r7c-r1-test-summary.json":"51a10f463f9517a9ef14988bfaa760359d929c71ee2012540d333769017996fb"
+}
