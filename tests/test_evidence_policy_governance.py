@@ -191,7 +191,11 @@ class PolicyGovernanceTests(unittest.TestCase):
         selected = harness.json_load(evidence / "stage-10d-r17a-selected-candidate.json"); selected.update({"freeze_timestamp": "2026-01-01T00:00:00Z"}); harness.json_dump(evidence / "stage-10d-r17a-selected-candidate.json", selected)
         chronology = harness.json_load(evidence / "stage-10d-r17a-selection-chronology.json"); chronology.update({"selection_data_window": "2024_development_only", "development_metric": "mae", "secondary_validation_timestamp": "2026-01-02T00:00:00Z"}); harness.json_dump(evidence / "stage-10d-r17a-selection-chronology.json", chronology)
         bootstrap = harness.json_load(evidence / "stage-10d-r17a-bootstrap.json"); bootstrap.update({"bootstrap_method": "paired_cluster", "bootstrap_unit": "prediction_period", "B": 1000, "random_seed": 42, "multiplicity_preserving": True, "candidate_id": "RECENCY_CANDIDATE_1", "baseline_id": "BASELINE", "reported_mean_delta": -1.0, "confidence_interval": [-1.2, -0.8], "bootstrap_probability_improves": 0.9, "sampled_draw_trace": [["a", "a", "b"]]}); harness.json_dump(evidence / "stage-10d-r17a-bootstrap.json", bootstrap)
-        ce = harness.json_load(evidence / "stage-10d-r17a-ce-integration.json"); ce.update({"authoritative_ce_path": "champion_prediction/ce.py", "authoritative_s30_path": "fantasy_prediction/s30.py", "authoritative_fe_path": "fantasy_prediction/fe.py", "candidate_id": "RECENCY_CANDIDATE_1", "baseline_id": "BASELINE", "scheduled_opponents_source": "canonical.scheduled_opponents", "development_ce_metrics": {"mae": 1.0}, "secondary_ce_metrics": {"mae": 2.0}, "secondary_ce_metrics_descriptive_only": True, "result_derived_opponent_fallback": False}); harness.json_dump(evidence / "stage-10d-r17a-ce-integration.json", ce)
+        ce = harness.json_load(evidence / "stage-10d-r17a-ce-integration.json"); ce.update({"candidate_id": "RECENCY_CANDIDATE_1", "baseline_id": "BASELINE", "scheduled_opponents_source": "canonical.scheduled_opponents", "development_ce_metrics": {"mae": 1.0}, "secondary_ce_metrics": {"mae": 2.0}, "secondary_ce_metrics_descriptive_only": True, "result_derived_opponent_fallback": False}); harness.json_dump(evidence / "stage-10d-r17a-ce-integration.json", ce)
+        ce.update(self.policy["authoritative_implementations"])
+        harness.json_dump(evidence / "stage-10d-r17a-ce-integration.json", ce)
+        bootstrap["consumed_cluster_counts"] = [{"a": 2, "b": 1}]
+        harness.json_dump(evidence / "stage-10d-r17a-bootstrap.json", bootstrap)
         portability = harness.json_load(evidence / "stage-10d-r17a-portability-smoke.json"); portability["prediction_succeeded"] = True; harness.json_dump(evidence / "stage-10d-r17a-portability-smoke.json", portability)
 
         # Claim manifest
@@ -240,6 +244,75 @@ class PolicyGovernanceTests(unittest.TestCase):
         result = harness.validate(self.root, evidence)
         self.assertTrue(result["valid"], f"Validation failed: {result['failures']}")
         self.assertEqual(result["status"], "PENDING_INDEPENDENT_REVIEW")
+
+    def test_frozen_implementation_identifiers_match_repository_definitions(self):
+        import ast
+        root = Path(__file__).resolve().parents[1]
+        expected = {
+            "authoritative_ce_path": "fantasy_prediction/ce_model.py:predict_ce",
+            "authoritative_s30_path": "fantasy_prediction/recovered_components.py:predict_s30_v2",
+            "authoritative_fe_path": "fantasy_prediction/recovered_components.py:predict_delta_e",
+        }
+        self.assertEqual(self.policy["authoritative_implementations"], expected)
+        for identifier in expected.values():
+            path, symbol = identifier.split(":")
+            tree = ast.parse((root / path).read_text())
+            self.assertTrue(any(isinstance(node, ast.FunctionDef) and node.name == symbol for node in tree.body))
+
+    def test_ce_rejects_substituted_identifiers_after_resealing(self):
+        evidence = self._setup_valid_evidence_bundle()
+        path = evidence / "stage-10d-r17a-ce-integration.json"
+        good = harness.json_load(path)
+        for field in self.policy["authoritative_implementations"]:
+            for replacement in ("fake/path", "", good[field].split(":")[0], good[field] + "_custom", None):
+                with self.subTest(field=field, replacement=replacement):
+                    bad = dict(good)
+                    bad[field] = replacement
+                    harness.json_dump(path, bad)
+                    harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+                    result = harness.validate(self.root, evidence)
+                    self.assertFalse(result["valid"])
+                    self.assertTrue(any("CE authoritative implementation mismatch" in failure for failure in result["failures"]), result)
+        harness.json_dump(path, good)
+        harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+        self.assertTrue(harness.validate(self.root, evidence)["valid"])
+
+    def test_ce_requires_trusted_policy_and_uses_its_identifiers(self):
+        evidence = self._setup_valid_evidence_bundle()
+        self.assertFalse(policy_lib.semantic_validate_ce_opponents(evidence)[0])
+        alternate = copy.deepcopy(self.policy)
+        alternate["authoritative_implementations"]["authoritative_ce_path"] = "future/ce.py:predict"
+        self.assertFalse(policy_lib.semantic_validate_ce_opponents(evidence, policy=alternate)[0])
+        path = evidence / "stage-10d-r17a-ce-integration.json"
+        data = harness.json_load(path)
+        data.update(alternate["authoritative_implementations"])
+        harness.json_dump(path, data)
+        self.assertTrue(policy_lib.semantic_validate_ce_opponents(evidence, policy=alternate)[0])
+
+    def test_bootstrap_requires_draw_and_consumption_audit(self):
+        evidence = self._setup_valid_evidence_bundle()
+        path = evidence / "stage-10d-r17a-bootstrap.json"
+        good = harness.json_load(path)
+        mutations = [
+            {"sampled_draw_trace": None},
+            {"consumed_cluster_counts": None},
+            {"consumed_cluster_counts": [{"a": 1, "b": 1}]},
+            {"consumed_cluster_counts": []},
+            {"sampled_draw_trace": [[{"bad": "cluster"}]]},
+            {"sampled_draw_trace": [["a", "b"]], "consumed_cluster_counts": [{"a": 1, "b": 1}]},
+        ]
+        for mutation in mutations:
+            with self.subTest(mutation=mutation):
+                harness.json_dump(path, {**good, **mutation})
+                proof = policy_lib.semantic_validate_bootstrap_multiplicity(evidence, policy=self.policy)
+                self.assertFalse(proof[0])
+                self.assertEqual(proof[2]["status"], "NOT_PROVEN")
+                harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+                result = harness.validate(self.root, evidence)
+                self.assertTrue(any("ARTIFACT_BOOTSTRAP_PRESERVES_MULTIPLICITY" in failure for failure in result["failures"]))
+        harness.json_dump(path, good)
+        harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+        self.assertTrue(harness.validate(self.root, evidence)["valid"])
 
     def test_manifest_tamper_all_files_rejected(self):
         evidence = self._setup_valid_evidence_bundle()

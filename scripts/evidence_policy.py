@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+from collections import Counter
 import datetime as dt
 import hashlib
 import json
@@ -70,27 +71,27 @@ def status_within_ceiling(value: Any, ceiling: Any) -> bool:
 APPROVED_STAGE_POLICIES: dict[str, dict[str, str]] = {
     "STAGE_10D_R17A": {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
-        "policy_sha256": "cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f",
+        "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
     },
     "STAGE_10D_R17A_R1": {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
-        "policy_sha256": "cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f",
+        "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
     },
     "STAGE_10D_R17A_R2": {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
-        "policy_sha256": "cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f",
+        "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
     },
     "STAGE_10D_R17A_R3": {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
-        "policy_sha256": "cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f",
+        "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
     },
     "STAGE_10D_R17A_R4": {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
-        "policy_sha256": "cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f",
+        "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
     },
     "STAGE_10D_R17A_DRY_RUN": {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
-        "policy_sha256": "cfa0f8a0ba9522281eaf05d2ed2f305f784492e971c36ccaaa7647970f0df73f",
+        "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
     },
 }
 
@@ -559,7 +560,7 @@ def semantic_validate_candidate_eligibility(evidence_dir: Path, source_artifacts
                   {"selected_candidate": selected_id, "eligible_candidates": sorted(eligible_ids)}, violations)
 
 
-def semantic_validate_bootstrap_multiplicity(evidence_dir: Path, source_artifacts: list[str] | None = None) -> tuple[bool, str, dict[str, Any]]:
+def semantic_validate_bootstrap_multiplicity(evidence_dir: Path, source_artifacts: list[str] | None = None, policy: dict[str, Any] | None = None) -> tuple[bool, str, dict[str, Any]]:
     violations: list[str] = []
     target = _artifact(evidence_dir, "bootstrap.json")
     if not target:
@@ -575,13 +576,32 @@ def semantic_validate_bootstrap_multiplicity(evidence_dir: Path, source_artifact
     ci = data.get("confidence_interval")
     if not isinstance(ci, (list, tuple)) or len(ci) != 2 or any(_number(value) is None for value in ci): violations.append("malformed confidence interval")
     trace = data.get("sampled_draw_trace")
-    if trace is not None and not any(len(draw) != len(set(draw)) for draw in trace if isinstance(draw, list)):
+    if not isinstance(trace, list) or not any(
+            isinstance(draw, list) and all(isinstance(cluster, str) for cluster in draw)
+            and len(draw) != len(set(draw)) for draw in trace):
         violations.append("sampled-draw trace lacks duplicate cluster multiplicity")
+    # An audit records what was actually consumed, not just what was drawn.
+    # Require a duplicate draw and compare the consumed cluster counts exactly.
+    audit_checked = False
+    if policy is None or policy.get("bootstrap_multiplicity_audit_required") is not False:
+        counts = data.get("consumed_cluster_counts")
+        if not isinstance(trace, list) or not trace or not isinstance(counts, list) or len(counts) != len(trace):
+            violations.append("missing or malformed bootstrap multiplicity audit")
+        else:
+            audit_checked = True
+            for draw, consumed in zip(trace, counts):
+                if (not isinstance(draw, list) or not draw
+                        or any(not isinstance(cluster, str) or not cluster for cluster in draw)
+                        or not isinstance(consumed, dict)
+                        or any(type(count) is not int or count <= 0 for count in consumed.values())):
+                    violations.append("malformed bootstrap draw/consumption audit")
+                elif dict(Counter(draw)) != consumed:
+                    violations.append("bootstrap consumed cluster counts do not preserve draw multiplicity")
     return _proof(not violations, "ARTIFACT_BOOTSTRAP_PRESERVES_MULTIPLICITY", [target],
-                  {"method": data.get("bootstrap_method"), "unit": data.get("bootstrap_unit"), "B": data.get("B")}, violations)
+                  {"method": data.get("bootstrap_method"), "unit": data.get("bootstrap_unit"), "B": data.get("B"), "multiplicity_audit_checked": audit_checked}, violations)
 
 
-def semantic_validate_ce_opponents(evidence_dir: Path, source_artifacts: list[str] | None = None) -> tuple[bool, str, dict[str, Any]]:
+def semantic_validate_ce_opponents(evidence_dir: Path, source_artifacts: list[str] | None = None, policy: dict[str, Any] | None = None) -> tuple[bool, str, dict[str, Any]]:
     violations: list[str] = []
     target = _artifact(evidence_dir, "ce-integration.json")
     selected = _artifact(evidence_dir, "selected-candidate.json")
@@ -590,6 +610,13 @@ def semantic_validate_ce_opponents(evidence_dir: Path, source_artifacts: list[st
         return _proof(False, "ARTIFACT_CE_USES_CANONICAL_SCHEDULED_OPPONENTS", sources, {}, ["CE semantic inputs missing"])
     data = _read_json(target, "CE integration", violations)
     selected_id = _candidate_id(_read_json(selected, "selected candidate", violations))
+    expected = (policy or {}).get("authoritative_implementations", {})
+    for field in ("authoritative_ce_path", "authoritative_s30_path", "authoritative_fe_path"):
+        identifier = expected.get(field) if isinstance(expected, dict) else None
+        if not isinstance(identifier, str) or not identifier:
+            violations.append(f"frozen policy missing authoritative implementation {field}")
+        elif data.get(field) != identifier:
+            violations.append(f"CE authoritative implementation mismatch {field}: expected {identifier}")
     for key in ("authoritative_ce_path", "authoritative_s30_path", "authoritative_fe_path", "candidate_id", "baseline_id", "scheduled_opponents_source", "development_ce_metrics", "secondary_ce_metrics"):
         if data.get(key) in (None, "", []): violations.append(f"CE evidence missing {key}")
     if data.get("candidate_id") != selected_id: violations.append("CE candidate identity mismatch")
@@ -682,7 +709,7 @@ def validate_invariant_proofs(
             failures.append(f"unsupported invariant ID {inv_id}: no semantic validator registered")
         else:
             try:
-                if inv_id == "ARTIFACT_PRODUCTION_BEFORE_AFTER_HASHES_IDENTICAL":
+                if inv_id in {"ARTIFACT_PRODUCTION_BEFORE_AFTER_HASHES_IDENTICAL", "ARTIFACT_CE_USES_CANONICAL_SCHEDULED_OPPONENTS", "ARTIFACT_BOOTSTRAP_PRESERVES_MULTIPLICITY"}:
                     res = validator_func(evidence_dir, sources, policy)
                 else:
                     res = validator_func(evidence_dir, sources)

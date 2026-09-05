@@ -1,6 +1,12 @@
 {
   "policy_id": "STAGE_10D_R17A_RECENCY_POLICY",
-  "policy_version": 1,
+  "policy_version": 2,
+  "authoritative_implementations": {
+    "authoritative_ce_path": "fantasy_prediction/ce_model.py:predict_ce",
+    "authoritative_s30_path": "fantasy_prediction/recovered_components.py:predict_s30_v2",
+    "authoritative_fe_path": "fantasy_prediction/recovered_components.py:predict_delta_e"
+  },
+  "bootstrap_multiplicity_audit_required": true,
   "stage_family": "STAGE_10D_R17A",
   "required_artifacts": [
     "stage-10d-r17a-candidate-freeze.json",
