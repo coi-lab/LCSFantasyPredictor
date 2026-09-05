@@ -184,6 +184,16 @@ class PolicyGovernanceTests(unittest.TestCase):
                     "portability_pass": True,
                 })
 
+        # Actual artifact content for semantic validators; PASS strings alone
+        # are intentionally insufficient.
+        (evidence / "stage-10d-r17a-development-metrics.csv").write_text("candidate_id,mae,year\nBASELINE,2.0,2024\nRECENCY_CANDIDATE_1,1.0,2024\n", encoding="utf-8")
+        (evidence / "stage-10d-r17a-eligibility-table.csv").write_text("candidate_id,status,is_eligible_for_winner_selection,gate_mae_passed\nBASELINE,ELIGIBLE,true,true\nRECENCY_CANDIDATE_1,ELIGIBLE,true,true\n", encoding="utf-8")
+        selected = harness.json_load(evidence / "stage-10d-r17a-selected-candidate.json"); selected.update({"freeze_timestamp": "2026-01-01T00:00:00Z"}); harness.json_dump(evidence / "stage-10d-r17a-selected-candidate.json", selected)
+        chronology = harness.json_load(evidence / "stage-10d-r17a-selection-chronology.json"); chronology.update({"selection_data_window": "2024_development_only", "development_metric": "mae", "secondary_validation_timestamp": "2026-01-02T00:00:00Z"}); harness.json_dump(evidence / "stage-10d-r17a-selection-chronology.json", chronology)
+        bootstrap = harness.json_load(evidence / "stage-10d-r17a-bootstrap.json"); bootstrap.update({"bootstrap_method": "paired_cluster", "bootstrap_unit": "prediction_period", "B": 1000, "random_seed": 42, "multiplicity_preserving": True, "candidate_id": "RECENCY_CANDIDATE_1", "baseline_id": "BASELINE", "reported_mean_delta": -1.0, "confidence_interval": [-1.2, -0.8], "bootstrap_probability_improves": 0.9, "sampled_draw_trace": [["a", "a", "b"]]}); harness.json_dump(evidence / "stage-10d-r17a-bootstrap.json", bootstrap)
+        ce = harness.json_load(evidence / "stage-10d-r17a-ce-integration.json"); ce.update({"authoritative_ce_path": "champion_prediction/ce.py", "authoritative_s30_path": "fantasy_prediction/s30.py", "authoritative_fe_path": "fantasy_prediction/fe.py", "candidate_id": "RECENCY_CANDIDATE_1", "baseline_id": "BASELINE", "scheduled_opponents_source": "canonical.scheduled_opponents", "development_ce_metrics": {"mae": 1.0}, "secondary_ce_metrics": {"mae": 2.0}, "secondary_ce_metrics_descriptive_only": True, "result_derived_opponent_fallback": False}); harness.json_dump(evidence / "stage-10d-r17a-ce-integration.json", ce)
+        portability = harness.json_load(evidence / "stage-10d-r17a-portability-smoke.json"); portability["prediction_succeeded"] = True; harness.json_dump(evidence / "stage-10d-r17a-portability-smoke.json", portability)
+
         # Claim manifest
         claims = []
         for cid in self.config["required_claims"]:
@@ -327,6 +337,41 @@ class PolicyGovernanceTests(unittest.TestCase):
         self.assertFalse(res["valid"])
         self.assertTrue(any("BLOCKED_BY_POLICY_MUTATION" in f for f in res["failures"]))
 
+    def test_untracked_anchored_policy_is_blocked(self):
+        subprocess.run(["git", "rm", "--cached", "harness_policies/stage-10d-r17a-recency-policy.json"], cwd=self.root, check=True, capture_output=True)
+        errors = harness.require_config(self.config, self.root)
+        self.assertTrue(any("BLOCKED_BY_POLICY_ANCHOR" in error for error in errors))
+
+    def test_status_pass_and_semantic_tampering_are_rejected(self):
+        evidence = self._setup_valid_evidence_bundle()
+        cases = [
+            ("stage-10d-r17a-selected-candidate.json", lambda body: body.update({"selected_candidate": "BASELINE"})),
+            ("stage-10d-r17a-bootstrap.json", lambda body: body.pop("B")),
+            ("stage-10d-r17a-ce-integration.json", lambda body: body.pop("scheduled_opponents_source")),
+            ("stage-10d-r17a-portability-smoke.json", lambda body: body.update({"market_snapshot_time": "2026-01-01T02:00:00Z"})),
+        ]
+        for filename, tamper in cases:
+            path = evidence / filename
+            original = path.read_text(encoding="utf-8")
+            body = json.loads(original); tamper(body); path.write_text(json.dumps(body), encoding="utf-8")
+            harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+            self.assertFalse(harness.validate(self.root, evidence)["valid"], filename)
+            path.write_text(original, encoding="utf-8")
+            harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+
+    def test_ineligible_or_missing_selected_candidate_is_rejected(self):
+        evidence = self._setup_valid_evidence_bundle()
+        eligibility = evidence / "stage-10d-r17a-eligibility-table.csv"
+        original = eligibility.read_text(encoding="utf-8")
+        eligibility.write_text(original.replace("RECENCY_CANDIDATE_1,ELIGIBLE", "RECENCY_CANDIDATE_1,INELIGIBLE"), encoding="utf-8")
+        harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+        self.assertFalse(harness.validate(self.root, evidence)["valid"])
+        eligibility.write_text(original, encoding="utf-8")
+        selected = evidence / "stage-10d-r17a-selected-candidate.json"
+        body = json.loads(selected.read_text()); body["selected_candidate"] = "MISSING"; selected.write_text(json.dumps(body), encoding="utf-8")
+        harness.json_dump(evidence / "manifest-sha256.json", policy_lib.generate_manifest(evidence))
+        self.assertFalse(harness.validate(self.root, evidence)["valid"])
+
     def test_status_ceiling_enforced_and_manual_pass_rejected(self):
         evidence = self._setup_valid_evidence_bundle()
         # Inject PASS into report
@@ -339,7 +384,7 @@ class PolicyGovernanceTests(unittest.TestCase):
 
         res = harness.validate(self.root, evidence)
         self.assertFalse(res["valid"])
-        self.assertTrue(any("manually injected PASS status" in f for f in res["failures"]))
+        self.assertTrue(any("status ceiling violation" in f for f in res["failures"]))
 
     def test_invariant_proof_verification_and_source_checks(self):
         evidence = self._setup_valid_evidence_bundle()
@@ -405,7 +450,7 @@ class PolicyGovernanceTests(unittest.TestCase):
             "schedule_information_time": "2026-01-01T00:00:00Z",
             "lock_time": "2026-01-01T01:00:00Z",
             "target_columns_removed": True,
-            "portability_pass": True,
+            "prediction_succeeded": True,
         }
         ok, msg, details = policy_lib.semantic_validate_postlock_portability(good_port)
         self.assertTrue(ok)

@@ -20,6 +20,7 @@ from scripts.evidence_policy import (
     validate_invariant_proofs,
     validate_manifest_entries,
     validate_policy_schema,
+    status_within_ceiling,
 )
 
 FORBIDDEN_STATUSES = {
@@ -572,8 +573,19 @@ def validate(root: Path, evidence: Path, skip_manifest: bool = False, skip_repor
                 for binding in config.get("report_bindings", []):
                     if report.get(binding["report_field"]) != locator(json_load(evidence / binding["source_artifact"]), binding["source_locator"]):
                         failures.append("report/raw metric mismatch")
-                if report.get("implementation_status") in FORBIDDEN_STATUSES:
-                    failures.append("manually injected PASS status")
+                # A frozen policy controls every machine-readable completion
+                # status, rather than a stage-specific forbidden string list.
+                if policy:
+                    ceiling = policy.get("status_ceiling")
+                    for field in ("status", "verdict", "validation_status", "implementation_status", "machine_verdict"):
+                        if field in report and not status_within_ceiling(report[field], ceiling):
+                            failures.append(f"status ceiling violation report.{field}={report[field]!r} ceiling={ceiling!r}")
+                    validation_path = evidence / "validation.json"
+                    if validation_path.exists():
+                        validation_body = json_load(validation_path)
+                        for field in ("status", "verdict", "machine_verdict"):
+                            if field in validation_body and not status_within_ceiling(validation_body[field], ceiling):
+                                failures.append(f"status ceiling violation validation.{field}={validation_body[field]!r} ceiling={ceiling!r}")
             except (OSError, KeyError, IndexError, json.JSONDecodeError):
                 failures.append("invalid report")
 
@@ -589,9 +601,13 @@ def validate(root: Path, evidence: Path, skip_manifest: bool = False, skip_repor
 
 def render_report(evidence: Path, validation: dict[str, Any]) -> None:
     config = json_load(evidence / "stage-config.json")
-    status = MAXIMUM_STATUS if validation["valid"] else "BLOCKED"
-    if status in FORBIDDEN_STATUSES:
-        raise ValueError("forbidden report status")
+    # The report is deliberately capped by the frozen policy instead of an
+    # implementation-local maximum that may outrun a future policy.
+    meta = json_load(evidence / "run-identity.json")
+    _, _, policy, _ = resolve_approved_policy(evidence.parents[1], meta.get("stage_id", ""))
+    status = (policy or {}).get("status_ceiling", "PENDING_INDEPENDENT_REVIEW") if validation["valid"] else "BLOCKED"
+    if not status_within_ceiling(status, (policy or {}).get("status_ceiling", status)):
+        raise ValueError("policy status ceiling violation")
     report = {
         "run_id": validation.get("run_id"),
         "git_commit": validation.get("git_commit"),

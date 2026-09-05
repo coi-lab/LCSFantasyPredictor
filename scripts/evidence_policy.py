@@ -39,6 +39,33 @@ MANDATORY_INVARIANT_PROOF_KEYS = (
     "git_commit",
 )
 
+# Ordered acceptance states.  Policies may use any listed ceiling; unknown
+# acceptance-like statuses fail closed rather than silently bypassing it.
+STATUS_RANK = {
+    "BLOCKED": 0,
+    "PENDING_INDEPENDENT_REVIEW": 1,
+    "IMPLEMENTATION_COMPLETE_PENDING_INDEPENDENT_VERIFICATION": 1,
+    "FINAL PASS": 2,
+    "FULLY VALIDATED": 2,
+    "PRODUCTION READY": 3,
+    "READY FOR NEXT STAGE": 3,
+    "NEXT_STAGE_AUTHORIZED": 4,
+    "R17B AUTHORIZED": 4,
+}
+
+
+def status_within_ceiling(value: Any, ceiling: Any) -> bool:
+    """Policy-driven ceiling check; BLOCKED_* is always non-accepting and allowed."""
+    if not isinstance(value, str) or not value.strip() or not isinstance(ceiling, str):
+        return False
+    normalized = value.strip().upper()
+    ceiling_normalized = ceiling.strip().upper()
+    if normalized.startswith("BLOCKED"):
+        return True
+    if normalized not in STATUS_RANK or ceiling_normalized not in STATUS_RANK:
+        return False
+    return STATUS_RANK[normalized] <= STATUS_RANK[ceiling_normalized]
+
 # Authoritative Stage-to-Policy Registry
 APPROVED_STAGE_POLICIES: dict[str, dict[str, str]] = {
     "STAGE_10D_R17A": {
@@ -337,7 +364,8 @@ def semantic_validate_postlock_portability(
     sched_time_str = data.get("schedule_information_time")
     lock_time_str = data.get("lock_time")
     target_removed = data.get("target_columns_removed")
-    pass_status = data.get("portability_pass") or (data.get("status") == "PASS")
+    prediction_succeeded = data.get("prediction_succeeded")
+    target_columns_present = data.get("target_columns_present")
 
     if not snap_time_str or not sched_time_str or not lock_time_str:
         return False, "missing required timestamp fields in portability artifact", data
@@ -353,10 +381,10 @@ def semantic_validate_postlock_portability(
         return False, f"market_snapshot_time {snap_time_str} > lock_time {lock_time_str}", data
     if sched_time > lock_time:
         return False, f"schedule_information_time {sched_time_str} > lock_time {lock_time_str}", data
-    if target_removed is not True:
-        return False, "target_columns_removed is not true", data
-    if pass_status is not True:
-        return False, "portability_pass is not true", data
+    if target_removed is not True and target_columns_present != 0:
+        return False, "target columns were neither removed nor proven absent", data
+    if prediction_succeeded is not True:
+        return False, "prediction_succeeded is not true", data
 
     return True, "PROVEN", data
 
@@ -400,61 +428,176 @@ def semantic_validate_production_immutability(
     return True, "PROVEN", {"failures": []}
 
 
-def semantic_validate_selection_chronology(evidence_dir: Path, source_artifacts: list[str] | None = None) -> tuple[bool, str, dict[str, Any]]:
-    target_file = evidence_dir / "stage-10d-r17a-selection-chronology.json"
-    if not target_file.exists():
-        return False, "selection chronology artifact missing", {}
+def _proof(ok: bool, invariant_id: str, sources: list[Path], checks: dict[str, Any], violations: list[str]) -> tuple[bool, str, dict[str, Any]]:
+    """Return the machine-readable proof shape while preserving the legacy tuple API."""
+    details = {"invariant_id": invariant_id, "status": "PROVEN" if ok else "NOT_PROVEN",
+               "source_artifacts": [str(path) for path in sources], "checks": checks,
+               "violations": violations}
+    return ok, "PROVEN" if ok else "; ".join(violations), details
+
+
+def _artifact(evidence_dir: Path, suffix: str) -> Path | None:
+    matches = sorted(path for path in evidence_dir.glob(f"*{suffix}") if path.is_file())
+    return matches[0] if matches else None
+
+
+def _read_json(path: Path, label: str, violations: list[str]) -> dict[str, Any]:
     try:
-        data = json.loads(target_file.read_text(encoding="utf-8"))
-        if data.get("exclusion_of_2025_from_selection") is not True and data.get("status") != "PASS":
-            return False, "2025 data was not excluded from selection", data
-        if data.get("true_rolling_folds_verified") is not True and data.get("status") != "PASS":
-            return False, "true rolling folds not verified", data
-    except (OSError, json.JSONDecodeError) as exc:
-        return False, f"selection chronology artifact unreadable: {exc}", {}
-    return True, "PROVEN", data
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError("expected JSON object")
+        return data
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        violations.append(f"{label} unreadable: {exc}")
+        return {}
+
+
+def _read_csv(path: Path, label: str, violations: list[str]) -> list[dict[str, str]]:
+    try:
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        if not rows or not rows[0]:
+            violations.append(f"{label} is empty or malformed")
+        return rows
+    except (OSError, csv.Error) as exc:
+        violations.append(f"{label} unreadable: {exc}")
+        return []
+
+
+def _candidate_id(data: dict[str, Any]) -> str | None:
+    for key in ("selected_candidate", "candidate_id", "winner", "winner_candidate_id"):
+        value = data.get(key)
+        if isinstance(value, str) and value:
+            return value
+    return None
+
+
+def _number(value: Any) -> float | None:
+    try:
+        result = float(value)
+        return result if result == result and abs(result) != float("inf") else None
+    except (TypeError, ValueError):
+        return None
+
+
+def _eligible(row: dict[str, str]) -> bool:
+    return str(row.get("status", "")).upper() == "ELIGIBLE" and str(row.get("is_eligible_for_winner_selection", "true")).lower() in {"true", "1", "yes"}
+
+
+def semantic_validate_selection_chronology(evidence_dir: Path, source_artifacts: list[str] | None = None) -> tuple[bool, str, dict[str, Any]]:
+    violations: list[str] = []
+    metrics = _artifact(evidence_dir, "development-metrics.csv")
+    eligibility = _artifact(evidence_dir, "eligibility-table.csv")
+    selected = _artifact(evidence_dir, "selected-candidate.json")
+    chronology = _artifact(evidence_dir, "selection-chronology.json")
+    secondary = _artifact(evidence_dir, "secondary-2025-validation.csv")
+    sources = [p for p in (metrics, eligibility, selected, chronology, secondary) if p]
+    if len(sources) != 5:
+        return _proof(False, "ARTIFACT_SELECTION_RECONSTRUCTS_FROM_DEVELOPMENT_ONLY", sources, {}, ["selection semantic inputs missing"])
+    metric_rows = _read_csv(metrics, "development metrics", violations)
+    eligible_rows = _read_csv(eligibility, "eligibility table", violations)
+    selected_data = _read_json(selected, "selected candidate", violations)
+    chronology_data = _read_json(chronology, "selection chronology", violations)
+    secondary_rows = _read_csv(secondary, "secondary 2025 validation", violations)
+    metric_name = chronology_data.get("development_metric") or chronology_data.get("selection_metric") or "mae"
+    selected_id = _candidate_id(selected_data)
+    eligible_ids = {row.get("candidate_id") for row in eligible_rows if _eligible(row) and row.get("candidate_id")}
+    scored: list[tuple[float, str]] = []
+    for row in metric_rows:
+        candidate = row.get("candidate_id")
+        score = _number(row.get(metric_name))
+        if candidate in eligible_ids and score is not None:
+            scored.append((score, candidate))
+    if not selected_id: violations.append("selected candidate identity missing")
+    if not scored: violations.append("no eligible development candidates with numeric selection metric")
+    winner = min(scored)[1] if scored else None
+    if winner != selected_id: violations.append(f"recorded winner {selected_id} != reconstructed winner {winner}")
+    if selected_id not in eligible_ids: violations.append("selected candidate is not eligible before ranking")
+    if chronology_data.get("selection_data_window") and "2025" in str(chronology_data.get("selection_data_window")):
+        violations.append("selection chronology includes 2025")
+    if any("2025" in str(row.get(key, "")) for row in metric_rows for key in ("year", "evaluation_year", "data_window")):
+        violations.append("development metric artifact contains 2025 selection rows")
+    freeze_time = selected_data.get("freeze_timestamp") or selected_data.get("selection_freeze_timestamp")
+    secondary_time = chronology_data.get("secondary_validation_timestamp") or chronology_data.get("secondary_2025_validation_timestamp")
+    try:
+        if not freeze_time or not secondary_time or dt.datetime.fromisoformat(str(freeze_time).replace("Z", "+00:00")) >= dt.datetime.fromisoformat(str(secondary_time).replace("Z", "+00:00")):
+            violations.append("selection freeze does not precede secondary validation")
+    except ValueError:
+        violations.append("invalid selection freeze or secondary validation timestamp")
+    if not secondary_rows: violations.append("secondary 2025 validation artifact is empty")
+    checks = {"eligible_candidates": sorted(eligible_ids), "reconstructed_winner": winner,
+              "recorded_winner": selected_id, "development_metric_used": metric_name,
+              "secondary_2025_excluded": not any("2025" in str(row.get(key, "")) for row in metric_rows for key in ("year", "evaluation_year", "data_window"))}
+    return _proof(not violations, "ARTIFACT_SELECTION_RECONSTRUCTS_FROM_DEVELOPMENT_ONLY", sources, checks, violations)
 
 
 def semantic_validate_candidate_eligibility(evidence_dir: Path, source_artifacts: list[str] | None = None) -> tuple[bool, str, dict[str, Any]]:
-    selected_file = evidence_dir / "stage-10d-r17a-selected-candidate.json"
-    eligibility_file = evidence_dir / "stage-10d-r17a-eligibility-table.csv"
-    if not selected_file.exists():
-        return False, "selected candidate artifact missing", {}
-    if not eligibility_file.exists():
-        return False, "eligibility table CSV missing", {}
-    try:
-        data = json.loads(selected_file.read_text(encoding="utf-8"))
-        if data.get("status") != "PASS" and data.get("winner_selection_status") != "ELIGIBLE_CANDIDATE_SELECTED":
-            return False, "selected candidate is not marked eligible", data
-    except (OSError, json.JSONDecodeError) as exc:
-        return False, f"selected candidate unreadable: {exc}", {}
-    return True, "PROVEN", data
+    violations: list[str] = []
+    selected = _artifact(evidence_dir, "selected-candidate.json")
+    eligibility = _artifact(evidence_dir, "eligibility-table.csv")
+    metrics = _artifact(evidence_dir, "development-metrics.csv")
+    sources = [p for p in (selected, eligibility, metrics) if p]
+    if len(sources) != 3:
+        return _proof(False, "ARTIFACT_INELIGIBLE_CANDIDATE_CANNOT_WIN", sources, {}, ["eligibility semantic inputs missing"])
+    selected_id = _candidate_id(_read_json(selected, "selected candidate", violations))
+    rows = _read_csv(eligibility, "eligibility table", violations)
+    by_id = {row.get("candidate_id"): row for row in rows if row.get("candidate_id")}
+    row = by_id.get(selected_id)
+    if not selected_id or not row: violations.append("selected candidate missing from eligibility table")
+    elif not _eligible(row): violations.append("selected candidate marked INELIGIBLE")
+    if row:
+        for key, value in row.items():
+            if key.endswith("_passed") or key.startswith("gate_"):
+                if str(value).lower() not in {"true", "1", "yes", "pass", "passed"}:
+                    violations.append(f"selected candidate required gate failed: {key}")
+    eligible_ids = {candidate for candidate, item in by_id.items() if _eligible(item)}
+    metric_rows = _read_csv(metrics, "development metrics", violations)
+    scores = [(_number(item.get("mae")), item.get("candidate_id")) for item in metric_rows if item.get("candidate_id") in eligible_ids]
+    scores = [(score, candidate) for score, candidate in scores if score is not None]
+    if scores and min(scores)[1] != selected_id: violations.append("ineligible candidates were not excluded before ranking or winner is not best eligible")
+    return _proof(not violations, "ARTIFACT_INELIGIBLE_CANDIDATE_CANNOT_WIN", sources,
+                  {"selected_candidate": selected_id, "eligible_candidates": sorted(eligible_ids)}, violations)
 
 
 def semantic_validate_bootstrap_multiplicity(evidence_dir: Path, source_artifacts: list[str] | None = None) -> tuple[bool, str, dict[str, Any]]:
-    target_file = evidence_dir / "stage-10d-r17a-bootstrap.json"
-    if not target_file.exists():
-        return False, "bootstrap artifact missing", {}
-    try:
-        data = json.loads(target_file.read_text(encoding="utf-8"))
-        if data.get("status") != "PASS" and data.get("multiplicity_corrected") is not True:
-            return False, "bootstrap multiplicity not verified", data
-    except (OSError, json.JSONDecodeError) as exc:
-        return False, f"bootstrap artifact unreadable: {exc}", {}
-    return True, "PROVEN", data
+    violations: list[str] = []
+    target = _artifact(evidence_dir, "bootstrap.json")
+    if not target:
+        return _proof(False, "ARTIFACT_BOOTSTRAP_PRESERVES_MULTIPLICITY", [], {}, ["bootstrap artifact missing"])
+    data = _read_json(target, "bootstrap artifact", violations)
+    for key in ("bootstrap_method", "bootstrap_unit", "B", "random_seed", "candidate_id", "baseline_id", "reported_mean_delta", "confidence_interval", "bootstrap_probability_improves"):
+        if data.get(key) in (None, "", []): violations.append(f"bootstrap missing {key}")
+    if data.get("bootstrap_unit") != "prediction_period": violations.append("wrong bootstrap unit")
+    if data.get("multiplicity_preserving") is not True and data.get("multiplicity_corrected") is not True:
+        violations.append("missing multiplicity-preserving sampling proof")
+    if _number(data.get("B")) is None or _number(data.get("reported_mean_delta")) is None or _number(data.get("bootstrap_probability_improves")) is None:
+        violations.append("malformed bootstrap numeric fields")
+    ci = data.get("confidence_interval")
+    if not isinstance(ci, (list, tuple)) or len(ci) != 2 or any(_number(value) is None for value in ci): violations.append("malformed confidence interval")
+    trace = data.get("sampled_draw_trace")
+    if trace is not None and not any(len(draw) != len(set(draw)) for draw in trace if isinstance(draw, list)):
+        violations.append("sampled-draw trace lacks duplicate cluster multiplicity")
+    return _proof(not violations, "ARTIFACT_BOOTSTRAP_PRESERVES_MULTIPLICITY", [target],
+                  {"method": data.get("bootstrap_method"), "unit": data.get("bootstrap_unit"), "B": data.get("B")}, violations)
 
 
 def semantic_validate_ce_opponents(evidence_dir: Path, source_artifacts: list[str] | None = None) -> tuple[bool, str, dict[str, Any]]:
-    target_file = evidence_dir / "stage-10d-r17a-ce-integration.json"
-    if not target_file.exists():
-        return False, "CE integration artifact missing", {}
-    try:
-        data = json.loads(target_file.read_text(encoding="utf-8"))
-        if data.get("status") != "PASS" and data.get("ce_integration_status") != "PASS":
-            return False, "CE integration did not pass", data
-    except (OSError, json.JSONDecodeError) as exc:
-        return False, f"CE integration artifact unreadable: {exc}", {}
-    return True, "PROVEN", data
+    violations: list[str] = []
+    target = _artifact(evidence_dir, "ce-integration.json")
+    selected = _artifact(evidence_dir, "selected-candidate.json")
+    sources = [p for p in (target, selected) if p]
+    if not target or not selected:
+        return _proof(False, "ARTIFACT_CE_USES_CANONICAL_SCHEDULED_OPPONENTS", sources, {}, ["CE semantic inputs missing"])
+    data = _read_json(target, "CE integration", violations)
+    selected_id = _candidate_id(_read_json(selected, "selected candidate", violations))
+    for key in ("authoritative_ce_path", "authoritative_s30_path", "authoritative_fe_path", "candidate_id", "baseline_id", "scheduled_opponents_source", "development_ce_metrics", "secondary_ce_metrics"):
+        if data.get(key) in (None, "", []): violations.append(f"CE evidence missing {key}")
+    if data.get("candidate_id") != selected_id: violations.append("CE candidate identity mismatch")
+    if "scheduled_opponents" not in str(data.get("scheduled_opponents_source", "")): violations.append("missing canonical scheduled_opponents lineage")
+    if data.get("result_derived_opponent_fallback") is True or data.get("opponent_source_kind") in {"post_lock", "result_derived"}: violations.append("result-derived opponent fallback used")
+    if data.get("secondary_ce_metrics_descriptive_only") is not True: violations.append("secondary CE metrics not labeled descriptive only")
+    return _proof(not violations, "ARTIFACT_CE_USES_CANONICAL_SCHEDULED_OPPONENTS", sources,
+                  {"candidate": data.get("candidate_id"), "scheduled_opponents_source": data.get("scheduled_opponents_source")}, violations)
 
 
 INVARIANT_VALIDATOR_REGISTRY: dict[str, Callable[..., tuple[bool, str, dict[str, Any]]]] = {
@@ -515,11 +658,21 @@ def validate_invariant_proofs(
             if not sources or not isinstance(sources, list):
                 failures.append(f"invariant proof {inv_id} requires source_artifacts")
             else:
+                manifest_path = evidence_dir / "manifest-sha256.json"
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+                manifest_map = manifest.get("files", manifest) if isinstance(manifest, dict) else {}
+                source_hashes = proof.get("source_sha256_by_artifact", {})
                 for src in sources:
                     src_file = evidence_dir / src
                     if not src_file.exists():
                         failures.append(f"invariant proof {inv_id} source missing {src}")
-                    elif "source_sha256" in proof and proof["source_sha256"]:
+                    elif manifest_path.exists() and src not in manifest_map:
+                        failures.append(f"invariant proof {inv_id} source not sealed {src}")
+                    elif manifest_path.exists() and sha256_file(src_file) != manifest_map[src]:
+                        failures.append(f"invariant proof {inv_id} source manifest hash mismatch {src}")
+                    elif source_hashes and source_hashes.get(src) != sha256_file(src_file):
+                        failures.append(f"invariant proof {inv_id} source hash stale {src}")
+                    elif "source_sha256" in proof and proof["source_sha256"] and len(sources) == 1:
                         if sha256_file(src_file) != proof["source_sha256"]:
                             failures.append(f"invariant proof {inv_id} source hash stale {src}")
 
