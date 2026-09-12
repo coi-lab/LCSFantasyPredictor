@@ -818,6 +818,7 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
         "confidence_interval": [round(winner_boot["ci_95_lower"], 4), round(winner_boot["ci_95_upper"], 4)],
         "bootstrap_probability_improves": round(winner_boot["bootstrap_probability_improves"], 4),
         "multiplicity_preserving": True,
+        "multiplicity_preserved": True,
         "sampling_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
         "sampled_draw_trace": winner_boot["sampled_draw_trace"],
         "consumed_cluster_counts": winner_boot["consumed_cluster_counts"],
