@@ -363,9 +363,9 @@ class TestStage10DR17AR4Recency(unittest.TestCase):
         lineage_path = self.evidence_root / "stage-10d-r17a-schedule-lineage.csv"
         if lineage_path.exists():
             df_lineage = pd.read_csv(lineage_path)
-            self.assertIn("schedule_status", df_lineage.columns)
+            self.assertIn("lineage_status", df_lineage.columns)
             self.assertTrue(
-                (df_lineage["schedule_status"] == "MISSING_AUTHENTIC_PRELOCK_SCHEDULE").all(),
+                (df_lineage["lineage_status"] == "MISSING_AUTHENTIC_PRELOCK_SCHEDULE").all(),
                 "Schedule lineage should document missing authentic prelock schedule",
             )
 

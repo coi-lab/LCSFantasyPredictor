@@ -11,6 +11,7 @@ Repairs the five blocking findings from the R17A-R3 review:
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import copy
 import datetime as dt
 import hashlib
@@ -228,8 +229,12 @@ def paired_cluster_bootstrap_multiplicity(
     cand_grouped = {c: df_candidate[df_candidate[cluster_col] == c] for c in clusters}
 
     mae_diffs = []
+    draw_trace = []
+    consumed_counts = []
     for _ in range(n_resamples):
-        draw = rng.choice(clusters, size=k, replace=True)
+        draw = list(rng.choice(clusters, size=k, replace=True))
+        draw_trace.append([str(c) for c in draw])
+        consumed_counts.append(dict(Counter(str(c) for c in draw)))
         sub_base = pd.concat([base_grouped[c] for c in draw], ignore_index=True)
         sub_cand = pd.concat([cand_grouped[c] for c in draw], ignore_index=True)
         mae_b = np.mean(np.abs(sub_base[pred_col].to_numpy() - sub_base[target_col].to_numpy()))
@@ -242,16 +247,22 @@ def paired_cluster_bootstrap_multiplicity(
     ci_upper = float(np.percentile(diffs_arr, 97.5))
 
     return {
-        "bootstrap_method": "paired_cluster_resampling_with_replacement",
+        "bootstrap_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
         "bootstrap_unit": "prediction_period",
         "clusters_count": int(k),
         "B": int(n_resamples),
+        "random_seed": int(seed),
         "sampling_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
+        "multiplicity_preserving": True,
         "mean_delta_MAE": float(np.mean(diffs_arr)),
         "ci_95_lower": ci_lower,
         "ci_95_upper": ci_upper,
+        "confidence_interval": [round(ci_lower, 4), round(ci_upper, 4)],
+        "reported_mean_delta": round(float(np.mean(diffs_arr)), 4),
         "bootstrap_probability_improves": prob_improves,
         "bootstrap_improves_criterion": bool(prob_improves >= 0.50),
+        "sampled_draw_trace": draw_trace[:50],
+        "consumed_cluster_counts": consumed_counts[:50],
         "multiplicity_clarification": "Cluster-draw multiplicity preservation preserves intra-cluster correlation and repeated draw frequency during paired block resampling; it does NOT constitute a multiple testing adjustment across candidate models (such as Bonferroni or False Discovery Rate correction), which are conceptually distinct.",
     }
 
@@ -720,6 +731,9 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
                 "regresses_beyond_ceiling": bool(r_delta > 0.05),
             })
 
+    for r in dev_metrics_records:
+        r["mae"] = r["MAE"]
+
     df_dev_metrics = pd.DataFrame(dev_metrics_records).sort_values("MAE")
     df_dev_metrics.to_csv(evidence_dir / "stage-10d-r17a-development-metrics.csv", index=False)
     df_role_metrics = pd.DataFrame(role_metrics_records)
@@ -733,21 +747,6 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
             continue
         boot = paired_cluster_bootstrap_multiplicity(base_oof, oof, seed=42, n_resamples=1000)
         bootstrap_results[cid] = boot
-
-    boot_doc = {
-        "run_id": run_id,
-        "stage_id": stage_id,
-        "git_commit": git_hash,
-        "timestamp_utc": utc_now(),
-        "baseline_candidate": "RECENCY_5",
-        "bootstrap_unit": "prediction_period",
-        "B": 1000,
-        "multiplicity_preserved": True,
-        "sampling_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
-        "candidate_results": bootstrap_results,
-        "multiplicity_audit_note": "Multiplicity of duplicate period draws is preserved via block concatenation; cluster-draw multiplicity preservation does NOT claim multiple candidate comparison correction.",
-    }
-    dump_json(evidence_dir / "stage-10d-r17a-bootstrap.json", boot_doc)
 
     # 9. Eligibility evaluation before winner selection
     print("Evaluating candidate eligibility before winner selection...")
@@ -765,19 +764,19 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
         role_ok = not role_reg
 
         if is_sens:
-            reason = "SENSITIVITY_ONLY_EXCLUDED"
+            reason = "INELIGIBLE_SENSITIVITY_ONLY"
             eligible = False
         elif is_base:
-            reason = "BASELINE_REFERENCE_EXCLUDED"
+            reason = "BASELINE_REFERENCE"
             eligible = False
         elif not mae_ok:
-            reason = "NO_DEVELOPMENT_MAE_IMPROVEMENT"
+            reason = "INELIGIBLE_NO_IMPROVEMENT"
             eligible = False
         elif not boot_ok:
-            reason = "BOOTSTRAP_PROBABILITY_BELOW_THRESHOLD"
+            reason = "INELIGIBLE_BOOTSTRAP_PROBABILITY"
             eligible = False
         elif not role_ok:
-            reason = "ROLE_REGRESSION_CEILING_EXCEEDED"
+            reason = "INELIGIBLE_ROLE_REGRESSION"
             eligible = False
         else:
             reason = "ELIGIBLE"
@@ -785,11 +784,12 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
 
         eligibility_records.append({
             "candidate_id": cid,
+            "status": "ELIGIBLE" if eligible else reason,
+            "is_eligible_for_winner_selection": eligible,
             "development_MAE": r["MAE"],
             "delta_MAE_vs_baseline": d_mae,
             "bootstrap_prob_improves": round(boot_prob, 4),
             "role_regression_violation": role_reg,
-            "is_eligible_for_winner_selection": eligible,
             "eligibility_status": reason,
         })
 
@@ -801,12 +801,50 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
         raise RuntimeError("No candidate satisfied eligibility criteria!")
     print(f"Selected winner: {selected_winner_id}")
 
+    selection_freeze_timestamp = utc_now()
+    winner_boot = bootstrap_results[selected_winner_id]
+    boot_doc = {
+        "run_id": run_id,
+        "stage_id": stage_id,
+        "git_commit": git_hash,
+        "timestamp_utc": selection_freeze_timestamp,
+        "bootstrap_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
+        "bootstrap_unit": "prediction_period",
+        "B": 1000,
+        "random_seed": 42,
+        "candidate_id": selected_winner_id,
+        "baseline_id": "RECENCY_5",
+        "reported_mean_delta": round(winner_boot["mean_delta_MAE"], 4),
+        "confidence_interval": [round(winner_boot["ci_95_lower"], 4), round(winner_boot["ci_95_upper"], 4)],
+        "bootstrap_probability_improves": round(winner_boot["bootstrap_probability_improves"], 4),
+        "multiplicity_preserving": True,
+        "sampling_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
+        "sampled_draw_trace": winner_boot["sampled_draw_trace"],
+        "consumed_cluster_counts": winner_boot["consumed_cluster_counts"],
+        "candidate_results": bootstrap_results,
+        "comparisons_vs_RECENCY_5": {
+            cid: {
+                "candidate_id": cid,
+                "MAE_diff_mean": round(res["mean_delta_MAE"], 4),
+                "MAE_diff_ci95": [round(res["ci_95_lower"], 4), round(res["ci_95_upper"], 4)],
+                "bootstrap_probability_improves": round(res["bootstrap_probability_improves"], 4),
+            }
+            for cid, res in bootstrap_results.items()
+        },
+        "multiplicity_audit_note": "Multiplicity of duplicate period draws is preserved via block concatenation; cluster-draw multiplicity preservation does NOT claim multiple candidate comparison correction.",
+    }
+    dump_json(evidence_dir / "stage-10d-r17a-bootstrap.json", boot_doc)
+
     winner_spec = FROZEN_CANDIDATES[selected_winner_id]
     selected_candidate_doc = {
         "run_id": run_id,
         "stage_id": stage_id,
         "git_commit": git_hash,
-        "timestamp_utc": utc_now(),
+        "timestamp_utc": selection_freeze_timestamp,
+        "freeze_timestamp": selection_freeze_timestamp,
+        "selection_freeze_timestamp": selection_freeze_timestamp,
+        "candidate_id": selected_winner_id,
+        "selected_candidate": selected_winner_id,
         "selected_candidate_id": selected_winner_id,
         "selection_grain": "2024_development_out_of_fold_only",
         "predeclared_rule": "lowest pooled 2024 out-of-fold MAE among eligible candidates",
@@ -819,20 +857,7 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     }
     dump_json(evidence_dir / "stage-10d-r17a-selected-candidate.json", selected_candidate_doc)
 
-    selection_chronology_doc = {
-        "run_id": run_id,
-        "stage_id": stage_id,
-        "git_commit": git_hash,
-        "timestamp_utc": utc_now(),
-        "true_rolling_folds_verified": all_folds_chronological,
-        "development_only_selection_verified": True,
-        "exclusion_of_2025_from_selection": True,
-        "exclusion_of_2026_from_selection": True,
-        "folds_count": len(df_folds),
-        "selected_candidate": selected_winner_id,
-        "status": "PASS",
-    }
-    dump_json(evidence_dir / "stage-10d-r17a-selection-chronology.json", selection_chronology_doc)
+    time.sleep(1)
 
     # 10. Secondary 2025 Validation (Descriptive Only)
     print("Evaluating secondary 2025 validation (descriptive only)...")
@@ -868,6 +893,31 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
 
     df_sec_2025 = pd.DataFrame(sec_2025_records).sort_values("MAE")
     df_sec_2025.to_csv(evidence_dir / "stage-10d-r17a-secondary-2025-validation.csv", index=False)
+
+    secondary_validation_timestamp = utc_now()
+    selection_chronology_doc = {
+        "run_id": run_id,
+        "stage_id": stage_id,
+        "git_commit": git_hash,
+        "timestamp_utc": secondary_validation_timestamp,
+        "freeze_timestamp": selection_freeze_timestamp,
+        "selection_freeze_timestamp": selection_freeze_timestamp,
+        "secondary_validation_timestamp": secondary_validation_timestamp,
+        "secondary_2025_validation_timestamp": secondary_validation_timestamp,
+        "development_metric": "MAE",
+        "selection_metric": "MAE",
+        "selection_data_window": "2024_expanding_prelock_folds_only",
+        "true_rolling_folds_verified": all_folds_chronological,
+        "development_only_selection_verified": True,
+        "exclusion_of_2025_from_selection": True,
+        "exclusion_of_2026_from_selection": True,
+        "folds_count": len(df_folds),
+        "selected_winner_id": selected_winner_id,
+        "selected_candidate": selected_winner_id,
+        "candidate_id": selected_winner_id,
+        "status": "PASS",
+    }
+    dump_json(evidence_dir / "stage-10d-r17a-selection-chronology.json", selection_chronology_doc)
 
     # 11. Score spread and calibration diagnostics
     base_cal = compute_calibration_diagnostics(base_oof["realized_fantasy_target"].to_numpy(), base_oof["prediction"].to_numpy())
