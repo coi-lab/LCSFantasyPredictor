@@ -241,9 +241,11 @@ def run_command(command: Any, root: Path, output_dir: Path, command_id: str, met
         "PYTHONDONTWRITEBYTECODE": "1",
     })
     primary_root = Path(meta.get("primary_root", str(root)))
-    py_abs = (primary_root / ".venv/bin/python").resolve()
+    py_abs = (primary_root / ".venv/bin/python").absolute()
     if py_abs.exists() and ".venv/bin/python" in text:
         text = text.replace(".venv/bin/python", str(py_abs))
+        env["VIRTUAL_ENV"] = str((primary_root / ".venv").absolute())
+        env["PATH"] = f"{str((primary_root / '.venv/bin').absolute())}:{env.get('PATH', '')}"
     if root != primary_root:
         env["PYTHONPATH"] = f"{root}:{env.get('PYTHONPATH', '')}"
     started = utc_now()
