@@ -40,10 +40,13 @@ if str(ROOT) not in sys.path:
 from scripts.source_closure import (
     compute_source_inventory,
     audit_runtime_modules,
+    build_canonical_closure,
+    R4_R3_EXECUTION_ROOTS,
+    R4_R3_EXPLICIT_INPUTS,
     EXECUTION_SEED_ROOTS,
     EXTRA_EXPLICIT_PATHS,
 )
-from scripts.schedule_authenticator import authenticate_schedule_source
+from scripts.schedule_authenticator import load_authenticated_schedule
 from fantasy_prediction.canonical_pit import (
     ROLES_CANONICAL,
     RecentFormSpec,
@@ -412,7 +415,8 @@ def extract_matchups_from_official_snapshot(snapshot_json_path: Path) -> Tuple[L
 
 def run_stage_portability_inference(
     market_frame: pd.DataFrame,
-    schedule_data: Any,
+    schedule_source_path: str,
+    schedule_source_sha256: str,
     lock_timestamp: str,
     market_snapshot_timestamp: str,
     schedule_information_timestamp: str,
@@ -420,8 +424,6 @@ def run_stage_portability_inference(
     model_state: Dict[str, Any],
     canonical_games: pd.DataFrame,
     canonical_series: pd.DataFrame,
-    schedule_source_path: str = "",
-    schedule_source_sha256: str = "",
 ) -> Dict[str, Any]:
     """Concrete stage portability entry point with pre-prediction fail-closed validation.
 
@@ -430,14 +432,12 @@ def run_stage_portability_inference(
     """
     if market_frame is None or len(market_frame) == 0:
         raise ValueError("EMPTY_REQUIRED_INPUTS: market_frame is empty")
-    if schedule_data is None:
-        raise ValueError("EMPTY_REQUIRED_INPUTS: schedule_data is None")
-    if not isinstance(schedule_data, list) or len(schedule_data) == 0:
-        raise ValueError("EMPTY_OR_MALFORMED_SCHEDULE: schedule_data must be a non-empty list of matchup dictionaries")
-
-    for item in schedule_data:
-        if not isinstance(item, dict) or "team_a_id" not in item or "team_b_id" not in item:
-            raise ValueError("MALFORMED_SCHEDULE_ITEM: each item must be a dict containing 'team_a_id' and 'team_b_id'")
+    authenticated, auth_message, auth = load_authenticated_schedule(
+        schedule_source_path, schedule_source_sha256, lock_timestamp=lock_timestamp, repo_root=ROOT,
+    )
+    if not authenticated:
+        raise ValueError(f"SCHEDULE_AUTHENTICATION_FAILED: {auth_message}")
+    schedule_data = auth["matchups"]
 
     for name, ts_val in [
         ("lock_timestamp", lock_timestamp),
@@ -509,6 +509,7 @@ def run_stage_portability_inference(
         "scheduled_opponents_bound": True,
         "schedule_source_path": schedule_source_path,
         "schedule_source_sha256": schedule_source_sha256,
+        "schedule_authentication_version": auth["authentication_version"],
         "schedule_information_timestamp": schedule_information_timestamp,
         "lock_timestamp": lock_timestamp,
         "predictions_sample": [round(float(p), 4) for p in preds[:5]],
@@ -545,13 +546,18 @@ def evaluate_historical_ce(
 
     all_periods = sorted(eval_table["prediction_period"].unique().tolist())
 
-    # Build schedule lookup if sources provided
+    # Authenticate each proposed source before it can contribute opponents.
     schedule_lookup: Dict[str, Dict[str, Any]] = {}
     if schedule_source_records:
         for rec in schedule_source_records:
             p_id = rec.get("prediction_period")
             if p_id:
-                schedule_lookup[p_id] = rec
+                lock = rec.get("lock_timestamp")
+                ok, message, auth = load_authenticated_schedule(
+                    rec.get("schedule_source_path", ""), rec.get("schedule_source_sha256", ""),
+                    lock_timestamp=lock, expected_source_type=rec.get("source_type", "OFFICIAL_MARKET_SNAPSHOT"), repo_root=ROOT,
+                )
+                schedule_lookup[p_id] = {"authenticated": ok, "auth_message": message, "auth": auth}
 
     lineage_records: List[Dict[str, Any]] = []
     missing_schedule_count = 0
@@ -571,11 +577,12 @@ def evaluate_historical_ce(
         status = "MISSING_AUTHENTIC_PRELOCK_SCHEDULE"
 
         if sched_entry:
-            cand_ts = sched_entry.get("schedule_information_timestamp")
-            cand_opps = sched_entry.get("scheduled_opponents")
-            cand_path = sched_entry.get("schedule_source_path")
-            cand_sha = sched_entry.get("schedule_source_sha256")
-            if cand_ts and cand_opps and cand_path:
+            auth = sched_entry.get("auth", {})
+            cand_ts = auth.get("schedule_information_timestamp")
+            cand_opps = auth.get("team_opponents")
+            cand_path = auth.get("source_path")
+            cand_sha = auth.get("source_sha256")
+            if sched_entry.get("authenticated") and cand_ts and cand_opps and cand_path:
                 cand_dt = pd.to_datetime(cand_ts, utc=True)
                 if cand_dt <= lock_dt:
                     is_valid = True
@@ -616,7 +623,7 @@ def evaluate_historical_ce(
         cand_preds = []
         for p_id, p_group in eval_table.groupby("prediction_period"):
             sched_entry = schedule_lookup[p_id]
-            matchups = sched_entry.get("scheduled_matchups", [])
+            matchups = sched_entry["auth"]["matchups"]
             cutoff = p_group["lock_timestamp"].iloc[0]
 
             # Build prediction frame with scheduled opponents
@@ -748,6 +755,13 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
         "pre_execution_integrity_pass": all_tracked,
     }
     dump_json(evidence_dir / "stage-10d-r17a-source-freeze.json", source_freeze_doc)
+    canonical_closure_doc = None
+    if stage_id == "STAGE_10D_R17A_R4_R3":
+        canonical_closure_doc = build_canonical_closure(
+            ROOT, R4_R3_EXECUTION_ROOTS, R4_R3_EXPLICIT_INPUTS, recorded_commit=git_hash,
+        )
+        canonical_closure_doc.update({"run_id": run_id, "stage_id": stage_id, "timestamp_utc": utc_now()})
+        dump_json(evidence_dir / "stage-10d-r17a-source-closure.json", canonical_closure_doc)
     if not all_tracked:
         raise RuntimeError(f"STOP: Source provenance preflight failed: {source_failures}")
     print(f"Source freeze verified: all {len(STAGE_SOURCE_PATHS)} stage sources match committed git objects.")
@@ -1273,7 +1287,8 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     # Clean positive run with authentic scheduled matchups
     clean_res = run_stage_portability_inference(
         market_frame=portability_market_df,
-        schedule_data=matchups_list,
+        schedule_source_path=str(snapshot_json_path.relative_to(ROOT)),
+        schedule_source_sha256=snap_sha,
         lock_timestamp=lock_time_str,
         market_snapshot_timestamp=market_time_str,
         schedule_information_timestamp=sched_time_str,
@@ -1281,8 +1296,6 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
         model_state=sealed_s30_state,
         canonical_games=games_hist,
         canonical_series=series_hist,
-        schedule_source_path=str(snapshot_json_path.relative_to(ROOT)),
-        schedule_source_sha256=snap_sha,
     )
 
     # Adversarial suite
@@ -1295,7 +1308,8 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     try:
         run_stage_portability_inference(
             market_frame=adv_target_df,
-            schedule_data=matchups_list,
+            schedule_source_path=str(snapshot_json_path.relative_to(ROOT)),
+            schedule_source_sha256=snap_sha,
             lock_timestamp=lock_time_str,
             market_snapshot_timestamp=market_time_str,
             schedule_information_timestamp=sched_time_str,
@@ -1314,7 +1328,8 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     try:
         run_stage_portability_inference(
             market_frame=portability_market_df,
-            schedule_data=matchups_list,
+            schedule_source_path=str(snapshot_json_path.relative_to(ROOT)),
+            schedule_source_sha256=snap_sha,
             lock_timestamp=lock_time_str,
             market_snapshot_timestamp="2026-07-25T21:00:00Z",  # after lock
             schedule_information_timestamp=sched_time_str,
@@ -1333,7 +1348,8 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     try:
         run_stage_portability_inference(
             market_frame=portability_market_df,
-            schedule_data=matchups_list,
+            schedule_source_path=str(snapshot_json_path.relative_to(ROOT)),
+            schedule_source_sha256=snap_sha,
             lock_timestamp=lock_time_str,
             market_snapshot_timestamp=market_time_str,
             schedule_information_timestamp="2026-07-25T21:30:00Z",  # after lock
@@ -1352,7 +1368,8 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     try:
         run_stage_portability_inference(
             market_frame=pd.DataFrame(),
-            schedule_data=matchups_list,
+            schedule_source_path=str(snapshot_json_path.relative_to(ROOT)),
+            schedule_source_sha256=snap_sha,
             lock_timestamp=lock_time_str,
             market_snapshot_timestamp=market_time_str,
             schedule_information_timestamp=sched_time_str,
@@ -1366,12 +1383,13 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
             c4_passed = True
     adversarial_suite.append({"case": "empty_market_frame_rejected", "passed": c4_passed})
 
-    # Case 5: Empty schedule list
+    # Case 5: unauthenticated schedule source
     c5_passed = False
     try:
         run_stage_portability_inference(
             market_frame=portability_market_df,
-            schedule_data=[],
+            schedule_source_path="data/raw/nonexistent_schedule.json",
+            schedule_source_sha256="0" * 64,
             lock_timestamp=lock_time_str,
             market_snapshot_timestamp=market_time_str,
             schedule_information_timestamp=sched_time_str,
@@ -1381,16 +1399,17 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
             canonical_series=series_hist,
         )
     except ValueError as exc:
-        if "EMPTY_OR_MALFORMED_SCHEDULE" in str(exc):
+        if "SCHEDULE_AUTHENTICATION_FAILED" in str(exc):
             c5_passed = True
     adversarial_suite.append({"case": "empty_schedule_rejected", "passed": c5_passed})
 
-    # Case 6: Malformed schedule item
+    # Case 6: wrong source hash
     c6_passed = False
     try:
         run_stage_portability_inference(
             market_frame=portability_market_df,
-            schedule_data=[{"invalid_key": "bad"}],
+            schedule_source_path=str(snapshot_json_path.relative_to(ROOT)),
+            schedule_source_sha256="0" * 64,
             lock_timestamp=lock_time_str,
             market_snapshot_timestamp=market_time_str,
             schedule_information_timestamp=sched_time_str,
@@ -1400,7 +1419,7 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
             canonical_series=series_hist,
         )
     except ValueError as exc:
-        if "MALFORMED_SCHEDULE_ITEM" in str(exc):
+        if "SCHEDULE_AUTHENTICATION_FAILED" in str(exc):
             c6_passed = True
     adversarial_suite.append({"case": "malformed_schedule_rejected", "passed": c6_passed})
 
@@ -1775,14 +1794,28 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     pd.DataFrame(audit_rows).to_csv(evidence_dir / "stage-10d-r17a-claim-proof-audit.csv", index=False)
 
     # 20. Post-execution source integrity verification
-    post_inv = compute_source_inventory(ROOT, EXECUTION_SEED_ROOTS, EXTRA_EXPLICIT_PATHS, recorded_commit=git_hash)
-    post_declared = {s["path"] for s in post_inv["sources"]}
-    audit_runtime_modules(ROOT, post_declared)
+    if canonical_closure_doc is not None:
+        canonical_declared = set(canonical_closure_doc["union"])
+        runtime_loaded = audit_runtime_modules(ROOT, canonical_declared)
+        canonical_closure_doc["RUNTIME_LOADED_REPO_MODULES"] = runtime_loaded
+        canonical_closure_doc["runtime_repo_module_count"] = len(runtime_loaded)
+        dump_json(evidence_dir / "stage-10d-r17a-source-closure.json", canonical_closure_doc)
+    else:
+        post_inv = compute_source_inventory(ROOT, EXECUTION_SEED_ROOTS, EXTRA_EXPLICIT_PATHS, recorded_commit=git_hash)
+        audit_runtime_modules(ROOT, {s["path"] for s in post_inv["sources"]})
     source_freeze_doc["post_execution_integrity_pass"] = True
     dump_json(evidence_dir / "stage-10d-r17a-source-freeze.json", source_freeze_doc)
 
-    # 21. Write R4-R2 remediation report
-    report_content = f'''# Stage 10D-R17A-R4-R2 Targeted Review Remediation Report
+    # 21. Write evidence-derived remediation report.
+    report_name = "stage-10d-r17a-r4-r3-remediation-report.md" if stage_id.endswith("R4_R3") else "stage-10d-r17a-r4-r2-remediation-report.md"
+    closure_summary = "not applicable"
+    if canonical_closure_doc is not None:
+        closure_summary = (f"static={canonical_closure_doc['static_closure_count']}; "
+                           f"runtime={canonical_closure_doc['runtime_repo_module_count']}; "
+                           f"explicit={canonical_closure_doc['explicit_input_count']}; "
+                           f"union={canonical_closure_doc['union_count']}; "
+                           f"sha256={canonical_closure_doc['union_sha256']}")
+    report_content = f'''# {stage_id} Targeted Review Remediation Report
 
 **Stage ID:** {stage_id}
 **Run ID:** {run_id}
@@ -1799,7 +1832,7 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
 5. **Isolated git worktree execution:** Yes, executed in detached git worktree at exact commit `{git_hash}`.
 6. **Tracked files read-only:** Yes, all tracked files in execution worktree set to `0o444` before command execution.
 7. **PYTHONDONTWRITEBYTECODE:** Yes, `PYTHONDONTWRITEBYTECODE=1` enforced in harness execution environment.
-8. **Source inventory derivation:** Derived via machine-parsed static AST traversal from execution entry roots (`scripts/source_closure.py`), capturing all transitive dependencies.
+8. **Canonical source closure:** `{closure_summary}`; machine-parsed static AST traversal and exact Git object verification are sealed in `stage-10d-r17a-source-closure.json`.
 9. **Transitive dependencies included:** Yes, `fantasy_prediction/player_baseline.py`, `fantasy_prediction/zero_sum_allocation.py`, and `learning/feedback_loop.py` are explicitly in the closure.
 10. **Runtime module audit:** Yes, `audit_runtime_modules` verifies loaded local modules in `sys.modules` against frozen inventory; zero undeclared modules loaded.
 11. **Schedule-source authentication bytes/SHA:** Yes, reads raw bytes from disk and recomputes SHA-256 (`scripts/schedule_authenticator.py`).
@@ -1819,7 +1852,7 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
 25. **Candidate models status:** Baseline `RECENCY_5` retained (`RETAIN`); `RECENCY_EWMA_H4` remains `RESEARCH_ONLY` (`NOT_AUTHORIZED` for promotion).
 26. **Stage 10D-R17B status:** `NOT_AUTHORIZED`.
 '''
-    (evidence_dir / "stage-10d-r17a-r4-r2-remediation-report.md").write_text(report_content, encoding="utf-8")
+    (evidence_dir / report_name).write_text(report_content, encoding="utf-8")
 
     print(f"=== Completed Stage 10D-R17A-R4-R2 Recency Evaluation in {time.time() - t_start:.1f}s ===")
 

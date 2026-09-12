@@ -517,6 +517,36 @@ def validate_source_freeze(root: Path, evidence: Path, meta: Optional[dict[str, 
                     )
         except Exception as exc:
             failures.append(f"source freeze validation error: {exc}")
+    # R4-R3 validates the object actually sealed, independently of evaluator
+    # assertions or an author-selected source list.
+    closure_file = evidence / "stage-10d-r17a-source-closure.json"
+    if closure_file.exists():
+        try:
+            from scripts.source_closure import compute_static_import_closure
+            closure = json_load(closure_file)
+            roots = closure.get("execution_roots", [])
+            recomputed = sorted(p.relative_to(root.resolve()).as_posix()
+                                for p in compute_static_import_closure(root, roots))
+            sealed_static = closure.get("STATIC_REPO_PYTHON_CLOSURE", [])
+            explicit = closure.get("EXPLICIT_EXECUTION_INPUTS", [])
+            union = closure.get("union", [])
+            if recomputed != sealed_static:
+                failures.append("canonical static closure differs from independent recomputation")
+            if sorted(set(recomputed).union(explicit)) != union:
+                failures.append("canonical closure union differs from static plus explicit inputs")
+            expected_union_sha = hashlib.sha256("\n".join(union).encode("utf-8")).hexdigest()
+            if closure.get("union_sha256") != expected_union_sha:
+                failures.append("canonical closure union hash stale")
+            for path in union:
+                tracked = subprocess.run(["git", "cat-file", "-e", f"{closure['git_commit']}:{path}"], cwd=root, capture_output=True)
+                if tracked.returncode != 0:
+                    failures.append(f"canonical closure contains untracked or absent path {path}")
+            runtime = closure.get("RUNTIME_LOADED_REPO_MODULES", [])
+            missing_runtime = sorted(set(runtime).difference(union))
+            if missing_runtime:
+                failures.append(f"undeclared runtime repository modules: {missing_runtime}")
+        except Exception as exc:
+            failures.append(f"canonical closure validation error: {exc}")
     return failures
 
 

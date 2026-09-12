@@ -26,7 +26,10 @@ APPROVED_DATA_ROOTS = [
 ]
 
 
-def authenticate_schedule_source(
+AUTHENTICATION_VERSION = "R17A_R4_R3_AUTH_V1"
+
+
+def load_authenticated_schedule(
     source_path: Path | str,
     declared_sha256: str,
     lock_timestamp: Optional[str] = None,
@@ -218,6 +221,7 @@ def authenticate_schedule_source(
 
         payload = {
             "authenticated": True,
+            "authentication_version": AUTHENTICATION_VERSION,
             "source_type": expected_source_type,
             "source_path": path_obj.relative_to(root).as_posix(),
             "source_sha256": actual_sha256,
@@ -232,3 +236,8 @@ def authenticate_schedule_source(
 
     else:
         return False, f"UNSUPPORTED_SCHEDULE_SOURCE_TYPE: {expected_source_type}", {}
+
+
+# Compatibility name for non-authoritative callers.  R4-R3 stage paths call
+# load_authenticated_schedule directly, making this one loader the trust edge.
+authenticate_schedule_source = load_authenticated_schedule

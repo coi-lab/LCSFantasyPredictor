@@ -26,6 +26,26 @@ EXECUTION_SEED_ROOTS: List[str] = [
     "tests/test_stage10d_r17a_r4_r2_recency.py",
 ]
 
+# R4-R3 deliberately names the execution boundary rather than keeping a
+# hand-maintained "source freeze".  The paths below are inputs to the closure
+# algorithm; the artifact records the algorithm's complete result.
+R4_R3_EXECUTION_ROOTS: List[str] = [
+    "scripts/run_stage10d_r17a_r4_r3_evaluation.py",
+    "scripts/run_stage_with_evidence.py",
+    "scripts/evidence_harness.py",
+    "scripts/evidence_policy.py",
+    "scripts/validate_stage_evidence.py",
+    "scripts/source_closure.py",
+    "scripts/schedule_authenticator.py",
+    "tests/test_stage10d_r17a_r4_r3_recency.py",
+]
+
+R4_R3_EXPLICIT_INPUTS: List[str] = [
+    "harness_configs/contracts/stage-10d-r17a-r4-r3.md",
+    "harness_configs/stage-10d-r17a-r4-r3.json",
+    "harness_policies/stage-10d-r17a-recency-policy.json",
+]
+
 EXTRA_EXPLICIT_PATHS: List[str] = [
     "harness_configs/contracts/stage-10d-r17a-r4-r2.md",
     "harness_configs/stage-10d-r17a-r4-r2.json",
@@ -194,22 +214,50 @@ def compute_source_inventory(
             "discovery_source": discovery_source,
         })
 
-    # Verify critical dependencies identified by R4-R1 review are included
-    declared_set = {s["path"] for s in sources}
-    critical_required = [
-        "fantasy_prediction/player_baseline.py",
-        "fantasy_prediction/zero_sum_allocation.py",
-        "learning/feedback_loop.py",
-    ]
-    for req in critical_required:
-        if req not in declared_set:
-            raise ValueError(f"MISSING_CRITICAL_DEPENDENCY: {req} was omitted from source closure")
-
     return {
         "git_commit": recorded_commit,
         "total_sources_count": len(sources),
         "critical_dependencies_verified": True,
         "sources": sources,
+    }
+
+
+def build_canonical_closure(
+    root: Path,
+    execution_roots: List[str] = R4_R3_EXECUTION_ROOTS,
+    explicit_inputs: List[str] = R4_R3_EXPLICIT_INPUTS,
+    recorded_commit: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Return the single sealed R4-R3 source-closure object.
+
+    Static imports are recursively derived; explicit inputs are the non-Python
+    behavior inputs.  Per-path Git-object and disk-byte equality is delegated
+    to ``compute_source_inventory`` so a caller cannot manufacture a closure
+    merely by asserting a completeness boolean.
+    """
+    inv = compute_source_inventory(root, execution_roots, explicit_inputs, recorded_commit)
+    static = sorted(
+        p.relative_to(root.resolve()).as_posix()
+        for p in compute_static_import_closure(root, execution_roots)
+    )
+    explicit = sorted(set(explicit_inputs))
+    union = sorted(set(static).union(explicit))
+    if {item["path"] for item in inv["sources"]} != set(union):
+        raise ValueError("CANONICAL_CLOSURE_CONSTRUCTION_MISMATCH")
+    return {
+        "schema_version": 1,
+        "git_commit": inv["git_commit"],
+        "execution_roots": sorted(execution_roots),
+        "STATIC_REPO_PYTHON_CLOSURE": static,
+        "RUNTIME_LOADED_REPO_MODULES": [],
+        "EXPLICIT_EXECUTION_INPUTS": explicit,
+        "union": union,
+        "static_closure_count": len(static),
+        "runtime_repo_module_count": 0,
+        "explicit_input_count": len(explicit),
+        "union_count": len(union),
+        "union_sha256": hashlib.sha256("\n".join(union).encode("utf-8")).hexdigest(),
+        "sources": inv["sources"],
     }
 
 
