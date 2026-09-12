@@ -420,8 +420,19 @@ def resume_stage(root: Path, evidence: Path) -> tuple[Path, int]:
                 if src_p.exists() and not dst_p.exists():
                     dst_p.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(src_p, dst_p)
+        if (root / "data").exists():
+            for src_item in (root / "data").rglob("*"):
+                if src_item.is_file():
+                    rel_p = src_item.relative_to(root)
+                    dst_item = wt_dir / rel_p
+                    if not dst_item.exists():
+                        dst_item.parent.mkdir(parents=True, exist_ok=True)
+                        try:
+                            dst_item.symlink_to(src_item)
+                        except OSError:
+                            shutil.copy2(src_item, dst_item)
         for item in wt_dir.rglob("*"):
-            if ".git" not in item.parts and item.is_file():
+            if ".git" not in item.parts and item.is_file() and not item.is_symlink():
                 try:
                     os.chmod(item, 0o444)
                 except OSError:
