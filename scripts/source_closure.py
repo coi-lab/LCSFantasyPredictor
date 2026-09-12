@@ -16,6 +16,28 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
+EXECUTION_SEED_ROOTS: List[str] = [
+    "scripts/run_stage10d_r17a_r4_r2_evaluation.py",
+    "scripts/run_stage_with_evidence.py",
+    "scripts/evidence_harness.py",
+    "scripts/evidence_policy.py",
+    "scripts/validate_stage_evidence.py",
+    "scripts/schedule_authenticator.py",
+    "tests/test_stage10d_r17a_r4_r2_recency.py",
+]
+
+EXTRA_EXPLICIT_PATHS: List[str] = [
+    "harness_configs/contracts/stage-10d-r17a-r4-r2.md",
+    "harness_configs/stage-10d-r17a-r4-r2.json",
+    "harness_policies/stage-10d-r17a-recency-policy.json",
+    "fantasy_prediction/canonical_pit.py",
+    "fantasy_prediction/recovered_components.py",
+    "fantasy_prediction/ce_model.py",
+    "fantasy_prediction/player_baseline.py",
+    "fantasy_prediction/zero_sum_allocation.py",
+    "learning/feedback_loop.py",
+]
+
 
 def resolve_import_path(module: str, base_dir: Path, root: Path, level: int = 0) -> List[Path]:
     """Resolve Python import statement to local repository paths."""
@@ -191,8 +213,22 @@ def compute_source_inventory(
     }
 
 
-def audit_runtime_modules(root: Path, declared_inventory_paths: Set[str]) -> List[str]:
+def audit_runtime_modules(arg1: Any, arg2: Any) -> List[str]:
     """Inspect sys.modules and reject any undeclared local repository modules."""
+    if isinstance(arg1, dict):
+        inv = arg1
+        root = Path(arg2)
+        declared_inventory_paths = {s["path"] for s in inv.get("sources", [])}
+    elif isinstance(arg1, (set, list)):
+        declared_inventory_paths = set(arg1)
+        root = Path(arg2)
+    elif isinstance(arg2, (set, list)):
+        root = Path(arg1)
+        declared_inventory_paths = set(arg2)
+    else:
+        root = Path(arg1)
+        declared_inventory_paths = {s["path"] for s in arg2.get("sources", [])}
+
     loaded_repo_paths: List[str] = []
     root_resolved = root.resolve()
 
