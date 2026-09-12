@@ -459,6 +459,44 @@ def predicate(actual: Any, expression: str) -> bool:
     return expression.startswith("!= ") and not predicate(actual, "== " + expression[3:])
 
 
+def validate_source_freeze(root: Path, evidence: Path, meta: Optional[dict[str, Any]] = None) -> list[str]:
+    failures: list[str] = []
+    if meta is None:
+        try:
+            meta = json_load(evidence / "run-identity.json")
+        except Exception:
+            meta = {}
+    for freeze_file in sorted(evidence.glob("*-source-freeze.json")):
+        try:
+            sf_data = json_load(freeze_file)
+            rec_commit = sf_data.get("git_commit") or meta.get("git_commit")
+            for src in sf_data.get("sources", []):
+                rel = src.get("path")
+                if not rel:
+                    continue
+                res = subprocess.run(
+                    ["git", "show", f"{rec_commit}:{rel}"],
+                    cwd=root,
+                    capture_output=True,
+                    check=False,
+                )
+                if res.returncode != 0:
+                    failures.append(f"committed source missing from git object tree {rec_commit}:{rel}")
+                    continue
+                git_sha = hashlib.sha256(res.stdout).hexdigest()
+                if git_sha != src.get("committed_content_sha256"):
+                    failures.append(
+                        f"committed source hash mismatch {rel}: git object {git_sha} != recorded {src.get('committed_content_sha256')}"
+                    )
+                if git_sha != src.get("executed_content_sha256"):
+                    failures.append(
+                        f"executed source differed from commit {rel}: git object {git_sha} != executed {src.get('executed_content_sha256')}"
+                    )
+        except Exception as exc:
+            failures.append(f"source freeze validation error: {exc}")
+    return failures
+
+
 def validate(root: Path, evidence: Path, skip_manifest: bool = False, skip_report: bool = False) -> dict[str, Any]:
     failures: list[str] = []
     try:
@@ -527,34 +565,7 @@ def validate(root: Path, evidence: Path, skip_manifest: bool = False, skip_repor
             failures.append(f"input hash mismatch {input_path}")
 
     # Recompute source freeze comparison directly from Git objects at recorded commit
-    for freeze_file in sorted(evidence.glob("*-source-freeze.json")):
-        try:
-            sf_data = json_load(freeze_file)
-            rec_commit = sf_data.get("git_commit") or meta.get("git_commit")
-            for src in sf_data.get("sources", []):
-                rel = src.get("path")
-                if not rel:
-                    continue
-                res = subprocess.run(
-                    ["git", "show", f"{rec_commit}:{rel}"],
-                    cwd=root,
-                    capture_output=True,
-                    check=False,
-                )
-                if res.returncode != 0:
-                    failures.append(f"committed source missing from git object tree {rec_commit}:{rel}")
-                    continue
-                git_sha = hashlib.sha256(res.stdout).hexdigest()
-                if git_sha != src.get("committed_content_sha256"):
-                    failures.append(
-                        f"committed source hash mismatch {rel}: git object {git_sha} != recorded {src.get('committed_content_sha256')}"
-                    )
-                if git_sha != src.get("executed_content_sha256"):
-                    failures.append(
-                        f"executed source differed from commit {rel}: git object {git_sha} != executed {src.get('executed_content_sha256')}"
-                    )
-        except Exception as exc:
-            failures.append(f"source freeze validation error: {exc}")
+    failures.extend(validate_source_freeze(root, evidence, meta))
 
 
     try:

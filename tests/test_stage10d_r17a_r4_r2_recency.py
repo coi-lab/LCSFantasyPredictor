@@ -174,9 +174,8 @@ class TestR4R2UnitSemantic(unittest.TestCase):
             freeze_file.write_text(json.dumps(bad_inventory), encoding="utf-8")
             run_id_file = tmp_ev / "run-identity.json"
             run_id_file.write_text(json.dumps({"stage_id": "STAGE_10D_R17A_R4_R2", "git_commit": git_commit(ROOT), "run_id": "test"}), encoding="utf-8")
-            res = evidence_harness.validate(ROOT, tmp_ev, skip_manifest=True, skip_report=True)
-            self.assertFalse(res["valid"])
-            self.assertTrue(any("committed source hash mismatch" in f for f in res["failures"]))
+            failures = evidence_harness.validate_source_freeze(ROOT, tmp_ev)
+            self.assertTrue(any("committed source hash mismatch" in f for f in failures))
 
     def test_07_source_mutation_attempt_blocked_by_readonly_worktree(self):
         """Repair 1: Tracked source file write attempt must be blocked by filesystem permissions."""
