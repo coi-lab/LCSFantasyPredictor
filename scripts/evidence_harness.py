@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import time
 import uuid
@@ -411,6 +412,14 @@ def resume_stage(root: Path, evidence: Path) -> tuple[Path, int]:
         )
         if wt_add.returncode != 0:
             raise RuntimeError(f"Failed to create isolated execution worktree: {wt_add.stderr}")
+        for p_item in config.get("protected_paths", []):
+            p_rel = p_item if isinstance(p_item, str) else p_item.get("path")
+            if p_rel:
+                src_p = root / p_rel
+                dst_p = wt_dir / p_rel
+                if src_p.exists() and not dst_p.exists():
+                    dst_p.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(src_p, dst_p)
         for item in wt_dir.rglob("*"):
             if ".git" not in item.parts and item.is_file():
                 try:
