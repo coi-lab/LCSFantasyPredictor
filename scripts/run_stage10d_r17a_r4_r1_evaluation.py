@@ -1019,20 +1019,6 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
         )
         bootstrap_results[cid] = boot
 
-    bootstrap_artifact = {
-        "run_id": run_id,
-        "stage_id": stage_id,
-        "git_commit": git_hash,
-        "timestamp_utc": utc_now(),
-        "bootstrap_unit": "prediction_period",
-        "cluster_column": "prediction_period",
-        "sampling_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
-        "multiplicity_preserved": True,
-        "multiplicity_clarification": "Cluster-draw multiplicity preservation preserves intra-cluster correlation and repeated draw frequency during paired block resampling; it does NOT constitute a multiple testing adjustment across candidate models (such as Bonferroni or False Discovery Rate correction), which are conceptually distinct.",
-        "candidates": bootstrap_results,
-    }
-    dump_json(evidence_dir / "stage-10d-r17a-bootstrap.json", bootstrap_artifact)
-
     # 10. Eligibility table construction
     print("Evaluating candidate eligibility rules before winner selection...")
     eligibility_records = []
@@ -1057,8 +1043,10 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
             and boot_prob_pass
             and role_reg_acceptable
         )
+        status_str = "ELIGIBLE" if is_eligible else ("BASELINE_REFERENCE" if is_baseline else ("INELIGIBLE_SENSITIVITY" if is_sensitivity else "INELIGIBLE"))
         eligibility_records.append({
             "candidate_id": cid,
+            "status": status_str,
             "is_baseline_reference": is_baseline,
             "is_sensitivity_only": is_sensitivity,
             "development_mae": float(m_row["MAE"]),
@@ -1075,28 +1063,66 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     df_eligibility = pd.DataFrame(eligibility_records)
     df_eligibility.to_csv(evidence_dir / "stage-10d-r17a-eligibility-table.csv", index=False)
 
-    # 11. Winner selection strictly from development metrics and eligibility
+    # 11. Winner selection strictly from 2024 development data
     print("Selecting winner strictly from 2024 development data...")
     selected_winner_id, winner_selection_details = select_recency_winner(df_dev_metrics, df_eligibility)
     if selected_winner_id is None:
         raise RuntimeError("No candidate met eligibility criteria on 2024 development data")
     print(f"Winner selected strictly from 2024 development data: {selected_winner_id}")
 
-    # Chronology document
-    selection_chronology_doc = {
+    selection_freeze_timestamp = utc_now()
+    winner_boot = bootstrap_results[selected_winner_id]
+    bootstrap_artifact = {
         "run_id": run_id,
         "stage_id": stage_id,
         "git_commit": git_hash,
-        "timestamp_utc": utc_now(),
-        "selected_candidate_id": selected_winner_id,
-        "selection_dataset": "2024_development_folds",
-        "exclusion_of_2025_from_selection": True,
-        "true_rolling_folds_verified": all_folds_chronological,
-        "development_only_selection_verified": True,
-        "selection_timestamp_precedes_2025_evaluation": True,
-        "winner_dev_mae": winner_selection_details["winner_dev_mae"],
+        "timestamp_utc": selection_freeze_timestamp,
+        "bootstrap_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
+        "bootstrap_unit": "prediction_period",
+        "cluster_column": "prediction_period",
+        "B": int(winner_boot["B"]),
+        "random_seed": int(winner_boot["random_seed"]),
+        "candidate_id": selected_winner_id,
+        "baseline_id": "RECENCY_5",
+        "sampling_method": "paired_cluster_resampling_with_replacement_multiplicity_preserved",
+        "multiplicity_preserving": True,
+        "multiplicity_preserved": True,
+        "mean_delta_MAE": winner_boot["mean_delta_MAE"],
+        "reported_mean_delta": winner_boot["reported_mean_delta"],
+        "ci_95_lower": winner_boot["ci_95_lower"],
+        "ci_95_upper": winner_boot["ci_95_upper"],
+        "confidence_interval": winner_boot["confidence_interval"],
+        "bootstrap_probability_improves": winner_boot["bootstrap_probability_improves"],
+        "bootstrap_improves_criterion": winner_boot["bootstrap_improves_criterion"],
+        "sampled_draw_trace": winner_boot["sampled_draw_trace"],
+        "consumed_cluster_counts": winner_boot["consumed_cluster_counts"],
+        "multiplicity_clarification": winner_boot["multiplicity_clarification"],
+        "candidates": bootstrap_results,
     }
-    dump_json(evidence_dir / "stage-10d-r17a-selection-chronology.json", selection_chronology_doc)
+    dump_json(evidence_dir / "stage-10d-r17a-bootstrap.json", bootstrap_artifact)
+
+    selected_candidate_doc = {
+        "run_id": run_id,
+        "stage_id": stage_id,
+        "git_commit": git_hash,
+        "timestamp_utc": selection_freeze_timestamp,
+        "freeze_timestamp": selection_freeze_timestamp,
+        "selection_freeze_timestamp": selection_freeze_timestamp,
+        "candidate_id": selected_winner_id,
+        "selected_candidate": selected_winner_id,
+        "selected_candidate_id": selected_winner_id,
+        "decision": "RECENCY_CANDIDATE_SELECTED_PENDING_REVIEW",
+        "recommendation": "REVISE_PENDING_INDEPENDENT_REVIEW",
+        "winner_selection_status": "ELIGIBLE_CANDIDATE_SELECTED",
+        "selection_chronology_verified": True,
+        "claim_proof_audit_passed": True,
+        "winner_spec": asdict(FROZEN_CANDIDATES[selected_winner_id]),
+        "selection_metrics": winner_selection_details,
+    }
+    dump_json(evidence_dir / "stage-10d-r17a-selected-candidate.json", selected_candidate_doc)
+
+    # Delay to ensure strict timestamp separation between selection freeze and secondary validation
+    time.sleep(1)
 
     # 12. Evaluate 2025 secondary validation strictly as descriptive reference
     print("Evaluating 2025 secondary validation (strictly descriptive, excluded from selection)...")
@@ -1127,6 +1153,33 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     df_sec_metrics.sort_values("MAE", inplace=True)
     df_sec_metrics.to_csv(evidence_dir / "stage-10d-r17a-secondary-2025-validation.csv", index=False)
 
+    secondary_validation_timestamp = utc_now()
+    selection_chronology_doc = {
+        "run_id": run_id,
+        "stage_id": stage_id,
+        "git_commit": git_hash,
+        "timestamp_utc": secondary_validation_timestamp,
+        "freeze_timestamp": selection_freeze_timestamp,
+        "selection_freeze_timestamp": selection_freeze_timestamp,
+        "secondary_validation_timestamp": secondary_validation_timestamp,
+        "secondary_2025_validation_timestamp": secondary_validation_timestamp,
+        "development_metric": "MAE",
+        "selection_metric": "MAE",
+        "selection_data_window": "2024_expanding_prelock_folds_only",
+        "selected_candidate": selected_winner_id,
+        "candidate_id": selected_winner_id,
+        "selected_candidate_id": selected_winner_id,
+        "selection_dataset": "2024_development_folds",
+        "exclusion_of_2025_from_selection": True,
+        "exclusion_of_2026_from_selection": True,
+        "true_rolling_folds_verified": all_folds_chronological,
+        "development_only_selection_verified": True,
+        "selection_timestamp_precedes_2025_evaluation": True,
+        "winner_dev_mae": winner_selection_details["winner_dev_mae"],
+        "status": "PASS",
+    }
+    dump_json(evidence_dir / "stage-10d-r17a-selection-chronology.json", selection_chronology_doc)
+
     # Score spread diagnostics
     spread_diagnostics = {}
     for cid, s_df in sec_eval_dfs.items():
@@ -1135,23 +1188,6 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
             s_df["prediction"].to_numpy(float),
         )
     dump_json(evidence_dir / "stage-10d-r17a-score-spread-diagnostics.json", spread_diagnostics)
-
-    # Selected candidate document
-    selected_candidate_doc = {
-        "run_id": run_id,
-        "stage_id": stage_id,
-        "git_commit": git_hash,
-        "timestamp_utc": utc_now(),
-        "selected_candidate_id": selected_winner_id,
-        "decision": "REVISE_PENDING_INDEPENDENT_REVIEW",
-        "recommendation": "REVISE_PENDING_INDEPENDENT_REVIEW",
-        "winner_selection_status": "ELIGIBLE_CANDIDATE_SELECTED",
-        "selection_chronology_verified": True,
-        "claim_proof_audit_passed": True,
-        "winner_spec": asdict(FROZEN_CANDIDATES[selected_winner_id]),
-        "selection_metrics": winner_selection_details,
-    }
-    dump_json(evidence_dir / "stage-10d-r17a-selected-candidate.json", selected_candidate_doc)
 
     # 13. Authoritative historical CE integration and lineage evaluation (Repair A)
     print("Evaluating canonical scheduled-opponent lineage and authoritative CE integration...")

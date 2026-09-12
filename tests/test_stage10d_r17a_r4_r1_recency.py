@@ -485,7 +485,7 @@ class TestR4R1ArtifactBound(unittest.TestCase):
 
         # Compute synthetic statistics on draw with multiplicity vs deduplicated
         # Proves that multiplicity preservation has a concrete numerical impact on resampled aggregates
-        cluster_weights = {c: float(len(c) % 5 + 1) for c in draw_with_multiplicity}
+        cluster_weights = {c: float(pd.to_datetime(c).day * 3 + pd.to_datetime(c).month * 7) for c in draw_with_multiplicity}
         stat_with_multiplicity = sum(cluster_weights[c] for c in draw_with_multiplicity) / len(draw_with_multiplicity)
         stat_deduplicated = sum(cluster_weights[c] for c in deduplicated_draw) / len(deduplicated_draw)
         numerical_diff = abs(stat_with_multiplicity - stat_deduplicated)
