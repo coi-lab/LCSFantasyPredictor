@@ -43,7 +43,7 @@ from scripts.source_closure import (
     EXECUTION_SEED_ROOTS,
     EXTRA_EXPLICIT_PATHS,
 )
-from scripts.schedule_authenticator import authenticate_schedule_source, parse_schedule_snapshot
+from scripts.schedule_authenticator import authenticate_schedule_source
 from fantasy_prediction.canonical_pit import (
     ROLES_CANONICAL,
     RecentFormSpec,
