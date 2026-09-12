@@ -382,12 +382,24 @@ def semantic_validate_postlock_portability(
         return False, f"market_snapshot_time {snap_time_str} > lock_time {lock_time_str}", data
     if sched_time > lock_time:
         return False, f"schedule_information_time {sched_time_str} > lock_time {lock_time_str}", data
-    if target_removed is not True and target_columns_present != 0:
-        return False, "target columns were neither removed nor proven absent", data
+    if target_columns_present is not None and (not isinstance(target_columns_present, int) or target_columns_present != 0):
+        return False, f"forbidden target columns present: {target_columns_present}", data
+    if target_removed is not True:
+        return False, "target_columns_removed is not true", data
     if prediction_succeeded is not True:
         return False, "prediction_succeeded is not true", data
+    if "output_row_count" in data and (not isinstance(data["output_row_count"], int) or data["output_row_count"] <= 0):
+        return False, "no prediction output rows generated in portability inference", data
+    if "adversarial_rejections" in data:
+        adversarial = data["adversarial_rejections"]
+        if not isinstance(adversarial, list) or len(adversarial) == 0:
+            return False, "adversarial_rejections must be a non-empty list", data
+        for case in adversarial:
+            if not isinstance(case, dict) or case.get("model_executed") is not False:
+                return False, f"adversarial case {case.get('case_id')} executed model instead of rejecting", data
 
     return True, "PROVEN", data
+
 
 
 def semantic_validate_production_immutability(

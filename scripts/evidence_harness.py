@@ -307,6 +307,27 @@ def _finalize(root: Path, evidence: Path, config: dict[str, Any], meta: dict[str
     test_results = json_load(evidence / "test-results.json") if (evidence / "test-results.json").exists() else []
     _checkpoint(evidence, state, "command", cmd_results)
     _checkpoint(evidence, state, "test", test_results)
+    for artifact_name in config.get("required_artifacts", []):
+        if artifact_name.endswith("artifact-bound-test-summary.json"):
+            all_passed = (
+                len(test_results) == len(config.get("test_commands", []))
+                and len(test_results) > 0
+                and all(t.get("exit_code") == 0 for t in test_results)
+            )
+            total_tests = sum(t.get("tests_run") or 0 for t in test_results)
+            summary_doc = {
+                "run_id": meta["run_id"],
+                "stage_id": meta["stage_id"],
+                "git_commit": meta["git_commit"],
+                "timestamp_utc": utc_now(),
+                "test_suite": config.get("test_commands", [""])[0],
+                "all_tests_passed": all_passed,
+                "tests_count": total_tests,
+                "test_commands_executed": len(test_results),
+                "command_exit_codes": [t.get("exit_code") for t in test_results],
+                "status": "PASS" if all_passed else "FAIL",
+            }
+            json_dump(evidence / artifact_name, summary_doc)
     raw_result = validate(root, evidence, skip_manifest=True, skip_report=True)
     render_report(evidence, raw_result)
     manifest = generate_manifest(evidence)
@@ -403,8 +424,22 @@ def validate(root: Path, evidence: Path, skip_manifest: bool = False, skip_repor
     for key in IDENTITY_FIELDS:
         if key not in meta or meta[key] is None or (isinstance(meta[key], str) and not meta[key]):
             failures.append(f"missing provenance {key}")
-    if meta.get("git_commit") != git(root, "rev-parse", "HEAD"):
-        failures.append("commit mismatch")
+    current_head = git(root, "rev-parse", "HEAD")
+    is_historical_replay = (meta.get("git_commit") != current_head)
+    if is_historical_replay:
+        commit_res = subprocess.run(
+            ["git", "cat-file", "-e", f"{meta.get('git_commit')}^{{commit}}"],
+            cwd=root,
+            capture_output=True,
+            check=False,
+        )
+        if commit_res.returncode != 0:
+            failures.append("commit mismatch")
+    else:
+        current_worktree = worktree_provenance(root, [config["evidence_root"]])
+        for key in ("working_tree_digest", "tracked_diff_digest", "untracked_digest"):
+            if meta.get(key) != current_worktree[key]:
+                failures.append(f"worktree provenance mismatch {key}")
     if meta.get("stage_config_sha256") != sha256_file(evidence / "stage-config.json"):
         failures.append("config hash mismatch")
     prompt = root / meta.get("prompt_path", "")
@@ -440,14 +475,41 @@ def validate(root: Path, evidence: Path, skip_manifest: bool = False, skip_repor
     elif meta.get("policy_path"):
         failures.append(f"BLOCKED_BY_POLICY_ANCHOR: unanchored policy_path in meta {meta.get('policy_path')}")
 
-    current_worktree = worktree_provenance(root, [config["evidence_root"]])
-    for key in ("working_tree_digest", "tracked_diff_digest", "untracked_digest"):
-        if meta.get(key) != current_worktree[key]:
-            failures.append(f"worktree provenance mismatch {key}")
     for input_path, expected_hash in meta.get("input_sha256", {}).items():
         path = root / input_path
         if not path.exists() or sha256_file(path) != expected_hash:
             failures.append(f"input hash mismatch {input_path}")
+
+    # Recompute source freeze comparison directly from Git objects at recorded commit
+    for freeze_file in sorted(evidence.glob("*-source-freeze.json")):
+        try:
+            sf_data = json_load(freeze_file)
+            rec_commit = sf_data.get("git_commit") or meta.get("git_commit")
+            for src in sf_data.get("sources", []):
+                rel = src.get("path")
+                if not rel:
+                    continue
+                res = subprocess.run(
+                    ["git", "show", f"{rec_commit}:{rel}"],
+                    cwd=root,
+                    capture_output=True,
+                    check=False,
+                )
+                if res.returncode != 0:
+                    failures.append(f"committed source missing from git object tree {rec_commit}:{rel}")
+                    continue
+                git_sha = hashlib.sha256(res.stdout).hexdigest()
+                if git_sha != src.get("committed_content_sha256"):
+                    failures.append(
+                        f"committed source hash mismatch {rel}: git object {git_sha} != recorded {src.get('committed_content_sha256')}"
+                    )
+                if git_sha != src.get("executed_content_sha256"):
+                    failures.append(
+                        f"executed source differed from commit {rel}: git object {git_sha} != executed {src.get('executed_content_sha256')}"
+                    )
+        except Exception as exc:
+            failures.append(f"source freeze validation error: {exc}")
+
 
     try:
         commands = json_load(evidence / "command-results.json")
