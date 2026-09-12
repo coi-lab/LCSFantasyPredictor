@@ -1,0 +1,910 @@
+[
+  {
+    "git_blob": "93033a2f3409eb696c6a48725bc255f96293540d",
+    "path": ".agent-runs/player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z (1).zip",
+    "sha256": "050bfe8d9a8ce3066124aa39387da5aabe6b3f54dc3ed23f6d1c80f8c3173636",
+    "removed_path": false,
+    "zip_members": [
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-source-folder-inventory.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-source-authority.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-week-snapshot-map.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-official-snapshot-integrity.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-official-lock-state.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-lineups-raw.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-lineups-canonical.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-image-extraction-audit.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-extraction-integrity.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-ac-fe-locksafe-player-table.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-ac-fe-lineups.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-optimizer-replay-integrity.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-lineup-features.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-ac-fe-lineup-features.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-lineup-overlap.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-missed-player-decomposition.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-hindsight-optimal-lineups.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-stack-analysis.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-selection-frequency.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-budget-analysis.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-mid-tier-high-combat-lineup-audit.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-safe-team-concentration.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-snapshot-fidelity-audit.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-no-live-api-substitution.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-current-season-strategy-findings.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-completion-report.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/self-review.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/task-scope.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-validator-report.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/manifest-sha256.json"
+    ],
+    "schedule_members": [
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-source-folder-inventory.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-source-authority.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-week-snapshot-map.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-official-snapshot-integrity.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-official-lock-state.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-lineups-raw.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-lineups-canonical.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-image-extraction-audit.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-extraction-integrity.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-ac-fe-locksafe-player-table.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-ac-fe-lineups.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-optimizer-replay-integrity.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-lineup-features.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-ac-fe-lineup-features.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-lineup-overlap.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-missed-player-decomposition.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-hindsight-optimal-lineups.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-stack-analysis.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-top3-selection-frequency.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-budget-analysis.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-mid-tier-high-combat-lineup-audit.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-safe-team-concentration.csv",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-snapshot-fidelity-audit.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-no-live-api-substitution.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-current-season-strategy-findings.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-completion-report.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/self-review.md",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/task-scope.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/stage-10d-r7a-validator-report.json",
+      "player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z/manifest-sha256.json"
+    ]
+  },
+  {
+    "git_blob": "8726cc0465d70dab8bf73d9f8a5033e76e151f03",
+    "path": ".agent-runs/player-model-v2-stage-10d-r7a-current-season-top3-official-snapshot-audit-20260821T011831Z.zip",
+    "sha256": "436ecfdb539f97e10825cf60b8d34b4cd074c8c497e24673f98fea51d49c4af0",
+    "removed_path": false,
+    "zip_members": [
+      "stage-10d-r7a-source-folder-inventory.md",
+      "stage-10d-r7a-source-authority.json",
+      "stage-10d-r7a-week-snapshot-map.csv",
+      "stage-10d-r7a-official-snapshot-integrity.csv",
+      "stage-10d-r7a-official-lock-state.csv",
+      "stage-10d-r7a-top3-lineups-raw.csv",
+      "stage-10d-r7a-top3-lineups-canonical.csv",
+      "stage-10d-r7a-image-extraction-audit.md",
+      "stage-10d-r7a-extraction-integrity.json",
+      "stage-10d-r7a-ac-fe-locksafe-player-table.csv",
+      "stage-10d-r7a-ac-fe-lineups.csv",
+      "stage-10d-r7a-optimizer-replay-integrity.csv",
+      "stage-10d-r7a-top3-lineup-features.csv",
+      "stage-10d-r7a-ac-fe-lineup-features.csv",
+      "stage-10d-r7a-lineup-overlap.csv",
+      "stage-10d-r7a-top3-missed-player-decomposition.csv",
+      "stage-10d-r7a-hindsight-optimal-lineups.csv",
+      "stage-10d-r7a-stack-analysis.csv",
+      "stage-10d-r7a-top3-selection-frequency.csv",
+      "stage-10d-r7a-budget-analysis.csv",
+      "stage-10d-r7a-mid-tier-high-combat-lineup-audit.csv",
+      "stage-10d-r7a-safe-team-concentration.csv",
+      "stage-10d-r7a-snapshot-fidelity-audit.json",
+      "stage-10d-r7a-no-live-api-substitution.json",
+      "stage-10d-r7a-current-season-strategy-findings.json",
+      "stage-10d-r7a-completion-report.md",
+      "self-review.md",
+      "task-scope.json",
+      "stage-10d-r7a-validator-report.json",
+      "manifest-sha256.json"
+    ],
+    "schedule_members": [
+      "stage-10d-r7a-week-snapshot-map.csv",
+      "stage-10d-r7a-official-snapshot-integrity.csv",
+      "stage-10d-r7a-snapshot-fidelity-audit.json"
+    ]
+  },
+  {
+    "git_blob": "13a41f7ae752a514bef81472647c1484c36396c1",
+    "path": ".codex/audits/stage-10d-r17q-r7c-r1/stage-10d-r17q-r7c-r1-positive-governance-fixture.json",
+    "sha256": "cc28dbc776ded1a4f7c3bf22cf9ca558f9af1516fcd76393bd8e10e27a22fd67",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "2672710e5fdb0b7c89c2ecf2b7c4f9bd221d7f3c",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "2b1964a443d1137eb224d2b478edfb826ea5209f6f27909cd8755ba2f34cda16",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00",
+      "2026-08-08T20:00:00+00:00",
+      "2026-08-15T20:00:00+00:00",
+      "2026-08-22T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "3f5861410dc0a04fa596365320ecb63b46e9d250",
+    "path": "data/external/oracles_elixir/metadata/stage_3d_snapshot_index.json",
+    "sha256": "85b436d366b22e5a35c54d25e0dc89ae78fea43af3bc0d3f77d5dc810803cd29",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "159a2516cf0f38005bc285f1a8d6e3f0b6e327b1",
+    "path": "data/predictions/player_model_v2/evaluation/stage-10d-r5g-r4a-schedule-adjusted-form-design.json",
+    "sha256": "bf34c3707f18fe798675e0a9a16b4e6bcbab1f5b91b0d90e1cf0aca909443852",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "7dc7c64c69ed05cf6792695c474ce816f49b8948",
+    "path": "data/predictions/player_model_v2/evaluation/stage-8-matchup-features.csv",
+    "sha256": "866eb976d872e0d18f9c3a5c340a1df76ee4ac970a9c4068439a19117003ee85",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "58344103edac7ba2a2eac64ece925a3752d2b725",
+    "path": "data/predictions/player_model_v2/evaluation/stage-8e-structural-schedule-exclusions.json",
+    "sha256": "bf9aabb363d809dc27f9a9d63317af765943a284d3f92a216308b0bdccfc6473",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "fd59e678391038897a03142d7b22f286ce7840d1",
+    "path": "data/processed/player_model_v2/stage_10d_r2a_context/matchup_context.csv",
+    "sha256": "b8cd974f5cda18baee4c8f334b7b88eeccf07d0fe071e4c4c7527e98737910ec",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "50c05053840d2c1f82e088cb0226bee169af238e",
+    "path": "data/processed/player_model_v2/stage_10d_r2a_r1_context/matchup_context.csv",
+    "sha256": "3465c5416bfc33d535e5924ce071fa926aaf3c0dc7d44f1e2e262ad24810a75a",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2020-01-26T19:20:42Z",
+      "2020-01-26T20:35:10Z",
+      "2020-01-26T22:02:06Z",
+      "2020-01-26T22:57:50Z",
+      "2020-01-28T00:52:53Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "d4d02bbd307acc81c8f20a0a86434d6cf85a81bc",
+    "path": "data/processed/player_model_v2/stage_3d/schedule_context.csv",
+    "sha256": "291964a416f5482e919905cb24459cff18dbee335ab0595bcc69625576851718",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2020-01-25T21:37:53Z",
+      "2020-01-25T22:32:55Z",
+      "2020-01-25T23:39:30Z",
+      "2020-01-26T00:44:16Z",
+      "2020-01-26T19:20:42Z"
+    ],
+    "postevent": true,
+    "structural": false
+  },
+  {
+    "git_blob": "163b06f4988580f24451dc79c487c9e256da2433",
+    "path": "data/processed/player_model_v2/stage_3d/schemas/schedule_context.schema.json",
+    "sha256": "b668f3bf40b7b1e43ff44309648cde2d07adcba5c83880c429046cdedd65c6e2",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "3fa1a979cbfac458b8a7f1422f1e212f07ce9853",
+    "path": "data/processed/player_model_v2/stage_3d/schemas/source_snapshot_index.schema.json",
+    "sha256": "39837479be08d49788532a4df69051e91e1edd48b48d456474fc3ab51ed95ae7",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "dc340d9a1240d9ba8765288d38a0a1cd1363b79d",
+    "path": "data/processed/player_model_v2/stage_3d/source_snapshot_index.csv",
+    "sha256": "34f13f5c91f35a38df32c5173b7992a5524e7d3c2ee3ab12189db243dafacc6d",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "a80b991a167bcd6fbfbb09fb3aa6904c42035009",
+    "path": "data/processed/player_model_v2/stage_4c_context/historical_matchup_context.csv",
+    "sha256": "beb176f15ba9c5582bbf8fbc8666c7023d4e0718fbf2696314e294f65d9e1086",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "b5733d92ce35ed2a23516c7926497263e6f66e67",
+    "path": "data/processed/player_model_v2/stage_4c_context/historical_schedule_context.csv",
+    "sha256": "159cb07c7564755ba82ee36d77a2e1a13a98fd9ae8b66b6761c2e1d141bb1bb2",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "707381856c204bc16a596f5491f58afcaeb0f1fe",
+    "path": "data/processed/player_model_v2/stage_4c_context_03/schemas/historical_matchup_context.schema.json",
+    "sha256": "015e154afa0c04218574195bcae0ce2d571c6a0a900d8b19aa149b3ed577b1b5",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "e5d439b2ea7430d321c915f4e6e098219a3c4686",
+    "path": "data/processed/player_model_v2/stage_4c_context_03/schemas/historical_schedule_context.schema.json",
+    "sha256": "f4513a7f28e8e36742b164714747e8855feba72ae2a40a14778c0543cfc5d404",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "140ed2a7af4462452b42c6517304523d1d69a78b",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/historical_prelock_matchup_context.csv",
+    "sha256": "9e3aa85ca023578881c8bf49cca35c42bbe88be5d066636a806c3e6efc5355d7",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "0a4ca9d5a1039ae292166c41364e4faa013b6080",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/historical_prelock_series_schedule.csv",
+    "sha256": "827184747308de484b78cf74546bb6fa81e38c7ca4b5968411a74fb401bb404d",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2020-01-25T21:37:53+00:00",
+      "2020-02-01T21:36:35+00:00",
+      "2020-02-08T21:30:18+00:00",
+      "2020-02-15T21:33:19+00:00",
+      "2020-02-22T21:37:14+00:00"
+    ],
+    "postevent": false,
+    "structural": true
+  },
+  {
+    "git_blob": "c12e9847fc84ba5eb41c6eafdc0443633c7d1097",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/historical_prelock_team_period_schedule.csv",
+    "sha256": "55feed93cc3f7d5b7cc2d936f36e0ba7ba4f4493fc1e32f67bbe16e0c103f6d0",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2020-01-25T21:37:53+00:00",
+      "2020-02-01T21:36:35+00:00",
+      "2020-02-08T21:30:18+00:00",
+      "2020-02-15T21:33:19+00:00",
+      "2020-02-22T21:37:14+00:00"
+    ],
+    "postevent": false,
+    "structural": true
+  },
+  {
+    "git_blob": "7ad69d089b94c4ac282b5d103810412137884bf5",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/schedule_event_crosswalk.csv",
+    "sha256": "31ac1e2ed742689c241d603a6578208bac99c8537ae237b113d1b5c310275d25",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2020-01-25T21:37:53+00:00",
+      "2020-01-26T00:00:00+00:00",
+      "2020-01-28T00:00:00+00:00",
+      "2020-02-01T00:00:00+00:00",
+      "2020-02-01T21:36:35+00:00"
+    ],
+    "postevent": false,
+    "structural": true
+  },
+  {
+    "git_blob": "d303a1c414d9b0430399071cacd65f609b147dc4",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/schemas/historical_prelock_matchup_context.schema.json",
+    "sha256": "88d8395db0bd08c0428fdbc2f2cfc5390b3f4985a9dfa590f864f91fdde520a3",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "f71b578eef30b37df532097731c44313ec9159f0",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/schemas/historical_prelock_series_schedule.schema.json",
+    "sha256": "9f55d31ff6869bd8564f7f3a1e961b0afe779d2fb30c43e02311d02c2adf4cd8",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "9e4cb2c46e27e630a85b1f75f0d1ad40f1c8be35",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/schemas/historical_prelock_team_period_schedule.schema.json",
+    "sha256": "dfcea473269c366dbbfeb91c33254d9d0be45a7aa788492bdf094b4a9f651f18",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "e3cd86300dfe3432d8c28769c22fec70f7b8b825",
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/schemas/schedule_event_crosswalk.schema.json",
+    "sha256": "a58c46de76e36ffe9095a67ff2f340abc426ef9fac0be3283a271573f5397b3e",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "a088d4d68ee8a87627ef61fd3f91b6546d5f9cde",
+    "path": "data/raw/official_market_snapshots/round-1-split-3_20260722T192318Z.csv",
+    "sha256": "b4f3c50bbe10e7e30b9db062232d2cdba13f8653e9fcb5f83eddece33996417c",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-21T20:00:00.000Z",
+      "2026-07-22T19:23:18.797384Z",
+      "2026-07-25T20:00:00.000Z",
+      "2026-07-25T23:00:00.000Z",
+      "2026-07-26T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "639eecdc56844fea5b3cac57af3523087b689400",
+    "path": "data/raw/official_market_snapshots/round-1-split-3_20260722T192318Z.json",
+    "sha256": "a3f8d7cc9fc728d747497eb75d1083492010146996da0a1245104046c12378a3",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-21T20:00:00.000Z",
+      "2026-07-22T19:23:18.797384Z",
+      "2026-07-25T20:00:00.000Z",
+      "2026-07-25T23:00:00.000Z",
+      "2026-07-26T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "9e9f94a546fd7b85f183731b6f985508a77b03eb",
+    "path": "data/raw/official_market_snapshots/round-1-split-3_20260724T131915Z.csv",
+    "sha256": "567eedde838fdf3ba1ee188a84f03397b333dc10a736645ff5b5918face5e286",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-21T20:00:00.000Z",
+      "2026-07-24T13:19:15.588988Z",
+      "2026-07-25T20:00:00.000Z",
+      "2026-07-25T23:00:00.000Z",
+      "2026-07-26T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "7f1c89fc9d38eb0630f1aa6a6fd251b1b0858eb6",
+    "path": "data/raw/official_market_snapshots/round-1-split-3_20260724T131915Z.json",
+    "sha256": "e7f8597de4f6a2c893ca6b5685f47043091c7c8efa4f4e0552702b8566d07f3a",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-21T20:00:00.000Z",
+      "2026-07-24T13:19:15.588988Z",
+      "2026-07-25T20:00:00.000Z",
+      "2026-07-25T23:00:00.000Z",
+      "2026-07-26T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "9fa276af912b9cee3fbec8ecd25043ec2ded464a",
+    "path": "data/raw/official_market_snapshots/round-2-split-3_20260728T150509Z.csv",
+    "sha256": "dff03c6cc0e17a7b27d43895897c4cdd195592b1e87b8d0aaba0846a7cfc71e4",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-28T15:00:00.000Z",
+      "2026-07-28T15:05:09.623762Z",
+      "2026-08-01T20:00:00.000Z",
+      "2026-08-01T23:00:00.000Z",
+      "2026-08-02T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "74099dc545d054640a8cd961ec7e87936acc022b",
+    "path": "data/raw/official_market_snapshots/round-2-split-3_20260728T150509Z.json",
+    "sha256": "d006e684fc964afea10b8eff24e62bfd81874129d14e69139729d697edc71506",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-28T15:00:00.000Z",
+      "2026-07-28T15:05:09.623762Z",
+      "2026-08-01T20:00:00.000Z",
+      "2026-08-01T23:00:00.000Z",
+      "2026-08-02T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "b5e55f4e26593bfa2b8e1a92a8016174ce81a2bd",
+    "path": "data/raw/official_market_snapshots/round-2-split-3_20260728T150935Z.csv",
+    "sha256": "3013e0bd07c6446f5896dde413c8092cb4364bf3af454635879b64698071bce1",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-28T15:00:00.000Z",
+      "2026-07-28T15:09:35.903110Z",
+      "2026-08-01T20:00:00.000Z",
+      "2026-08-01T23:00:00.000Z",
+      "2026-08-02T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "70ceea9dd3f98f981c75b7568a37a98ba9f9553b",
+    "path": "data/raw/official_market_snapshots/round-2-split-3_20260728T150935Z.json",
+    "sha256": "d75f55485fb048ccf81a402b86c9fc0658f7c59d816ed2047c925fa30e46fd34",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-28T15:00:00.000Z",
+      "2026-07-28T15:09:35.903110Z",
+      "2026-08-01T20:00:00.000Z",
+      "2026-08-01T23:00:00.000Z",
+      "2026-08-02T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "8d5793ceed48616833d67c6c8cbc3614d2d45373",
+    "path": "data/raw/official_market_snapshots/round-3-split-3_20260805T223848Z.csv",
+    "sha256": "4c8f23905cec38fc85a7089a3de352bdf0ca21c4e66f878a85507b601fcb95ef",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-04T15:00:00.000Z",
+      "2026-08-05T22:38:48.280380Z",
+      "2026-08-08T20:00:00.000Z",
+      "2026-08-08T23:00:00.000Z",
+      "2026-08-09T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "558db0e009c1cf6877ed73ccc202f70390f92dd4",
+    "path": "data/raw/official_market_snapshots/round-3-split-3_20260805T223848Z.json",
+    "sha256": "8404a3fbbe7d36e57c76e597944b8d672a78a82a5e51d4091d4412427bc2e5c3",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-04T15:00:00.000Z",
+      "2026-08-05T22:38:48.280380Z",
+      "2026-08-08T20:00:00.000Z",
+      "2026-08-08T23:00:00.000Z",
+      "2026-08-09T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "6c6b73bdd736abfdc3728073d038d23c70766b24",
+    "path": "data/raw/official_market_snapshots/round-3-split-3_20260807T145636Z.csv",
+    "sha256": "45534b58cee6adfc316d8d4ff95f4db48327a4774032df0c0d46d6cd73fd287b",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-04T15:00:00.000Z",
+      "2026-08-07T14:56:36.447751Z",
+      "2026-08-08T20:00:00.000Z",
+      "2026-08-08T23:00:00.000Z",
+      "2026-08-09T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "f62e076449fa8bdcaaad75c72a4cd51b2774f3f4",
+    "path": "data/raw/official_market_snapshots/round-3-split-3_20260807T145636Z.json",
+    "sha256": "ea7bc90df819275957f8e2fb181e93b89cae69e509a711f68c80bed43ebc2d33",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-04T15:00:00.000Z",
+      "2026-08-07T14:56:36.447751Z",
+      "2026-08-08T20:00:00.000Z",
+      "2026-08-08T23:00:00.000Z",
+      "2026-08-09T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "424bb4ed7008f1b58d1610cd8435fa11204cb733",
+    "path": "data/raw/official_market_snapshots/round-4-split-3_20260813T022316Z.csv",
+    "sha256": "3b865248e2fea4814dc8ea74a97be2b7372e604bf62b3e6f40c2594cb33bada7",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-11T15:20:00.000Z",
+      "2026-08-13T02:23:16.239520Z",
+      "2026-08-15T20:00:00.000Z",
+      "2026-08-15T23:00:00.000Z",
+      "2026-08-16T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "0a2d2dbf3850deedafbcbcfd4d9e7208ca7aacef",
+    "path": "data/raw/official_market_snapshots/round-4-split-3_20260813T022316Z.json",
+    "sha256": "d8952c69080bc8ca576adeaf489d2cc6dbc92bd7b184fd1fc0eea25f0ef1bbbf",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-11T15:20:00.000Z",
+      "2026-08-13T02:23:16.239520Z",
+      "2026-08-15T20:00:00.000Z",
+      "2026-08-15T23:00:00.000Z",
+      "2026-08-16T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "4484fb920c2e2144928b396a3a9d64e698527087",
+    "path": "data/raw/official_market_snapshots/round-5-split-3_20260821T015058Z.csv",
+    "sha256": "5d6e2586e81cfda75afc6fb3bfc266ae2f59c72ce845a69293fac57b97effbb3",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-18T15:00:00.000Z",
+      "2026-08-21T01:50:58.599311Z",
+      "2026-08-22T20:00:00.000Z",
+      "2026-08-22T23:00:00.000Z",
+      "2026-08-23T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "56a467412338b8ab49a57baccdf61d982a2cc3c3",
+    "path": "data/raw/official_market_snapshots/round-5-split-3_20260821T015058Z.json",
+    "sha256": "534291e2dd32016d928fd01f3dbfb6f326a2e3cf3ea7c2d7b5a45bc1943de5d5",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-18T15:00:00.000Z",
+      "2026-08-21T01:50:58.599311Z",
+      "2026-08-22T20:00:00.000Z",
+      "2026-08-22T23:00:00.000Z",
+      "2026-08-23T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "f2adadba3e513448b0ea3001bcb2df14a8facfcf",
+    "path": "data/raw/official_market_snapshots/round-6-split-3_20260830T020429Z.csv",
+    "sha256": "c82bba17c8b56d5b7bb7a8d9ebf8864feac9be5669fbd56c8b3e7c7267ef935c",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-25T15:00:00.000Z",
+      "2026-08-29T20:00:00.000Z",
+      "2026-08-29T23:00:00.000Z",
+      "2026-08-30T02:04:29.445121Z",
+      "2026-08-30T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "53f0109cde8f97e97808812da98f6bd0cdeba03e",
+    "path": "data/raw/official_market_snapshots/round-6-split-3_20260830T020429Z.json",
+    "sha256": "63625020ae8e89f664d8d24aae52462cefde6faaa4f9bc294ea3db51d641e8d7",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-08-25T15:00:00.000Z",
+      "2026-08-29T20:00:00.000Z",
+      "2026-08-29T23:00:00.000Z",
+      "2026-08-30T02:04:29.445121Z",
+      "2026-08-30T20:00:00.000Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "8a3736e3530aebd1eba25029e919cc1f80d8d73a",
+    "path": "data/recovered/player_model_v2/player-model-v2-structural-20260805-39b2744-c735b540e14c/prelock-schedules.jsonl",
+    "sha256": "87edf0aa9f5be03a4a855ab1afdc0000814d0ea7524259d2874348000a37d695",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-24T13:19:15.588988Z",
+      "2026-07-25T20:00:00Z",
+      "2026-07-25T23:00:00Z",
+      "2026-07-26T20:00:00Z",
+      "2026-07-26T23:00:00Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "da9810a8e3fb633becac95eedba20f16454beef5",
+    "path": "data/recovered/player_model_v2/player-model-v2-structural-20260805-39b2744-c735b540e14c/stage_3b/prelock-schedules-stage-3b.jsonl",
+    "sha256": "e6e86460a102bce2193b871c534b6f1b744443949f34e9ce3b4b449eae711ca6",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-22T19:23:18.797384Z",
+      "2026-07-24T13:19:15.588988Z",
+      "2026-07-25T20:00:00Z",
+      "2026-07-25T23:00:00Z",
+      "2026-07-26T20:00:00Z"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "feacbd33001a4b3fd38b4f70df5f871c516d2632",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "79e2fb9782abf9b65a16eb200697956c8eb7a6f1291126bacf8f5a5da9a3e111",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00",
+      "2026-08-08T20:00:00+00:00",
+      "2026-08-15T20:00:00+00:00",
+      "2026-08-22T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "57d478c826a72c74519c49fa4aa869c1d6fa7ccc",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "42001330c7a4ecc4fc178679adb71945ff661bcf3bd178a31d14b849b2fec1eb",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00",
+      "2026-08-08T20:00:00+00:00",
+      "2026-08-15T20:00:00+00:00",
+      "2026-08-22T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "ca8ebef057b04c719a11ca7001f8880dc6f0ccca",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "25937f5b4eb8439540ff879110fd3f7617384f2540ffd663d0e3f4003128f5c9",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00",
+      "2026-08-08T20:00:00+00:00",
+      "2026-08-15T20:00:00+00:00",
+      "2026-08-22T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "e81a1acf532fecda6bfd4e19340238985ff16243",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "f46c4d9ac789e6d8f6dabcab93ed8fdca39f3ba8416317e370496893a1e4b7cc",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00",
+      "2026-08-08T20:00:00+00:00",
+      "2026-08-15T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "bda62c3c726bdf6bcb54a5df79f9d3db95e905b0",
+    "path": ".agent-runs/player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z.zip",
+    "sha256": "23ca54153ac3df6089efbd2d809268d4e3af2a829d3a2e9c429c491e9de38923",
+    "removed_path": true,
+    "zip_members": [
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/task-scope.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-design-contract.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-r3a-parent-evidence-check.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-existing-matchup-fields.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-existing-matchup-coverage.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-signal-overlap-matrix.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-production-residual-feasibility.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-form-aggregation-spec.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-streak-design.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-strength-of-schedule-spec.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-upcoming-matchup-audit.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-injection-point-design.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-middle-team-case-studies.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-behavior-contract.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-temporal-safety-audit.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-data-coverage.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-minimal-candidate-spec.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-completion-report.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/self-review.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-validator-report.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/manifest-sha256.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-determinism-comparison.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-test-summary.json"
+    ],
+    "schedule_members": [
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/task-scope.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-design-contract.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-r3a-parent-evidence-check.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-existing-matchup-fields.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-existing-matchup-coverage.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-signal-overlap-matrix.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-production-residual-feasibility.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-form-aggregation-spec.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-streak-design.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-strength-of-schedule-spec.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-upcoming-matchup-audit.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-injection-point-design.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-middle-team-case-studies.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-behavior-contract.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-temporal-safety-audit.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-data-coverage.csv",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-minimal-candidate-spec.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-completion-report.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/self-review.md",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-validator-report.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/manifest-sha256.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-determinism-comparison.json",
+      "player-model-v2-stage-10d-r5g-r4a-schedule-adjusted-form-design-20260819T155108Z/stage-10d-r5g-r4a-test-summary.json"
+    ]
+  },
+  {
+    "git_blob": "c359929aa1278c3c6afe82584215f584162425c1",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "b5a1250e2ed5350bf2c483c529872748481530ba26a383689c16f7ff4123352b",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00",
+      "2026-08-08T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "77011ea912fbfdf75a71525ce9ea2d83c246377f",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "fdaa6a3fcb93327abdf565e1ab404a7fd938fd89dbb5a5be2cd04d2c0dc4a27f",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "09916d0006b896497ba60bdeead1b7a0f952e927",
+    "path": "dashboard/generated/current/matchup_lineups.json",
+    "sha256": "ad5555463a7ccec90a90bc7cb6ab961036f1e7a227e04e77a899f1fd11496f88",
+    "removed_path": false,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "f98c75427d8c30e1ea8679d0cea18b1f1e6d82c6",
+    "path": "data/cache/champion_prediction/feature_cache/candidates_20240701_20250601_hl120.pkl",
+    "sha256": "aa9e3b1a887ed04aebc603a884651ddeced83a9a01419ee5b26a7656ab15cb51",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "e4543cf73fffc2d91f06ecb6bc09110aeba59b0c",
+    "path": "data/cache/champion_prediction/feature_cache/candidates_20250601_20250901_hl120.pkl",
+    "sha256": "a416c163724a20f6c47021385cdd62a2171bf4aa0978e9b27107b10d6db0d664",
+    "removed_path": false,
+    "timestamp_samples": [],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "6f4d809899d895370443855ea6b60140f1e5c0b6",
+    "path": "dashboard/matchup_lineups.json",
+    "sha256": "b322b1f009c2c1d0e69c7cf5d2bd420743d6c405b0a590b29585fcf2bedb839c",
+    "removed_path": true,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "b1ce173194ef5e68ae70c97e18dafa9e18750bf3",
+    "path": "dashboard/matchup_lineups.json",
+    "sha256": "bbe35c2c045b8397f063e237eb929fc953f2699bfb82c03ffdb4cad73d579222",
+    "removed_path": true,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "3fdc6345df8f7dac75930d130d0741566712ee6a",
+    "path": "dashboard/matchup_lineups.json",
+    "sha256": "34a0012d61ccdb8f20d33bb7b19ee69d6dadd51aacbb71e6f0a2f10212e3af0e",
+    "removed_path": true,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00",
+      "2026-08-01T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "1db1d2d8c979f8a5d830b0c1e72a44863204e41f",
+    "path": "dashboard/matchup_lineups.json",
+    "sha256": "e8392e7550b91c0648aff3757a9f65170a2ab8c1280fee546790eaa18c95dc0b",
+    "removed_path": true,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "e10df60ea33d0726479b2fde8ef21ceca0f2468f",
+    "path": "dashboard/matchup_lineups.json",
+    "sha256": "e123112557f6a10cb98c233d7de33f722d8663750f4ef80f964e26b44a393abe",
+    "removed_path": true,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  },
+  {
+    "git_blob": "f28fe24b50009fe7ad868991a12ac09a2d1db3f8",
+    "path": "dashboard/matchup_lineups.json",
+    "sha256": "4e443caedf4dac323f7d6ce408b2691493b04f09b7877a26f1d173fee59983d7",
+    "removed_path": true,
+    "timestamp_samples": [
+      "2026-07-25T20:00:00+00:00"
+    ],
+    "postevent": false,
+    "structural": false
+  }
+]

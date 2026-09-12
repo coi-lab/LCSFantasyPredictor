@@ -1,0 +1,550 @@
+[
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/005a78a67d2e29b9c0417b8a362f47e50f77446f9f1af28dad92497b16217b6b.json",
+    "sha256": "dce3e292325d3ba2fcf3e050d23a07e69d3e58004033fdbe1d135877f9399277",
+    "timestamps": [
+      "2022-06-27T00:50:34Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/0da25a9e34b2d96a9835be6809ea53f4c54cd2fd3daaa5bb88333540037a13bf.json",
+    "sha256": "3ba0520eb303efbebb88e54a7b926a00a5f2482c8f32d9d7321c9e717da4537d",
+    "timestamps": [
+      "2022-06-27T00:50:34Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 8150
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/11d91fe559c0aec7d4b4312af11ad1d2ad91955b564208c30543f1437125a531.json",
+    "sha256": "957fc47efa7e98799bc67f0684efd764b4719a02305349577a88aea94f7ef8b1",
+    "timestamps": [
+      "2023-08-02T20:57:06Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/13083817f97143c4d7959d6fcb4b58ec626b74268ece88989f1268025d3360c6.json",
+    "sha256": "da3423b3538560e7d0398960cb7b91f10c458f8860440a8d6979727230c00a31",
+    "timestamps": [
+      "2022-02-21T02:03:32Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/13465230e57f7b5cca220482b1f4fe68aba5361aac95909bb81fa52517db4a4a.json",
+    "sha256": "8a6b8b73f6e68c90069c2a64a35cd83dcc9af5ad5672f5571483939d99e3c8c1",
+    "timestamps": [
+      "2023-06-24T05:39:54Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 8676
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/138380ba16234ff4c75c9d56752c59e9138072b30b50614c447243ee9a87ac65.json",
+    "sha256": "cd9f0ab70524a6ab2b7448005744c380775e974b2ec3d0fc67677bcb4948e014",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 104
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/16f9b7ae69e25ab3d334a214f3cfefe15dc52296876a406d69d054b900f4e4a8.json",
+    "sha256": "8e4695b4c28f994e7b658ca4b7b16c24bfb4b644fec87aba94e7c8292f6def4e",
+    "timestamps": [
+      "2022-06-08T08:32:18Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/207b1cf331988c47579ee4a2aecb51786b5e282a83a15c177b9e70d70eb1535c.json",
+    "sha256": "68b688099677fab734e44d6e1d4ae5e00e1b952485e124e325d72451aeb347b4",
+    "timestamps": [
+      "2023-08-17T19:34:26Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 10639
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/209bd5bcf9642088a839d15af2c7fc529971d03e1927be01753ec72f6b4fc6ff.json",
+    "sha256": "55cef5a819f7a5858d3ff16b47a403739b56e09f2f6b3bdc10ce9a3f54963e17",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 114
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/25ed23ec0a36216a8488618ca44cd193a54afdba05af2992ac492ceb57c49a73.json",
+    "sha256": "f370d192e0170155520fbf6f0dd24b5c90dc921c27c148e0840e1d9a495ea7c0",
+    "timestamps": [
+      "2022-03-22T09:13:34Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 12159
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/264e791c965e410386bff9e037b162e7bc96c2519d6f8f0240e06f5eb3fd5b0e.json",
+    "sha256": "5bba39b538f012d861aa44ba3b0f4e66799b7eb3c4c68bb9c0d581c13172fa6b",
+    "timestamps": [
+      "2022-08-10T00:23:20Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/28cf9e630c718c85e077456d0de6fadfc5c155b6c0221ab4bfb3c3c85953218f.json",
+    "sha256": "e8608d8a6b2223333886d25465bfbfd1113cfeae32ce3ffeb7dd684d494db29e",
+    "timestamps": [
+      "2022-02-07T05:29:10Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/2e26c90b3690e7e47794cd6e578f6d83f159abc67bc90ff262be382359ac4edc.json",
+    "sha256": "d6ac9fe863f1be8f238f857a558472b603287e72e4b2dbbd6cc3dce6e1fddfaf",
+    "timestamps": [
+      "2022-06-08T08:32:18Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 6735
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/2f266650ab77e05bf28c9400fde4bf5932f070d41fe977aef144e3cfd7dfe76d.json",
+    "sha256": "1411118b986b8938eefab3987a612668005c31d858168b47214fb5466d8084c7",
+    "timestamps": [
+      "2023-07-10T22:14:57Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/31d19a754ebb64e23fc67b547877694180757a207e0c3c67c4905ec9d9bed632.json",
+    "sha256": "cd9f0ab70524a6ab2b7448005744c380775e974b2ec3d0fc67677bcb4948e014",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 104
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/32180cf7f53489125132e0321e0c31659a899298dd1cd9e9672a28348ee2c7fe.json",
+    "sha256": "17c8a6a05c24606129212738d09c5cb1964f2379e53639a0b7ab196f1353ef1e",
+    "timestamps": [
+      "2023-02-09T07:55:04Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/3ab04ad6f837c534c2d694b99ddb8bbf68cdf5d6a674ea7eb59b41b2a14dfd95.json",
+    "sha256": "e360e8f4b07c02b76c934701c438eff2b8902d54933071631dc1c5dbed135f7e",
+    "timestamps": [
+      "2022-07-20T09:20:15Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/3db5d13d395df3ef20e50ca23aeef6a28aff8cfe55d1e2bbdf7e85f87415939a.json",
+    "sha256": "51c9e05bc9c1ccd36ed0b21f9ef12726823d28a01e0d6fb230b13b705ba6396c",
+    "timestamps": [
+      "2022-07-20T09:20:15Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 8556
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/42989a01761cd50d6e73d3a1e781abedd0d8dbe6f6262dc8d32f15dee5a4ed48.json",
+    "sha256": "672e52d77de70b79a8d4ec8687e9dbaa2a4888150ea626c2eec783dc92a5e4cd",
+    "timestamps": [
+      "2023-06-24T05:39:54Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/472f5f0df5399dcadbe8acc059eff6f155ab28dea2919be53cbf4c7863915bfe.json",
+    "sha256": "1eff23c6794c5cd32adf676f43b9bf7cfa5e0a4042c37cc269c0c5be88d693bd",
+    "timestamps": [
+      "2023-07-15T18:54:53Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 9026
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/4dbc9004687a4bd1ef50fc6c1dec7cbfdf067d524e9808dc87c868078fb60630.json",
+    "sha256": "a210b0d899ca89b1928fe47f7245eaf644a34cc5e7110989cb90fa1a66ce74f6",
+    "timestamps": [
+      "2022-02-07T05:29:10Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 10082
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/50212f5da83a645d4dff6d87aba08ce39620ab5b57de80ae1487d245c85c6dbd.json",
+    "sha256": "4501df58b362a3323f8dc41fee57e975f8da04c7402b459cb72552cae6de9987",
+    "timestamps": [
+      "2023-03-18T11:20:13Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 11064
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/55d825c9bbdc8ef6e109b58368b72498e2eda20270b176f6c111d308ab9f0de2.json",
+    "sha256": "fee683328e445229843001977d183a6d4c3d0a03915616afeaeab5cbf652c592",
+    "timestamps": [
+      "2023-07-10T22:14:57Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 8801
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/5689f34ea498c58a1fb87efb9d40795b4bc98708a80b82b3fd53c18852e22f3a.json",
+    "sha256": "d5ed92f5cf4da7b66e8533ac9eeb27a4942d45887a2eb22c93c252dc9ed8ad9b",
+    "timestamps": [
+      "2022-03-22T09:13:34Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/585b45525d932208fac115cdba72dd33636d90c95e0f4ce8ad563b1eba2d9f5a.json",
+    "sha256": "72f5f2e4feaf0f394e79650040d89a7340ebd1c07f768a35c7eddfe37bde28c7",
+    "timestamps": [
+      "2023-03-18T11:20:13Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/585b93b5ff48a871ce44987a560beac9259f116bd645df1c6e336a7fe39558da.json",
+    "sha256": "44739caa0cd3b2f80c0186b06002e74b552ae3821721dca894663537b06c2140",
+    "timestamps": [
+      "2023-01-26T22:13:51Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 9216
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/6159cfca85b78c9d69c75f4265a87b2d09ba6cb23d1323f53c268890317657ff.json",
+    "sha256": "e6e10cb15fc91eb1ad5640c65a221f9d9a0aa99c31c9719cba3c02befc8a14e9",
+    "timestamps": [
+      "2022-08-25T13:44:05Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/749051719794fd92eb6862352b6a843a7d65f2e66f921d9ee1b9d75950a822d3.json",
+    "sha256": "2c693e72231a156e54aeca3322d480b471b33b798541ce50bcab1c2fabf391f3",
+    "timestamps": [
+      "2023-06-14T17:28:41Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 7576
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/76e34b5630c54416b5e59a41eaee6b9ff0e33cab6c4a1c1a45dcaf4882d08999.json",
+    "sha256": "e6e10cb15fc91eb1ad5640c65a221f9d9a0aa99c31c9719cba3c02befc8a14e9",
+    "timestamps": [
+      "2022-08-25T13:44:05Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/7c490bfc6048d3fda2759d9303e8de8a2ec1555ed41b192c925aad07fda778cc.json",
+    "sha256": "72f5f2e4feaf0f394e79650040d89a7340ebd1c07f768a35c7eddfe37bde28c7",
+    "timestamps": [
+      "2023-03-18T11:20:13Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/890081d5a72497bd67988d6379c35390bbd87f771b6a94e70748823cd98c9405.json",
+    "sha256": "cbe29d923360245f503a31f3dee347b19362adb46d438329a9ef71fa410b7c14",
+    "timestamps": [
+      "2023-02-18T10:49:57Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/8f1f4685f25601e0e705aef4ba4a8d8e5be382700b1a97343a609708898d1f9e.json",
+    "sha256": "d3a8cbb123441e1a95247f969f3b80a1084b6bbda6ef19beb0a82622503178a3",
+    "timestamps": [
+      "2023-03-04T03:56:09Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/90b616e55b414dbd2c8c50e38e4ac488e1483597647569415f19e57cf2ac6ffe.json",
+    "sha256": "cd9f0ab70524a6ab2b7448005744c380775e974b2ec3d0fc67677bcb4948e014",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 104
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/90c97c946143fcf2898af59c3456e1b1e64b2b046b290d8a0462594ebadbd941.json",
+    "sha256": "1cab65f10edde17e3d72b91fdcc7784484181bae47040ce7714b5b7b4a3bd625",
+    "timestamps": [
+      "2022-01-19T13:42:41Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 6898
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/943f979450ffbd04af0354d77af9a4f954dc9060c5d3bb3414406500ec421177.json",
+    "sha256": "9169eeb240ab599423064db7d1976801a8cd53b883e69f5f1e9a3b3e77c148bd",
+    "timestamps": [
+      "2022-08-10T00:23:20Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 9617
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/9dc97d08b37fdb064e7fdb32f97db5c385e7e53e0bca7cc72db9346e80b2468c.json",
+    "sha256": "51367f8e7ca11f40dfecbe25affacd72478c9150f9ffc48941bb1436f5322ae7",
+    "timestamps": [
+      "2023-02-18T10:49:57Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 9552
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/b5520e5d90aaa8c663d5c16685b05cef56266c2c2c5f676e6a4eef2ae5d314f7.json",
+    "sha256": "a672ba0af25d4f5527583b07bf1b9c2fea5163edbd767021f17a64ec1e30cb51",
+    "timestamps": [
+      "2023-06-14T17:28:41Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/b713f131ae30e75d44078e7a6d21d3b12e29e46132f94e5d0b426e976f14c804.json",
+    "sha256": "fea47d989a7c16a696f876d631d66d248f69668dfeab2084db5c1fe779684ad0",
+    "timestamps": [
+      "2023-02-09T07:55:04Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 9446
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/bad49f68bf533f1ad017d0e037cdb1f80b89cbcaf0e50f23441d6725eb3232d9.json",
+    "sha256": "10ec7ce2f9d7f834d0798e138585f8277921dcb7da30707342c58cdf729ba6ea",
+    "timestamps": [
+      "2022-08-25T13:44:05Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 10885
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/c0eb3342623be9f3f84cf002e42828ddc4e8fa1781ac568a35e4b1a26c8b8ef5.json",
+    "sha256": "a6a31813a950effa667229054b65928f80aed2cf95f519265e7d0f291ad28a9f",
+    "timestamps": [
+      "2023-01-26T22:13:51Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/c27a3e7fd6e18f0eb272f0cf80190d5bb476f2fab90719f19b87d52031db167b.json",
+    "sha256": "796bf1f5ee6c0eb9c7389f6ba0882e3d427a8ada419fa9dceed32dabc2522a94",
+    "timestamps": [
+      "2022-02-21T02:03:32Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 10616
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/cd60000f2a3dbd79475d52567619295d0f85c30d92a06616af02d8175a3535ad.json",
+    "sha256": "2f3e2c7610ad597fe12985f9915cdb6b1792fb9d6bf11e36af89b88ff3705874",
+    "timestamps": [
+      "2023-08-02T20:57:06Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 10439
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/d00264d54f4b1051facefe5bdd6f0a86c7bc7f83e843bb06f715989670656ab8.json",
+    "sha256": "399b3dc1313607a7fdebab5455cb6712e60061ef465398ebc019076d0c102d3b",
+    "timestamps": [
+      "2023-08-17T19:34:26Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/d2eaaf115aedf19d5f968af37b27edd048325f3d676ab3f01e0f812ac0a1fe5c.json",
+    "sha256": "cd9f0ab70524a6ab2b7448005744c380775e974b2ec3d0fc67677bcb4948e014",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 104
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/e02bcc94c6e11541079ef945d987a437ee0f2754b9ae0f144ebd27f9d0237629.json",
+    "sha256": "27bfe0cba2b245dc0efca3265970c34ed02d484f444816fd417cce2e77878b83",
+    "timestamps": [
+      "2022-01-19T13:42:41Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/e0e0ed55862ed86c97d879008808735336d849b0e6c3bbef11ece50fa24b34b8.json",
+    "sha256": "0c14794a6ba821f469a0646a9c0ad94ad5cd7d7acdb0c3288cf11111cde9eec5",
+    "timestamps": [
+      "2022-03-07T13:45:15Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/e649816d870f8a6b305974d401dda5736a7547cb492243b6bfb4b5b24bd1f866.json",
+    "sha256": "c302f5588367df7c8ab276dfbd8ee17d04c95d84a67aea4bb72daf724a0ecb8b",
+    "timestamps": [
+      "2022-03-07T13:45:15Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 11721
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/fc6232f6a926a1e3f9a1558419624b2ed30678703d535067c7df5fb4bc4a1eee.json",
+    "sha256": "0cf34dcfbcc190a957adf85ae438369dcfe287c7500d6d473226f3137f17cc4a",
+    "timestamps": [
+      "2023-07-15T18:54:53Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 248
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/raw-leaguepedia-api-cache/fd29257fb23407c28b63c23018a03174d8aa925e8dd66522ebb7bf4dc3c65ca5.json",
+    "sha256": "05f1c8a696767858889f0ee6a5661d002c4f1622d378ae390692d903e86571f0",
+    "timestamps": [
+      "2023-03-04T03:56:09Z"
+    ],
+    "AutoMatches": true,
+    "transclusion": false,
+    "length": 9871
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/stage-8e-s1-fallback-source-matrix.csv",
+    "sha256": "13701c89e585584414f649337b7db55a67723e6d81c96eaff1159eb11f42551d",
+    "timestamps": [
+      "2023-01-26T12:14:09Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": true,
+    "length": 765
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/stage-8e-s1-page-discovery.csv",
+    "sha256": "cff3b597301cdf8f9d39beb266b0e50f477222777cfaca7e818167f5fc0ca0c9",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 18667
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/stage-8e-s1-published-series.csv",
+    "sha256": "dc8300fa838ea7f7729fcad1d118d8a03ae2d4516fd6902b4646771548fe9f2e",
+    "timestamps": [
+      "2022-01-19T13:42:41Z",
+      "2022-02-07T05:29:10Z",
+      "2022-02-21T02:03:32Z",
+      "2022-03-07T13:45:15Z",
+      "2022-03-22T09:13:34Z",
+      "2022-06-08T08:32:18Z",
+      "2022-06-27T00:50:34Z",
+      "2022-07-20T09:20:15Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 37352
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/stage-8e-s1-revision-index.csv",
+    "sha256": "a529cd3429a02364a0bef43105b3ee1c4874ff5d18964a9a78bb3cb33040974b",
+    "timestamps": [
+      "2022-01-19T13:42:41Z",
+      "2022-02-07T05:29:10Z",
+      "2022-02-21T02:03:32Z",
+      "2022-03-07T13:45:15Z",
+      "2022-03-22T09:13:34Z",
+      "2022-06-08T08:32:18Z",
+      "2022-06-27T00:50:34Z",
+      "2022-07-20T09:20:15Z"
+    ],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 6537
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/stage-8e-s1-series-reconciliation.csv",
+    "sha256": "46c8e1ed9a380e02fe4e8be8ae7bbafe41235e10255ab3295257f42ad21ec6fe",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 31736
+  },
+  {
+    "path": ".agent-runs/player-model-v2-stage-8e-s1-prelock-schedule-source-20260810/stage-8e-s1-target-cutoffs.csv",
+    "sha256": "ceedc78ab6e136d7c839a65259a0948be961416aadc00dcff1678e3bc207226d",
+    "timestamps": [],
+    "AutoMatches": false,
+    "transclusion": false,
+    "length": 23005
+  }
+]

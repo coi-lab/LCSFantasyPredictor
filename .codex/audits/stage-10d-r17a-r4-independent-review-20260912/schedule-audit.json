@@ -1,0 +1,165 @@
+[
+  {
+    "path": "data/processed/player_model_v2/stage_3d/schedule_context.csv",
+    "sha256": "291964a416f5482e919905cb24459cff18dbee335ab0595bcc69625576851718",
+    "rows": 1162,
+    "provenance": {
+      "revision_id": {
+        "NULL": 1162
+      },
+      "revision_timestamp_utc": {
+        "NULL": 1162
+      },
+      "source_id": {
+        "src_oracles_elixir": 1162
+      },
+      "provenance": {
+        "POSTEVENT_CONTEXT_ONLY": 1162
+      }
+    },
+    "columns": [
+      "schedule_event_id",
+      "series_id",
+      "competition_id",
+      "season",
+      "split_id",
+      "stage_id",
+      "team_1_id",
+      "team_2_id",
+      "scheduled_start_utc",
+      "actual_start_utc",
+      "status",
+      "revision_id",
+      "revision_timestamp_utc",
+      "best_of",
+      "source_id",
+      "quality_flags",
+      "provenance"
+    ]
+  },
+  {
+    "path": "data/processed/player_model_v2/stage_4c_context/historical_schedule_context.csv",
+    "sha256": "159cb07c7564755ba82ee36d77a2e1a13a98fd9ae8b66b6761c2e1d141bb1bb2",
+    "rows": 0,
+    "provenance": {},
+    "columns": [
+      "team_id",
+      "prediction_period_id",
+      "status",
+      "reason"
+    ]
+  },
+  {
+    "path": "data/processed/player_model_v2/stage_4c_context_02/historical_schedule_context.csv",
+    "sha256": "159cb07c7564755ba82ee36d77a2e1a13a98fd9ae8b66b6761c2e1d141bb1bb2",
+    "rows": 0,
+    "provenance": {},
+    "columns": [
+      "team_id",
+      "prediction_period_id",
+      "status",
+      "reason"
+    ]
+  },
+  {
+    "path": "data/processed/player_model_v2/stage_4c_context_03/historical_schedule_context.csv",
+    "sha256": "159cb07c7564755ba82ee36d77a2e1a13a98fd9ae8b66b6761c2e1d141bb1bb2",
+    "rows": 0,
+    "provenance": {},
+    "columns": [
+      "team_id",
+      "prediction_period_id",
+      "status",
+      "reason"
+    ]
+  },
+  {
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/schedule_event_crosswalk.csv",
+    "sha256": "31ac1e2ed742689c241d603a6578208bac99c8537ae237b113d1b5c310275d25",
+    "rows": 2224,
+    "provenance": {
+      "evidence_class": {
+        "STRUCTURAL_RECONCILIATION_ONLY": 2194,
+        "NULL": 30
+      }
+    },
+    "columns": [
+      "series_id",
+      "team_id",
+      "opponent_team_id",
+      "prediction_period_id",
+      "season",
+      "split",
+      "stage",
+      "series_date",
+      "series_format",
+      "target_cutoff",
+      "match_status",
+      "match_keys",
+      "evidence_class"
+    ]
+  },
+  {
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/historical_prelock_series_schedule.csv",
+    "sha256": "827184747308de484b78cf74546bb6fa81e38c7ca4b5968411a74fb401bb404d",
+    "rows": 2194,
+    "provenance": {
+      "evidence_class": {
+        "STRUCTURAL_RECONCILIATION_ONLY": 2194
+      }
+    },
+    "columns": [
+      "team_id",
+      "prediction_period_id",
+      "opponent_team_id",
+      "series_id",
+      "season",
+      "split",
+      "stage",
+      "series_date",
+      "series_format",
+      "best_of",
+      "expected_games",
+      "expected_games_method",
+      "target_cutoff",
+      "evidence_class",
+      "quality_status"
+    ]
+  },
+  {
+    "path": "data/processed/player_model_v2/stage_6a_m4_m5_context/historical_prelock_team_period_schedule.csv",
+    "sha256": "55feed93cc3f7d5b7cc2d936f36e0ba7ba4f4493fc1e32f67bbe16e0c103f6d0",
+    "rows": 1003,
+    "provenance": {
+      "evidence_class": {
+        "STRUCTURAL_RECONCILIATION_ONLY": 1003
+      }
+    },
+    "columns": [
+      "team_id",
+      "prediction_period_id",
+      "opponent_count",
+      "scheduled_series_count",
+      "series_format",
+      "best_of",
+      "scheduled_game_floor",
+      "expected_games_total",
+      "days_to_first_series",
+      "schedule_density",
+      "multi_opponent_indicator",
+      "target_cutoff",
+      "evidence_class",
+      "quality_status"
+    ]
+  },
+  {
+    "path": "data/recovered/player_model_v2/player-model-v2-structural-20260805-39b2744-c735b540e14c/prelock-schedules.jsonl",
+    "sha256": "87edf0aa9f5be03a4a855ab1afdc0000814d0ea7524259d2874348000a37d695",
+    "sample": "{\"competition_id\":\"competition:lcs_fantasy\",\"cutoff_eligible\":true,\"evaluation_eligibility\":\"METADATA_ONLY_FOR_2026_EXPOSED_EVALUATION\",\"fantasy_week_id\":\"fantasy_week:cff54ad4-f3cf-4d4f-817d-a5f808bacb64\",\"limitations\":[\"series format is absent\",\"historical reschedule completeness is not independently verified\"],\"provenance\":\"LOCAL_HISTORICAL_SNAPSHOT\",\"recovery_status\":\"RECOVERED_CUTOFF_SAFE_WITH_LIMITATIONS\",\"schedule_source_timestamp\":\"2026-07-24T13:19:15.588988Z\",\"schedule_version\":\"official_market_capture_v1\",\"scheduled_start\":\"2026-07-25T20:00:00Z\",\"series_format\":null,\"series_id\":\"series_v1_b5ad8e7304c90a718cadd3fa\",\"series_status\":\"SCHEDULED_AT_CAPTURE\",\"split_id\":\"split:lcs_fantasy:2026:split_3\",\"target_cutoff\":\"2026-07-25T20:00:00Z\",\"team_a_id\":\"team:47a8978e-8e16-434c-ba6d-a9e7bb1956ef\",\"team_b_id\":\"team:848fdaaf-589a-4e94-b3dc-90299584db0b\"}\n{\"competition_id\":\"competition:lcs_fantasy\",\"cutoff_eligible\":true,\"evaluation_eligibility\":\"METADATA_ONLY_FOR_2026_EXPOSED_EVALUATION\",\"fantasy_week_id\":\"fantasy_week:cff54ad4-f3cf-4d4f-817d-a5f808bacb64\",\"limitations\":[\"series format is absent\",\"historical reschedule completeness is not independently verified\"],\"provenance\":\"LOCAL_HISTORICAL_SNAPSHOT\",\"recovery_status\":\"RECOVERED_CUTOFF_SAFE_WITH_LIMITATIONS\",\"schedule_source_timestamp\":\"2026-07-24T13:19:15.588988Z\",\"schedule_version\":\"official_market_capture_v1\",\"scheduled_s"
+  },
+  {
+    "path": "data/recovered/player_model_v2/player-model-v2-structural-20260805-39b2744-c735b540e14c/stage_3b/prelock-schedules-stage-3b.jsonl",
+    "sha256": "e6e86460a102bce2193b871c534b6f1b744443949f34e9ce3b4b449eae711ca6",
+    "sample": "{\"competition_id\":\"competition:lcs_fantasy\",\"complete_source_batch\":true,\"completeness_evidence\":\"RECIPROCAL_OFFICIAL_ROUND_ENUMERATION\",\"completeness_limitations\":[],\"coverage_status\":\"COMPLETE_WITH_EXPLICIT_CONDITION\",\"cutoff_eligible\":true,\"evaluation_eligibility\":\"METADATA_ONLY_FOR_2026_EXPOSED_EVALUATION\",\"fallbacks\":[\"UNKNOWN_SERIES_FORMAT\"],\"fantasy_week_id\":\"fantasy_week:cff54ad4-f3cf-4d4f-817d-a5f808bacb64\",\"format_status\":\"APPROVED_UNKNOWN_FALLBACK\",\"provenance\":\"LOCAL_HISTORICAL_SNAPSHOT\",\"recovery_status\":\"RECOVERED_CUTOFF_SAFE_WITH_LIMITATIONS\",\"revision_id\":\"schedule_revision_v1_207a11d26c9066123dd20694\",\"schedule_source_timestamp\":\"2026-07-22T19:23:18.797384Z\",\"schedule_version\":\"reciprocal_official_round_snapshot_v1\",\"scheduled_start\":\"2026-07-26T20:00:00Z\",\"series_format\":\"UNKNOWN\",\"series_id\":\"series_v2_374e623ee03909a13fcb9a58\",\"series_status\":\"SUPERSEDED\",\"split_id\":\"split:lcs_fantasy:2026:split_3\",\"supersedes_revision_id\":null,\"target_cutoff\":\"2026-07-25T20:00:00Z\",\"team_a_id\":\"team:1155b4eb-b55e-4cf2-9d66-9476d31db16f\",\"team_b_id\":\"team:40dbf5d2-24ba-4894-b90f-4397fe4a53ea\"}\n{\"competition_id\":\"competition:lcs_fantasy\",\"complete_source_batch\":true,\"completeness_evidence\":\"RECIPROCAL_OFFICIAL_ROUND_ENUMERATION\",\"completeness_limitations\":[],\"coverage_status\":\"COMPLETE_WITH_EXPLICIT_CONDITION\",\"cutoff_eligible\":true,\"evaluation_eligibility\":\"METADATA_ONLY_FOR"
+  }
+]

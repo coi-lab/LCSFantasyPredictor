@@ -1,0 +1,12 @@
+{
+  "baseline": true,
+  "tracked_mutation_rejected": true,
+  "restored": true,
+  "untracked_rejected": true,
+  "validation_dependency_wrong_bytes_rejected": true,
+  "wrong_recorded_hash_failures": [
+    "executed source differed from commit scripts/evidence_policy.py: git object cb4eb1ae4758511e6cd791fe8a98dbb5972bb0dd7455e6be2891cf6fb79966be != executed 0000000000000000000000000000000000000000000000000000000000000000",
+    "blocking gate failure GATE_CE_INTEGRATION",
+    "report/raw metric mismatch"
+  ]
+}
