@@ -238,7 +238,14 @@ def run_command(command: Any, root: Path, output_dir: Path, command_id: str, met
         "EVIDENCE_ROOT": str(output_dir.resolve()),
         "EVIDENCE_PROMPT_SHA256": meta["prompt_sha256"],
         "EVIDENCE_STAGE_CONFIG_SHA256": meta["stage_config_sha256"],
+        "PYTHONDONTWRITEBYTECODE": "1",
     })
+    primary_root = Path(meta.get("primary_root", str(root)))
+    py_abs = (primary_root / ".venv/bin/python").resolve()
+    if py_abs.exists() and ".venv/bin/python" in text:
+        text = text.replace(".venv/bin/python", str(py_abs))
+    if root != primary_root:
+        env["PYTHONPATH"] = f"{root}:{env.get('PYTHONPATH', '')}"
     started = utc_now()
     clock = time.monotonic()
     result = subprocess.run(text, shell=True, cwd=root, text=True, capture_output=True, check=False, env=env)
@@ -387,9 +394,48 @@ def resume_stage(root: Path, evidence: Path) -> tuple[Path, int]:
         return evidence, 0 if validate(root, evidence)["valid"] else 1
     if state.get("preflight_failures"):
         return _finalize(root, evidence, config, meta, state)
-    _, stopped = _execute_pending(root, evidence, config, meta, state, "command", config["commands"])
-    if not stopped:
-        _execute_pending(root, evidence, config, meta, state, "test", config["test_commands"])
+
+    use_isolated = bool(config.get("isolated_worktree", False))
+    exec_root = root
+    wt_dir: Optional[Path] = None
+
+    if use_isolated:
+        wt_dir = (root / config.get("evidence_root", ".agent-runs") / f"wt-{meta['run_id']}").resolve()
+        if wt_dir.exists():
+            subprocess.run(["git", "worktree", "remove", "--force", str(wt_dir)], cwd=root, capture_output=True)
+        wt_add = subprocess.run(
+            ["git", "worktree", "add", "--detach", str(wt_dir), meta["git_commit"]],
+            cwd=root, capture_output=True, text=True, check=False,
+        )
+        if wt_add.returncode != 0:
+            raise RuntimeError(f"Failed to create isolated execution worktree: {wt_add.stderr}")
+        for item in wt_dir.rglob("*"):
+            if ".git" not in item.parts and item.is_file():
+                try:
+                    os.chmod(item, 0o444)
+                except OSError:
+                    pass
+        exec_root = wt_dir
+        meta["primary_root"] = str(root.resolve())
+        meta["execution_worktree_path"] = str(wt_dir)
+        meta["execution_worktree_commit"] = meta["git_commit"]
+        meta["execution_worktree_clean"] = True
+        meta["transient_mutation_prevention"] = "IMMUTABLE_DETACHED_WORKTREE_WITH_READONLY_TRACKED_SOURCES"
+
+    try:
+        _, stopped = _execute_pending(exec_root, evidence, config, meta, state, "command", config["commands"])
+        if not stopped:
+            _execute_pending(exec_root, evidence, config, meta, state, "test", config["test_commands"])
+    finally:
+        if wt_dir and wt_dir.exists():
+            for item in wt_dir.rglob("*"):
+                if item.is_file():
+                    try:
+                        os.chmod(item, 0o644)
+                    except OSError:
+                        pass
+            subprocess.run(["git", "worktree", "remove", "--force", str(wt_dir)], cwd=root, capture_output=True)
+
     return _finalize(root, evidence, config, meta, state)
 
 

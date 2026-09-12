@@ -93,6 +93,10 @@ APPROVED_STAGE_POLICIES: dict[str, dict[str, str]] = {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
         "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
     },
+    "STAGE_10D_R17A_R4_R2": {
+        "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
+        "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
+    },
     "STAGE_10D_R17A_DRY_RUN": {
         "policy_path": "harness_policies/stage-10d-r17a-recency-policy.json",
         "policy_sha256": "d5a2972360486dade1f5197460fb367417b11a825a9e32a58c8a2d87fedcbbd9",
