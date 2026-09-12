@@ -601,9 +601,12 @@ def evaluate_historical_ce(
             "role": str(r["role"]),
             "prediction_period": str(p_id),
             "lock_time": lock_str,
-            "modeling_row_key": f"{p_id}::{r['team']}::{r['player']}::{r['role']}",
+            "modeling_row_key": f"{p_id}::{r['team']}::{r['player']}::{r['role']}::{lock_str}",
             "fold_id": fold_id,
             "lineage_status": status,
+            "schedule_status": status,
+            "result_fallback": 0,
+            "synthetic_fallback": 0,
             "reason": "Authentic pre-lock schedule file with verifiable origin SHA-256 and pre-lock capture timestamp does not exist for historical period in repository" if not is_valid else "AUTHENTIC_PRELOCK_VERIFIED",
         })
 

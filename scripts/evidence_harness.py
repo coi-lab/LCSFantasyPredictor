@@ -446,6 +446,7 @@ def resume_stage(root: Path, evidence: Path) -> tuple[Path, int]:
 
     try:
         _, stopped = _execute_pending(exec_root, evidence, config, meta, state, "command", config["commands"])
+        json_dump(evidence / "protected-paths.json", {"before": state["protected_before"], "after": snapshot_paths(root, config["protected_paths"])})
         if not stopped:
             _execute_pending(exec_root, evidence, config, meta, state, "test", config["test_commands"])
     finally:
