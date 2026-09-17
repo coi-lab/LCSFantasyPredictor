@@ -283,6 +283,82 @@ class TestR4R2UnitSemantic(unittest.TestCase):
         self.assertFalse(ok)
         self.assertIn("POST_LOCK_SCHEDULE_SOURCE", msg)
 
+    def test_15_historical_fixture_csv_authenticates_after_lock_and_is_reciprocal(self):
+        """Class-B fixture identities are valid even when the retrieval is after a historical lock."""
+        schedule_path = ROOT / "data/reference/historical_schedules/lcs_2024_2025_r17a_weekly_schedule.csv"
+        expected_sha = "4b6f67dd54ce3ebdef6b31bcd040439926640ede8313e58ccc208ac32a9cbde4"
+        ok, msg, payload = authenticate_schedule_source(
+            schedule_path, expected_sha, lock_timestamp="2020-01-01T00:00:00Z",
+            expected_source_type="IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+            prediction_period="2024-01-15 00:00:00+00:00", repo_root=ROOT,
+        )
+        self.assertTrue(ok, msg)
+        self.assertEqual(payload["provenance_class"], "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE")
+        self.assertGreater(payload["matchups_count"], 0)
+        for team, opponents in payload["team_opponents"].items():
+            self.assertNotIn(team, opponents)
+            for opponent in opponents:
+                self.assertIn(team, payload["team_opponents"][opponent])
+
+    def test_16_historical_fixture_csv_rejects_bad_sha_and_unknown_period(self):
+        schedule_path = ROOT / "data/reference/historical_schedules/lcs_2024_2025_r17a_weekly_schedule.csv"
+        common = {
+            "expected_source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+            "prediction_period": "2024-01-15 00:00:00+00:00", "repo_root": ROOT,
+        }
+        ok, msg, _ = authenticate_schedule_source(schedule_path, "0" * 64, **common)
+        self.assertFalse(ok)
+        self.assertIn("SCHEDULE_SOURCE_SHA256_MISMATCH", msg)
+        ok, msg, _ = authenticate_schedule_source(
+            schedule_path, sha256_file(schedule_path), expected_source_type="IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+            prediction_period="2023-01-01 00:00:00+00:00", repo_root=ROOT,
+        )
+        self.assertFalse(ok)
+        self.assertIn("HISTORICAL_SCHEDULE_UNKNOWN_PREDICTION_PERIOD", msg)
+
+    def test_17_historical_fixture_csv_is_period_isolated_and_rejects_bad_declarations(self):
+        schedule_path = ROOT / "data/reference/historical_schedules/lcs_2024_2025_r17a_weekly_schedule.csv"
+        source = pd.read_csv(schedule_path)
+        scratch_dir = ROOT / ".agent-runs" / "test_scratch"
+        scratch_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            isolated = scratch_dir / "historical_fixture.csv"
+            source.to_csv(isolated, index=False)
+            sha = sha256_file(isolated)
+            with patch("scripts.schedule_authenticator.APPROVED_DATA_ROOTS", [scratch_dir]):
+                ok, msg, payload = authenticate_schedule_source(
+                    isolated, sha, expected_source_type="IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+                    prediction_period="2025-01-20 00:00:00+00:00", repo_root=ROOT,
+                )
+                self.assertTrue(ok, msg)
+                self.assertEqual(payload["prediction_period"], "2025-01-20T00:00:00+00:00")
+
+                malformed = source.copy()
+                malformed.loc[0, "team_b_id"] = malformed.loc[0, "team_a_id"]
+                malformed.to_csv(isolated, index=False)
+                ok, msg, _ = authenticate_schedule_source(
+                    isolated, sha256_file(isolated), expected_source_type="IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+                    prediction_period="2024-01-15 00:00:00+00:00", repo_root=ROOT,
+                )
+                self.assertFalse(ok)
+                self.assertIn("SELF_OPPONENT_DETECTED", msg)
+
+                conflicting = source.copy()
+                duplicate = conflicting.iloc[[0]].copy()
+                duplicate.loc[:, "fixture_id"] = "fixture:conflicting_duplicate"
+                duplicate.loc[:, "best_of"] = 99
+                conflicting = pd.concat([conflicting, duplicate], ignore_index=True)
+                conflicting.to_csv(isolated, index=False)
+                ok, msg, _ = authenticate_schedule_source(
+                    isolated, sha256_file(isolated), expected_source_type="IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+                    prediction_period="2024-01-15 00:00:00+00:00", repo_root=ROOT,
+                )
+                self.assertFalse(ok)
+                self.assertIn("CONFLICTING_DUPLICATE_FIXTURE_DECLARATION", msg)
+        finally:
+            if isolated.exists():
+                isolated.unlink()
+
     def test_23_recency_5_baseline_feature_parity(self):
         """Verify RECENCY_5 achieves exact feature parity with research baseline."""
         p_df = self.raw[self.raw["player"].eq("Jensen")].sort_values("date")

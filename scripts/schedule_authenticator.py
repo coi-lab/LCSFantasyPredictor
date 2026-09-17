@@ -12,6 +12,7 @@ Stage 10D-R17A-R4-R2:
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -28,6 +29,13 @@ APPROVED_DATA_ROOTS = [
 
 AUTHENTICATION_VERSION = "R17A_R4_R3_AUTH_V1"
 
+HISTORICAL_FIXTURE_SOURCE_TYPE = "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE"
+HISTORICAL_FIXTURE_PROVENANCE = "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE"
+HISTORICAL_FIXTURE_COLUMNS = {
+    "prediction_period", "season", "scheduled_start_utc", "team_a_id", "team_b_id",
+    "best_of", "source_type", "provenance_class", "fixed_before_prediction", "fixture_id",
+}
+
 
 def load_authenticated_schedule(
     source_path: Path | str,
@@ -35,6 +43,7 @@ def load_authenticated_schedule(
     lock_timestamp: Optional[str] = None,
     expected_source_type: str = "OFFICIAL_MARKET_SNAPSHOT",
     repo_root: Optional[Path] = None,
+    prediction_period: Optional[str] = None,
 ) -> Tuple[bool, str, Dict[str, Any]]:
     """Strictly authenticate schedule source file bytes and reciprocal matchup structure."""
     if not source_path:
@@ -70,7 +79,86 @@ def load_authenticated_schedule(
     if not declared_sha256 or actual_sha256.lower() != declared_sha256.lower():
         return False, f"SCHEDULE_SOURCE_SHA256_MISMATCH: actual {actual_sha256} != declared {declared_sha256}", {}
 
-    # 4. JSON parsing
+    # 4. Historical Class-B fixture timelines are CSV sources.  Their fixture
+    # identities are immutable pre-known facts, so a later retrieval timestamp
+    # is intentionally not subjected to the live snapshot capture-time rule.
+    if expected_source_type == HISTORICAL_FIXTURE_SOURCE_TYPE:
+        if not prediction_period:
+            return False, "HISTORICAL_SCHEDULE_MISSING_PREDICTION_PERIOD", {}
+        try:
+            timeline = pd.read_csv(io.BytesIO(raw_bytes))
+        except Exception as exc:
+            return False, f"HISTORICAL_SCHEDULE_MALFORMED_CSV: {exc}", {}
+
+        missing_columns = sorted(HISTORICAL_FIXTURE_COLUMNS - set(timeline.columns))
+        if missing_columns:
+            return False, f"HISTORICAL_SCHEDULE_MISSING_COLUMNS: {missing_columns}", {}
+        if timeline.empty:
+            return False, "HISTORICAL_SCHEDULE_EMPTY", {}
+        if not timeline["provenance_class"].eq(HISTORICAL_FIXTURE_PROVENANCE).all():
+            return False, "HISTORICAL_SCHEDULE_INVALID_PROVENANCE_CLASS", {}
+
+        try:
+            requested_period = pd.to_datetime(prediction_period, utc=True)
+            timeline_periods = pd.to_datetime(timeline["prediction_period"], utc=True)
+        except Exception as exc:
+            return False, f"HISTORICAL_SCHEDULE_INVALID_PREDICTION_PERIOD: {exc}", {}
+        selected = timeline.loc[timeline_periods.eq(requested_period)].copy()
+        if selected.empty:
+            return False, f"HISTORICAL_SCHEDULE_UNKNOWN_PREDICTION_PERIOD: {prediction_period}", {}
+
+        from fantasy_prediction.canonical_pit import TEAM_NORMALIZATION_MAP
+        canonical_ids = {team_id for team_id, _ in TEAM_NORMALIZATION_MAP.values()}
+        # Historical R17A Class-B schedules can legitimately contain LTA
+        # cross-conference and promotion-event teams.  These deterministic IDs
+        # are schedule identities only; they do not create player identities or
+        # manufacture opponent performance history.
+        canonical_ids.update({
+            "team:lyon", "team:disguised", "team:red_canids", "team:pain_gaming",
+            "team:vivo_keyd_stars", "team:conviction", "team:estral_esports",
+            "team:luminosity_gaming", "team:sdm_tigres",
+        })
+        for column in ("team_a_id", "team_b_id"):
+            invalid = sorted(set(selected[column].astype(str)) - canonical_ids)
+            if invalid:
+                return False, f"HISTORICAL_SCHEDULE_UNRECOGNIZED_TEAM_IDENTITY: {invalid}", {}
+        if selected["team_a_id"].eq(selected["team_b_id"]).any():
+            return False, "SELF_OPPONENT_DETECTED", {}
+        if selected["fixture_id"].astype(str).duplicated().any():
+            return False, "HISTORICAL_SCHEDULE_DUPLICATE_FIXTURE_ID", {}
+        fixture_keys = selected.apply(
+            lambda row: (str(row["scheduled_start_utc"]), *sorted((str(row["team_a_id"]), str(row["team_b_id"])))), axis=1,
+        )
+        if fixture_keys.duplicated().any():
+            return False, "CONFLICTING_DUPLICATE_FIXTURE_DECLARATION", {}
+        fixed_values = selected["fixed_before_prediction"].astype(str).str.lower()
+        if not fixed_values.isin({"true", "1"}).all():
+            return False, "HISTORICAL_SCHEDULE_NOT_FIXED_BEFORE_PREDICTION", {}
+
+        team_opponents: Dict[str, Set[str]] = {}
+        canonical_matchups: List[Dict[str, Any]] = []
+        for row in selected.sort_values(["scheduled_start_utc", "fixture_id"]).to_dict("records"):
+            team_a, team_b = str(row["team_a_id"]), str(row["team_b_id"])
+            team_opponents.setdefault(team_a, set()).add(team_b)
+            team_opponents.setdefault(team_b, set()).add(team_a)
+            canonical_matchups.append({"team_a_id": team_a, "team_b_id": team_b, "best_of": int(row["best_of"])})
+
+        return True, "AUTHENTICATED_IMMUTABLE_HISTORICAL_FIXTURE", {
+            "authenticated": True,
+            "authentication_version": AUTHENTICATION_VERSION,
+            "source_type": expected_source_type,
+            "provenance_class": HISTORICAL_FIXTURE_PROVENANCE,
+            "source_path": path_obj.relative_to(root).as_posix(),
+            "source_sha256": actual_sha256,
+            "prediction_period": requested_period.isoformat(),
+            "schedule_information_timestamp": None,
+            "fixed_before_prediction": True,
+            "matchups": canonical_matchups,
+            "matchups_count": len(canonical_matchups),
+            "team_opponents": {team: sorted(opponents) for team, opponents in sorted(team_opponents.items())},
+        }
+
+    # 5. JSON parsing
     try:
         raw_json = json.loads(raw_bytes.decode("utf-8"))
     except Exception as exc:

@@ -1,0 +1,118 @@
+{
+  "dataset": "LCS/LTA North 2024-2025 canonical historical fixture timeline",
+  "retrieval_date_utc": "2026-09-17",
+  "scientific_semantics": "Scheduled matchups are pre-known exogenous facts. No target-period outcome or player-stat field is included.",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "schedule_change_assumption": "ASSUMED_NONE_PER_PROJECT_RULE",
+  "fixture_rows": 201,
+  "prediction_periods": 49,
+  "periods_by_season": {
+    "2024": 21,
+    "2025": 28
+  },
+  "sources": [
+    {
+      "name": "Leaguepedia LCS 2024 Spring Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LCS/2024_Season/Spring_Season",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LCS 2024 Spring Playoffs Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LCS/2024_Season/Spring_Playoffs",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LCS 2024 Summer Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LCS/2024_Season/Summer_Season",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LCS 2024 Championship Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LCS/2024_Season/Championship",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LTA North 2025 Split 1 Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LTA_North/2025_Season/Split_1",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LTA North 2025 Split 2 Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LTA_North/2025_Season/Split_2",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LTA North 2025 Split 2 Playoffs Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LTA_North/2025_Season/Split_2_Playoffs",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LTA North 2025 Split 3 Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LTA_North/2025_Season/Split_3",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LTA 2025 Split 1 Playoffs Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LTA/2025_Season/Split_1_Playoffs",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LTA 2025 Championship Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LTA/2025_Season/Regional_Championship",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    },
+    {
+      "name": "Leaguepedia LTA North 2026 Promotion Match Schedule",
+      "url": "https://lol.fandom.com/wiki/LTA_North/2026_Season/Promotion",
+      "source_type": "LEAGUEPEDIA_MATCH_SCHEDULE"
+    }
+  ],
+  "artifacts": {
+    "lcs_2024_2025_fixture_timeline.csv": {
+      "sha256": "69f7d148380a728e44f60c60da2e70bd2a73f9b9b91611baa0c105bbc63d8056",
+      "rows": 201
+    },
+    "lcs_2024_2025_team_period_opponents.csv": {
+      "sha256": "10990ae187ab251026e3a302b28d588497c5e1e06e99d709f515b7041ad22ac8",
+      "rows": 290
+    },
+    "lcs_2024_2025_period_mapping_audit.csv": {
+      "sha256": "3f08cf981cc564d35090106f2765c2c84c23d20003f156fcbe8d6f9cf695e429",
+      "rows": 47
+    }
+  },
+  "important_note": "The remote page byte hashes are not represented here. The generated canonical CSV is hash-bound by this manifest. If the repository authenticator requires raw-source byte preservation, save page/API snapshots separately before treating this as formal promotion-grade provenance.",
+  "r17a_artifacts": {
+    "lcs_2024_2025_r17a_weekly_schedule.csv": {
+      "sha256": "4b6f67dd54ce3ebdef6b31bcd040439926640ede8313e58ccc208ac32a9cbde4",
+      "rows": 201
+    },
+    "lcs_2024_2025_r17a_weekly_opponents.csv": {
+      "sha256": "a0f689697fe5ac6d623a349e91b1eae4ca2ed957b6cf68565ec8a228f07f6c15",
+      "rows": 292
+    },
+    "lcs_2024_2025_r17a_schedule_bundle.json": {
+      "sha256": "4518973e8d450949a77df8e13d7bedad746d0ffa59813cbf7858ce983ef33109",
+      "prediction_periods": 49
+    },
+    "r17a_weekly_json/": {
+      "files": 49
+    }
+  },
+  "r17a_prediction_period_semantics": "Calendar week starting Monday UTC, matching raw.date.dt.to_period('W-SUN').dt.start_time in build_s30_v2_raw_modeling_table.py",
+  "r17a_r5_remediation": {
+    "new_fixture_rows": 19,
+    "missing_prediction_periods_before": [
+      "2025-02-17 00:00:00+00:00",
+      "2025-08-25 00:00:00+00:00",
+      "2025-09-01 00:00:00+00:00",
+      "2025-09-08 00:00:00+00:00",
+      "2025-09-15 00:00:00+00:00",
+      "2025-09-22 00:00:00+00:00",
+      "2025-09-29 00:00:00+00:00",
+      "2025-10-06 00:00:00+00:00"
+    ],
+    "fixture_identity_source": "schedule-oriented Leaguepedia Match Schedule pages only",
+    "result_derived_fixture_rows": 0
+  }
+}

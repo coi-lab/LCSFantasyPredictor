@@ -1,0 +1,36 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-09-29 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:91f0f693d24f1fd61b98",
+      "scheduled_start_utc": "2025-10-04T20:00:00Z",
+      "team_a_id": "team:conviction",
+      "team_b_id": "team:estral_esports",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:27f607d8e2632740b64e",
+      "scheduled_start_utc": "2025-10-05T20:00:00Z",
+      "team_a_id": "team:luminosity_gaming",
+      "team_b_id": "team:sdm_tigres",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:conviction": [
+      "team:estral_esports"
+    ],
+    "team:estral_esports": [
+      "team:conviction"
+    ],
+    "team:luminosity_gaming": [
+      "team:sdm_tigres"
+    ],
+    "team:sdm_tigres": [
+      "team:luminosity_gaming"
+    ]
+  }
+}

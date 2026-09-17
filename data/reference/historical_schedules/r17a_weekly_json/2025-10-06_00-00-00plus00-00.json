@@ -1,0 +1,45 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-10-06 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:9156efa86960235c7ca9",
+      "scheduled_start_utc": "2025-10-07T20:00:00Z",
+      "team_a_id": "team:disguised",
+      "team_b_id": "team:estral_esports",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:bfb3027329cb5d62b438",
+      "scheduled_start_utc": "2025-10-08T20:00:00Z",
+      "team_a_id": "team:disguised",
+      "team_b_id": "team:luminosity_gaming",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:a201f63e50e9c59e840a",
+      "scheduled_start_utc": "2025-10-09T20:00:00Z",
+      "team_a_id": "team:estral_esports",
+      "team_b_id": "team:sdm_tigres",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:disguised": [
+      "team:estral_esports",
+      "team:luminosity_gaming"
+    ],
+    "team:estral_esports": [
+      "team:disguised",
+      "team:sdm_tigres"
+    ],
+    "team:luminosity_gaming": [
+      "team:disguised"
+    ],
+    "team:sdm_tigres": [
+      "team:estral_esports"
+    ]
+  }
+}

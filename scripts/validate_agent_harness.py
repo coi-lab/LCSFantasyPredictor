@@ -125,6 +125,10 @@ R5G_R1_CODEX_AGENTS = {
 R5G_R1_R1_CODEX_AGENTS = {
     "r5g_r1_r1_direct_codex": ("gpt-5.6-terra", "medium", "workspace-write"),
 }
+R17A_R5_CODEX_AGENTS = {
+    "r17a_r5_schedule_worker": ("gpt-5.6-terra", "medium", "workspace-write"),
+    "r17a_r5_schedule_validator": ("gpt-5.6-terra", "low", "read-only"),
+}
 R3_EXCEPTION_PATH = Path(".codex/policy-exceptions/stage-10d-r3.toml")
 R3B_R1_EXCEPTION_PATH = Path(
     ".codex/policy-exceptions/stage-10d-r3b-r1.toml"
@@ -164,6 +168,9 @@ R5G_R1_EXCEPTION_PATH = Path(
 R5G_R1_R1_EXCEPTION_PATH = Path(
     ".codex/policy-exceptions/stage-10d-r5g-r1-r1.toml"
 )
+R17A_R5_EXCEPTION_PATH = Path(
+    ".codex/policy-exceptions/stage-10d-r17a-r5.toml"
+)
 R3_EXCEPTION_KEYS = {
     "exception_id",
     "authorized_by_user",
@@ -187,7 +194,28 @@ R3B_R1_READ_ONLY_AGENTS = sorted(
     name for name, (_, _, sandbox) in R3B_R1_CODEX_AGENTS.items()
     if sandbox == "read-only"
 )
+R17A_R5_READ_ONLY_AGENTS = sorted(
+    name for name, (_, _, sandbox) in R17A_R5_CODEX_AGENTS.items()
+    if sandbox == "read-only"
+)
 POLICY_EXCEPTION_SPECS = {
+    R17A_R5_EXCEPTION_PATH: {
+        "agents": R17A_R5_CODEX_AGENTS,
+        "exact_values": (
+            ("exception_id", "stage-10d-r17a-r5-historical-schedule-integration"),
+            ("authorized_by_user", True),
+            ("allowed_stage", "STAGE_10D_R17A_R5_HISTORICAL_SCHEDULE_INTEGRATION_R1"),
+            ("max_concurrent_threads_per_session", 1),
+            ("write_capable_agents", ["r17a_r5_schedule_worker"]),
+            ("read_only_agents", R17A_R5_READ_ONLY_AGENTS),
+            ("recursive_delegation_allowed", False),
+            ("allow_commit", False),
+            ("allow_push", False),
+            ("allow_reset", False),
+            ("allow_clean", False),
+            ("allow_rebase", False),
+        ),
+    },
     R3_EXCEPTION_PATH: {
         "agents": R3_CODEX_AGENTS,
         "exact_values": (

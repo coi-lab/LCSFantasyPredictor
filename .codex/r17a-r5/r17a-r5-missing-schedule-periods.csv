@@ -1,0 +1,9 @@
+prediction_period,season,modeling_row_count,unique_team_count,teams,earliest_target_date,latest_target_date
+2025-02-17 00:00:00+00:00,2025,20,4,100 Thieves | Cloud9 | FlyQuest | Team Liquid,2025-02-22T19:00:00Z,2025-02-23T19:00:00Z
+2025-08-25 00:00:00+00:00,2025,31,6,100 Thieves | Cloud9 | Disguised | FlyQuest | Shopify Rebellion | Team Liquid,2025-08-29T20:00:00Z,2025-08-31T20:00:00Z
+2025-09-01 00:00:00+00:00,2025,20,4,100 Thieves | Cloud9 | FlyQuest | Shopify Rebellion,2025-09-06T20:00:00Z,2025-09-07T20:00:00Z
+2025-09-08 00:00:00+00:00,2025,20,4,100 Thieves | RED Canids | Shopify Rebellion | paiN Gaming,2025-09-13T20:00:00Z,2025-09-14T20:00:00Z
+2025-09-15 00:00:00+00:00,2025,20,4,100 Thieves | FlyQuest | RED Canids | Vivo Keyd Stars,2025-09-20T20:00:00Z,2025-09-21T20:00:00Z
+2025-09-22 00:00:00+00:00,2025,15,3,100 Thieves | FlyQuest | Vivo Keyd Stars,2025-09-27T20:00:00Z,2025-09-28T20:00:00Z
+2025-09-29 00:00:00+00:00,2025,24,4,Conviction | Estral Esports | Luminosity Gaming | SDM Tigres,2025-10-04T20:00:00Z,2025-10-05T20:00:00Z
+2025-10-06 00:00:00+00:00,2025,21,4,Disguised | Estral Esports | Luminosity Gaming | SDM Tigres,2025-10-07T20:00:00Z,2025-10-09T20:00:00Z

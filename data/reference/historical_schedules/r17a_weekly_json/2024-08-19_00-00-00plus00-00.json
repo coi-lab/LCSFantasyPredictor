@@ -1,0 +1,49 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2024-08-19 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:5d1cedf0b7dad78b613c",
+      "scheduled_start_utc": "2024-08-23T20:00:00Z",
+      "team_a_id": "team:dignitas",
+      "team_b_id": "team:nrg",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:ef10da17426efb120d9f",
+      "scheduled_start_utc": "2024-08-24T20:00:00Z",
+      "team_a_id": "team:team_liquid",
+      "team_b_id": "team:100_thieves",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:1ad48b3489c5c03e12b6",
+      "scheduled_start_utc": "2024-08-25T20:00:00Z",
+      "team_a_id": "team:cloud9",
+      "team_b_id": "team:flyquest",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:team_liquid"
+    ],
+    "team:cloud9": [
+      "team:flyquest"
+    ],
+    "team:dignitas": [
+      "team:nrg"
+    ],
+    "team:flyquest": [
+      "team:cloud9"
+    ],
+    "team:nrg": [
+      "team:dignitas"
+    ],
+    "team:team_liquid": [
+      "team:100_thieves"
+    ]
+  }
+}

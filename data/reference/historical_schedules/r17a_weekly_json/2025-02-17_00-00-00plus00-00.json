@@ -1,0 +1,45 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-02-17 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:3af992917685fdcb6fca",
+      "scheduled_start_utc": "2025-02-22T19:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:flyquest",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:06b728d0cb3ed26e83d7",
+      "scheduled_start_utc": "2025-02-22T22:00:00Z",
+      "team_a_id": "team:team_liquid",
+      "team_b_id": "team:cloud9",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:43ea7fc6c554007fb93a",
+      "scheduled_start_utc": "2025-02-23T19:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:team_liquid",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:flyquest",
+      "team:team_liquid"
+    ],
+    "team:cloud9": [
+      "team:team_liquid"
+    ],
+    "team:flyquest": [
+      "team:100_thieves"
+    ],
+    "team:team_liquid": [
+      "team:100_thieves",
+      "team:cloud9"
+    ]
+  }
+}

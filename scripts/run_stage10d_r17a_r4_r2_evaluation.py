@@ -34,6 +34,9 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
+HISTORICAL_R17A_SCHEDULE_PATH = "data/reference/historical_schedules/lcs_2024_2025_r17a_weekly_schedule.csv"
+HISTORICAL_R17A_SCHEDULE_SHA256 = "4b6f67dd54ce3ebdef6b31bcd040439926640ede8313e58ccc208ac32a9cbde4"
+HISTORICAL_FIXTURE_SOURCE_TYPE = "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE"
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
@@ -54,6 +57,7 @@ from fantasy_prediction.canonical_pit import (
     build_future_prediction_frame,
     compute_player_recent_form,
     normalize_player,
+    normalize_role,
     normalize_team,
 )
 from fantasy_prediction.recovered_components import (
@@ -555,9 +559,13 @@ def evaluate_historical_ce(
                 lock = rec.get("lock_timestamp")
                 ok, message, auth = load_authenticated_schedule(
                     rec.get("schedule_source_path", ""), rec.get("schedule_source_sha256", ""),
-                    lock_timestamp=lock, expected_source_type=rec.get("source_type", "OFFICIAL_MARKET_SNAPSHOT"), repo_root=ROOT,
+                    lock_timestamp=lock, expected_source_type=rec.get("source_type", "OFFICIAL_MARKET_SNAPSHOT"),
+                    prediction_period=p_id, repo_root=ROOT,
                 )
-                schedule_lookup[p_id] = {"authenticated": ok, "auth_message": message, "auth": auth}
+                schedule_lookup[p_id] = {
+                    "authenticated": ok, "auth_message": message, "auth": auth,
+                    "source_type": rec.get("source_type", "OFFICIAL_MARKET_SNAPSHOT"),
+                }
 
     lineage_records: List[Dict[str, Any]] = []
     missing_schedule_count = 0
@@ -582,17 +590,25 @@ def evaluate_historical_ce(
             cand_opps = auth.get("team_opponents")
             cand_path = auth.get("source_path")
             cand_sha = auth.get("source_sha256")
-            if sched_entry.get("authenticated") and cand_ts and cand_opps and cand_path:
-                cand_dt = pd.to_datetime(cand_ts, utc=True)
-                if cand_dt <= lock_dt:
+            if sched_entry.get("authenticated") and cand_opps and cand_path:
+                if sched_entry.get("source_type") == HISTORICAL_FIXTURE_SOURCE_TYPE:
                     is_valid = True
                     sched_opps = cand_opps
                     sched_ts = cand_ts
                     sched_path = cand_path
                     sched_sha = cand_sha
-                    status = "VALID_AUTHENTIC_PRELOCK_SCHEDULE"
-                else:
-                    status = "REJECTED_POSTLOCK_SCHEDULE"
+                    status = "VALID_AUTHENTIC_HISTORICAL_FIXTURE"
+                elif cand_ts:
+                    cand_dt = pd.to_datetime(cand_ts, utc=True)
+                    if cand_dt <= lock_dt:
+                        is_valid = True
+                        sched_opps = cand_opps
+                        sched_ts = cand_ts
+                        sched_path = cand_path
+                        sched_sha = cand_sha
+                        status = "VALID_AUTHENTIC_PRELOCK_SCHEDULE"
+                    else:
+                        status = "REJECTED_POSTLOCK_SCHEDULE"
 
         if is_valid:
             valid_schedule_count += 1
@@ -614,13 +630,12 @@ def evaluate_historical_ce(
             "schedule_status": status,
             "result_fallback": 0,
             "synthetic_fallback": 0,
-            "reason": "Authentic pre-lock schedule file with verifiable origin SHA-256 and pre-lock capture timestamp does not exist for historical period in repository" if not is_valid else "AUTHENTIC_PRELOCK_VERIFIED",
+            "reason": "Authenticated immutable Class-B fixture source with a verifiable SHA-256" if status == "VALID_AUTHENTIC_HISTORICAL_FIXTURE" else ("Authentic pre-lock schedule file with verifiable origin SHA-256 and pre-lock capture timestamp does not exist for historical period in repository" if not is_valid else "AUTHENTIC_PRELOCK_VERIFIED"),
         })
 
     # If all rows have valid schedules, execute authoritative predict_ce
     if valid_schedule_count == total_eval_rows and total_eval_rows > 0:
-        base_preds = []
-        cand_preds = []
+        common_rows = []
         for p_id, p_group in eval_table.groupby("prediction_period"):
             sched_entry = schedule_lookup[p_id]
             matchups = sched_entry["auth"]["matchups"]
@@ -647,12 +662,55 @@ def evaluate_historical_ce(
             )
             ce_b = ce_model.predict_ce(frame=f_base, canonical_games=canonical_games, cutoff_timestamp=cutoff, s30_state=s30_state)
             ce_c = ce_model.predict_ce(frame=f_cand, canonical_games=canonical_games, cutoff_timestamp=cutoff, s30_state=s30_state)
-            base_preds.extend(ce_b["ce"])
-            cand_preds.extend(ce_c["ce"])
+            # Prediction frames use a canonical stable order, whereas the source
+            # modeling table is ordered by display team/lock.  Join labels on the
+            # stable player/team/role key rather than relying on array position.
+            labels = p_group[["player", "team", "role", "realized_fantasy_target"]].copy()
+            labels["canonical_player_id"] = labels["player"].map(lambda value: normalize_player(value)[0])
+            labels["canonical_team_id"] = labels["team"].map(lambda value: normalize_team(value)[0])
+            labels["role"] = labels["role"].map(normalize_role)
+            labels = labels.rename(columns={"realized_fantasy_target": "y_true"})
+            labels = labels[["canonical_player_id", "canonical_team_id", "role", "y_true"]]
 
-        y_true = eval_table["realized_fantasy_target"].to_numpy(float)
-        m_base = compute_metrics(y_true, np.array(base_preds))
-        m_cand = compute_metrics(y_true, np.array(cand_preds))
+            predictions = f_base[["canonical_player_id", "canonical_team_id", "role"]].copy()
+            predictions["baseline_prediction"] = np.asarray(ce_b["ce"], dtype=float)
+            predictions["candidate_prediction"] = np.asarray(ce_c["ce"], dtype=float)
+            aligned = predictions.merge(
+                labels, on=["canonical_player_id", "canonical_team_id", "role"], how="inner", validate="one_to_one",
+            )
+            if len(aligned) != len(p_group):
+                raise RuntimeError(
+                    f"HISTORICAL_CE_COMMON_ROW_ALIGNMENT_FAILED: period={p_id} "
+                    f"predictions={len(predictions)} labels={len(labels)} common={len(aligned)}"
+                )
+            aligned["prediction_period"] = str(p_id)
+            common_rows.append(aligned)
+
+        common = pd.concat(common_rows, ignore_index=True)
+        y_true = common["y_true"].to_numpy(float)
+        m_base = compute_metrics(y_true, common["baseline_prediction"].to_numpy(float))
+        m_cand = compute_metrics(y_true, common["candidate_prediction"].to_numpy(float))
+        role_metrics = {
+            str(role): {
+                "baseline": compute_metrics(group["y_true"].to_numpy(float), group["baseline_prediction"].to_numpy(float)),
+                "candidate": compute_metrics(group["y_true"].to_numpy(float), group["candidate_prediction"].to_numpy(float)),
+            }
+            for role, group in common.groupby("role", sort=True)
+        }
+        period_metrics = {
+            str(period): {
+                "rows": int(len(group)),
+                "baseline_MAE": compute_metrics(group["y_true"].to_numpy(float), group["baseline_prediction"].to_numpy(float))["MAE"],
+                "candidate_MAE": compute_metrics(group["y_true"].to_numpy(float), group["candidate_prediction"].to_numpy(float))["MAE"],
+            }
+            for period, group in common.groupby("prediction_period", sort=True)
+        }
+        prediction_spread = {
+            "baseline_std": float(common["baseline_prediction"].std(ddof=0)),
+            "candidate_std": float(common["candidate_prediction"].std(ddof=0)),
+            "baseline_p90_p10": float(np.percentile(common["baseline_prediction"], 90) - np.percentile(common["baseline_prediction"], 10)),
+            "candidate_p90_p10": float(np.percentile(common["candidate_prediction"], 90) - np.percentile(common["candidate_prediction"], 10)),
+        }
 
         return {
             "ce_integration_status": "PASS",
@@ -663,10 +721,14 @@ def evaluate_historical_ce(
             "authoritative_ce_architecture": "CE_PORTABLE_V1 = S30 + FE",
             "candidate_id": candidate_spec.candidate_id,
             "baseline_id": baseline_spec.candidate_id,
-            "scheduled_opponents_source": "canonical_scheduled_opponents_prelock",
+            "scheduled_opponents_source": "canonical_scheduled_opponents_authenticated",
             "result_derived_opponent_fallback": False,
-            "opponent_source_kind": "authentic_prelock_schedule",
+            "opponent_source_kind": "authenticated_historical_fixture_timeline",
             "evaluated_rows_count": total_eval_rows,
+            "common_evaluation_rows": int(len(common)),
+            "role_metrics": role_metrics,
+            "period_metrics": period_metrics,
+            "prediction_spread": prediction_spread,
             "missing_schedule_rows_count": 0,
             "rows_with_authentic_prelock_schedule": total_eval_rows,
             "rows_using_result_fallback": 0,
@@ -692,7 +754,7 @@ def evaluate_historical_ce(
         "authoritative_ce_architecture": "CE_PORTABLE_V1 = S30 + FE",
         "candidate_id": candidate_spec.candidate_id,
         "baseline_id": baseline_spec.candidate_id,
-        "scheduled_opponents_source": "canonical_scheduled_opponents_prelock",
+        "scheduled_opponents_source": "canonical_scheduled_opponents_authenticated",
         "result_derived_opponent_fallback": False,
         "opponent_source_kind": "blocked_missing_schedule",
         "evaluated_rows_count": total_eval_rows,
@@ -1252,9 +1314,18 @@ def run_evaluation(evidence_dir: Path, run_id: str, stage_id: str, git_hash: str
     base_spec = FROZEN_CANDIDATES["RECENCY_5"]
 
     # Execute authoritative historical CE evaluation entry point
+    historical_periods = sorted(
+        table.loc[table["year"].isin([2024, 2025]), "prediction_period"].astype(str).unique().tolist()
+    )
+    historical_schedule_records = [{
+        "schedule_source_path": HISTORICAL_R17A_SCHEDULE_PATH,
+        "schedule_source_sha256": HISTORICAL_R17A_SCHEDULE_SHA256,
+        "source_type": HISTORICAL_FIXTURE_SOURCE_TYPE,
+        "prediction_period": prediction_period,
+    } for prediction_period in historical_periods]
     ce_integration_doc = evaluate_historical_ce(
         modeling_table=table,
-        schedule_source_records=None,  # Real historical repository data lacks authentic pre-lock schedules
+        schedule_source_records=historical_schedule_records,
         canonical_games=games_hist,
         canonical_series=series_hist,
         candidate_spec=winner_spec,

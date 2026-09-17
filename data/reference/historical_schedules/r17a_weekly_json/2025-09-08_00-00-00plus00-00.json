@@ -1,0 +1,36 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-09-08 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:1b49fd8100f745abcd88",
+      "scheduled_start_utc": "2025-09-13T20:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:pain_gaming",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:c414e79d7478d81c8aeb",
+      "scheduled_start_utc": "2025-09-14T20:00:00Z",
+      "team_a_id": "team:red_canids",
+      "team_b_id": "team:shopify_rebellion",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:pain_gaming"
+    ],
+    "team:pain_gaming": [
+      "team:100_thieves"
+    ],
+    "team:red_canids": [
+      "team:shopify_rebellion"
+    ],
+    "team:shopify_rebellion": [
+      "team:red_canids"
+    ]
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2024-02-26 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:7d0797a87e67ad862429",
+      "scheduled_start_utc": "2024-03-02T21:00:00Z",
+      "team_a_id": "team:immortals",
+      "team_b_id": "team:shopify_rebellion",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:30a836b8fd85492648ac",
+      "scheduled_start_utc": "2024-03-02T22:00:00Z",
+      "team_a_id": "team:flyquest",
+      "team_b_id": "team:cloud9",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:696cf68f630d41e6692a",
+      "scheduled_start_utc": "2024-03-02T23:00:00Z",
+      "team_a_id": "team:team_liquid",
+      "team_b_id": "team:nrg",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:d9cec3f161be584f2cae",
+      "scheduled_start_utc": "2024-03-03T00:00:00Z",
+      "team_a_id": "team:dignitas",
+      "team_b_id": "team:100_thieves",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:6e4ba601cb8ea04abe5a",
+      "scheduled_start_utc": "2024-03-03T21:00:00Z",
+      "team_a_id": "team:nrg",
+      "team_b_id": "team:immortals",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:fa807c907b9f71e55914",
+      "scheduled_start_utc": "2024-03-03T22:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:flyquest",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:c3ecac0b476fbfb299ac",
+      "scheduled_start_utc": "2024-03-03T23:00:00Z",
+      "team_a_id": "team:dignitas",
+      "team_b_id": "team:shopify_rebellion",
+      "best_of": 1
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:dignitas",
+      "team:flyquest"
+    ],
+    "team:cloud9": [
+      "team:flyquest"
+    ],
+    "team:dignitas": [
+      "team:100_thieves",
+      "team:shopify_rebellion"
+    ],
+    "team:flyquest": [
+      "team:100_thieves",
+      "team:cloud9"
+    ],
+    "team:immortals": [
+      "team:nrg",
+      "team:shopify_rebellion"
+    ],
+    "team:nrg": [
+      "team:immortals",
+      "team:team_liquid"
+    ],
+    "team:shopify_rebellion": [
+      "team:dignitas",
+      "team:immortals"
+    ],
+    "team:team_liquid": [
+      "team:nrg"
+    ]
+  }
+}

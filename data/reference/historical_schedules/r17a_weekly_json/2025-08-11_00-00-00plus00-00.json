@@ -1,0 +1,36 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-08-11 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:0d784efde35d6987fbd9",
+      "scheduled_start_utc": "2025-08-16T20:00:00Z",
+      "team_a_id": "team:cloud9",
+      "team_b_id": "team:shopify_rebellion",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:db7e240512a45b4d3b14",
+      "scheduled_start_utc": "2025-08-17T20:00:00Z",
+      "team_a_id": "team:flyquest",
+      "team_b_id": "team:team_liquid",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:cloud9": [
+      "team:shopify_rebellion"
+    ],
+    "team:flyquest": [
+      "team:team_liquid"
+    ],
+    "team:shopify_rebellion": [
+      "team:cloud9"
+    ],
+    "team:team_liquid": [
+      "team:flyquest"
+    ]
+  }
+}

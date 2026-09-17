@@ -1,0 +1,49 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-08-25 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:5da8e1b9c459d3f8bcb9",
+      "scheduled_start_utc": "2025-08-29T20:00:00Z",
+      "team_a_id": "team:cloud9",
+      "team_b_id": "team:disguised",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:a7f06e56674e76bf6c31",
+      "scheduled_start_utc": "2025-08-30T20:00:00Z",
+      "team_a_id": "team:team_liquid",
+      "team_b_id": "team:100_thieves",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:970085700c2fc79a9dca",
+      "scheduled_start_utc": "2025-08-31T20:00:00Z",
+      "team_a_id": "team:shopify_rebellion",
+      "team_b_id": "team:flyquest",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:team_liquid"
+    ],
+    "team:cloud9": [
+      "team:disguised"
+    ],
+    "team:disguised": [
+      "team:cloud9"
+    ],
+    "team:flyquest": [
+      "team:shopify_rebellion"
+    ],
+    "team:shopify_rebellion": [
+      "team:flyquest"
+    ],
+    "team:team_liquid": [
+      "team:100_thieves"
+    ]
+  }
+}

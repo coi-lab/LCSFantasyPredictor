@@ -1,0 +1,49 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-01-20 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:b5cf9ba3736dd82cb69c",
+      "scheduled_start_utc": "2025-01-25T21:00:00Z",
+      "team_a_id": "team:flyquest",
+      "team_b_id": "team:shopify_rebellion",
+      "best_of": 3
+    },
+    {
+      "fixture_id": "fixture:d6aaaa30b7b54fa498ec",
+      "scheduled_start_utc": "2025-01-26T00:00:00Z",
+      "team_a_id": "team:lyon",
+      "team_b_id": "team:cloud9",
+      "best_of": 3
+    },
+    {
+      "fixture_id": "fixture:6a4d38f790f5ee1de09f",
+      "scheduled_start_utc": "2025-01-26T21:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:disguised",
+      "best_of": 3
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:disguised"
+    ],
+    "team:cloud9": [
+      "team:lyon"
+    ],
+    "team:disguised": [
+      "team:100_thieves"
+    ],
+    "team:flyquest": [
+      "team:shopify_rebellion"
+    ],
+    "team:lyon": [
+      "team:cloud9"
+    ],
+    "team:shopify_rebellion": [
+      "team:flyquest"
+    ]
+  }
+}

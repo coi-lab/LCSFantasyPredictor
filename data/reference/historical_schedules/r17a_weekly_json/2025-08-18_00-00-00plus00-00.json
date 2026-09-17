@@ -1,0 +1,36 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-08-18 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:71062206b23574957da0",
+      "scheduled_start_utc": "2025-08-23T20:00:00Z",
+      "team_a_id": "team:disguised",
+      "team_b_id": "team:dignitas",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:b58fe9a7cd98b018c30c",
+      "scheduled_start_utc": "2025-08-24T20:00:00Z",
+      "team_a_id": "team:lyon",
+      "team_b_id": "team:100_thieves",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:lyon"
+    ],
+    "team:dignitas": [
+      "team:disguised"
+    ],
+    "team:disguised": [
+      "team:dignitas"
+    ],
+    "team:lyon": [
+      "team:100_thieves"
+    ]
+  }
+}

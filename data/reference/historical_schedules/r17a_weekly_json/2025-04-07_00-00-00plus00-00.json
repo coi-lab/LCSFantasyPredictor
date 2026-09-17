@@ -1,0 +1,98 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-04-07 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:b7553877fd54288f65d7",
+      "scheduled_start_utc": "2025-04-12T20:00:00Z",
+      "team_a_id": "team:cloud9",
+      "team_b_id": "team:disguised",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:950ed7d33c63935a54c7",
+      "scheduled_start_utc": "2025-04-12T21:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:flyquest",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:4e788fe45101dfc561dd",
+      "scheduled_start_utc": "2025-04-12T22:00:00Z",
+      "team_a_id": "team:dignitas",
+      "team_b_id": "team:team_liquid",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:774cf4ea38d48fbab515",
+      "scheduled_start_utc": "2025-04-12T23:00:00Z",
+      "team_a_id": "team:shopify_rebellion",
+      "team_b_id": "team:lyon",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:373c9dd8b791494ccb26",
+      "scheduled_start_utc": "2025-04-13T20:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:disguised",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:78575463867f3a531577",
+      "scheduled_start_utc": "2025-04-13T21:00:00Z",
+      "team_a_id": "team:shopify_rebellion",
+      "team_b_id": "team:flyquest",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:78fd60469d06efbcac30",
+      "scheduled_start_utc": "2025-04-13T22:00:00Z",
+      "team_a_id": "team:team_liquid",
+      "team_b_id": "team:lyon",
+      "best_of": 1
+    },
+    {
+      "fixture_id": "fixture:99025ff11ae2a0076f89",
+      "scheduled_start_utc": "2025-04-13T23:00:00Z",
+      "team_a_id": "team:cloud9",
+      "team_b_id": "team:dignitas",
+      "best_of": 1
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:disguised",
+      "team:flyquest"
+    ],
+    "team:cloud9": [
+      "team:dignitas",
+      "team:disguised"
+    ],
+    "team:dignitas": [
+      "team:cloud9",
+      "team:team_liquid"
+    ],
+    "team:disguised": [
+      "team:100_thieves",
+      "team:cloud9"
+    ],
+    "team:flyquest": [
+      "team:100_thieves",
+      "team:shopify_rebellion"
+    ],
+    "team:lyon": [
+      "team:shopify_rebellion",
+      "team:team_liquid"
+    ],
+    "team:shopify_rebellion": [
+      "team:flyquest",
+      "team:lyon"
+    ],
+    "team:team_liquid": [
+      "team:dignitas",
+      "team:lyon"
+    ]
+  }
+}

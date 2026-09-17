@@ -1,0 +1,36 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2024-03-18 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:79441b6922a3dbcfe565",
+      "scheduled_start_utc": "2024-03-22T20:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:team_liquid",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:8745d047b6f61aa5720f",
+      "scheduled_start_utc": "2024-03-23T20:00:00Z",
+      "team_a_id": "team:flyquest",
+      "team_b_id": "team:cloud9",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:team_liquid"
+    ],
+    "team:cloud9": [
+      "team:flyquest"
+    ],
+    "team:flyquest": [
+      "team:cloud9"
+    ],
+    "team:team_liquid": [
+      "team:100_thieves"
+    ]
+  }
+}

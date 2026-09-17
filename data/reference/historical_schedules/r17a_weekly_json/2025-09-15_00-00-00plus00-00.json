@@ -1,0 +1,36 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2025-09-15 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:a2f8f3925d4fc72f2c8c",
+      "scheduled_start_utc": "2025-09-20T20:00:00Z",
+      "team_a_id": "team:flyquest",
+      "team_b_id": "team:vivo_keyd_stars",
+      "best_of": 5
+    },
+    {
+      "fixture_id": "fixture:9e82c5b262d1f96f2c10",
+      "scheduled_start_utc": "2025-09-21T20:00:00Z",
+      "team_a_id": "team:100_thieves",
+      "team_b_id": "team:red_canids",
+      "best_of": 5
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:red_canids"
+    ],
+    "team:flyquest": [
+      "team:vivo_keyd_stars"
+    ],
+    "team:red_canids": [
+      "team:100_thieves"
+    ],
+    "team:vivo_keyd_stars": [
+      "team:flyquest"
+    ]
+  }
+}

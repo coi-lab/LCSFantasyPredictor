@@ -1,0 +1,62 @@
+{
+  "schema_version": "LCS_HISTORICAL_FIXTURE_WEEK_V1",
+  "prediction_period": "2024-07-22 00:00:00+00:00",
+  "source_type": "IMMUTABLE_HISTORICAL_FIXTURE_TIMELINE",
+  "provenance_class": "CLASS_B_IMMUTABLE_HISTORICAL_FIXTURE",
+  "matchups": [
+    {
+      "fixture_id": "fixture:11d9bde77bae441c7d6b",
+      "scheduled_start_utc": "2024-07-27T20:00:00Z",
+      "team_a_id": "team:cloud9",
+      "team_b_id": "team:nrg",
+      "best_of": 3
+    },
+    {
+      "fixture_id": "fixture:d4cbbb146756def215d5",
+      "scheduled_start_utc": "2024-07-27T23:00:00Z",
+      "team_a_id": "team:shopify_rebellion",
+      "team_b_id": "team:dignitas",
+      "best_of": 3
+    },
+    {
+      "fixture_id": "fixture:85d7714f538f6d991a13",
+      "scheduled_start_utc": "2024-07-28T20:00:00Z",
+      "team_a_id": "team:flyquest",
+      "team_b_id": "team:100_thieves",
+      "best_of": 3
+    },
+    {
+      "fixture_id": "fixture:f4dee798dd034db023f0",
+      "scheduled_start_utc": "2024-07-28T23:00:00Z",
+      "team_a_id": "team:team_liquid",
+      "team_b_id": "team:immortals",
+      "best_of": 3
+    }
+  ],
+  "team_opponents": {
+    "team:100_thieves": [
+      "team:flyquest"
+    ],
+    "team:cloud9": [
+      "team:nrg"
+    ],
+    "team:dignitas": [
+      "team:shopify_rebellion"
+    ],
+    "team:flyquest": [
+      "team:100_thieves"
+    ],
+    "team:immortals": [
+      "team:team_liquid"
+    ],
+    "team:nrg": [
+      "team:cloud9"
+    ],
+    "team:shopify_rebellion": [
+      "team:dignitas"
+    ],
+    "team:team_liquid": [
+      "team:immortals"
+    ]
+  }
+}
